@@ -2,7 +2,7 @@
 
 This runbook turns the prepared local platform into a dedicated, fictional judging installation. It is an execution contract, not authorization. Every stage that creates, links, writes, deploys, shares, publishes, or promotes external state begins only after Michael records approval for that specific stage in [`submission-checklist.md`](submission-checklist.md).
 
-The operator works from one reviewed commit and records safe results in [`hosted-evidence-record.md`](hosted-evidence-record.md). Secrets stay in provider secret stores or ignored operator environment files. Command output copied into the repository must be redacted first.
+The operator deploys from a clean detached worktree at the immutable candidate tag and records safe results on the ordinary evidence branch in [`hosted-evidence-record.md`](hosted-evidence-record.md). Evidence-only commits may follow the tag, but they never enter the candidate worktree. Secrets stay in provider secret stores or ignored operator environment files. Command output copied into the repository must be redacted first.
 
 ## Fixed boundaries
 
@@ -22,12 +22,13 @@ Required record:
 ```text
 FINAL_TAG=[NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG]
 FINAL_COMMIT=[40-character commit]
+EVIDENCE_COMMIT=[CURRENT DOCUMENTATION-BRANCH COMMIT]
 FINAL_NAME=[approved public name]
 LICENSE=[approved SPDX identifier]
 HOSTED_RESOURCES_APPROVAL=[timestamp and Michael approval reference]
 ```
 
-After the clean aggregate passes at `HEAD`, create a new, never-reused annotated tag and derive the commit from it. The tag solves the self-reference problem of trying to write a commit's own hash inside that commit.
+After the clean aggregate passes at the implementation `HEAD`, create a new, never-reused annotated tag and derive the runtime commit from it. The tag solves the self-reference problem of trying to write a commit's own hash inside that commit. The ordinary branch may then receive evidence-only documentation commits; `EVIDENCE_COMMIT` records that branch state and is never substituted for `FINAL_COMMIT` during build or deployment.
 
 ```text
 git tag -a [NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG] -m "Freeze hosted judging candidate" HEAD
@@ -36,11 +37,11 @@ git rev-parse "[NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG]^{commit}"
 
 Acceptance:
 
-1. `git status --short` is empty.
-2. `git rev-parse HEAD` and `git rev-parse "${FINAL_TAG}^{commit}"` both equal `FINAL_COMMIT`.
-3. `npm ci`, `npm run verify`, `npm audit --audit-level=high`, and local Supabase `db lint` pass at that commit.
-4. The repository license, package metadata, README, evidence, and demo language agree.
-5. No later commit enters the deployment without a new local aggregate and a new immutable candidate tag.
+1. The ordinary evidence branch has an empty `git status --short` before provider execution.
+2. `git rev-parse "${FINAL_TAG}^{commit}"` equals `FINAL_COMMIT`; the detached deployment worktree described in Stage 6 also has `HEAD` equal to `FINAL_COMMIT` and an empty status.
+3. `npm ci`, `npm run verify`, `npm audit --audit-level=high`, and local Supabase `db lint` pass at `FINAL_COMMIT`.
+4. The repository license, package metadata, README, evidence, and demo language agree at `EVIDENCE_COMMIT`.
+5. Later evidence-only documentation commits remain outside the deployment worktree. Any application, configuration, migration, dependency, worker, fixture, or verification-code change requires a new complete aggregate and a new immutable candidate tag before deployment.
 
 ## Stage 1: prepare dedicated provider resources
 
@@ -201,9 +202,19 @@ The tracked Services configuration deploys the Nuxt application and both worker 
 After explicit approval to create one preview containing all three services:
 
 1. Pin one reviewed Vercel CLI version for the deployment record.
-2. Link only the approved judging project.
-3. Confirm the project framework is **Services** and configure preview environment values in Vercel's encrypted environment store.
-4. Pull preview configuration, build, and deploy the exact candidate:
+2. Create a clean, private detached worktree at the immutable candidate tag, verify its exact commit, and run all remaining deployment commands from that directory:
+
+```text
+git worktree add --detach [PRIVATE_CANDIDATE_WORKTREE] "${FINAL_TAG}"
+cd [PRIVATE_CANDIDATE_WORKTREE]
+test "$(git rev-parse HEAD)" = "${FINAL_COMMIT}"
+test -z "$(git status --short)"
+npm ci
+```
+
+3. Link only the approved judging project from that candidate worktree.
+4. Confirm the project framework is **Services** and configure preview environment values in Vercel's encrypted environment store.
+5. Pull preview configuration, build, and deploy the exact candidate:
 
 ```text
 npx vercel@[PINNED_VERSION] pull --yes --environment=preview
@@ -211,7 +222,7 @@ npx vercel@[PINNED_VERSION] build
 npx vercel@[PINNED_VERSION] deploy --prebuilt
 ```
 
-5. Record stdout as `IMMUTABLE_PREVIEW_URL` and inspect the deployment:
+6. Record stdout as `IMMUTABLE_PREVIEW_URL` and inspect the deployment:
 
 ```text
 npx vercel@[PINNED_VERSION] inspect [IMMUTABLE_PREVIEW_URL]
@@ -232,6 +243,8 @@ Acceptance:
 - Browser-secret scanning, response headers, accessibility, viewport containment, and production performance budgets pass against the preview.
 
 No alias, custom domain, or production promotion is implied by this stage. If a stable production alias is later approved, validate the exact preview first and then record a separate `vercel promote [IMMUTABLE_PREVIEW_URL]` approval and result.
+
+After the deployment evidence is recorded and no further inspection needs the detached source, remove the private candidate worktree from the ordinary evidence-branch checkout. Worktree cleanup does not change the immutable tag or deployed preview.
 
 ## Stage 7: provider and application verification
 

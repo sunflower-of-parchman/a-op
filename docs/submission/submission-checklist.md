@@ -13,12 +13,12 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Requirement-by-requirement completion audit records every proven, prepared, decision-gated, and external-gated item.
 - [x] Michael finalized Artist-Owned Platform as the public project name and it is applied consistently.
 - [x] Michael selected `AGPL-3.0-or-later`; `LICENSE`, package metadata, README, ADR, and original asset ledger agree.
-- [x] Final locally verified implementation commit is recorded and the evidence update leaves the repository clean.
+- [x] Final locally verified runtime commit and immutable candidate tag are recorded.
 
 ## Verification
 
 - [x] Integration Gate A: signed simulated payment, replay idempotency, atomic order/entitlement creation, protected delivery, and cross-account denial.
-- [x] Final-candidate complete local aggregate passed every module, recovery and clean restore, 12 isolated desktop/mobile browser specifications, documentation/assets, Chromium/WebKit judge journeys, and browser-secret scanning from `fe2062a`.
+- [x] Candidate `build-week-hosted-candidate-20260715-121920` passed every module, recovery and clean restore, 12 isolated desktop/mobile browser specifications, the private three-service contract, documentation/assets, Chromium/WebKit judge journeys, and browser-secret scanning from exact commit `04f23fa4b8632b04609cd2689b3b575ec2b193b0`.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
 - [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
 - [x] Linux workflow defines coverage for every module, the complete browser regression, dependency audit, and Chromium/Firefox/WebKit judge path.

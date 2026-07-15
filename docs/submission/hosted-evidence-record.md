@@ -9,11 +9,13 @@ This record stays pending until an approved operator executes the corresponding 
 | Final public name               | Ready   | Artist-Owned Platform                                            |
 | License                         | Ready   | `AGPL-3.0-or-later`                                              |
 | Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                       |
-| Current immutable candidate tag | Pending | Created only after the resumed full aggregate passes             |
-| Current exact commit            | Pending | Derived from the immutable candidate tag                         |
+| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-121920`                    |
+| Current exact commit            | Ready   | `04f23fa4b8632b04609cd2689b3b575ec2b193b0`                       |
+| Evidence branch relationship    | Ready   | Later documentation commits stay outside the candidate worktree  |
+| Detached worktree rehearsal     | Pass    | Clean worktree resolved the tag to exact commit `04f23fa`        |
 | Local worker-service contract   | Pass    | Unit, FFmpeg, PDF, two image builds, auth, and queue checks pass |
-| Current local full aggregate    | Pending | Required after worker-service and runbook changes                |
-| Dependency audit                | Pass    | Zero vulnerabilities before the immutable candidate freeze       |
+| Current local full aggregate    | Pass    | Complete Node 24 aggregate passed at the tagged commit           |
+| Dependency audit                | Pass    | Zero vulnerabilities at the candidate lockfile                   |
 | Local schema lint               | Pass    | No error-level findings in `public` or `private`                 |
 | Linux CI all jobs               | Pending |                                                                  |
 
@@ -81,30 +83,30 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Worker evidence
 
-| Check                                     | Status  | Safe digest/job suffix / result               |
-| ----------------------------------------- | ------- | --------------------------------------------- |
-| Local media image builds                  | Pass    | `sha256:07b378557cfd…b5ec7de`                 |
-| Local document image builds               | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                |
-| Private HTTP auth and redaction contract  | Pass    | Health 200; no-auth 401; generic failure only |
-| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`      |
-| Media image matches final commit          | Pending |                                               |
-| Approved source upload                    | Pending |                                               |
-| `queued -> processing -> ready`           | Pending |                                               |
-| Immutable source hash                     | Pending |                                               |
-| Preview and waveform                      | Pending |                                               |
-| Hosted public playback                    | Pending |                                               |
-| Media retry and expired-lease recovery    | Pending |                                               |
-| Document runtime matches pinned lock      | Pending |                                               |
-| License document reaches `ready`          | Pending |                                               |
-| PDF text and purchaser-only delivery      | Pending |                                               |
-| Document retry and expired-lease recovery | Pending |                                               |
+| Check                                     | Status  | Safe digest/job suffix / result                      |
+| ----------------------------------------- | ------- | ---------------------------------------------------- |
+| Local media image builds                  | Pass    | `sha256:07b378557cfd…b5ec7de`                        |
+| Local document image builds               | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                       |
+| Private HTTP auth and redaction contract  | Pass    | Health 200; no-auth 401; generic failure only        |
+| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`             |
+| Media image matches final commit          | Pass    | Candidate source and lockfile; digest recorded above |
+| Approved source upload                    | Pending |                                                      |
+| `queued -> processing -> ready`           | Pending |                                                      |
+| Immutable source hash                     | Pending |                                                      |
+| Preview and waveform                      | Pending |                                                      |
+| Hosted public playback                    | Pending |                                                      |
+| Media retry and expired-lease recovery    | Pending |                                                      |
+| Document runtime matches pinned lock      | Pass    | Candidate source and lockfile; digest recorded above |
+| License document reaches `ready`          | Pending |                                                      |
+| PDF text and purchaser-only delivery      | Pending |                                                      |
+| Document retry and expired-lease recovery | Pending |                                                      |
 
 ## Vercel and browser evidence
 
 | Check                                    | Status  | Safe URL hash / result                                                                |
 | ---------------------------------------- | ------- | ------------------------------------------------------------------------------------- |
-| Pinned Vercel CLI                        | Pending | `54.21.1` selected; final candidate validation remains                                |
-| Services configuration schema            | Ready   | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs` |
+| Pinned Vercel CLI                        | Pass    | `54.21.1` detected `web`, `media_worker`, and `document_worker`                       |
+| Services configuration schema            | Pass    | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs` |
 | Immutable preview ready                  | Pending |                                                                                       |
 | Deployment identifies final commit       | Pending |                                                                                       |
 | Free unauthenticated public reachability | Pending |                                                                                       |
