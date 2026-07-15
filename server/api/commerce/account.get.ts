@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     { data: subscriptions, error: subscriptionError },
     { data: downloads, error: downloadError },
     { data: paymentCustomer, error: customerError },
+    { data: licenses, error: licenseError },
   ] = await Promise.all([
     admin
       .from('orders')
@@ -38,8 +39,22 @@ export default defineEventHandler(async (event) => {
       .eq('subject_id', identity.user.id)
       .eq('provider', 'stripe')
       .maybeSingle(),
+    admin
+      .from('issued_licenses')
+      .select(
+        'id, track_id, option_id, terms_snapshot, status, document_status, amount_minor, currency, issued_at',
+      )
+      .eq('subject_id', identity.user.id)
+      .order('issued_at', { ascending: false }),
   ])
-  if (orderError || entitlementError || subscriptionError || downloadError || customerError) {
+  if (
+    orderError ||
+    entitlementError ||
+    subscriptionError ||
+    downloadError ||
+    customerError ||
+    licenseError
+  ) {
     throw createError({ statusCode: 503, statusMessage: 'Commerce history could not load.' })
   }
 
@@ -70,6 +85,22 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 503, statusMessage: 'Commerce history could not load.' })
   }
   const productById = new Map(products.map((product) => [product.id, product]))
+  const licenseTrackIds = [...new Set(licenses.map(({ track_id }) => track_id))]
+  const licenseOptionIds = [...new Set(licenses.map(({ option_id }) => option_id))]
+  const [
+    { data: licenseTracks, error: licenseTrackError },
+    { data: licenseOptions, error: licenseOptionError },
+  ] = await Promise.all([
+    licenseTrackIds.length
+      ? admin.from('tracks').select('id, title').in('id', licenseTrackIds)
+      : Promise.resolve({ data: [], error: null }),
+    licenseOptionIds.length
+      ? admin.from('license_options').select('id, label').in('id', licenseOptionIds)
+      : Promise.resolve({ data: [], error: null }),
+  ])
+  if (licenseTrackError || licenseOptionError) {
+    throw createError({ statusCode: 503, statusMessage: 'License history could not load.' })
+  }
   const releaseIds = [
     ...new Set(
       items
@@ -132,5 +163,24 @@ export default defineEventHandler(async (event) => {
       mediaObjectId: download.media_object_id,
       deliveredAt: download.delivered_at,
     })),
+    licenses: licenses.map((license) => {
+      const snapshot = license.terms_snapshot as {
+        licensee?: { name?: string; projectTitle?: string }
+      }
+      return {
+        id: license.id,
+        trackTitle:
+          licenseTracks?.find(({ id }) => id === license.track_id)?.title ?? 'Licensed track',
+        optionLabel:
+          licenseOptions?.find(({ id }) => id === license.option_id)?.label ?? 'Artist license',
+        licenseeName: snapshot.licensee?.name ?? 'Licensee',
+        projectTitle: snapshot.licensee?.projectTitle ?? 'Licensed project',
+        status: license.status,
+        documentStatus: license.document_status,
+        amountMinor: license.amount_minor,
+        currency: license.currency,
+        issuedAt: license.issued_at,
+      }
+    }),
   }
 })

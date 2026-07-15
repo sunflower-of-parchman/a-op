@@ -35,7 +35,13 @@ export async function loadPublishedCommerce(event: H3Event) {
   const admin = getAdminSupabase(event)
   const [{ data: products, error: productError }, { data: prices, error: priceError }] =
     await Promise.all([
-      admin.from('products').select('*').eq('state', 'published').order('sort_order').order('name'),
+      admin
+        .from('products')
+        .select('*')
+        .eq('state', 'published')
+        .neq('product_type', 'license')
+        .order('sort_order')
+        .order('name'),
       admin.from('prices').select('*').eq('active', true).order('created_at'),
     ])
   if (productError || priceError) {

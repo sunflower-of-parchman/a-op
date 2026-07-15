@@ -48,6 +48,17 @@ webhook, customer-portal, verification, and recovery procedure is in
 [`docs/artist/commerce.md`](docs/artist/commerce.md). Live mode is never required for development or
 judging.
 
+The demonstration also includes complete, non-exclusive music licensing. Install Python 3.12 or
+newer and the pinned PDF renderer before running its worker or verification:
+
+    python3 -m pip install -r workers/documents/requirements.txt
+    npm run documents:work
+    npm run verify:licensing
+
+The public terms, immutable versioning, local and Stripe test checkout paths, private document
+worker, retry procedure, and hosted worker contract are documented in
+[`docs/artist/licensing.md`](docs/artist/licensing.md).
+
 ## Guided personalization
 
 The setup commands are implemented and verified during the build. Their stable contract is:

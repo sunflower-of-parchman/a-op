@@ -61,6 +61,12 @@ if (error.value?.statusCode === 401) {
           >Own the offerings, price mappings, fulfillment state, and subscription record.</small
         >
       </NuxtLink>
+      <NuxtLink v-if="data.roles.includes('owner')" to="/admin/licensing">
+        <span>Music licensing</span>
+        <small
+          >Publish explicit use packages, immutable terms, issued records, and documents.</small
+        >
+      </NuxtLink>
     </nav>
 
     <p v-else-if="error" class="form-message" role="alert">

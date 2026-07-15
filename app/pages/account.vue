@@ -81,6 +81,11 @@ async function download(mediaId: string) {
   const result = await $fetch(`/api/downloads/${mediaId}`)
   window.location.assign(result.url)
 }
+
+async function downloadLicense(licenseId: string) {
+  const result = await $fetch(`/api/licenses/${licenseId}/document`)
+  window.location.assign(result.url)
+}
 </script>
 
 <template>
@@ -174,6 +179,37 @@ async function download(mediaId: string) {
         >
           Manage billing in Stripe
         </button>
+      </section>
+
+      <section aria-labelledby="licenses-heading">
+        <div class="library-section-heading">
+          <p class="section-number">Licenses</p>
+          <h2 id="licenses-heading">The exact terms issued for your project.</h2>
+        </div>
+        <div v-if="commerce.licenses.length" class="license-history">
+          <article v-for="license in commerce.licenses" :key="license.id">
+            <div>
+              <h3>{{ license.trackTitle }} · {{ license.optionLabel }}</h3>
+              <p>{{ license.licenseeName }} · {{ license.projectTitle }}</p>
+              <p>
+                {{ formatMoney(license.amountMinor, license.currency) }} · {{ license.status }} ·
+                document {{ license.documentStatus }}
+              </p>
+            </div>
+            <button
+              v-if="license.documentStatus === 'ready' && license.status === 'active'"
+              class="text-action"
+              type="button"
+              @click="downloadLicense(license.id)"
+            >
+              Download protected license
+            </button>
+          </article>
+        </div>
+        <p v-else>
+          Issued music licenses will appear here.
+          <NuxtLink to="/licensing">View supported uses.</NuxtLink>
+        </p>
       </section>
 
       <section aria-labelledby="access-heading">

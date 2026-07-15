@@ -112,6 +112,9 @@ useSeoMeta({
       <NuxtLink v-if="data.release" class="text-action" :to="`/music/${data.release.slug}`">
         Return to {{ data.release.title }}
       </NuxtLink>
+      <NuxtLink class="text-action" :to="`/licensing?track=${data.track.slug}`">
+        License this track
+      </NuxtLink>
     </div>
     <section class="track-library-actions" aria-labelledby="track-library-heading">
       <div>

@@ -547,6 +547,89 @@ export async function seedAuthorizationDemonstration(status) {
   ])
   if (commercePricesError) throw new Error('Could not seed the demonstration commerce prices.')
 
+  const { data: existingLicenseTemplate, error: existingLicenseTemplateError } = await admin
+    .from('license_templates')
+    .select('id')
+    .eq('slug', 'turn-toward-home-licensing')
+    .maybeSingle()
+  if (existingLicenseTemplateError) {
+    throw new Error('Could not inspect the demonstration license template.')
+  }
+  if (!existingLicenseTemplate) {
+    const { error: licenseTemplateError } = await admin.rpc('publish_license_template_version', {
+      p_actor_id: users.get('owner'),
+      p_template_id: null,
+      p_track_id: demoFixtureIds.trackThree,
+      p_slug: 'turn-toward-home-licensing',
+      p_name: 'Turn Toward Home supported uses',
+      p_summary:
+        'Two fictional, non-exclusive uses show how an artist can publish clear terms and prices.',
+      p_title: 'Limited non-exclusive music synchronization license',
+      p_introduction:
+        'This license grants only the supported use selected below. The artist keeps every right not expressly granted.',
+      p_general_terms: [
+        {
+          heading: 'Music and project',
+          body: 'The named recording may be synchronized only with the project described by the licensee.',
+        },
+        {
+          heading: 'Ownership',
+          body: 'Copyright and ownership remain with the artist. This agreement does not transfer the recording or composition.',
+        },
+        {
+          heading: 'Changes and transfer',
+          body: 'The license may not be transferred, sublicensed, or expanded beyond the selected use without written approval.',
+        },
+      ],
+      p_disclaimer:
+        'This artist-configurable demonstration document is a business record, not legal advice. An artist should review production terms with qualified counsel before live use.',
+      p_options: [
+        {
+          key: 'dance-film-study',
+          label: 'Dance film study',
+          description:
+            'A small, non-commercial dance film, rehearsal study, or choreographic reel released online.',
+          usageCategory: 'Synchronization',
+          allowedMedia: ['Dance film', 'Rehearsal study', 'Choreographic reel'],
+          audienceLabel: 'Up to 10,000 total viewers',
+          maxAudience: 10000,
+          distributionLabel: 'One online project on artist-controlled or social channels',
+          maxCopies: 1,
+          termMonths: 12,
+          territory: 'Worldwide',
+          attributionRequired: true,
+          attributionText: 'Music: Turn Toward Home by Daymark Assembly',
+          exclusive: false,
+          currency: 'USD',
+          amountMinor: 7500,
+          sortOrder: 1,
+        },
+        {
+          key: 'small-live-performance',
+          label: 'Small live performance',
+          description:
+            'Use in one independently produced live dance performance and its private rehearsal process.',
+          usageCategory: 'Live performance',
+          allowedMedia: ['Live performance', 'Private rehearsal'],
+          audienceLabel: 'Up to 300 in-person attendees',
+          maxAudience: 300,
+          distributionLabel:
+            'One performance; no broadcast, paid stream, or recording distribution',
+          maxCopies: 1,
+          termMonths: 6,
+          territory: 'United States',
+          attributionRequired: true,
+          attributionText: 'Music: Turn Toward Home by Daymark Assembly',
+          exclusive: false,
+          currency: 'USD',
+          amountMinor: 12500,
+          sortOrder: 2,
+        },
+      ],
+    })
+    if (licenseTemplateError) throw new Error('Could not seed the demonstration license template.')
+  }
+
   const { error: pageError } = await admin.from('pages').upsert([
     {
       id: demoFixtureIds.aboutPage,

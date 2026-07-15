@@ -1585,7 +1585,9 @@ button.text-action:disabled {
 
 .support-page,
 .simulated-checkout,
-.commerce-admin {
+.commerce-admin,
+.licensing-page,
+.licensing-admin {
   padding-block: clamp(4rem, 8vw, 8rem);
 }
 
@@ -1713,6 +1715,181 @@ button.text-action:disabled {
   gap: 1rem;
 }
 
+.license-history {
+  grid-column: 2;
+}
+
+.license-history article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 2rem;
+  padding-block: 1.25rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.license-history h3,
+.license-history p {
+  margin: 0;
+}
+
+.license-history p {
+  color: var(--color-muted-text);
+}
+
+.licensing-heading {
+  margin-bottom: clamp(2rem, 5vw, 5rem);
+}
+
+.license-template {
+  padding-block: clamp(3rem, 7vw, 7rem);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-template > header {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.4fr) minmax(0, 0.8fr) minmax(14rem, 0.8fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  margin-bottom: clamp(3rem, 6vw, 6rem);
+}
+
+.license-template > header h2,
+.license-template > header p {
+  margin-top: 0;
+}
+
+.license-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  gap: clamp(3rem, 7vw, 8rem);
+  padding-block: clamp(2.5rem, 5vw, 5rem);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-option__terms > header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.license-option__terms h3,
+.license-price {
+  margin-top: 0;
+}
+
+.license-price {
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.license-option__terms dl {
+  margin: 2rem 0 0;
+}
+
+.license-option__terms dl div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.4fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-option__terms dd {
+  margin: 0;
+}
+
+.license-project-form,
+.license-template-editor {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+}
+
+.license-general-terms {
+  max-width: var(--reading-max);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-general-terms summary {
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.licensing-inquiry,
+.license-template-history,
+.issued-license-admin {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  padding-block: clamp(3rem, 7vw, 6rem);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.licensing-inquiry > *:not(.section-number),
+.license-template-history > ol,
+.issued-license-admin > ol,
+.issued-license-admin > p {
+  grid-column: 2;
+}
+
+.license-template-editor {
+  padding-block: 2rem clamp(4rem, 8vw, 8rem);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-term-editor,
+.license-option-editor {
+  padding-block: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-term-editor > header,
+.license-option-editor > header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.license-term-row,
+.license-option-editor article {
+  display: grid;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-template-history ol,
+.issued-license-admin ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.license-template-history li,
+.issued-license-admin li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 2rem;
+  padding-block: 1rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.license-template-history li div,
+.issued-license-admin li div {
+  display: grid;
+}
+
+.license-template-history span,
+.issued-license-admin span {
+  color: var(--color-muted-text);
+}
+
 .commerce-editor-list {
   display: grid;
   gap: clamp(4rem, 8vw, 8rem);
@@ -1813,6 +1990,11 @@ button.text-action:disabled {
   .track-library-actions,
   .customer-library > section,
   .commerce-account > section,
+  .license-template > header,
+  .license-option,
+  .licensing-inquiry,
+  .license-template-history,
+  .issued-license-admin,
   .commerce-editor-list form > header,
   .commerce-operations,
   .offering-list article,
@@ -1822,6 +2004,20 @@ button.text-action:disabled {
   .structured-section--feature,
   .structured-section--contact,
   .admin-edit-form > section {
+    grid-template-columns: 1fr;
+  }
+
+  .license-history,
+  .licensing-inquiry > *:not(.section-number),
+  .license-template-history > ol,
+  .issued-license-admin > ol,
+  .issued-license-admin > p {
+    grid-column: 1;
+  }
+
+  .license-history article,
+  .license-template-history li,
+  .issued-license-admin li {
     grid-template-columns: 1fr;
   }
 

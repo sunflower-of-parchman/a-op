@@ -1,3 +1,5 @@
+import type { IssuedLicenseSummary } from './licensing'
+
 export type CommercePrice = {
   id: string
   currency: string
@@ -84,4 +86,5 @@ export type AccountCommerceResponse =
         mediaObjectId: string
         deliveredAt: string
       }>
+      licenses: IssuedLicenseSummary[]
     }

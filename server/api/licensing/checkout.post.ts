@@ -1,54 +1,62 @@
 import { readValidatedBody } from 'h3'
-import { createCheckoutSchema } from '#shared/schemas/commerce'
-import { publicSiteOrigin, requirePublishedProduct } from '../../utils/commerce'
+import { licenseCheckoutSchema } from '#shared/schemas/licensing'
+import { publicSiteOrigin } from '../../utils/commerce'
 import { getAdminSupabase, requireAuthIdentity } from '../../utils/supabase'
 import { getStripeClient } from '../../utils/stripe'
 
 export default defineEventHandler(async (event) => {
   const identity = await requireAuthIdentity(event)
-  const input = await readValidatedBody(event, (body) => createCheckoutSchema.parse(body))
-  const product = await requirePublishedProduct(event, input.productId)
-
-  if (product.productType === 'license') {
-    throw createError({
-      statusCode: 409,
-      statusMessage: 'License checkout requires an exact supported-use selection.',
-    })
+  const input = await readValidatedBody(event, (body) => licenseCheckoutSchema.parse(body))
+  const admin = getAdminSupabase(event)
+  const { data: selectionRows, error: selectionError } = await admin.rpc(
+    'create_license_selection',
+    {
+      p_subject_id: identity.user.id,
+      p_offer_id: input.offerId,
+      p_licensee_name: input.licenseeName,
+      p_project_title: input.projectTitle,
+      p_project_description: input.projectDescription,
+    },
+  )
+  const selection = selectionRows?.[0]
+  if (selectionError || !selection) {
+    throw createError({ statusCode: 409, statusMessage: 'The license could not be prepared.' })
   }
 
-  if (product.purchaseMode === 'external') {
-    return { provider: 'external' as const, url: product.externalUrl, status: 'external' as const }
-  }
-  if (!product.price) {
-    throw createError({ statusCode: 409, statusMessage: 'This offering has no active price.' })
+  const { data: price, error: priceError } = await admin
+    .from('prices')
+    .select('external_price_id')
+    .eq('id', selection.price_id)
+    .single()
+  if (priceError) {
+    throw createError({ statusCode: 503, statusMessage: 'The license price could not be read.' })
   }
 
   const config = useRuntimeConfig(event)
   const useSimulation =
-    product.purchaseMode === 'free' ||
-    (config.public.demoMode && (!config.stripeSecretKey || !product.price.mapped))
-  if (!useSimulation && (!config.stripeSecretKey || !product.price.mapped)) {
+    config.public.demoMode && (!config.stripeSecretKey || !price.external_price_id)
+  if (!useSimulation && (!config.stripeSecretKey || !price.external_price_id)) {
     throw createError({
       statusCode: 503,
-      statusMessage: 'Stripe test mode and an approved price mapping are required.',
+      statusMessage: 'Stripe test mode and an approved license price mapping are required.',
     })
   }
 
-  const admin = getAdminSupabase(event)
   const provider = useSimulation ? 'simulation' : 'stripe'
   const { data: intent, error: intentError } = await admin
     .from('checkout_intents')
     .insert({
       subject_id: identity.user.id,
-      product_id: product.id,
-      price_id: product.price.id,
+      product_id: selection.product_id,
+      price_id: selection.price_id,
+      license_selection_id: selection.selection_id,
       provider,
       return_path: input.returnPath,
     })
     .select('id')
     .single()
   if (intentError || !intent) {
-    throw createError({ statusCode: 503, statusMessage: 'Checkout could not be prepared.' })
+    throw createError({ statusCode: 503, statusMessage: 'License checkout could not be created.' })
   }
 
   if (useSimulation) {
@@ -56,8 +64,12 @@ export default defineEventHandler(async (event) => {
       .from('checkout_intents')
       .update({ provider_session_id: `sim_${intent.id}`, updated_at: new Date().toISOString() })
       .eq('id', intent.id)
-    if (error)
-      throw createError({ statusCode: 503, statusMessage: 'Checkout could not be prepared.' })
+    if (error) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'License checkout could not be created.',
+      })
+    }
     return {
       provider: 'simulation' as const,
       intentId: intent.id,
@@ -68,14 +80,6 @@ export default defineEventHandler(async (event) => {
 
   const stripe = getStripeClient(event)
   try {
-    const { data: mappedPrice, error: mappedPriceError } = await admin
-      .from('prices')
-      .select('external_price_id')
-      .eq('id', product.price.id)
-      .single()
-    if (mappedPriceError || !mappedPrice.external_price_id) {
-      throw new Error('The Stripe price mapping is missing.')
-    }
     const { data: existingCustomer } = await admin
       .from('payment_customers')
       .select('provider_customer_id')
@@ -98,26 +102,25 @@ export default defineEventHandler(async (event) => {
       if (error) throw new Error('The Stripe customer mapping could not be stored.')
     }
 
-    const origin = publicSiteOrigin(event)
     const metadata = {
       platformUserId: identity.user.id,
-      productId: product.id,
-      priceId: product.price.id,
+      productId: selection.product_id,
+      priceId: selection.price_id,
       checkoutIntentId: intent.id,
+      licenseSelectionId: selection.selection_id,
     }
-    const mode = product.productType === 'membership' ? 'subscription' : 'payment'
+    const origin = publicSiteOrigin(event)
     const session = await stripe.checkout.sessions.create(
       {
-        mode,
+        mode: 'payment',
         customer: customerId,
         client_reference_id: identity.user.id,
-        line_items: [{ price: mappedPrice.external_price_id, quantity: 1 }],
+        line_items: [{ price: price.external_price_id!, quantity: 1 }],
         success_url: `${origin}/checkout/return?intent=${intent.id}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/checkout/return?intent=${intent.id}&canceled=1`,
         metadata,
-        ...(mode === 'subscription' ? { subscription_data: { metadata } } : {}),
       },
-      { idempotencyKey: `artist-checkout-${intent.id}` },
+      { idempotencyKey: `artist-license-checkout-${intent.id}` },
     )
 
     const { error } = await admin
@@ -135,6 +138,6 @@ export default defineEventHandler(async (event) => {
         updated_at: new Date().toISOString(),
       })
       .eq('id', intent.id)
-    throw createError({ statusCode: 502, statusMessage: 'Stripe Checkout could not be created.' })
+    throw createError({ statusCode: 502, statusMessage: 'Stripe license checkout failed.' })
   }
 })

@@ -181,6 +181,7 @@ export type Database = {
           created_at: string
           failure_code: string | null
           id: string
+          license_selection_id: string | null
           price_id: string | null
           product_id: string
           provider: string
@@ -195,6 +196,7 @@ export type Database = {
           created_at?: string
           failure_code?: string | null
           id?: string
+          license_selection_id?: string | null
           price_id?: string | null
           product_id: string
           provider: string
@@ -209,6 +211,7 @@ export type Database = {
           created_at?: string
           failure_code?: string | null
           id?: string
+          license_selection_id?: string | null
           price_id?: string | null
           product_id?: string
           provider?: string
@@ -219,6 +222,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "checkout_intents_license_selection_id_fkey"
+            columns: ["license_selection_id"]
+            isOneToOne: false
+            referencedRelation: "license_selections"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "checkout_intents_price_id_fkey"
             columns: ["price_id"]
@@ -485,6 +495,506 @@ export type Database = {
           resource_type?: string
         }
         Relationships: []
+      }
+      issued_licenses: {
+        Row: {
+          amount_minor: number
+          currency: string
+          document_failure_code: string | null
+          document_media_id: string | null
+          document_status: string
+          id: string
+          issued_at: string
+          option_id: string
+          order_id: string
+          revoked_at: string | null
+          selection_id: string
+          status: string
+          subject_id: string
+          template_version_id: string
+          terms_snapshot: Json
+          track_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount_minor: number
+          currency: string
+          document_failure_code?: string | null
+          document_media_id?: string | null
+          document_status?: string
+          id?: string
+          issued_at?: string
+          option_id: string
+          order_id: string
+          revoked_at?: string | null
+          selection_id: string
+          status?: string
+          subject_id: string
+          template_version_id: string
+          terms_snapshot: Json
+          track_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount_minor?: number
+          currency?: string
+          document_failure_code?: string | null
+          document_media_id?: string | null
+          document_status?: string
+          id?: string
+          issued_at?: string
+          option_id?: string
+          order_id?: string
+          revoked_at?: string | null
+          selection_id?: string
+          status?: string
+          subject_id?: string
+          template_version_id?: string
+          terms_snapshot?: Json
+          track_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "issued_licenses_document_media_id_fkey"
+            columns: ["document_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "issued_licenses_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "license_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "issued_licenses_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "issued_licenses_selection_id_fkey"
+            columns: ["selection_id"]
+            isOneToOne: true
+            referencedRelation: "license_selections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "issued_licenses_template_version_id_fkey"
+            columns: ["template_version_id"]
+            isOneToOne: false
+            referencedRelation: "license_template_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "issued_licenses_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_document_jobs: {
+        Row: {
+          attempts: number
+          created_at: string
+          error_code: string | null
+          id: string
+          issued_license_id: string
+          lease_expires_at: string | null
+          lease_token: string | null
+          status: string
+          updated_at: string
+          worker_id: string | null
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          error_code?: string | null
+          id?: string
+          issued_license_id: string
+          lease_expires_at?: string | null
+          lease_token?: string | null
+          status?: string
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          error_code?: string | null
+          id?: string
+          issued_license_id?: string
+          lease_expires_at?: string | null
+          lease_token?: string | null
+          status?: string
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_document_jobs_issued_license_id_fkey"
+            columns: ["issued_license_id"]
+            isOneToOne: true
+            referencedRelation: "issued_licenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_offers: {
+        Row: {
+          created_at: string
+          id: string
+          option_id: string
+          price_id: string
+          product_id: string
+          state: Database["public"]["Enums"]["publication_state"]
+          template_id: string
+          template_version_id: string
+          track_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_id: string
+          price_id: string
+          product_id: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          template_id: string
+          template_version_id: string
+          track_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_id?: string
+          price_id?: string
+          product_id?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          template_id?: string
+          template_version_id?: string
+          track_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_offers_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "license_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_offers_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: true
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_offers_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_offers_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "license_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_offers_template_version_id_fkey"
+            columns: ["template_version_id"]
+            isOneToOne: false
+            referencedRelation: "license_template_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_offers_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_options: {
+        Row: {
+          allowed_media: string[]
+          amount_minor: number
+          attribution_required: boolean
+          attribution_text: string
+          audience_label: string
+          created_at: string
+          currency: string
+          description: string
+          distribution_label: string
+          exclusive: boolean
+          id: string
+          label: string
+          max_audience: number | null
+          max_copies: number | null
+          option_key: string
+          sort_order: number
+          template_version_id: string
+          term_months: number
+          territory: string
+          usage_category: string
+        }
+        Insert: {
+          allowed_media: string[]
+          amount_minor: number
+          attribution_required?: boolean
+          attribution_text?: string
+          audience_label: string
+          created_at?: string
+          currency: string
+          description: string
+          distribution_label: string
+          exclusive?: boolean
+          id?: string
+          label: string
+          max_audience?: number | null
+          max_copies?: number | null
+          option_key: string
+          sort_order?: number
+          template_version_id: string
+          term_months: number
+          territory: string
+          usage_category: string
+        }
+        Update: {
+          allowed_media?: string[]
+          amount_minor?: number
+          attribution_required?: boolean
+          attribution_text?: string
+          audience_label?: string
+          created_at?: string
+          currency?: string
+          description?: string
+          distribution_label?: string
+          exclusive?: boolean
+          id?: string
+          label?: string
+          max_audience?: number | null
+          max_copies?: number | null
+          option_key?: string
+          sort_order?: number
+          template_version_id?: string
+          term_months?: number
+          territory?: string
+          usage_category?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_options_template_version_id_fkey"
+            columns: ["template_version_id"]
+            isOneToOne: false
+            referencedRelation: "license_template_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_selections: {
+        Row: {
+          amount_minor: number
+          created_at: string
+          currency: string
+          id: string
+          licensee_name: string
+          offer_id: string
+          option_id: string
+          price_id: string
+          product_id: string
+          project_description: string
+          project_title: string
+          purchased_at: string | null
+          status: string
+          subject_id: string
+          template_version_id: string
+          terms_snapshot: Json
+        }
+        Insert: {
+          amount_minor: number
+          created_at?: string
+          currency: string
+          id?: string
+          licensee_name: string
+          offer_id: string
+          option_id: string
+          price_id: string
+          product_id: string
+          project_description: string
+          project_title: string
+          purchased_at?: string | null
+          status?: string
+          subject_id: string
+          template_version_id: string
+          terms_snapshot: Json
+        }
+        Update: {
+          amount_minor?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          licensee_name?: string
+          offer_id?: string
+          option_id?: string
+          price_id?: string
+          product_id?: string
+          project_description?: string
+          project_title?: string
+          purchased_at?: string | null
+          status?: string
+          subject_id?: string
+          template_version_id?: string
+          terms_snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_selections_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "license_offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_selections_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "license_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_selections_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_selections_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_selections_template_version_id_fkey"
+            columns: ["template_version_id"]
+            isOneToOne: false
+            referencedRelation: "license_template_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_template_versions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          disclaimer: string
+          general_terms: Json
+          id: string
+          introduction: string
+          template_id: string
+          title: string
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          disclaimer: string
+          general_terms: Json
+          id?: string
+          introduction: string
+          template_id: string
+          title: string
+          version_number: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          disclaimer?: string
+          general_terms?: Json
+          id?: string
+          introduction?: string
+          template_id?: string
+          title?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_template_versions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "license_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_version_id: string | null
+          id: string
+          name: string
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          track_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          name: string
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          track_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          track_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_templates_current_version_fkey"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "license_template_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_templates_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: true
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       listening_history: {
         Row: {
@@ -1656,6 +2166,16 @@ export type Database = {
         Returns: string
       }
       bootstrap_owner: { Args: { target_user_id: string }; Returns: undefined }
+      claim_license_document_job: {
+        Args: { p_lease_seconds?: number; p_worker_id: string }
+        Returns: {
+          document_payload: Json
+          job_id: string
+          lease_token: string
+          license_id: string
+          object_path: string
+        }[]
+      }
       claim_media_job: {
         Args: { p_lease_seconds?: number; p_worker_id: string }
         Returns: {
@@ -1668,6 +2188,32 @@ export type Database = {
           source_path: string
         }[]
       }
+      complete_license_document_job: {
+        Args: {
+          p_byte_size: number
+          p_job_id: string
+          p_lease_token: string
+          p_object_path: string
+          p_sha256: string
+        }
+        Returns: string
+      }
+      create_license_selection: {
+        Args: {
+          p_licensee_name: string
+          p_offer_id: string
+          p_project_description: string
+          p_project_title: string
+          p_subject_id: string
+        }
+        Returns: {
+          amount_minor: number
+          currency: string
+          price_id: string
+          product_id: string
+          selection_id: string
+        }[]
+      }
       decide_access: {
         Args: {
           target_resource_id: string
@@ -1675,6 +2221,10 @@ export type Database = {
           target_subject_id: string
         }
         Returns: Json
+      }
+      fail_license_document_job: {
+        Args: { p_error_code: string; p_job_id: string; p_lease_token: string }
+        Returns: undefined
       }
       fail_media_job: {
         Args: {
@@ -1764,6 +2314,25 @@ export type Database = {
           subscription_id: string
         }[]
       }
+      publish_license_template_version: {
+        Args: {
+          p_actor_id: string
+          p_disclaimer: string
+          p_general_terms: Json
+          p_introduction: string
+          p_name: string
+          p_options: Json
+          p_slug: string
+          p_summary: string
+          p_template_id: string
+          p_title: string
+          p_track_id: string
+        }
+        Returns: {
+          template_id: string
+          version_id: string
+        }[]
+      }
       publish_page: {
         Args: { p_actor_id: string; p_page_id: string }
         Returns: string
@@ -1793,6 +2362,10 @@ export type Database = {
       }
       resolve_webhook_failure: {
         Args: { p_provider_event_id: string }
+        Returns: undefined
+      }
+      retry_license_document_job: {
+        Args: { p_actor_id: string; p_license_id: string }
         Returns: undefined
       }
       submit_contact_message: {
