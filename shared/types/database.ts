@@ -60,6 +60,199 @@ export type Database = {
         }
         Relationships: []
       }
+      catalog_credits: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          position: number
+          resource_id: string
+          resource_type: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          position?: number
+          resource_id: string
+          resource_type: string
+          role: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          position?: number
+          resource_id?: string
+          resource_type?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      catalog_taxonomies: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          label: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          label: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          label?: string
+        }
+        Relationships: []
+      }
+      catalog_term_assignments: {
+        Row: {
+          created_at: string
+          resource_id: string
+          resource_type: string
+          term_id: string
+        }
+        Insert: {
+          created_at?: string
+          resource_id: string
+          resource_type: string
+          term_id: string
+        }
+        Update: {
+          created_at?: string
+          resource_id?: string
+          resource_type?: string
+          term_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_term_assignments_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_terms: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          slug: string
+          sort_order: number
+          taxonomy_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          slug: string
+          sort_order?: number
+          taxonomy_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          slug?: string
+          sort_order?: number
+          taxonomy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_terms_taxonomy_id_fkey"
+            columns: ["taxonomy_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_taxonomies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collection_tracks: {
+        Row: {
+          collection_id: string
+          created_at: string
+          note: string
+          position: number
+          track_id: string
+        }
+        Insert: {
+          collection_id: string
+          created_at?: string
+          note?: string
+          position: number
+          track_id: string
+        }
+        Update: {
+          collection_id?: string
+          created_at?: string
+          note?: string
+          position?: number
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_tracks_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_tracks_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          published_at: string | null
+          slug: string
+          sort_order: number
+          state: Database["public"]["Enums"]["publication_state"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          published_at?: string | null
+          slug: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          published_at?: string | null
+          slug?: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           consent: boolean
@@ -180,20 +373,137 @@ export type Database = {
         }
         Relationships: []
       }
+      favorites: {
+        Row: {
+          created_at: string
+          owner_id: string
+          resource_id: string
+          resource_type: string
+        }
+        Insert: {
+          created_at?: string
+          owner_id: string
+          resource_id: string
+          resource_type: string
+        }
+        Update: {
+          created_at?: string
+          owner_id?: string
+          resource_id?: string
+          resource_type?: string
+        }
+        Relationships: []
+      }
+      listening_history: {
+        Row: {
+          completed: boolean
+          id: string
+          listened_at: string
+          owner_id: string
+          progress_ms: number
+          track_id: string
+        }
+        Insert: {
+          completed?: boolean
+          id?: string
+          listened_at?: string
+          owner_id: string
+          progress_ms?: number
+          track_id: string
+        }
+        Update: {
+          completed?: boolean
+          id?: string
+          listened_at?: string
+          owner_id?: string
+          progress_ms?: number
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listening_history_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_jobs: {
+        Row: {
+          attempts: number
+          created_at: string
+          error_category: string | null
+          finished_at: string | null
+          id: string
+          lease_expires_at: string | null
+          media_object_id: string
+          processing_profile_version: string
+          result_metadata: Json
+          started_at: string | null
+          status: Database["public"]["Enums"]["media_job_status"]
+          updated_at: string
+          worker_id: string | null
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          error_category?: string | null
+          finished_at?: string | null
+          id?: string
+          lease_expires_at?: string | null
+          media_object_id: string
+          processing_profile_version: string
+          result_metadata?: Json
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["media_job_status"]
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          error_category?: string | null
+          finished_at?: string | null
+          id?: string
+          lease_expires_at?: string | null
+          media_object_id?: string
+          processing_profile_version?: string
+          result_metadata?: Json
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["media_job_status"]
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_jobs_media_object_id_fkey"
+            columns: ["media_object_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       media_objects: {
         Row: {
           bucket_id: string
           byte_size: number | null
           created_at: string
           created_by: string | null
+          derivative_key: string | null
           id: string
           is_public: boolean
           kind: Database["public"]["Enums"]["media_kind"]
           media_type: string
+          metadata: Json
           object_path: string
+          processing_profile_version: string | null
           release_id: string | null
           sha256: string | null
+          source_media_id: string | null
           status: string
+          track_id: string | null
           updated_at: string
         }
         Insert: {
@@ -201,14 +511,19 @@ export type Database = {
           byte_size?: number | null
           created_at?: string
           created_by?: string | null
+          derivative_key?: string | null
           id?: string
           is_public?: boolean
           kind: Database["public"]["Enums"]["media_kind"]
           media_type: string
+          metadata?: Json
           object_path: string
+          processing_profile_version?: string | null
           release_id?: string | null
           sha256?: string | null
+          source_media_id?: string | null
           status?: string
+          track_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -216,14 +531,19 @@ export type Database = {
           byte_size?: number | null
           created_at?: string
           created_by?: string | null
+          derivative_key?: string | null
           id?: string
           is_public?: boolean
           kind?: Database["public"]["Enums"]["media_kind"]
           media_type?: string
+          metadata?: Json
           object_path?: string
+          processing_profile_version?: string | null
           release_id?: string | null
           sha256?: string | null
+          source_media_id?: string | null
           status?: string
+          track_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -232,6 +552,20 @@ export type Database = {
             columns: ["release_id"]
             isOneToOne: false
             referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_objects_source_media_id_fkey"
+            columns: ["source_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_objects_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
             referencedColumns: ["id"]
           },
         ]
@@ -431,6 +765,69 @@ export type Database = {
           },
         ]
       }
+      playlist_tracks: {
+        Row: {
+          added_at: string
+          playlist_id: string
+          position: number
+          track_id: string
+        }
+        Insert: {
+          added_at?: string
+          playlist_id: string
+          position: number
+          track_id: string
+        }
+        Update: {
+          added_at?: string
+          playlist_id?: string
+          position?: number
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_tracks_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_tracks_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          owner_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          owner_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          owner_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       prices: {
         Row: {
           active: boolean
@@ -532,47 +929,115 @@ export type Database = {
         }
         Relationships: []
       }
+      release_tracks: {
+        Row: {
+          created_at: string
+          disc_number: number
+          position: number
+          release_id: string
+          track_id: string
+        }
+        Insert: {
+          created_at?: string
+          disc_number?: number
+          position: number
+          release_id: string
+          track_id: string
+        }
+        Update: {
+          created_at?: string
+          disc_number?: number
+          position?: number
+          release_id?: string
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "release_tracks_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "release_tracks_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       releases: {
         Row: {
+          artwork_media_id: string | null
+          catalog_number: string
           created_at: string
           created_by: string | null
           description: string
+          genre: string
           id: string
+          label: string
+          mood: string
           published_at: string | null
           release_date: string | null
+          release_type: string
           slug: string
           sort_order: number
           state: Database["public"]["Enums"]["publication_state"]
+          subtitle: string
           title: string
           updated_at: string
         }
         Insert: {
+          artwork_media_id?: string | null
+          catalog_number?: string
           created_at?: string
           created_by?: string | null
           description?: string
+          genre?: string
           id?: string
+          label?: string
+          mood?: string
           published_at?: string | null
           release_date?: string | null
+          release_type?: string
           slug: string
           sort_order?: number
           state?: Database["public"]["Enums"]["publication_state"]
+          subtitle?: string
           title: string
           updated_at?: string
         }
         Update: {
+          artwork_media_id?: string | null
+          catalog_number?: string
           created_at?: string
           created_by?: string | null
           description?: string
+          genre?: string
           id?: string
+          label?: string
+          mood?: string
           published_at?: string | null
           release_date?: string | null
+          release_type?: string
           slug?: string
           sort_order?: number
           state?: Database["public"]["Enums"]["publication_state"]
+          subtitle?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "releases_artwork_media_id_fkey"
+            columns: ["artwork_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_config_versions: {
         Row: {
@@ -625,6 +1090,74 @@ export type Database = {
           },
         ]
       }
+      tracks: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          duration_ms: number | null
+          explicit: boolean
+          id: string
+          instruments: string[]
+          meter: string
+          mood: string
+          musical_key: string
+          primary_release_id: string | null
+          published_at: string | null
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          tempo_bpm: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_ms?: number | null
+          explicit?: boolean
+          id?: string
+          instruments?: string[]
+          meter?: string
+          mood?: string
+          musical_key?: string
+          primary_release_id?: string | null
+          published_at?: string | null
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          tempo_bpm?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_ms?: number | null
+          explicit?: boolean
+          id?: string
+          instruments?: string[]
+          meter?: string
+          mood?: string
+          musical_key?: string
+          primary_release_id?: string | null
+          published_at?: string | null
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          tempo_bpm?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracks_primary_release_id_fkey"
+            columns: ["primary_release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       published_site_config: {
@@ -654,6 +1187,18 @@ export type Database = {
     }
     Functions: {
       bootstrap_owner: { Args: { target_user_id: string }; Returns: undefined }
+      claim_media_job: {
+        Args: { p_lease_seconds?: number; p_worker_id: string }
+        Returns: {
+          job_id: string
+          lease_expires_at: string
+          media_id: string
+          processing_profile_version: string
+          source_bucket: string
+          source_hash: string
+          source_path: string
+        }[]
+      }
       decide_access: {
         Args: {
           target_resource_id: string
@@ -661,6 +1206,18 @@ export type Database = {
           target_subject_id: string
         }
         Returns: Json
+      }
+      fail_media_job: {
+        Args: {
+          p_error_category: string
+          p_job_id: string
+          p_worker_id: string
+        }
+        Returns: undefined
+      }
+      finalize_media_job: {
+        Args: { p_job_id: string; p_result_metadata: Json; p_worker_id: string }
+        Returns: undefined
       }
       process_simulated_payment_event: {
         Args: {
@@ -700,6 +1257,7 @@ export type Database = {
       app_role: "owner" | "editor" | "customer"
       entitlement_status: "active" | "revoked" | "expired"
       fulfillment_status: "pending" | "complete" | "failed" | "refunded"
+      media_job_status: "pending" | "processing" | "ready" | "failed"
       media_kind:
         | "artwork"
         | "preview_audio"
@@ -839,6 +1397,7 @@ export const Constants = {
       app_role: ["owner", "editor", "customer"],
       entitlement_status: ["active", "revoked", "expired"],
       fulfillment_status: ["pending", "complete", "failed", "refunded"],
+      media_job_status: ["pending", "processing", "ready", "failed"],
       media_kind: [
         "artwork",
         "preview_audio",

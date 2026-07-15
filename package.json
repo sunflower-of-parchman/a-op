@@ -26,6 +26,7 @@
     "test:policies": "node scripts/test-policies.mjs",
     "test:spine": "node scripts/test-spine.mjs",
     "test:administration": "node scripts/test-administration.mjs",
+    "test:catalog": "node scripts/test-catalog.mjs",
     "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
     "test:e2e": "playwright test",
     "setup:preflight": "node scripts/setup-preflight.mjs",

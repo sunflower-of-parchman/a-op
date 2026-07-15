@@ -16,6 +16,14 @@ export const demoFixtureIds = {
   price: '10000000-0000-4000-8000-000000000005',
   aboutPage: '10000000-0000-4000-8000-000000000006',
   contactPage: '10000000-0000-4000-8000-000000000007',
+  trackOne: '10000000-0000-4000-8000-000000000008',
+  trackTwo: '10000000-0000-4000-8000-000000000009',
+  trackThree: '10000000-0000-4000-8000-00000000000a',
+  collection: '10000000-0000-4000-8000-00000000000b',
+  taxonomy: '10000000-0000-4000-8000-00000000000c',
+  taxonomyTerm: '10000000-0000-4000-8000-00000000000d',
+  previewTwo: '10000000-0000-4000-8000-00000000000e',
+  previewThree: '10000000-0000-4000-8000-00000000000f',
 }
 
 function createAdminClient(status) {
@@ -28,7 +36,7 @@ function sha256(value) {
   return createHash('sha256').update(value).digest('hex')
 }
 
-function createPreviewWave() {
+function createPreviewWave(frequency = 440) {
   const sampleRate = 8000
   const seconds = 1
   const samples = sampleRate * seconds
@@ -52,7 +60,7 @@ function createPreviewWave() {
   for (let sample = 0; sample < samples; sample += 1) {
     const time = sample / sampleRate
     const fade = Math.min(1, sample / 400, (samples - sample) / 400)
-    const value = Math.round(Math.sin(2 * Math.PI * 440 * time) * 2600 * fade)
+    const value = Math.round(Math.sin(2 * Math.PI * frequency * time) * 2600 * fade)
     wave.writeInt16LE(value, 44 + sample * 2)
   }
 
@@ -243,18 +251,151 @@ export async function seedAuthorizationDemonstration(status) {
   const { error: releaseError } = await admin.from('releases').upsert(release)
   if (releaseError) throw new Error('Could not seed the demonstration release.')
 
-  const previewBytes = createPreviewWave()
+  const trackFixtures = [
+    {
+      id: demoFixtureIds.trackOne,
+      slug: 'first-light-repeated',
+      title: 'First Light, Repeated',
+      description: 'A fictional opening study in return and attention.',
+      musical_key: 'D minor',
+      meter: '4/4',
+      tempo_bpm: 84,
+      mood: 'Grounded',
+      instruments: ['Piano'],
+    },
+    {
+      id: demoFixtureIds.trackTwo,
+      slug: 'a-measure-of-distance',
+      title: 'A Measure of Distance',
+      description: 'A fictional study in spacing and suspended arrival.',
+      musical_key: 'A major',
+      meter: '3/4',
+      tempo_bpm: 72,
+      mood: 'Spacious',
+      instruments: ['Piano', 'Prepared strings'],
+    },
+    {
+      id: demoFixtureIds.trackThree,
+      slug: 'turn-toward-home',
+      title: 'Turn Toward Home',
+      description: 'A fictional closing study in weight and release.',
+      musical_key: 'G major',
+      meter: '6/8',
+      tempo_bpm: 96,
+      mood: 'Resolute',
+      instruments: ['Piano'],
+    },
+  ].map((track) => ({
+    ...track,
+    primary_release_id: demoFixtureIds.release,
+    duration_ms: 1000,
+    state: 'published',
+    published_at: '2026-07-14T00:00:00.000Z',
+    created_by: users.get('owner'),
+  }))
+  const { error: trackError } = await admin.from('tracks').upsert(trackFixtures)
+  if (trackError) throw new Error('Could not seed the demonstration tracks.')
+
+  const { error: releaseTracksError } = await admin.from('release_tracks').upsert(
+    trackFixtures.map((track, index) => ({
+      release_id: demoFixtureIds.release,
+      track_id: track.id,
+      disc_number: 1,
+      position: index + 1,
+    })),
+  )
+  if (releaseTracksError) throw new Error('Could not seed the authored release order.')
+
+  const { error: collectionError } = await admin.from('collections').upsert({
+    id: demoFixtureIds.collection,
+    slug: 'movement-studies',
+    title: 'Movement Studies',
+    description: 'The same fictional tracks in a separately authored collection order.',
+    state: 'published',
+    sort_order: 10,
+    published_at: '2026-07-14T00:00:00.000Z',
+    created_by: users.get('owner'),
+  })
+  if (collectionError) throw new Error('Could not seed the demonstration collection.')
+  const { error: collectionTracksError } = await admin.from('collection_tracks').upsert([
+    { collection_id: demoFixtureIds.collection, track_id: demoFixtureIds.trackThree, position: 1 },
+    { collection_id: demoFixtureIds.collection, track_id: demoFixtureIds.trackOne, position: 2 },
+  ])
+  if (collectionTracksError) throw new Error('Could not seed the collection order.')
+
+  const { error: taxonomyError } = await admin.from('catalog_taxonomies').upsert({
+    id: demoFixtureIds.taxonomy,
+    key: 'practice',
+    label: 'Practice',
+  })
+  if (taxonomyError) throw new Error('Could not seed the catalog taxonomy.')
+  const { error: termError } = await admin.from('catalog_terms').upsert({
+    id: demoFixtureIds.taxonomyTerm,
+    taxonomy_id: demoFixtureIds.taxonomy,
+    slug: 'movement-study',
+    label: 'Movement study',
+    sort_order: 10,
+  })
+  if (termError) throw new Error('Could not seed the catalog term.')
+  const { error: assignmentError } = await admin.from('catalog_term_assignments').upsert(
+    trackFixtures.map((track) => ({
+      term_id: demoFixtureIds.taxonomyTerm,
+      resource_type: 'track',
+      resource_id: track.id,
+    })),
+  )
+  if (assignmentError) throw new Error('Could not seed the catalog term assignments.')
+
+  const { error: creditsError } = await admin.from('catalog_credits').upsert([
+    {
+      resource_type: 'release',
+      resource_id: demoFixtureIds.release,
+      role: 'Music and performance',
+      name: 'Daymark Assembly',
+      position: 1,
+    },
+    {
+      resource_type: 'track',
+      resource_id: demoFixtureIds.trackOne,
+      role: 'Piano',
+      name: 'Daymark Assembly',
+      position: 1,
+    },
+  ])
+  if (creditsError) throw new Error('Could not seed the catalog credits.')
+
+  const previewFixtures = [
+    {
+      id: demoFixtureIds.preview,
+      trackId: demoFixtureIds.trackOne,
+      path: 'gate-a/first-light-repeated-preview.wav',
+      bytes: createPreviewWave(440),
+    },
+    {
+      id: demoFixtureIds.previewTwo,
+      trackId: demoFixtureIds.trackTwo,
+      path: 'gate-a/a-measure-of-distance-preview.wav',
+      bytes: createPreviewWave(554.37),
+    },
+    {
+      id: demoFixtureIds.previewThree,
+      trackId: demoFixtureIds.trackThree,
+      path: 'gate-a/turn-toward-home-preview.wav',
+      bytes: createPreviewWave(659.25),
+    },
+  ]
   const downloadBytes = Buffer.from(
     'Daymark Assembly local demonstration download. This fixture contains no private artist material.\n',
     'utf8',
   )
-  const previewPath = 'gate-a/lines-we-carry-preview.wav'
   const downloadPath = 'gate-a/lines-we-carry-download.txt'
 
-  const { error: previewUploadError } = await admin.storage
-    .from('preview-media')
-    .upload(previewPath, previewBytes, { contentType: 'audio/wav', upsert: true })
-  if (previewUploadError) throw new Error('Could not upload the public preview fixture.')
+  for (const preview of previewFixtures) {
+    const { error: previewUploadError } = await admin.storage
+      .from('preview-media')
+      .upload(preview.path, preview.bytes, { contentType: 'audio/wav', upsert: true })
+    if (previewUploadError) throw new Error('Could not upload a public preview fixture.')
+  }
 
   const { error: downloadUploadError } = await admin.storage
     .from('downloads')
@@ -262,19 +403,23 @@ export async function seedAuthorizationDemonstration(status) {
   if (downloadUploadError) throw new Error('Could not upload the private download fixture.')
 
   const { error: mediaError } = await admin.from('media_objects').upsert([
-    {
-      id: demoFixtureIds.preview,
+    ...previewFixtures.map((preview) => ({
+      id: preview.id,
       release_id: demoFixtureIds.release,
+      track_id: preview.trackId,
       kind: 'preview_audio',
       bucket_id: 'preview-media',
-      object_path: previewPath,
+      object_path: preview.path,
       media_type: 'audio/wav',
-      byte_size: previewBytes.byteLength,
-      sha256: sha256(previewBytes),
+      byte_size: preview.bytes.byteLength,
+      sha256: sha256(preview.bytes),
       status: 'ready',
       is_public: true,
+      metadata: { generated: true, durationMs: 1000 },
+      processing_profile_version: 'demo-generated-v1',
+      derivative_key: `${sha256(preview.bytes)}:demo-generated-v1:preview`,
       created_by: users.get('owner'),
-    },
+    })),
     {
       id: demoFixtureIds.download,
       release_id: demoFixtureIds.release,
@@ -286,10 +431,17 @@ export async function seedAuthorizationDemonstration(status) {
       sha256: sha256(downloadBytes),
       status: 'ready',
       is_public: false,
+      metadata: { fixture: true },
+      processing_profile_version: null,
+      derivative_key: null,
       created_by: users.get('owner'),
     },
   ])
-  if (mediaError) throw new Error('Could not seed the demonstration media records.')
+  if (mediaError) {
+    throw new Error(
+      `Could not seed the demonstration media records: ${redactOutput(mediaError.message)}`,
+    )
+  }
 
   const { error: productError } = await admin.from('products').upsert({
     id: demoFixtureIds.product,
