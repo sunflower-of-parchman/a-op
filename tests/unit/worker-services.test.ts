@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createWorkerRequestHandler } from '../../workers/shared/httpService'
+import {
+  createWorkerRequestHandler,
+  createWorkerRouterRequestHandler,
+} from '../../workers/shared/httpService'
 import { dispatchWorkerService, invokeWorkerService } from '../../server/utils/workerServices'
 
 describe('private worker HTTP service', () => {
@@ -63,6 +66,35 @@ describe('private worker HTTP service', () => {
     release?.()
     expect((await first).statusCode).toBe(200)
   })
+
+  it('routes the shared container runtime to the requested durable queue', async () => {
+    const processMedia = vi.fn(async () => ({ processed: 1, failed: 0 }))
+    const processDocuments = vi.fn(async () => ({ processed: 0, failed: 0 }))
+    const handleRequest = createWorkerRouterRequestHandler({
+      services: [
+        { service: 'media', secret: 'service-secret', processOne: processMedia },
+        { service: 'documents', secret: 'service-secret', processOne: processDocuments },
+      ],
+    })
+
+    expect((await handleRequest({ method: 'GET', path: '/media/health' })).payload).toEqual({
+      status: 'ok',
+      service: 'media',
+      queue: 'supabase-durable',
+    })
+    expect(
+      (
+        await handleRequest({
+          method: 'POST',
+          path: '/documents/jobs/process-one',
+          authorization: 'Bearer service-secret',
+        })
+      ).payload,
+    ).toEqual({ status: 'complete', service: 'documents', processed: 0, failed: 0 })
+    expect(processMedia).not.toHaveBeenCalled()
+    expect(processDocuments).toHaveBeenCalledTimes(1)
+    expect((await handleRequest({ method: 'GET', path: '/health' })).statusCode).toBe(404)
+  })
 })
 
 describe('Nuxt worker binding client', () => {
@@ -73,6 +105,7 @@ describe('Nuxt worker binding client', () => {
       release = resolve
     })
     const result = await dispatchWorkerService({
+      service: 'media',
       url: 'https://worker.internal',
       secret: 'service-secret',
       defer: (promise) => {
@@ -92,11 +125,12 @@ describe('Nuxt worker binding client', () => {
 
   it('calls the bound service without returning its URL or secret', async () => {
     const fetchImplementation = vi.fn(async (input: string | URL, init?: RequestInit) => {
-      expect(String(input)).toBe('https://worker.internal/jobs/process-one')
+      expect(String(input)).toBe('https://worker.internal/media/jobs/process-one')
       expect(init?.headers).toEqual({ authorization: 'Bearer service-secret' })
       return Response.json({ status: 'complete', processed: 1, failed: 0 })
     })
     const result = await invokeWorkerService({
+      service: 'media',
       url: 'https://worker.internal',
       secret: 'service-secret',
       fetchImplementation,
@@ -108,14 +142,17 @@ describe('Nuxt worker binding client', () => {
   })
 
   it('preserves the durable queue when a binding is absent or unavailable', async () => {
-    expect(await invokeWorkerService({ secret: 'service-secret' })).toEqual({
+    expect(await invokeWorkerService({ service: 'media', secret: 'service-secret' })).toEqual({
       status: 'not-configured',
     })
-    expect(await invokeWorkerService({ url: 'https://worker.internal' })).toEqual({
-      status: 'misconfigured',
-    })
+    expect(await invokeWorkerService({ service: 'media', url: 'https://worker.internal' })).toEqual(
+      {
+        status: 'misconfigured',
+      },
+    )
     expect(
       await invokeWorkerService({
+        service: 'documents',
         url: 'https://worker.internal',
         secret: 'service-secret',
         fetchImplementation: async () => new Response(null, { status: 503 }),

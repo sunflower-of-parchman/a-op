@@ -23,6 +23,10 @@ type WorkerResponse = {
   payload: object
 }
 
+type WorkerRouterOptions = {
+  services: WorkerHttpServiceOptions[]
+}
+
 function sendJson(response: ServerResponse, statusCode: number, payload: object) {
   response.writeHead(statusCode, {
     'cache-control': 'no-store',
@@ -77,6 +81,20 @@ export function createWorkerRequestHandler(options: WorkerHttpServiceOptions) {
   }
 }
 
+export function createWorkerRouterRequestHandler(options: WorkerRouterOptions) {
+  const handlers = new Map(
+    options.services.map((service) => [service.service, createWorkerRequestHandler(service)]),
+  )
+
+  return async (request: WorkerRequest): Promise<WorkerResponse> => {
+    const match = request.path.match(/^\/(media|documents)(\/.*)$/)
+    if (!match) return { statusCode: 404, payload: { status: 'not-found' } }
+    const handler = handlers.get(match[1] as WorkerHttpServiceOptions['service'])
+    if (!handler) return { statusCode: 404, payload: { status: 'not-found' } }
+    return handler({ ...request, path: match[2] })
+  }
+}
+
 export function createWorkerHttpService(options: WorkerHttpServiceOptions) {
   const handleRequest = createWorkerRequestHandler(options)
   return createServer(async (request: IncomingMessage, response: ServerResponse) => {
@@ -89,18 +107,38 @@ export function createWorkerHttpService(options: WorkerHttpServiceOptions) {
   })
 }
 
-export function startWorkerHttpService(options: WorkerHttpServiceOptions) {
+export function createWorkerRouterHttpService(options: WorkerRouterOptions) {
+  const handleRequest = createWorkerRouterRequestHandler(options)
+  return createServer(async (request: IncomingMessage, response: ServerResponse) => {
+    const result = await handleRequest({
+      method: request.method,
+      path: new URL(request.url ?? '/', 'http://worker.internal').pathname,
+      authorization: request.headers.authorization,
+    })
+    sendJson(response, result.statusCode, result.payload)
+  })
+}
+
+function listenForWorkerRequests(
+  server: ReturnType<typeof createServer>,
+  service: 'media' | 'documents' | 'worker-runtime',
+) {
   const port = Number(process.env.PORT ?? 8787)
   if (!Number.isInteger(port) || port < 1 || port > 65_535) {
     throw new Error('The worker service PORT must be an integer between 1 and 65535.')
   }
 
-  const server = createWorkerHttpService(options)
   server.listen(port, '0.0.0.0', () => {
-    console.log(
-      JSON.stringify({ event: 'worker-service-listening', service: options.service, port }),
-    )
+    console.log(JSON.stringify({ event: 'worker-service-listening', service, port }))
   })
   process.once('SIGTERM', () => server.close())
   return server
+}
+
+export function startWorkerHttpService(options: WorkerHttpServiceOptions) {
+  return listenForWorkerRequests(createWorkerHttpService(options), options.service)
+}
+
+export function startWorkerRouterHttpService(options: WorkerRouterOptions) {
+  return listenForWorkerRequests(createWorkerRouterHttpService(options), 'worker-runtime')
 }

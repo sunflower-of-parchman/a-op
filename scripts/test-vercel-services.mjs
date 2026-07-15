@@ -28,22 +28,16 @@ assert.deepEqual(config.services.web.bindings, [
 ])
 assert.deepEqual(config.rewrites, [{ source: '/(.*)', destination: { service: 'web' } }])
 
-for (const [service, module] of [
-  ['media_worker', 'media'],
-  ['document_worker', 'documents'],
-]) {
+for (const service of ['media_worker', 'document_worker']) {
   assert.equal(config.services[service].root, '.')
   assert.equal(config.services[service].runtime, 'container')
   assert.equal(config.services[service].entrypoint, 'Dockerfile')
-  assert.deepEqual(config.services[service].command, [
-    'node',
-    '--experimental-strip-types',
-    `workers/${module}/service.ts`,
-  ])
+  assert.equal(config.services[service].command, undefined)
   assert.ok(existsSync(resolve(projectRoot, 'Dockerfile')), 'Dockerfile is missing')
   const dockerfile = read('Dockerfile')
+  assert.match(dockerfile, /COPY workers\/service\.ts \.\/workers\/service\.ts/)
   assert.match(dockerfile, /COPY workers\/shared \.\/workers\/shared/)
-  assert.match(dockerfile, new RegExp(`COPY workers/${module} \\.\\/workers/${module}`))
+  assert.match(dockerfile, /workers\/service\.ts/)
 }
 
 assert.match(read('.env.example'), /^NUXT_MEDIA_WORKER_SECRET=/m)

@@ -12,9 +12,10 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY shared ./shared
+COPY workers/service.ts ./workers/service.ts
 COPY workers/shared ./workers/shared
 COPY workers/media ./workers/media
 COPY workers/documents ./workers/documents
 
 ENV NODE_ENV=production
-CMD ["node", "--experimental-strip-types", "workers/media/service.ts"]
+CMD ["node", "--experimental-strip-types", "workers/service.ts"]

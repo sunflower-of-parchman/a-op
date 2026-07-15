@@ -22,6 +22,7 @@ function isWorkerSummary(value: unknown): value is { processed: number; failed: 
 }
 
 export async function invokeWorkerService(options: {
+  service: WorkerServiceKind
   url?: string
   secret?: string
   fetchImplementation?: WorkerFetch
@@ -32,7 +33,10 @@ export async function invokeWorkerService(options: {
 
   try {
     const baseUrl = new URL(options.url)
-    const requestUrl = new URL('jobs/process-one', `${baseUrl.href.replace(/\/$/, '')}/`)
+    const requestUrl = new URL(
+      `${options.service}/jobs/process-one`,
+      `${baseUrl.href.replace(/\/$/, '')}/`,
+    )
     const response = await (options.fetchImplementation ?? fetch)(requestUrl, {
       method: 'POST',
       headers: { authorization: `Bearer ${options.secret}` },
@@ -48,6 +52,7 @@ export async function invokeWorkerService(options: {
 }
 
 export async function dispatchWorkerService(options: {
+  service: WorkerServiceKind
   url?: string
   secret?: string
   fetchImplementation?: WorkerFetch
@@ -84,6 +89,7 @@ export async function requestWorkerRun(
       ? process.env.MEDIA_WORKER_INTERNAL_URL
       : process.env.DOCUMENT_WORKER_INTERNAL_URL
   return dispatchWorkerService({
+    service: kind,
     url,
     secret: config.mediaWorkerSecret,
     defer: process.env.VERCEL ? waitUntil : undefined,

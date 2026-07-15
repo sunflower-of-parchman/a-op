@@ -184,8 +184,8 @@ docker build --pull=false -f Dockerfile -t artist-owned-platform-worker-runtime:
 
 Start the image once with each service command, the disposable local environment, an overridden container-reachable local Supabase URL, and a temporary invocation secret. Prove:
 
-1. `/health` returns only service identity and `supabase-durable` queue status.
-2. `/jobs/process-one` returns 401 without the exact bearer secret.
+1. `/media/health` and `/documents/health` return only service identity and `supabase-durable` queue status.
+2. Both service-qualified `/jobs/process-one` routes return 401 without the exact bearer secret.
 3. An authenticated empty-queue request reaches local Supabase and returns `processed: 0, failed: 0`.
 4. The ordinary CLI tests still perform real FFmpeg processing and private PDF rendering.
 5. The images contain no `.env`, hosted credential, private media, or machine-specific path.
