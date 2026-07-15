@@ -23,6 +23,6 @@ Each implementation entry below must name the concept, private reference area wh
 
 | Capability | Private reference concept | New Build Week implementation | Generalization | Commit | Verification |
 | --- | --- | --- | --- | --- | --- |
-| Platform planning | Production-proven web, music, licensing, membership, education, and operations architecture | `plans/artistOwnedPlatform.md`; `docs/architecture/` | Defined a reusable single-artist product, authority model, Codex setup contract, and evidence requirements without private code or data | `e71e1d9`; `8c8a95d` | Required ExecPlan sections and documentation checks passed |
+| Platform planning | Production-proven web, music, licensing, membership, education, and operations architecture | `plans/artistOwnedPlatform.md`; `README.md`; `AGENTS.md`; `SETUP.md`; `docs/architecture/` | Defined a reusable single-artist product, authority model, Codex setup contract, design direction, and evidence requirements without private code or data | `e71e1d9`; `8c8a95d`; `ebdc320` | Required ExecPlan sections, product contracts, JSON, public-path, secret-pattern, and documentation checks passed |
 
 Add entries as implementation begins. A capability is not considered Build Week work until the new files, dated commit, and verification exist in this repository.

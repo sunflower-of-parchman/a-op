@@ -49,7 +49,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
 - Human decisions: Preserve the complete platform, center musicians, keep Codex in setup and maintenance rather than visitor runtime, and retain explicit approval over identity, rights, prices, accounts, costs, license, and publication.
 - Material contribution: Public README and setup entrypoint, repository agent rules, complete product contract, provenance ledger, visual and interaction thesis, eleven architecture decision records, current Supabase security constraints, and Developer Tools track decision.
-- Commit: Pending the Milestone 0 commit.
+- Commit: `ebdc320` (`Define artist-owned platform contract`).
 - Verification: Required documents exist; tracked paths are public-safe; local-path example is valid JSON; documentation contains no secret values; ExecPlan and evidence records are synchronized.
 
 ## Submission reconciliation
