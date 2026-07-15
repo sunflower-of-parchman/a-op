@@ -106,6 +106,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `d6991d2` (`Build music licensing and private documents`).
 - Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:licensing`, type checking, application lint, production build, browser-secret scan, PDF text extraction and two-page visual inspection, and four passing desktop/mobile licensing journeys with two intentional shared-database skips. Stripe sandbox evidence remains pending Michael's explicit approval to connect the external test account.
 
+### Milestone 7 learning, video, and editorial publishing — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Deliver the complete education and publishing system; preserve authored order; support public, account, individual-purchase, and membership access; keep lesson media private; require visitor consent before external video embeds; keep publication and unsafe-content decisions explicit.
+- Material contribution: Normalized learning areas, paths, courses, lessons, sections, drafts, progress, videos, and editorial records; atomic draft publication and reorder safety; central entitlement reuse; protected mixed-media delivery; monotonic progress and account resume; safe rich-text rendering without raw HTML; consent-gated external video; complete owner preview and publication workspaces; fictional demonstration content; CI, runbook, database authority tests, and responsive browser coverage; deterministic full-suite isolation and hydration-aware browser navigation.
+- Commit: `b49c36c` (`Build learning video and editorial publishing`).
+- Verification: Clean local reset and schema lint, `npm run verify:learning`, `npm run verify:catalog`, formatting, lint, type checking, setup health, production build, browser-secret scan, and the complete nine-specification desktop/mobile Playwright regression passed. That full run isolated each specification with a fresh deterministic seed and used the prepared pinned PDF runtime for the licensing prerequisite.
+
 ## Submission reconciliation
 
 Before submission:
