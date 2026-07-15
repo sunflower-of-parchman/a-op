@@ -36,6 +36,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael approved and the primary task completed Stage 2A Supabase linking, migration-history inspection, and a non-mutating dry run on July 15, 2026.
 - [x] Michael approved and the primary task completed Stage 2B application of the 11 reviewed forward migrations plus remote history, normalized types, and schema-lint verification on July 15, 2026.
 - [x] Michael approved and the primary task completed Stage 3 guarded initialization and independent verification of four fictional hosted identities, Daymark Assembly content, and all seven storage boundaries on July 15, 2026.
+- [x] Michael approved and the primary task completed Stage 4A creation of three test-only Stripe products and prices plus owner-authorized mappings for the album download, dance-film license, and monthly membership on July 15, 2026.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
@@ -69,6 +70,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | Link and dry-run Supabase migrations  | Approved | Stage 2A executed; 0 remote migrations applied          |
 | Apply reviewed Supabase migrations    | Approved | Stage 2B executed; exact 11/11 parity and clean lint     |
 | Initialize hosted fictional fixtures  | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`      |
+| Create Stripe sandbox catalog/mappings | Approved | Stage 4A executed; 3 test products, prices, and mappings |
 | Promote final deployment              | Pending  | Approved URL and deployment commit                      |
 | Share repository or judge credentials | Pending  | Devpost access record                                   |
 | Publish YouTube video                 | Pending  | Public video URL                                        |

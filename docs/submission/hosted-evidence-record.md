@@ -29,6 +29,7 @@ This record stays pending until an approved operator executes the corresponding 
 | Link and dry-run Supabase migrations    | Executed | Stage 2A approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:44:15Z |
 | Apply Supabase migrations               | Executed | Stage 2B approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:50:39Z |
 | Seed hosted fixtures                    | Executed | Stage 3 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:01:49Z |
+| Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:24:04Z |
 | Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
 | Execute hosted reset                    | Pending |                                       |                  |
 | Assign production alias or domain       | Pending |                                       |                  |
@@ -66,13 +67,14 @@ This record stays pending until an approved operator executes the corresponding 
 
 The successful push ended with a non-fatal local pg-delta catalog-cache warning about a missing temporary certificate path. Direct migration-history, type-generation, and linked-lint verification all passed afterward. No migration repair, reset, or retry was performed.
 
-The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and zero Stripe provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization.
+The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and an initial Stripe provider-mapping count of zero. After Stage 4A, another independent check preserved the same fixture, account, and storage results while verifying three provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization or mapping.
 
 ## Stripe evidence
 
 | Journey                                 | Status  | Safe event suffix/hash / result |
 | --------------------------------------- | ------- | ------------------------------- |
-| Test or sandbox mode confirmed          | Pass    | 2026-07-15T19:43:37Z; authenticated read returned `livemode: false` |
+| Test or sandbox mode confirmed          | Pass    | 2026-07-15T21:24:04Z; all three products and prices returned `livemode: false` |
+| Sandbox catalog and owner mappings      | Pass    | 2026-07-15T21:24:04Z; 3 products, 3 prices, and 3 mappings: download `sha256:17ba0837a9ec` / `sha256:ad6d6f333fb0`; license `sha256:3cfdd1b9bdac` / `sha256:2b580f5891ab`; membership `sha256:25eb8bdf879c` / `sha256:89a75f244374` |
 | One-time Checkout                       | Pending |                                 |
 | Signed webhook                          | Pending |                                 |
 | Same-event replay                       | Pending |                                 |
@@ -85,6 +87,8 @@ The guarded Stage 3 initializer and a separate hosted check both passed at reset
 | License Checkout and frozen terms       | Pending |                                 |
 | Purchaser-only PDF delivery             | Pending |                                 |
 | Redacted webhook recovery               | Pending |                                 |
+
+Stage 4A created only the three approved sandbox offerings: the USD 12 one-time album download, USD 75 dance-film license, and USD 8 monthly membership. The second fictional USD 125 live-performance license remains intentionally unmapped pending a separate decision. No Checkout session, webhook endpoint, signing secret, customer-portal configuration, deployment, live-mode object, or real payment was created.
 
 ## Worker evidence
 
