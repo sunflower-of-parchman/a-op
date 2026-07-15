@@ -122,8 +122,8 @@ test('authors, uploads, processes, and explicitly publishes a release', async ({
   expect(workerOutput).toContain('"event":"media-job-ready"')
 
   await page.reload()
-  await expect(page.getByText(/Source ready · job ready/)).toBeVisible()
-  await expect(page.getByText('Public preview ready.')).toBeVisible()
+  await expect(page.getByText(/Source ready · job ready/).first()).toBeVisible()
+  await expect(page.getByText('Public preview ready.').first()).toBeVisible()
 
   await page.getByRole('button', { name: 'Add credit' }).click()
   const credit = page.locator('.credit-editor li').last()
@@ -142,6 +142,58 @@ test('authors, uploads, processes, and explicitly publishes a release', async ({
   await expect(page.getByRole('button', { name: 'Play public preview' })).toBeVisible()
 })
 
+test('drafts, orders, and explicitly publishes a collection', async ({ page }, testInfo) => {
+  test.skip(
+    testInfo.project.name === 'mobile-chromium',
+    'The collection mutation journey runs once against the shared database.',
+  )
+  await signInAsOwner(page, '/admin/collections')
+  await expect(
+    page.getByRole('heading', { name: 'Make another authored way through the music.' }),
+  ).toBeVisible()
+
+  await page.getByRole('button', { name: 'New collection' }).click()
+  await expect(page.getByText('Unsaved private changes.')).toBeVisible()
+  const identity = page.locator('.catalog-edit-form section').first()
+  await identity.getByLabel('Title', { exact: true }).fill('Browser Path')
+  await identity.getByLabel('Slug', { exact: true }).fill('browser-path')
+  await identity
+    .getByLabel('Description', { exact: true })
+    .fill('A separately authored route through already-published music.')
+
+  for (const title of ['First Light, Repeated', 'Turn Toward Home']) {
+    await page
+      .locator('.collection-track-pool li')
+      .filter({ hasText: title })
+      .getByRole('button', { name: 'Add' })
+      .click()
+  }
+  const collectionOrder = page.locator('.collection-order > li')
+  await expect(collectionOrder).toHaveCount(2)
+  await collectionOrder.first().getByRole('button', { name: 'Down' }).click()
+  await collectionOrder.first().getByLabel('Optional collection note').fill('Begin with return.')
+
+  await page.getByRole('button', { name: 'Save draft' }).click()
+  await expect(page.getByText('Collection draft saved privately.')).toBeVisible()
+  const publicBefore = await page.request.get('/api/catalog?draft=browser-path-before')
+  const beforeCatalog = await publicBefore.json()
+  expect(beforeCatalog.collections).not.toEqual(
+    expect.arrayContaining([expect.objectContaining({ slug: 'browser-path' })]),
+  )
+
+  page.once('dialog', (dialog) => dialog.accept())
+  await page.getByRole('button', { name: 'Publish collection' }).click()
+  await expect(page.getByText('Collection published from the approved draft.')).toBeVisible()
+
+  await page.goto('/music/collections/browser-path')
+  await expect(page.getByRole('heading', { name: 'Browser Path' })).toBeVisible()
+  await expect(page.locator('.tracklist__title')).toHaveText([
+    'Turn Toward Home',
+    'First Light, Repeated',
+  ])
+  await expect(page.getByRole('button', { name: 'Play Turn Toward Home' })).toBeVisible()
+})
+
 test('keeps music administration accessible within desktop and mobile viewports', async ({
   page,
 }) => {
@@ -156,5 +208,19 @@ test('keeps music administration accessible within desktop and mobile viewports'
   const results = await new AxeBuilder({ page }).analyze()
   expect(
     results.violations.filter(({ impact }) => impact === 'critical' || impact === 'serious'),
+  ).toEqual([])
+
+  await page.goto('/admin/collections')
+  await expect(
+    page.getByRole('heading', { name: 'Make another authored way through the music.' }),
+  ).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  )
+  const collectionResults = await new AxeBuilder({ page }).analyze()
+  expect(
+    collectionResults.violations.filter(
+      ({ impact }) => impact === 'critical' || impact === 'serious',
+    ),
   ).toEqual([])
 })

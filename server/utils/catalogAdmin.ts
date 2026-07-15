@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { ReleaseDraftInput } from '#shared/schemas/catalog'
+import type { CollectionDraftInput, ReleaseDraftInput } from '#shared/schemas/catalog'
 import type { AuthIdentity } from './supabase'
 import type { Database, Json } from '#shared/types/database'
 
@@ -135,4 +135,69 @@ export async function saveReleaseDraft(
     detail: { tracks: release.tracks.length },
   })
   return release
+}
+
+export function normalizeCollectionDraft(
+  input: CollectionDraftInput,
+  collectionId = input.id ?? randomUUID(),
+) {
+  return {
+    id: collectionId,
+    slug: input.slug,
+    title: input.title,
+    description: input.description,
+    tracks: input.tracks.map((track, index) => ({ ...track, position: index + 1 })),
+  }
+}
+
+export async function saveCollectionDraft(
+  admin: SupabaseClient<Database>,
+  identity: AuthIdentity,
+  input: CollectionDraftInput,
+  expectedId?: string,
+) {
+  const collection = normalizeCollectionDraft(input, expectedId)
+  const { data: existing, error: existingError } = await admin
+    .from('collections')
+    .select('id')
+    .eq('id', collection.id)
+    .maybeSingle()
+  if (existingError) throw new Error('Collection lookup failed.')
+  if (!existing) {
+    const { error } = await admin.from('collections').insert({
+      id: collection.id,
+      slug: collection.slug,
+      title: collection.title,
+      description: collection.description,
+      state: 'draft',
+      created_by: identity.user.id,
+    })
+    if (error) throw new Error('Collection draft shell could not be created.')
+  }
+
+  const payload = {
+    slug: collection.slug,
+    title: collection.title,
+    description: collection.description,
+    tracks: collection.tracks.map((track) => ({
+      track_id: track.trackId,
+      position: track.position,
+      note: track.note,
+    })),
+  } satisfies Json
+  const { error: draftError } = await admin.from('collection_drafts').upsert({
+    collection_id: collection.id,
+    payload,
+    updated_by: identity.user.id,
+    updated_at: new Date().toISOString(),
+  })
+  if (draftError) throw new Error('Collection draft could not be saved.')
+  await admin.from('audit_records').insert({
+    actor_id: identity.user.id,
+    event_type: 'catalog.collection_draft_saved',
+    target_type: 'collection',
+    target_id: collection.id,
+    detail: { tracks: collection.tracks.length },
+  })
+  return collection
 }

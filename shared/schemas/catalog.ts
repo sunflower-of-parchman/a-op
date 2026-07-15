@@ -55,4 +55,40 @@ export const releaseDraftSchema = z
     }
   })
 
+export const collectionDraftSchema = z
+  .object({
+    id: z.uuid().optional(),
+    slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    title: z.string().trim().min(1).max(200),
+    description: z.string().max(5000).default(''),
+    tracks: z
+      .array(
+        z.object({
+          trackId: z.uuid(),
+          position: z.number().int().positive(),
+          note: z.string().max(500).default(''),
+        }),
+      )
+      .min(1)
+      .max(1000),
+  })
+  .superRefine((collection, context) => {
+    const trackIds = new Set<string>()
+    const positions = new Set<number>()
+    for (const track of collection.tracks) {
+      if (trackIds.has(track.trackId)) {
+        context.addIssue({
+          code: 'custom',
+          message: 'A track can appear only once per collection.',
+        })
+      }
+      if (positions.has(track.position)) {
+        context.addIssue({ code: 'custom', message: 'Collection positions must be unique.' })
+      }
+      trackIds.add(track.trackId)
+      positions.add(track.position)
+    }
+  })
+
 export type ReleaseDraftInput = z.infer<typeof releaseDraftSchema>
+export type CollectionDraftInput = z.infer<typeof collectionDraftSchema>

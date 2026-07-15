@@ -111,6 +111,11 @@ try {
       .select('release_id')
       .limit(1)
     assert.ok(releaseDraftReadError, `${label} read server-only release drafts`)
+    const { error: collectionDraftReadError } = await client
+      .from('collection_drafts')
+      .select('collection_id')
+      .limit(1)
+    assert.ok(collectionDraftReadError, `${label} read server-only collection drafts`)
   }
 
   const { data: ownerProfiles, error: ownerProfileError } = await owner.client

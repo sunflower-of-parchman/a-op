@@ -175,6 +175,38 @@ export type Database = {
           },
         ]
       }
+      collection_drafts: {
+        Row: {
+          collection_id: string
+          created_at: string
+          payload: Json
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          collection_id: string
+          created_at?: string
+          payload: Json
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          collection_id?: string
+          created_at?: string
+          payload?: Json
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_drafts_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: true
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collection_tracks: {
         Row: {
           collection_id: string
@@ -1284,6 +1316,10 @@ export type Database = {
       }
     }
     Functions: {
+      apply_collection_draft: {
+        Args: { p_actor_id: string; p_collection_id: string }
+        Returns: string
+      }
       apply_release_draft: {
         Args: { p_actor_id: string; p_release_id: string }
         Returns: string

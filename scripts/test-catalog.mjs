@@ -10,6 +10,7 @@ const testIds = {
   job: '50000000-0000-4000-8000-000000000005',
   derivative: '50000000-0000-4000-8000-000000000006',
   duplicateDerivative: '50000000-0000-4000-8000-000000000007',
+  unpublishedCollection: '50000000-0000-4000-8000-000000000008',
 }
 
 try {
@@ -66,6 +67,33 @@ try {
     title: 'Unauthorized catalog entry',
   })
   assert.ok(customerTrackError, 'A customer created a catalog track')
+
+  await admin.from('collections').delete().eq('id', testIds.unpublishedCollection)
+  const { error: collectionShellError } = await admin.from('collections').insert({
+    id: testIds.unpublishedCollection,
+    slug: 'unpublished-track-collection',
+    title: 'Unpublished track collection',
+    state: 'draft',
+    created_by: editor.user.id,
+  })
+  requireNoError(collectionShellError, 'Collection draft shell failed')
+  const { error: collectionDraftError } = await admin.from('collection_drafts').insert({
+    collection_id: testIds.unpublishedCollection,
+    payload: {
+      slug: 'unpublished-track-collection',
+      title: 'Unpublished track collection',
+      description: '',
+      tracks: [{ track_id: testIds.draftTrack, position: 1, note: '' }],
+    },
+    updated_by: editor.user.id,
+  })
+  requireNoError(collectionDraftError, 'Collection proposal creation failed')
+  const { error: unpublishedCollectionError } = await admin.rpc('apply_collection_draft', {
+    p_collection_id: testIds.unpublishedCollection,
+    p_actor_id: editor.user.id,
+  })
+  assert.ok(unpublishedCollectionError, 'A collection published an unpublished track')
+  await admin.from('collections').delete().eq('id', testIds.unpublishedCollection)
 
   await admin.from('playlists').delete().eq('id', testIds.playlist)
   const { error: playlistError } = await customerOne.client.from('playlists').insert({

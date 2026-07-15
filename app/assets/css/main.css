@@ -874,6 +874,56 @@ button.text-action:disabled {
   margin: 0.25rem 0 0;
 }
 
+.collection-composer {
+  display: grid;
+  gap: clamp(2rem, 5vw, 5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.42fr);
+}
+
+.collection-order label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.collection-order label > span {
+  color: var(--color-muted-text);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.collection-track-pool {
+  align-self: start;
+  border-top: var(--border-width) solid var(--color-border);
+  padding-top: 1rem;
+  position: sticky;
+  top: 7rem;
+}
+
+.collection-track-pool ul {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.collection-track-pool li {
+  align-items: center;
+  border-bottom: var(--border-width) solid var(--color-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+}
+
+.collection-track-pool li > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.collection-track-pool small {
+  color: var(--color-muted-text);
+}
+
 .catalog-message {
   position: sticky;
   z-index: 10;
@@ -1480,6 +1530,14 @@ button.text-action:disabled {
 
   .catalog-musical-fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .collection-composer {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-track-pool {
+    position: static;
   }
 
   .admin-workspace-links a:nth-child(even) {

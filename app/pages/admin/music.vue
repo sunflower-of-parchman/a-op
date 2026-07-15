@@ -417,6 +417,7 @@ onBeforeRouteLeave(() => !dirty.value || window.confirm('Leave without saving th
         Metadata, source audio, artwork, credits, order, and processing state remain together. A
         draft does not replace the published release until approval.
       </p>
+      <NuxtLink class="text-action" to="/admin/collections">Organize collections</NuxtLink>
     </header>
 
     <div v-if="data" class="catalog-workspace">
