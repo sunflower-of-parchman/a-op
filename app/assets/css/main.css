@@ -359,6 +359,39 @@ button.text-action:disabled {
   color: var(--color-muted-text);
 }
 
+.oauth-options {
+  display: grid;
+  max-width: 38rem;
+  margin-top: 2.5rem;
+  gap: 1.25rem;
+}
+
+.oauth-options__heading {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  color: var(--color-muted-text);
+  gap: 1rem;
+}
+
+.oauth-options__heading span {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.oauth-options__heading p {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.oauth-options__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1rem;
+}
+
 .account-actions {
   display: flex;
   flex-wrap: wrap;

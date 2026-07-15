@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     public: {
       artist: artistConfig,
       demoMode: true,
+      oauthProviders: '',
       supabaseUrl: 'http://127.0.0.1:54321',
       supabasePublishableKey: '',
       siteUrl: 'http://127.0.0.1:3000',

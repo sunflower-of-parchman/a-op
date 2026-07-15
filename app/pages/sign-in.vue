@@ -6,7 +6,7 @@ useSeoMeta({ title: 'Sign in' })
 const route = useRoute()
 const credentials = reactive<SignInInput>({ email: '', password: '' })
 const pending = ref(false)
-const message = ref('')
+const message = ref(route.query.oauth === 'failed' ? 'Provider sign-in was not completed.' : '')
 const ready = ref(false)
 
 onMounted(() => {
@@ -64,6 +64,10 @@ async function signIn() {
         {{ pending ? 'Signing in…' : 'Sign in' }}
       </button>
     </form>
+
+    <OAuthOptions
+      :redirect="typeof route.query.redirect === 'string' ? route.query.redirect : '/account'"
+    />
 
     <p class="account-alternative">
       New here? <NuxtLink to="/sign-up">Create an account</NuxtLink>.

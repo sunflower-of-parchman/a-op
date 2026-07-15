@@ -72,6 +72,8 @@ async function signUp() {
       </button>
     </form>
 
+    <OAuthOptions />
+
     <p class="account-alternative">
       Already registered? <NuxtLink to="/sign-in">Sign in</NuxtLink>.
     </p>

@@ -9,9 +9,12 @@ import {
   type H3Event,
 } from 'h3'
 import type { Database, Enums } from '#shared/types/database'
+import { parseOAuthProviders } from '#shared/utils/oauth'
 
 const accessCookie = 'artist-access-token'
 const refreshCookie = 'artist-refresh-token'
+const oauthVerifierCookie = 'artist-oauth-code-verifier'
+const oauthReturnCookie = 'artist-oauth-return'
 
 function clientOptions() {
   return { auth: { autoRefreshToken: false, persistSession: false } }
@@ -57,6 +60,52 @@ function cookieOptions(event: H3Event, maxAge: number) {
     path: '/',
     maxAge,
   }
+}
+
+export function getEnabledOAuthProviders(event: H3Event) {
+  return parseOAuthProviders(useRuntimeConfig(event).public.oauthProviders)
+}
+
+export function getOAuthSupabase(event: H3Event): SupabaseClient<Database> {
+  const { url, publishableKey } = getConnection(event)
+  const storage = {
+    getItem(key: string) {
+      return key.endsWith('-code-verifier') ? (getCookie(event, oauthVerifierCookie) ?? null) : null
+    },
+    setItem(key: string, value: string) {
+      if (key.endsWith('-code-verifier')) {
+        setCookie(event, oauthVerifierCookie, value, cookieOptions(event, 10 * 60))
+      }
+    },
+    removeItem(key: string) {
+      if (key.endsWith('-code-verifier')) deleteCookie(event, oauthVerifierCookie, { path: '/' })
+    },
+  }
+
+  return createClient<Database>(url, publishableKey, {
+    auth: {
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      flowType: 'pkce',
+      persistSession: true,
+      storage,
+    },
+  })
+}
+
+export function setOAuthReturnPath(event: H3Event, path: string) {
+  setCookie(event, oauthReturnCookie, path, cookieOptions(event, 10 * 60))
+}
+
+export function takeOAuthReturnPath(event: H3Event) {
+  const path = getCookie(event, oauthReturnCookie) ?? '/account'
+  deleteCookie(event, oauthReturnCookie, { path: '/' })
+  return path
+}
+
+export function clearOAuthTransaction(event: H3Event) {
+  deleteCookie(event, oauthVerifierCookie, { path: '/' })
+  deleteCookie(event, oauthReturnCookie, { path: '/' })
 }
 
 export function setAuthCookies(event: H3Event, session: Session) {
