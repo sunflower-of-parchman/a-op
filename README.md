@@ -37,7 +37,7 @@ The setup lifecycle is:
 
 ## Current status
 
-Milestones 0 through 5 and Integration Gate A are implemented locally. The repository now includes the Nuxt 4 and local Supabase foundation, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, structured pages, consent-based contact storage, catalog and collection authorship, signed resumable media intake, one local/container processing worker, a persistent public player, private listener libraries, one-time commerce, memberships, refunds, cancellation, customer billing tools, protected downloads, and auditable entitlements. The prepared media worker and Stripe integration still require explicitly approved hosted and sandbox connections before those external demonstrations can be recorded.
+Milestones 0 through 6 and Integration Gate A are implemented locally. The repository now includes the Nuxt 4 and local Supabase foundation, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, structured pages, consent-based contact storage, catalog and collection authorship, signed resumable media intake, one local/container processing worker, a persistent public player, private listener libraries, one-time commerce, memberships, refunds, cancellation, customer billing tools, protected downloads, auditable entitlements, explicit non-exclusive music licensing, immutable issued terms, and private PDF delivery. The prepared media worker and Stripe integration still require explicitly approved hosted and sandbox connections before those external demonstrations can be recorded.
 
 - Build record: `BUILD_WEEK.md`
 - Complete execution plan: `plans/artistOwnedPlatform.md`
@@ -67,10 +67,11 @@ Verify the current foundation with:
     npm run verify:administration
     npm run verify:catalog
     npm run verify:commerce
+    npm run verify:licensing
     npm run verify
     npm run test:e2e
 
-`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `verify:catalog` proves catalog authority, idempotent media intake, local and container media processing, and browser-secret boundaries. `verify:commerce` proves replay-safe fulfillment, changed-fact denial, subscription expiry, partial and full refunds, redacted webhook recovery records, raw-body Stripe signature verification, and customer isolation. `npm run verify` runs the aggregate gate and restores deterministic prerequisites before the responsive browser suite; it will continue to expand as licensing, learning, portability, and judge journeys are integrated.
+`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `verify:catalog` proves catalog authority, idempotent media intake, local and container media processing, and browser-secret boundaries. `verify:commerce` proves replay-safe fulfillment, changed-fact denial, subscription expiry, partial and full refunds, redacted webhook recovery records, raw-body Stripe signature verification, and customer isolation. `verify:licensing` proves immutable terms, replay-safe issue, private PDF rendering, account isolation, and refund revocation. `npm run verify` runs the aggregate gate and restores deterministic prerequisites before the responsive browser suite; it will continue to expand as learning, portability, and judge journeys are integrated.
 
 ## Ownership and operating costs
 

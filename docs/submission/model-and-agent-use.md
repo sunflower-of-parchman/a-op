@@ -97,6 +97,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `058201c` (`Build commerce and membership authority`).
 - Verification: `npm run setup:check`, `npm run verify:commerce`, Supabase schema lint with no findings, type checking, application lint, production build, and desktop/mobile commerce, owner-mapping, account-isolation, viewport, and accessibility journeys passed. Stripe sandbox evidence remains pending Michael's explicit approval to connect the external test account.
 
+### Milestone 6 music licensing — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Let artists publish complete supported uses; keep identity, rights, terms, prices, accounts, and external payment connections under human authority; automate only explicit non-exclusive options; route unusual or exclusive uses to inquiry; preserve private customer documents.
+- Material contribution: Versioned immutable templates and options; exact pre-checkout selection snapshots; license-specific local and Stripe test checkout paths; replay-safe atomic issue, document-job, and entitlement creation; refund revocation; private ReportLab PDF worker with leases and recovery; customer account history and protected signed delivery; owner publication and retry controls; public inquiry routing; CI and artist runbook.
+- Commit: `d6991d2` (`Build music licensing and private documents`).
+- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:licensing`, type checking, application lint, production build, browser-secret scan, PDF text extraction and two-page visual inspection, and four passing desktop/mobile licensing journeys with two intentional shared-database skips. Stripe sandbox evidence remains pending Michael's explicit approval to connect the external test account.
+
 ## Submission reconciliation
 
 Before submission:
