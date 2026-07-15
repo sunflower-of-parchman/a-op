@@ -124,6 +124,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `1b585c9` (`Build privacy telemetry and redacted operations`).
 - Verification: `npm run verify:telemetry`, `npm run setup:check`, Supabase schema lint, formatting, lint, type checking, production build, browser-secret scan, focused desktop/mobile Playwright journeys, and the complete ten-specification isolated browser regression passed. The browser proof produced page-view, catalog-search, media-start, meaningful-listen, and contact-conversion aggregates from real visitor actions and proved GPC refusal, owner-only status, redaction, viewport containment, and critical/serious axe compliance.
 
+### Milestone 9 Codex-guided setup and maintenance — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Make Codex the approachable setup and maintenance partner; keep the complete artist site operable without an OpenAI API key; preserve human authority over identity, rights, prices, accounts, costs, publication, and every consequential external action.
+- Material contribution: Fourteen-topic interview and strict proposal schemas; canonical configuration hashing; stale-aware recursive diff; ignored complete proposals; approval and local-authority guards; deterministic database configuration publication; approved idempotent media import and shared-worker processing; structured setup checks; versioned non-secret project state; explicit hosted-service checkpoints; provider-neutral Supabase, auth, storage, Stripe, email, Vercel/domain, media, backup/restore, upgrade, and troubleshooting runbooks; CI; and a disposable two-track end-to-end setup proof.
+- Commit: `ce976ff` (`Build Codex-guided artist setup`).
+- Verification: `npm run verify:setup`, formatting, lint, type checking, production build, and diff checks passed. The integration created generated fictional media, proved preview made no state change, rejected an unapproved proposal, applied and verified an approved artist configuration and two-track release, recorded five external approvals without acting on them, repeated idempotently, scanned output for secrets, and restored the original local demonstration and project state.
+
 ## Submission reconciliation
 
 Before submission:

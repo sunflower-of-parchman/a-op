@@ -143,7 +143,7 @@ This section will develop as we discuss the idea.
 | Free-credit request             | Submitted; approval not yet confirmed                                                                                          |
 | Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                       |
 | Working implementation          | Milestones 0–9 and Integration Gate A implemented locally; complete application plus the Codex-guided setup lifecycle verified |
-| Repository history and evidence | Planning through Milestone 8 commits; Milestone 9 implementation and verification evidence ready for its milestone commit      |
+| Repository history and evidence | Planning through Milestone 9 commits, capability evidence, model record, provenance, runbooks, and living ExecPlan recorded    |
 | README                          | Product introduction and verified local quickstart complete                                                                    |
 | Demo and judging access         | Not started                                                                                                                    |
 | Demo video                      | Not started                                                                                                                    |
