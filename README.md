@@ -26,16 +26,18 @@ Codex helps the artist set up and maintain the system. The public website does n
 ```mermaid
 flowchart LR
   Artist["Artist + Codex"] --> Setup["Interview, proposal, approval, apply"]
-  Setup --> Nuxt["Nuxt 4 public site + administration"]
+  Setup --> Nuxt["Public Nuxt 4 service"]
   Audience["Listeners, learners, buyers, licensees"] --> Nuxt
   Nuxt --> Supabase["Supabase auth, Postgres, RLS, storage"]
   Nuxt --> Stripe["Artist-owned Stripe account"]
-  Supabase --> Media["Shared media worker"]
-  Supabase --> Documents["Private document worker"]
+  Nuxt -->|"private binding"| Media["FFmpeg media container"]
+  Nuxt -->|"private binding"| Documents["PDF document container"]
+  Media --> Supabase
+  Documents --> Supabase
   Supabase --> Export["Verified artist export + restore"]
 ```
 
-Supabase is authoritative for artist-editable runtime content and access state. Shared schemas define valid configuration and payloads. Environment variables remain authoritative for secrets. Stripe supplies verified payment facts while the application owns products, descriptions, prices, license terms, and entitlement decisions. Media and PDF work runs outside ordinary requests through durable leased jobs.
+Supabase is authoritative for artist-editable runtime content, durable worker queues, and access state. Shared schemas define valid configuration and payloads. Environment variables remain authoritative for secrets. Stripe supplies verified payment facts while the application owns products, descriptions, prices, license terms, and entitlement decisions. Media and PDF work runs outside the Nuxt process through leased jobs. The first hosted path places all three services in one Vercel Services deployment; the workers receive no public routes and process one job per authenticated internal request.
 
 ## How an artist begins
 
@@ -166,7 +168,7 @@ The command refuses a hosted target and refuses to run without the explicit conf
 
 ## Deployment and operating costs
 
-The software is licensed under the GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`); see [`LICENSE`](LICENSE). Repository publication remains a separate Michael-controlled action. The initial documented path is a Node deployment on Vercel with an artist-owned Supabase project, Stripe account, domain, email provider, and a container-capable media worker. Ordinary Node-compatible hosting remains possible because the core application does not depend on a proprietary Vercel runtime.
+The software is licensed under the GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`); see [`LICENSE`](LICENSE). Repository publication remains a separate Michael-controlled action. The initial documented path is one Vercel Services deployment containing the public Nuxt application and two private container workers, connected to an artist-owned Supabase project and Stripe account. Ordinary Node-compatible and HTTP-capable container hosting remains possible because the core application, queue, and workers do not depend on a proprietary Vercel runtime.
 
 Running a site may still involve domain registration, hosting, database, storage and egress, email, worker compute, and payment-processing costs. Free tiers can support evaluation but are provider-controlled and may change. Each artist owns their repository, connected accounts, domain, content, customer relationship, and a verified path for exporting and restoring the installation. No deployment, paid resource, DNS change, live payment, email send, or publication occurs without explicit approval.
 

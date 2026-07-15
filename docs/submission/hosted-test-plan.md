@@ -4,11 +4,10 @@ This is the topology and acceptance plan for a free, resettable judging environm
 
 ## Intended topology
 
-- One Vercel project running the committed Nuxt Node build.
+- One Vercel Services project running the committed Nuxt Node build as its only public service.
 - One dedicated Supabase judging project containing only Daymark Assembly and fictional test identities.
 - One Stripe account in test mode with dedicated judging products, prices, webhook endpoint, and customer portal configuration.
-- One container deployment of the repository's shared media worker connected only to the judging Supabase project.
-- One private document worker using the pinned renderer environment.
+- One private, request-driven media container and one private, request-driven document container in the same Vercel deployment. The Nuxt service reaches them through internal bindings; both connect only to the judging Supabase project.
 - An optional project-owned subdomain. DNS is not required if the Vercel deployment URL is approved for judging.
 
 No production Sound for Movement service, media, customer, domain, or credential enters this environment.
@@ -25,7 +24,7 @@ SUPABASE_SERVICE_ROLE_KEY=[REDACTED]
 STRIPE_SECRET_KEY=[REDACTED_TEST_KEY]
 STRIPE_WEBHOOK_SECRET=[REDACTED_TEST_SECRET]
 NUXT_PUBLIC_OAUTH_PROVIDERS=[OPTIONAL_APPROVED_ALLOWLIST]
-MEDIA_WORKER_DEPLOYMENT=[REDACTED_HTTPS_URL_OR_SERVICE]
+VERCEL_SERVICES_DEPLOYMENT=[REDACTED_IMMUTABLE_PREVIEW]
 OWNER_EMAIL=[REDACTED_JUDGE_FIXTURE]
 OWNER_PASSWORD=[SHARED_PRIVATELY]
 CUSTOMER_EMAIL=[REDACTED_JUDGE_FIXTURE]
@@ -42,7 +41,7 @@ The public repository and demo video must never display those values. The final 
 4. Create dedicated hosted owner, editor, and two customer fixtures. These must differ from the local `.local` identities.
 5. Map application products and prices to Stripe test-mode identifiers. Confirm the Dashboard remains in test mode.
 6. Register the webhook and prove signature verification, replay idempotency, one-time purchase, membership, cancellation, refund, license issue, and private document delivery.
-7. Deploy the shared media worker container. Upload one approved source tone through hosted administration and prove `queued -> processing -> ready`, waveform creation, and public preview playback.
+7. Deploy the exact Nuxt, media-worker, and document-worker services together. Upload one approved source tone through hosted administration and prove private binding dispatch, `queued -> processing -> ready`, waveform creation, public preview playback, and one purchaser-only license PDF.
 8. Configure only approved OAuth and email paths. The judging route does not require OAuth or outbound email.
 9. Deploy the exact reviewed commit to Vercel and run setup checks, policy tests, browser-secret scans, production budgets, and the judge route against that URL.
 10. Run Supabase security and performance advisors, record the dated results, and resolve every new actionable project finding.

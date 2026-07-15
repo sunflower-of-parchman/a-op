@@ -20,28 +20,36 @@ The operator works from one reviewed commit and records safe results in [`hosted
 Required record:
 
 ```text
+FINAL_TAG=[NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG]
 FINAL_COMMIT=[40-character commit]
 FINAL_NAME=[approved public name]
 LICENSE=[approved SPDX identifier]
 HOSTED_RESOURCES_APPROVAL=[timestamp and Michael approval reference]
 ```
 
+After the clean aggregate passes at `HEAD`, create a new, never-reused annotated tag and derive the commit from it. The tag solves the self-reference problem of trying to write a commit's own hash inside that commit.
+
+```text
+git tag -a [NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG] -m "Freeze hosted judging candidate" HEAD
+git rev-parse "[NEW_IMMUTABLE_LOCAL_CANDIDATE_TAG]^{commit}"
+```
+
 Acceptance:
 
 1. `git status --short` is empty.
-2. `git rev-parse HEAD` equals `FINAL_COMMIT`.
+2. `git rev-parse HEAD` and `git rev-parse "${FINAL_TAG}^{commit}"` both equal `FINAL_COMMIT`.
 3. `npm ci`, `npm run verify`, `npm audit --audit-level=high`, and local Supabase `db lint` pass at that commit.
 4. The repository license, package metadata, README, evidence, and demo language agree.
-5. No later commit enters the deployment without a new local aggregate and an updated final commit record.
+5. No later commit enters the deployment without a new local aggregate and a new immutable candidate tag.
 
 ## Stage 1: prepare dedicated provider resources
 
 After the resource-creation approval:
 
 1. Create or select one empty Supabase judging project.
-2. Create or select one Vercel judging project.
+2. Create or select one Vercel judging project whose framework is explicitly set to **Services**.
 3. Create or select one Stripe sandbox or test-mode account context.
-4. Create one media-worker service and one document-worker service connected only to the judging Supabase project.
+4. Confirm the tracked `vercel.json` will create exactly the public `web` service and private `media_worker` and `document_worker` services in that single project.
 5. Record safe provider references privately and add only redacted suffixes or hashes to the evidence record.
 6. Confirm expected cost and free judge access before provisioning any paid capacity.
 
@@ -55,10 +63,11 @@ NUXT_SUPABASE_SECRET_KEY=[SERVER_ONLY_SECRET]
 NUXT_PUBLIC_DEMO_MODE=false
 NUXT_STRIPE_SECRET_KEY=[TEST_OR_SANDBOX_SECRET]
 NUXT_STRIPE_WEBHOOK_SECRET=[TEST_OR_SANDBOX_WEBHOOK_SECRET]
+NUXT_MEDIA_WORKER_SECRET=[GENERATED_SERVER_ONLY_BEARER_SECRET]
 NUXT_PUBLIC_OAUTH_PROVIDERS=[OPTIONAL_APPROVED_ALLOWLIST]
 ```
 
-The worker services receive only the minimum server-only values documented in the media and document worker contracts. Provider keys never enter Vercel build logs, client runtime configuration, screenshots, or repository files.
+Vercel generates `MEDIA_WORKER_INTERNAL_URL` and `DOCUMENT_WORKER_INTERNAL_URL` from the tracked caller-side bindings; the operator does not create or store those URLs. The worker services receive only the minimum server-only values documented in the media and document worker contracts. Provider keys never enter Vercel build logs, client runtime configuration, screenshots, or repository files.
 
 ## Stage 2: link and migrate Supabase
 
@@ -161,31 +170,39 @@ Acceptance journeys:
 6. License Checkout freezes the visible terms and price, issues one private document, and grants it only to the purchaser.
 7. The webhook recovery view exposes no raw secret or unredacted payload.
 
-## Stage 5: deploy and prove both workers
+## Stage 5: prove both worker services locally
 
-After worker deployment approval:
+This stage creates no hosted state. Execute it at `FINAL_COMMIT` before requesting deployment approval:
 
-1. Deploy the exact `workers/media/Dockerfile` image from `FINAL_COMMIT`.
-2. Deploy the exact `workers/documents/Dockerfile` image from `FINAL_COMMIT`.
-3. Record image digests and safe service references.
-4. Upload one approved generated source tone through hosted administration.
-5. Observe one media job move `queued -> processing -> ready`.
-6. Verify source immutability, metadata, preview, waveform, and public playback.
-7. Complete one hosted license purchase and observe one document job reach `ready`.
-8. Verify the private PDF text and purchaser-only delivery.
-9. Run retry and expired-lease recovery once for each worker.
+```text
+npm run test:unit
+npm run test:media
+npm run test:licensing
+docker build --pull=false -f workers/media/Dockerfile -t artist-owned-platform-media-worker:candidate .
+docker build --pull=false -f workers/documents/Dockerfile -t artist-owned-platform-document-worker:candidate .
+```
 
-Acceptance requires a digest-matched worker, durable job history, no unresolved failure, and no dependency on Michael's local computer.
+Start each image with the disposable local environment, an overridden container-reachable local Supabase URL, and a temporary invocation secret. Prove:
+
+1. `/health` returns only service identity and `supabase-durable` queue status.
+2. `/jobs/process-one` returns 401 without the exact bearer secret.
+3. An authenticated empty-queue request reaches local Supabase and returns `processed: 0, failed: 0`.
+4. The ordinary CLI tests still perform real FFmpeg processing and private PDF rendering.
+5. The images contain no `.env`, hosted credential, private media, or machine-specific path.
+
+Record the two local image digests. These are local build evidence; the deployed Vercel image digests are recorded separately after the approved deployment.
 
 ## Stage 6: build and deploy an immutable Vercel preview
 
 Vercel documents `vercel pull`, `vercel build`, and `vercel deploy --prebuilt` as the separated build/deploy path. The [current deploy reference](https://vercel.com/docs/cli/deploy) also confirms that deployment stdout is the immutable deployment URL and that production-domain assignment is a separate concern.
 
-After Vercel project/deployment approval:
+The tracked Services configuration deploys the Nuxt application and both worker containers together. Only `web` receives a public rewrite; caller-side bindings grant it private access to the two workers.
+
+After explicit approval to create one preview containing all three services:
 
 1. Pin one reviewed Vercel CLI version for the deployment record.
 2. Link only the approved judging project.
-3. Configure preview environment values in Vercel's encrypted environment store.
+3. Confirm the project framework is **Services** and configure preview environment values in Vercel's encrypted environment store.
 4. Pull preview configuration, build, and deploy the exact candidate:
 
 ```text
@@ -203,8 +220,13 @@ npx vercel@[PINNED_VERSION] inspect [IMMUTABLE_PREVIEW_URL]
 Acceptance:
 
 - Deployment status is ready and identifies `FINAL_COMMIT` in metadata or the evidence record.
+- The deployment contains exactly `web`, `media_worker`, and `document_worker`; neither worker has a public rewrite.
+- The web service receives both generated binding URLs at runtime, and all three services share the approved server-only invocation secret.
 - The preview is reachable without payment, a local machine, or an unshared Vercel login.
 - `NUXT_PUBLIC_SITE_URL`, Supabase Auth redirects, Stripe return URLs, and the webhook endpoint use the exact approved HTTPS origin.
+- One approved generated source tone moves `pending -> processing -> ready` through the media binding; its immutable source hash, metadata, preview, waveform, and public playback pass.
+- One hosted test-mode license purchase moves its document job to `ready`; PDF text and purchaser-only delivery pass.
+- Retry and expired-lease recovery pass once for each worker, with no dependency on Michael's local computer.
 - `npm run health:check` with `BASE_URL` set to the preview passes.
 - `npx playwright test --config playwright.cross-browser.config.ts` with `BASE_URL` set to the preview passes Chromium, Firefox, and WebKit on Linux.
 - Browser-secret scanning, response headers, accessibility, viewport containment, and production performance budgets pass against the preview.
@@ -245,7 +267,7 @@ After the reset execution approval:
 4. Run the same exact reset command a second time under the recorded rehearsal approval.
 5. Compare the two reset hashes and expected row/media counts.
 6. Run the complete judge route after the second reset.
-7. Run `npm run hosted:check` and confirm Stripe mappings, webhook configuration, provider secrets, and worker deployments remain connected.
+7. Run `npm run hosted:check` and confirm Stripe mappings, webhook configuration, provider secrets, and private worker bindings remain connected.
 
 Acceptance requires two idempotent reset passes, a complete post-reset judge route, rotated fixture sessions, preserved provider configuration, and zero private reference data.
 

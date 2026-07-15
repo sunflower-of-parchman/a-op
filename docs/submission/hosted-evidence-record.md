@@ -4,34 +4,35 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                     | Status  | Safe evidence                                           |
-| ------------------------- | ------- | ------------------------------------------------------- |
-| Final public name         | Ready   | Artist-Owned Platform                                   |
-| License                   | Ready   | `AGPL-3.0-or-later`                                     |
-| Exact 40-character commit | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`              |
-| Local full aggregate      | Ready   | `fe2062a`: complete Node 24 aggregate passed            |
-| Dependency audit          | Ready   | `fe2062a`: zero vulnerabilities                         |
-| Local schema lint         | Ready   | `fe2062a`: no `public` or `private` error-level results |
-| Linux CI all jobs         | Pending |                                                         |
+| Field                           | Status  | Safe evidence                                                    |
+| ------------------------------- | ------- | ---------------------------------------------------------------- |
+| Final public name               | Ready   | Artist-Owned Platform                                            |
+| License                         | Ready   | `AGPL-3.0-or-later`                                              |
+| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                       |
+| Current immutable candidate tag | Pending | Created only after the resumed full aggregate passes             |
+| Current exact commit            | Pending | Derived from the immutable candidate tag                         |
+| Local worker-service contract   | Pass    | Unit, FFmpeg, PDF, two image builds, auth, and queue checks pass |
+| Current local full aggregate    | Pending | Required after worker-service and runbook changes                |
+| Dependency audit                | Pass    | Zero vulnerabilities before the immutable candidate freeze       |
+| Local schema lint               | Pass    | No error-level findings in `public` or `private`                 |
+| Linux CI all jobs               | Pending |                                                                  |
 
 ## Authorization ledger
 
-| External action                         | Status  | Michael approval reference | Executed by / at |
-| --------------------------------------- | ------- | -------------------------- | ---------------- |
-| Create or select Supabase judge project | Pending |                            |                  |
-| Create or select Stripe test resources  | Pending |                            |                  |
-| Create or select Vercel judge project   | Pending |                            |                  |
-| Deploy media worker                     | Pending |                            |                  |
-| Deploy document worker                  | Pending |                            |                  |
-| Apply Supabase migrations               | Pending |                            |                  |
-| Seed hosted fixtures                    | Pending |                            |                  |
-| Deploy immutable preview                | Pending |                            |                  |
-| Execute hosted reset                    | Pending |                            |                  |
-| Assign production alias or domain       | Pending |                            |                  |
-| Share judge URL and credentials         | Pending |                            |                  |
-| Publish repository                      | Pending |                            |                  |
-| Publish video                           | Pending |                            |                  |
-| Submit Devpost entry                    | Pending |                            |                  |
+| External action                         | Status  | Michael approval reference            | Executed by / at |
+| --------------------------------------- | ------- | ------------------------------------- | ---------------- |
+| Create or select Supabase judge project | Pending |                                       |                  |
+| Create or select Stripe test resources  | Pending |                                       |                  |
+| Create or select Vercel judge project   | Pending |                                       |                  |
+| Apply Supabase migrations               | Pending |                                       |                  |
+| Seed hosted fixtures                    | Pending |                                       |                  |
+| Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
+| Execute hosted reset                    | Pending |                                       |                  |
+| Assign production alias or domain       | Pending |                                       |                  |
+| Share judge URL and credentials         | Pending |                                       |                  |
+| Publish repository                      | Pending |                                       |                  |
+| Publish video                           | Pending |                                       |                  |
+| Submit Devpost entry                    | Pending |                                       |                  |
 
 ## Resource boundaries
 
@@ -80,37 +81,42 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Worker evidence
 
-| Check                                     | Status  | Safe digest/job suffix / result |
-| ----------------------------------------- | ------- | ------------------------------- |
-| Media image matches final commit          | Pending |                                 |
-| Approved source upload                    | Pending |                                 |
-| `queued -> processing -> ready`           | Pending |                                 |
-| Immutable source hash                     | Pending |                                 |
-| Preview and waveform                      | Pending |                                 |
-| Hosted public playback                    | Pending |                                 |
-| Media retry and expired-lease recovery    | Pending |                                 |
-| Document runtime matches pinned lock      | Pending |                                 |
-| License document reaches `ready`          | Pending |                                 |
-| PDF text and purchaser-only delivery      | Pending |                                 |
-| Document retry and expired-lease recovery | Pending |                                 |
+| Check                                     | Status  | Safe digest/job suffix / result               |
+| ----------------------------------------- | ------- | --------------------------------------------- |
+| Local media image builds                  | Pass    | `sha256:07b378557cfd…b5ec7de`                 |
+| Local document image builds               | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                |
+| Private HTTP auth and redaction contract  | Pass    | Health 200; no-auth 401; generic failure only |
+| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`      |
+| Media image matches final commit          | Pending |                                               |
+| Approved source upload                    | Pending |                                               |
+| `queued -> processing -> ready`           | Pending |                                               |
+| Immutable source hash                     | Pending |                                               |
+| Preview and waveform                      | Pending |                                               |
+| Hosted public playback                    | Pending |                                               |
+| Media retry and expired-lease recovery    | Pending |                                               |
+| Document runtime matches pinned lock      | Pending |                                               |
+| License document reaches `ready`          | Pending |                                               |
+| PDF text and purchaser-only delivery      | Pending |                                               |
+| Document retry and expired-lease recovery | Pending |                                               |
 
 ## Vercel and browser evidence
 
-| Check                                    | Status  | Safe URL hash / result |
-| ---------------------------------------- | ------- | ---------------------- |
-| Pinned Vercel CLI                        | Pending |                        |
-| Immutable preview ready                  | Pending |                        |
-| Deployment identifies final commit       | Pending |                        |
-| Free unauthenticated public reachability | Pending |                        |
-| Public health check                      | Pending |                        |
-| Chromium hosted route                    | Pending |                        |
-| Firefox hosted route                     | Pending |                        |
-| WebKit hosted route                      | Pending |                        |
-| Browser-secret scan                      | Pending |                        |
-| Production response boundaries           | Pending |                        |
-| Accessibility and viewport checks        | Pending |                        |
-| Performance budgets                      | Pending |                        |
-| Error-log review                         | Pending |                        |
+| Check                                    | Status  | Safe URL hash / result                                                                |
+| ---------------------------------------- | ------- | ------------------------------------------------------------------------------------- |
+| Pinned Vercel CLI                        | Pending | `54.21.1` selected; final candidate validation remains                                |
+| Services configuration schema            | Ready   | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs` |
+| Immutable preview ready                  | Pending |                                                                                       |
+| Deployment identifies final commit       | Pending |                                                                                       |
+| Free unauthenticated public reachability | Pending |                                                                                       |
+| Public health check                      | Pending |                                                                                       |
+| Chromium hosted route                    | Pending |                                                                                       |
+| Firefox hosted route                     | Pending |                                                                                       |
+| WebKit hosted route                      | Pending |                                                                                       |
+| Browser-secret scan                      | Pending |                                                                                       |
+| Production response boundaries           | Pending |                                                                                       |
+| Accessibility and viewport checks        | Pending |                                                                                       |
+| Performance budgets                      | Pending |                                                                                       |
+| Error-log review                         | Pending |                                                                                       |
 
 ## Reset and judge evidence
 

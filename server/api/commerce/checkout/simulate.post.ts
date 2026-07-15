@@ -1,6 +1,7 @@
 import { readValidatedBody } from 'h3'
 import { confirmSimulationSchema } from '#shared/schemas/commerce'
 import { getAdminSupabase, requireAuthIdentity } from '../../../utils/supabase'
+import { requestDocumentWorkerForOrder } from '../../../utils/workerServices'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
@@ -54,5 +55,6 @@ export default defineEventHandler(async (event) => {
   if (error || !data?.[0]) {
     throw createError({ statusCode: 400, statusMessage: 'The simulated payment was rejected.' })
   }
+  await requestDocumentWorkerForOrder(event, data[0].order_id)
   return { fulfillment: data[0], returnPath: intent.return_path }
 })

@@ -1,5 +1,6 @@
 import { getRouterParam } from 'h3'
 import { getAdminSupabase, requireAnyRole } from '../../../../utils/supabase'
+import { requestWorkerRun } from '../../../../utils/workerServices'
 
 export default defineEventHandler(async (event) => {
   const identity = await requireAnyRole(event, ['owner', 'editor'])
@@ -38,5 +39,6 @@ export default defineEventHandler(async (event) => {
     target_type: 'media_object',
     target_id: id,
   })
+  await requestWorkerRun(event, 'media')
   return { jobId: job.id, status: 'pending' }
 })

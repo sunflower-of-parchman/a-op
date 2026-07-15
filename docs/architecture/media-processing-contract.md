@@ -20,9 +20,13 @@ Local Codex-operated mode runs:
 
 This command may process pending jobs until the queue is empty and exit. `npm run media:watch` remains active for local administration sessions. Codex can operate either command during setup and maintenance.
 
-Hosted mode packages the same worker as an Open Container Initiative image through `workers/media/Dockerfile`. “Open Container Initiative image” means a standard container artifact that can run on a container-capable service. The process polls or subscribes to the Supabase-backed job queue, needs no public application endpoint, and exposes only a minimal authenticated or non-sensitive health check when the selected host requires one. Vercel may host the Nuxt application; the media worker is a separate process with its own documented environment configuration and scaling limit.
+Hosted mode packages the same runtime as an Open Container Initiative image through `workers/media/Dockerfile`. The supported first deployment uses a private, request-driven Vercel container service. The Nuxt service receives its deployment-aware internal URL through a service binding and sends an authenticated request only after the durable job exists. One request claims at most one job. The container exposes a non-sensitive `/health` response and an authenticated `/jobs/process-one` route; neither route receives a public rewrite.
+
+The binding is private reachability, and `NUXT_MEDIA_WORKER_SECRET` adds application-level authorization. The Nuxt service registers hosted dispatch with Vercel `waitUntil`, allowing the upload-complete response to return while the private service request finishes. If a bound service is absent, busy, or unavailable, the accepted upload and queue row remain intact. A later owner retry or worker invocation can claim the pending or explicitly retried job. The database lease and derivative key remain authoritative across container shutdown, retry, and concurrent instances.
 
 Before Milestone 4 is accepted, the Build Week demonstration environment must run this container on one selected and documented container-capable service after Michael explicitly approves the deployment. The hosted end-to-end test must upload approved demonstration audio, observe the job reach `ready`, load the generated waveform, and play the generated preview. A merely documented future worker does not satisfy the hosted administration claim.
+
+The container remains portable to another HTTP-capable host. A long-running host can also continue to run `npm run media:watch`; Vercel is the documented first path, not a requirement for future installations.
 
 ## Idempotency and concurrency
 

@@ -63,6 +63,13 @@ The public terms, immutable versioning, local and Stripe test checkout paths, pr
 worker, retry procedure, and hosted worker contract are documented in
 [`docs/artist/licensing.md`](docs/artist/licensing.md).
 
+The first hosted path uses the tracked `vercel.json` to deploy the public Nuxt service and both
+private worker containers together. Vercel supplies deployment-aware binding URLs to the Nuxt
+server. The workers share one server-only invocation secret, receive no public rewrite, and keep
+Supabase jobs, leases, and retries as the recovery authority. Linking a project, setting secrets,
+or deploying still requires the action-specific approval in
+[`docs/submission/hosted-operator-runbook.md`](docs/submission/hosted-operator-runbook.md).
+
 The fictional demonstration includes one three-lesson learning path, public and protected mixed
 media, account resume, a privacy-gated external video, and a structured editorial note. Run:
 

@@ -2,6 +2,7 @@ import { basename, dirname } from 'node:path'
 import { createError, readValidatedBody } from 'h3'
 import { mediaUploadCompleteSchema } from '#shared/schemas/mediaUpload'
 import { getAdminSupabase, requireAnyRole } from '../../../utils/supabase'
+import { requestWorkerRun } from '../../../utils/workerServices'
 
 export default defineEventHandler(async (event) => {
   const identity = await requireAnyRole(event, ['owner', 'editor'])
@@ -79,6 +80,7 @@ export default defineEventHandler(async (event) => {
         .update({ status: 'completed', completed_at: new Date().toISOString() })
         .eq('id', intent.id)
     }
+    if (uploadIntent.kind === 'source_audio') await requestWorkerRun(event, 'media')
     return { mediaId: existingMedia?.id ?? intent.id, status: existingMedia?.status ?? 'pending' }
   }
 
@@ -170,5 +172,6 @@ export default defineEventHandler(async (event) => {
     detail: { kind: intent.kind, byteSize: intent.byte_size },
   })
 
+  if (uploadIntent.kind === 'source_audio') await requestWorkerRun(event, 'media')
   return { mediaId: intent.id, status: ready ? 'ready' : 'pending' }
 })

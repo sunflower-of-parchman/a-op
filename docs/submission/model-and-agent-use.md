@@ -214,6 +214,14 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commits: `4487b7e` (`Finalize Artist-Owned Platform name`) and `fe2062a` (`Stabilize meaningful-listen browser proof`).
 - Verification: Three fresh-demo focused Chromium telemetry suites and `npm run verify:telemetry` passed. Exact commit `fe2062aacaa9c808d6b05103d9fbcff144248ea0` then passed the complete uninterrupted Node 24 `npm run verify` aggregate: every local module, Integration Gate A, optional OAuth, setup and portability, production hardening and four performance budgets, guarded reset and recovery, all 12 isolated desktop/mobile specifications, documentation and fictional assets, Chromium/WebKit judge journeys, and browser-secret scanning. The fresh dependency audit found zero vulnerabilities, and the repository-pinned Supabase CLI found no error-level findings in `public` or `private`. No hosted project or provider was contacted.
 
+### Private request-driven worker services — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task.
+- Human decisions: Resume the complete goal; retain Artist-Owned Platform as the public name; keep hosted resources, costs, deployment, and publication separately approval-gated.
+- Material contribution: Current Vercel Services and container-runtime research; single-project web/media/document topology; private caller-side bindings; authenticated one-job HTTP contract; shared media and document runtimes for CLI and container operation; post-queue dispatch from source upload, verified license issue, and explicit retries; durable deferred behavior; local container and operator contracts; immutable candidate-tag procedure that avoids commit self-reference.
+- Verification: Four focused service/auth/client unit tests, focused ESLint, and Nuxt type checking passed. Both Docker images built from the tracked Dockerfiles. Live container probes returned non-sensitive health, rejected unauthenticated work, exposed only generic failure without configuration, and connected through authenticated requests to the disposable local Supabase queues. `npm run test:media` passed real FFprobe, FFmpeg, immutable-source, waveform, retry, and safe-failure behavior; `npm run test:licensing` passed immutable terms, replay-safe issue, private PDF, isolation, and refund revocation. The complete resumed aggregate and immutable candidate tag remain the next local gate. No hosted project or provider was changed.
+
 ## Submission reconciliation
 
 Before submission:

@@ -7,6 +7,7 @@ import {
   stripeObjectId,
   subscriptionPeriod,
 } from './stripe'
+import { requestDocumentWorkerForOrder } from './workerServices'
 
 type EventMetadata = {
   platformUserId: string
@@ -64,6 +65,7 @@ async function fulfillCheckoutPayment(
     p_event_payload: safeStripeEventPayload(stripeEvent, session.id),
   })
   if (error || !data?.[0]) throw new Error('Stripe Checkout fulfillment failed.')
+  await requestDocumentWorkerForOrder(event, data[0].order_id)
   return { handled: true, kind: 'payment', fulfillment: data[0] }
 }
 
@@ -98,6 +100,7 @@ async function fulfillPaidInvoice(
     p_event_payload: safeStripeEventPayload(stripeEvent, invoice.id),
   })
   if (error || !data?.[0]) throw new Error('Stripe subscription invoice fulfillment failed.')
+  await requestDocumentWorkerForOrder(event, data[0].order_id)
   return { handled: true, kind: 'subscription-payment', fulfillment: data[0] }
 }
 

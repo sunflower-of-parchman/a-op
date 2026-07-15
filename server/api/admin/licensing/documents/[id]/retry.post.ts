@@ -1,5 +1,6 @@
 import { getRouterParam } from 'h3'
 import { getAdminSupabase, requireAnyRole } from '../../../../../utils/supabase'
+import { requestWorkerRun } from '../../../../../utils/workerServices'
 
 export default defineEventHandler(async (event) => {
   const identity = await requireAnyRole(event, ['owner'])
@@ -17,5 +18,6 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'The license document could not be retried.',
     })
   }
+  await requestWorkerRun(event, 'documents')
   return { queued: true }
 })

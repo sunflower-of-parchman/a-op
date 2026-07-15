@@ -25,7 +25,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Local cross-browser public route passed in Chromium and WebKit.
 - [ ] Linux CI passes Chromium, Firefox, and WebKit on the final published commit.
 - [ ] Supabase hosted security and performance advisors run against the approved judging project; results recorded.
-- [ ] Hosted media upload reaches `ready` through the deployed shared worker and plays the generated preview.
+- [ ] Hosted media upload reaches `ready` through the deployed private media service and plays the generated preview.
 - [ ] Stripe test-mode purchase, membership, portal, cancellation/refund, webhook replay, license issue, and protected document verified against the approved judging account.
 
 ## Judging access

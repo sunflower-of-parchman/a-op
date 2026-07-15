@@ -10,7 +10,7 @@ The website is owned and branded by the artist. It may coexist with streaming, s
 
 One installation represents one artist, ensemble, composer, accompanist, or artist-led organization. It supports multiple owner and editor accounts and many visitor or customer accounts. It is not a shared marketplace containing unrelated artists.
 
-The initial supported stack is Nuxt 4 and TypeScript, Supabase for PostgreSQL, authentication, authorization, and storage, Stripe for transactions and subscriptions, Vercel as the first documented web host, and a separately deployable Node container for audio processing.
+The initial supported stack is Nuxt 4 and TypeScript, Supabase for PostgreSQL, authentication, authorization, and storage, Stripe for transactions and subscriptions, and Vercel Services as the first documented web host. The Nuxt application is the only public service; separate request-driven media and document containers perform FFmpeg and PDF work through private bindings while Supabase remains their durable queue. Both images remain portable to other HTTP-capable container hosts.
 
 ## People and authority
 

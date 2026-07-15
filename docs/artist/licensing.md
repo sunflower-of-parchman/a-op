@@ -18,7 +18,7 @@ Run one pass over pending jobs with:
 
     npm run documents:work
 
-For a long-running local or hosted worker, use:
+For a long-running local worker or a compatible always-on host, use:
 
     npm run documents:watch
 
@@ -61,14 +61,15 @@ If document generation fails, the owner sees the redacted failure state in `/adm
 
 ## Hosted worker contract
 
-The tracked [`workers/documents/Dockerfile`](../../workers/documents/Dockerfile) is the supported deployed path. Supply these runtime variables through the worker host's secret manager:
+The tracked [`workers/documents/Dockerfile`](../../workers/documents/Dockerfile) is the supported deployed path. The first hosted path runs it as a private, request-driven Vercel container service beside the Nuxt application. The Nuxt service receives its URL through the `DOCUMENT_WORKER_INTERNAL_URL` binding, then invokes one job after a license issue or explicit retry. Supply these runtime variables through the deployment secret manager:
 
 - `NUXT_PUBLIC_SUPABASE_URL`
 - `NUXT_SUPABASE_SECRET_KEY`
+- `NUXT_MEDIA_WORKER_SECRET`, shared only by the Nuxt server and both private worker services
 - optional `LICENSE_DOCUMENT_WORKER_ID`
 - optional `LICENSE_DOCUMENT_PYTHON` when the executable is not `python3`
 
-The worker needs outbound HTTPS access to the installation's Supabase API and Storage service. It needs no inbound public port. Run one replica first; database leases also make concurrent replicas safe. Deployment is approval-gated and is verified separately from the local worker path.
+The worker needs outbound HTTPS access to the installation's Supabase API and Storage service. Its `/health` and `/jobs/process-one` routes receive no public rewrite; only the bound Nuxt service can reach them. The verified Stripe handler registers document dispatch with Vercel `waitUntil`, so it can acknowledge the webhook while the bound request finishes. Each request claims at most one durable job, and a failed dispatch leaves the job recoverable. Database leases make concurrent container instances safe. The same image can run on another HTTP-capable host or use the long-running CLI mode. Deployment is approval-gated and is verified separately from the local worker path.
 
 ## Verify and recover
 
