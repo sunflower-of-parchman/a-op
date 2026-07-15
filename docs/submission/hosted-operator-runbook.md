@@ -231,6 +231,8 @@ npx vercel@[PINNED_VERSION] deploy --prebuilt --prod --skip-domain
 
 Record the bootstrap deployment identifier privately so it can be removed exactly. Do not copy its URL into tracked evidence.
 
+Observed provider result, 2026-07-15: with CLI `54.21.1`, the approved static artifact reached Ready but Vercel assigned two automatic `.vercel.app` Production aliases despite `--skip-domain`. The operator followed rule 5, removed the exact deployment, verified the project returned to zero deployments and aliases, and stopped before deploying the application. This no-domain bootstrap contract is therefore blocked. Do not repeat it; any revised contract must explicitly disclose the temporary automatic aliases observed here and receive new action-specific approval.
+
 After explicit approval to create one preview containing all three services:
 
 1. Pin one reviewed Vercel CLI version for the deployment record.

@@ -42,7 +42,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael separately approved and the primary task completed Stage 4A-2 creation and owner-authorized mapping of the USD 125 live-performance license, bringing the published sandbox catalog to four products, four prices, and four mappings on July 15, 2026.
 - [x] Michael approved Stage 6 deployment of one immutable Preview. The three-service Preview build completed, but Vercel classified both the default and explicit `--target preview` deployment attempts as Production while Building. Both were removed immediately, a third attempt was not made, and the exact project returned to zero deployments.
 - [x] Read-only provider and official-document investigation established Vercel's automatic first-deployment Production promotion as the cause; the project remains Git-unlinked with zero deployments and aliases.
-- [ ] Michael separately approves one temporary Production-classified `--skip-domain` bootstrap deployment, its unique unshared URL, and exact removal after the immutable Preview is confirmed.
+- [x] Michael separately approved one temporary Production-classified `--skip-domain` bootstrap. The no-application artifact reached Ready, but Vercel assigned two automatic Production aliases; the exact deployment was removed immediately and the project returned to zero deployments, `live: false`, and zero aliases.
+- [ ] Michael explicitly approves any revised first-deployment contract after it accounts for the temporary automatic aliases that `--skip-domain` did not suppress. The original no-domain contract must not be retried.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
@@ -68,19 +69,19 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 
 ## Final authorization record
 
-| Action                                  | Approval | Evidence                                                                           |
-| --------------------------------------- | -------- | ---------------------------------------------------------------------------------- |
-| Select project name                     | Approved | Michael approved Artist-Owned Platform on July 15, 2026                            |
-| Select open-source license              | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026                              |
-| Create dedicated hosted resources       | Approved | Stage 1 executed; provider references remain private                               |
-| Link and dry-run Supabase migrations    | Approved | Stage 2A executed; 0 remote migrations applied                                     |
-| Apply reviewed Supabase migrations      | Approved | Stage 2B executed; exact 11/11 parity and clean lint                               |
-| Initialize hosted fictional fixtures    | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`                                |
-| Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                     |
-| Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                   |
-| Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed |
-| Execute temporary Vercel bootstrap      | Pending  | Separate approval required for Production classification and unique URL            |
-| Promote final deployment                | Pending  | Approved URL and deployment commit                                                 |
-| Share repository or judge credentials   | Pending  | Devpost access record                                                              |
-| Publish YouTube video                   | Pending  | Public video URL                                                                   |
-| Submit Devpost entry                    | Pending  | Submission confirmation                                                            |
+| Action                                  | Approval | Evidence                                                                                                                         |
+| --------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Select project name                     | Approved | Michael approved Artist-Owned Platform on July 15, 2026                                                                          |
+| Select open-source license              | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026                                                                            |
+| Create dedicated hosted resources       | Approved | Stage 1 executed; provider references remain private                                                                             |
+| Link and dry-run Supabase migrations    | Approved | Stage 2A executed; 0 remote migrations applied                                                                                   |
+| Apply reviewed Supabase migrations      | Approved | Stage 2B executed; exact 11/11 parity and clean lint                                                                             |
+| Initialize hosted fictional fixtures    | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`                                                                              |
+| Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                                                                   |
+| Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                                                                 |
+| Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                                               |
+| Execute temporary Vercel bootstrap      | Blocked  | Approved attempt removed after Vercel assigned automatic aliases despite `--skip-domain`; revised contract requires new approval |
+| Promote final deployment                | Pending  | Approved URL and deployment commit                                                                                               |
+| Share repository or judge credentials   | Pending  | Devpost access record                                                                                                            |
+| Publish YouTube video                   | Pending  | Public video URL                                                                                                                 |
+| Submit Devpost entry                    | Pending  | Submission confirmation                                                                                                          |
