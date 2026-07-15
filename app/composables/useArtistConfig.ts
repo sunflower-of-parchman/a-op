@@ -3,12 +3,24 @@ import { artistConfigSchema, type ArtistConfig } from '#shared/schemas/artistCon
 
 export function useArtistConfig(): ArtistConfig {
   const runtimeConfig = useRuntimeConfig()
-  return artistConfigSchema.parse(runtimeConfig.public.artist)
+  const config = useState<ArtistConfig>('artist-config', () =>
+    artistConfigSchema.parse(runtimeConfig.public.artist),
+  )
+  return config.value
+}
+
+export function setArtistConfig(value: unknown): ArtistConfig {
+  const parsed = artistConfigSchema.parse(value)
+  const config = useState<ArtistConfig>('artist-config')
+  config.value = parsed
+  return parsed
 }
 
 export function useArtistTheme(): CSSProperties {
-  const { design } = useArtistConfig()
+  return artistThemeFromConfig(useArtistConfig())
+}
 
+export function artistThemeFromConfig({ design }: ArtistConfig): CSSProperties {
   return {
     '--color-background': design.colors.background,
     '--color-text': design.colors.text,

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const { data: publishedConfig } = await useFetch('/api/site-config')
+if (publishedConfig.value?.config) setArtistConfig(publishedConfig.value.config)
+
 const artist = useArtistConfig()
 const theme = useArtistTheme()
 

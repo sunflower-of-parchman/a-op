@@ -40,6 +40,19 @@ if (error.value?.statusCode === 401) {
       </dl>
     </section>
 
+    <nav v-if="data" class="admin-workspace-links" aria-label="Administration areas">
+      <NuxtLink to="/admin/identity">
+        <span>Identity, design, and navigation</span>
+        <small>Draft, preview, and publish the artist-controlled site configuration.</small>
+      </NuxtLink>
+      <NuxtLink to="/admin/pages">
+        <span>Structured pages</span>
+        <small
+          >Edit ordered, validated sections without allowing arbitrary scripts or markup.</small
+        >
+      </NuxtLink>
+    </nav>
+
     <p v-else-if="error" class="form-message" role="alert">
       This account does not have access to artist administration.
     </p>

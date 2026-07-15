@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const artist = useArtistConfig()
-useSeoMeta({ title: 'About' })
+const { data: page } = await useFetch('/api/pages/about')
+useSeoMeta({
+  title: page.value?.seo.title ?? 'About',
+  description: page.value?.seo.description,
+})
 </script>
 
 <template>
@@ -20,5 +24,6 @@ useSeoMeta({ title: 'About' })
         <dd>Fictional, original, and ready to be replaced through guided setup.</dd>
       </div>
     </dl>
+    <StructuredSections v-if="page" :sections="page.sections" />
   </article>
 </template>

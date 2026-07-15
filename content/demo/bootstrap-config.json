@@ -57,7 +57,8 @@
     { "label": "Music", "to": "/music", "feature": "music" },
     { "label": "Licensing", "to": "/licensing", "feature": "licensing" },
     { "label": "Learn", "to": "/learn", "feature": "learning" },
-    { "label": "About", "to": "/about" }
+    { "label": "About", "to": "/about" },
+    { "label": "Contact", "to": "/contact" }
   ],
   "features": {
     "music": true,

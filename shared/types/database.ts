@@ -30,6 +30,72 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_records: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          detail: Json
+          event_type: string
+          id: string
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: Json
+          event_type: string
+          id?: string
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: Json
+          event_type?: string
+          id?: string
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          request_fingerprint: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          request_fingerprint: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          request_fingerprint?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       download_records: {
         Row: {
           delivered_at: string
@@ -259,6 +325,62 @@ export type Database = {
           },
         ]
       }
+      pages: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          navigation_label: string | null
+          published_at: string | null
+          sections: Json
+          seo: Json
+          slug: string
+          status: Database["public"]["Enums"]["publication_state"]
+          supersedes_id: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          navigation_label?: string | null
+          published_at?: string | null
+          sections?: Json
+          seo?: Json
+          slug: string
+          status?: Database["public"]["Enums"]["publication_state"]
+          supersedes_id?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          navigation_label?: string | null
+          published_at?: string | null
+          sections?: Json
+          seo?: Json
+          slug?: string
+          status?: Database["public"]["Enums"]["publication_state"]
+          supersedes_id?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pages_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_events: {
         Row: {
           amount_minor: number
@@ -461,6 +583,8 @@ export type Database = {
           installation_key: string
           published_at: string | null
           status: string
+          supersedes_id: string | null
+          updated_by: string | null
         }
         Insert: {
           config: Json
@@ -470,6 +594,8 @@ export type Database = {
           installation_key?: string
           published_at?: string | null
           status: string
+          supersedes_id?: string | null
+          updated_by?: string | null
         }
         Update: {
           config?: Json
@@ -479,8 +605,25 @@ export type Database = {
           installation_key?: string
           published_at?: string | null
           status?: string
+          supersedes_id?: string | null
+          updated_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "site_config_versions_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "published_site_config"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "site_config_versions_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "site_config_versions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -533,6 +676,24 @@ export type Database = {
           order_id: string
           replayed: boolean
         }[]
+      }
+      publish_page: {
+        Args: { p_actor_id: string; p_page_id: string }
+        Returns: string
+      }
+      publish_site_config: {
+        Args: { p_actor_id: string; p_version_id: string }
+        Returns: string
+      }
+      submit_contact_message: {
+        Args: {
+          p_consent: boolean
+          p_email: string
+          p_message: string
+          p_name: string
+          p_request_fingerprint: string
+        }
+        Returns: string
       }
     }
     Enums: {

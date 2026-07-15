@@ -14,6 +14,8 @@ export const demoFixtureIds = {
   download: '10000000-0000-4000-8000-000000000003',
   product: '10000000-0000-4000-8000-000000000004',
   price: '10000000-0000-4000-8000-000000000005',
+  aboutPage: '10000000-0000-4000-8000-000000000006',
+  contactPage: '10000000-0000-4000-8000-000000000007',
 }
 
 function createAdminClient(status) {
@@ -310,6 +312,64 @@ export async function seedAuthorizationDemonstration(status) {
     active: true,
   })
   if (priceError) throw new Error('Could not seed the demonstration price.')
+
+  const { error: pageError } = await admin.from('pages').upsert([
+    {
+      id: demoFixtureIds.aboutPage,
+      slug: 'about',
+      title: 'About Daymark Assembly',
+      navigation_label: 'About',
+      status: 'published',
+      seo: {
+        title: 'About',
+        description: 'Meet the fictional artist demonstrating this artist-owned platform.',
+      },
+      sections: [
+        {
+          id: '30000000-0000-4000-8000-000000000001',
+          type: 'prose',
+          eyebrow: 'Practice and place',
+          heading: 'Work built around attentive movement.',
+          body: 'Daymark Assembly is a fictional independent music practice created to prove that an artist can publish, teach, license, and build direct relationships from infrastructure they own.',
+        },
+      ],
+      created_by: users.get('owner'),
+      updated_by: users.get('owner'),
+      published_at: '2026-07-14T00:00:00.000Z',
+    },
+    {
+      id: demoFixtureIds.contactPage,
+      slug: 'contact',
+      title: 'Contact Daymark Assembly',
+      navigation_label: 'Contact',
+      status: 'published',
+      seo: {
+        title: 'Contact',
+        description: 'Send a local demonstration message to the fictional artist.',
+      },
+      sections: [
+        {
+          id: '30000000-0000-4000-8000-000000000002',
+          type: 'contact',
+          heading: 'Begin with a clear note.',
+          introduction:
+            'Messages are stored in the artist-owned database. This local demonstration does not send external email.',
+          consentLabel: 'I understand this message will be stored so the artist can respond.',
+        },
+      ],
+      created_by: users.get('owner'),
+      updated_by: users.get('owner'),
+      published_at: '2026-07-14T00:00:00.000Z',
+    },
+  ])
+  if (pageError) throw new Error('Could not seed the demonstration pages.')
+
+  const { error: configOwnerError } = await admin
+    .from('site_config_versions')
+    .update({ updated_by: users.get('owner') })
+    .eq('installation_key', 'primary')
+    .eq('status', 'published')
+  if (configOwnerError) throw new Error('Could not assign the demonstration configuration owner.')
 }
 
 export async function verifyPublicDemonstration(status) {
@@ -356,16 +416,27 @@ export async function verifyAuthorizationDemonstration(status) {
   const bucketsResponse = await fetch(`${status.apiUrl}/storage/v1/bucket`, {
     headers: serviceHeaders,
   })
+  const pagesResponse = await fetch(
+    `${status.apiUrl}/rest/v1/pages?status=eq.published&select=slug`,
+    { headers: publicHeaders },
+  )
 
-  if (!releaseResponse.ok || !mediaResponse.ok || !rolesResponse.ok || !bucketsResponse.ok) {
+  if (
+    !releaseResponse.ok ||
+    !mediaResponse.ok ||
+    !rolesResponse.ok ||
+    !bucketsResponse.ok ||
+    !pagesResponse.ok
+  ) {
     throw new Error('The authorization or storage fixtures could not be read.')
   }
 
-  const [releases, media, roles, buckets] = await Promise.all([
+  const [releases, media, roles, buckets, pages] = await Promise.all([
     releaseResponse.json(),
     mediaResponse.json(),
     rolesResponse.json(),
     bucketsResponse.json(),
+    pagesResponse.json(),
   ])
   if (releases.length !== 1 || media.length !== 1) {
     throw new Error('The public authorization fixtures are missing or duplicated.')
@@ -388,6 +459,11 @@ export async function verifyAuthorizationDemonstration(status) {
   ]
   if (!expectedBuckets.every((bucket) => bucketNames.has(bucket))) {
     throw new Error('The demonstration storage buckets are incomplete.')
+  }
+
+  const pageSlugs = new Set(pages.map(({ slug }) => slug))
+  if (!['about', 'contact'].every((slug) => pageSlugs.has(slug))) {
+    throw new Error('The demonstration pages are incomplete.')
   }
 }
 
