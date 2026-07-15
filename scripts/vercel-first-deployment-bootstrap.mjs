@@ -6,6 +6,18 @@ import { projectRoot } from './lib/command.mjs'
 
 export const VERCEL_BOOTSTRAP_CONFIRMATION = 'TEMPORARY_PRODUCTION_BOOTSTRAP'
 
+export const VERCEL_BOOTSTRAP_HEADERS = Object.freeze({
+  'cache-control': 'private, no-store, max-age=0',
+  'content-security-policy':
+    "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+  'cross-origin-resource-policy': 'same-origin',
+  'permissions-policy': 'camera=(), geolocation=(), microphone=(), payment=(), usb=()',
+  'referrer-policy': 'no-referrer',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+  'x-robots-tag': 'noindex, nofollow, noarchive, nosnippet',
+})
+
 const bootstrapHtml = `<!doctype html>
 <html lang="en">
   <head>
@@ -41,9 +53,24 @@ export async function createVercelFirstDeploymentBootstrap(root) {
 
   const staticRoot = join(outputRoot, 'static')
   await mkdir(staticRoot, { recursive: true, mode: 0o700 })
-  await writeFile(join(outputRoot, 'config.json'), `${JSON.stringify({ version: 3 }, null, 2)}\n`, {
-    mode: 0o600,
-  })
+  await writeFile(
+    join(outputRoot, 'config.json'),
+    `${JSON.stringify(
+      {
+        version: 3,
+        routes: [
+          {
+            src: '/(.*)',
+            headers: VERCEL_BOOTSTRAP_HEADERS,
+            continue: true,
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+    { mode: 0o600 },
+  )
   await writeFile(join(staticRoot, 'index.html'), bootstrapHtml, { mode: 0o600 })
   await writeFile(
     join(absoluteRoot, 'bootstrap-manifest.json'),
@@ -54,7 +81,9 @@ export async function createVercelFirstDeploymentBootstrap(root) {
         containsApplication: false,
         containsSecrets: false,
         expectedEnvironment: 'production',
-        expectedDomainAssignment: false,
+        expectedCustomDomainAssignment: false,
+        expectedPlatformManagedUrls: true,
+        responseHeadersHardened: true,
         removalRequired: true,
       },
       null,
@@ -88,6 +117,7 @@ async function main() {
       outputRoot: result.outputRoot,
       containsApplication: false,
       containsSecrets: false,
+      responseHeadersHardened: true,
       remoteMutationPerformed: false,
     }),
   )

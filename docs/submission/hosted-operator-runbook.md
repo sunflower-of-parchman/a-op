@@ -204,13 +204,20 @@ Vercel's [default production domain record](https://vercel.com/blog/default-prod
 
 For a new project whose safe provider read reports `hasDeployments: false`, Stage 6 therefore requires a separate, explicit approval for one temporary Production-classified bootstrap deployment before the approved immutable Preview can exist. Preview approval alone does not authorize the bootstrap.
 
-The approved bootstrap contract must be all of the following:
+Michael approved an initial contract that required no assigned domain. The static artifact reached Ready, but the deployment metadata reported two automatic `.vercel.app` aliases. The operator removed the exact deployment and stopped before deploying the application, as the contract required.
 
-1. Generate it in a fresh disposable directory with the repository command below. The output contains one static, `noindex` HTML file, Build Output API configuration, and no application code, environment value, credential, database identifier, media, or customer data.
-2. Deploy it with `--prod --skip-domain`. This still creates a Production-classified deployment and a unique deployment URL, but requests no production-domain assignment.
-3. Do not share or visit the bootstrap URL. Keep the deployment only while creating and confirming the real immutable Preview.
-4. Remove the exact bootstrap deployment after the Preview is confirmed. Verify that the project retains the Preview, has no current Production deployment or production-domain assignment, and still has no custom domain.
-5. If any requested condition is unavailable or the bootstrap is assigned a domain, remove it immediately and stop.
+The [official deploy reference](https://vercel.com/docs/cli/deploy) now resolves the terminology: `--skip-domain` overrides **Auto-assign Custom Production Domains**. The exact pinned CLI `54.21.1` implements the flag by sending `autoAssignCustomDomains: false`. It does not claim to suppress the immutable deployment URL or Vercel-managed automatic `.vercel.app` aliases. No supported CLI flag or documented deployment option found in the read-only review suppresses those platform-managed URLs.
+
+### Revised platform-managed URL contract awaiting approval
+
+The original no-domain contract remains blocked and must not be retried. A revised action-specific approval must accept only the following narrow behavior:
+
+1. Generate the bootstrap in a fresh disposable directory with the repository command below. The output contains one static `noindex` page, response headers for `no-store`, CSP, framing denial, referrer denial, content sniffing denial, permissions denial, and crawler denial, plus Build Output API configuration. It contains no application code, environment value, credential, database identifier, media, or customer data.
+2. Deploy it with `--prod --skip-domain`. This creates a Production-classified deployment and its immutable deployment URL, disables custom Production-domain assignment, and may create the same two Vercel-managed automatic `.vercel.app` aliases observed in the contained attempt.
+3. Do not share or intentionally visit any bootstrap URL. Keep the deployment only while creating and confirming the real immutable Preview.
+4. Before continuing, verify the bootstrap is the only deployment, is Ready, has exactly the expected Vercel-managed URL class, leaves project `live: false`, leaves the project alias list empty, preserves all seven Preview-only environment values, and creates no custom, branch, custom-environment, or redirect domain.
+5. Remove the exact bootstrap deployment after the Preview is confirmed. Verify that the project retains only the Preview, has no current Production deployment, remains `live: false`, and still has no project alias or custom domain.
+6. If any custom domain, non-`.vercel.app` alias, application payload, secret, unexpected deployment, environment-scope change, or other condition appears, remove the bootstrap immediately and stop.
 
 Local preparation does not create provider state:
 
@@ -221,7 +228,7 @@ npm run hosted:vercel-bootstrap -- \
 npm run test:vercel-bootstrap
 ```
 
-Only after the separate bootstrap approval, link that disposable directory to the exact guarded project and execute:
+Only after Michael explicitly approves the revised platform-managed URL contract, link that disposable directory to the exact guarded project and execute:
 
 ```text
 cd [FRESH_PRIVATE_BOOTSTRAP_DIRECTORY]
@@ -231,7 +238,7 @@ npx vercel@[PINNED_VERSION] deploy --prebuilt --prod --skip-domain
 
 Record the bootstrap deployment identifier privately so it can be removed exactly. Do not copy its URL into tracked evidence.
 
-Observed provider result, 2026-07-15: with CLI `54.21.1`, the approved static artifact reached Ready but Vercel assigned two automatic `.vercel.app` Production aliases despite `--skip-domain`. The operator followed rule 5, removed the exact deployment, verified the project returned to zero deployments and aliases, and stopped before deploying the application. This no-domain bootstrap contract is therefore blocked. Do not repeat it; any revised contract must explicitly disclose the temporary automatic aliases observed here and receive new action-specific approval.
+Observed provider result, 2026-07-15: with CLI `54.21.1`, the approved static artifact reached Ready but Vercel assigned two automatic `.vercel.app` Production aliases despite `--skip-domain`. The operator followed the initial stop rule, removed the exact deployment, verified the project returned to zero deployments and aliases, and stopped before deploying the application. The hardened revised artifact and the contract above are local preparation only; no revised provider action has been approved or executed.
 
 After explicit approval to create one preview containing all three services:
 
