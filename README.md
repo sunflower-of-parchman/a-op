@@ -37,7 +37,7 @@ The setup lifecycle is:
 
 ## Current status
 
-Milestones 0 through 2 and Integration Gate A are complete. The repository now includes the Nuxt 4 foundation, local Supabase, typed fictional artist, email authentication, explicit owner/editor/customer roles, seven policy-controlled storage buckets, server-owned payment facts, idempotent order and entitlement fulfillment, central access decisions, and short-lived protected download delivery. Milestone 3 expands this verified authority spine into artist onboarding, database-authoritative identity, structured pages, and the complete administration workspace.
+Milestones 0 through 3 and Integration Gate A are complete. The repository now includes the Nuxt 4 and local Supabase foundation, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, all nine structured page-section types, consent-based local contact storage, audit records, and a complete responsive administration workspace. Milestone 4 expands this foundation into catalog management, media intake and processing, and the persistent listening experience.
 
 - Build record: `BUILD_WEEK.md`
 - Complete execution plan: `plans/artistOwnedPlatform.md`
@@ -64,9 +64,11 @@ Verify the current foundation with:
     npm run test:db
     npm run verify:foundation
     npm run verify:spine
+    npm run verify:administration
+    npm run verify
     npm run test:e2e
 
-`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `npm run verify` will expand as media, commerce, learning, portability, and judge journeys are integrated.
+`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `npm run verify` runs every current gate and restores deterministic prerequisites before the complete responsive browser suite; it will continue to expand as media, commerce, learning, portability, and judge journeys are integrated.
 
 ## Ownership and operating costs
 

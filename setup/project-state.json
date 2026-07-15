@@ -19,7 +19,8 @@
     "demoSeed": "pass",
     "authentication": "pass",
     "storage": "pass",
-    "authoritySpine": "pass"
+    "authoritySpine": "pass",
+    "administration": "pass"
   },
   "externalActions": {
     "repositoryPublication": "approval-required",
