@@ -31,6 +31,13 @@ select {
   font: inherit;
 }
 
+button,
+input,
+textarea,
+select {
+  color: inherit;
+}
+
 a {
   color: inherit;
 }
@@ -212,6 +219,140 @@ h3 {
 
 .text-action--primary {
   color: var(--color-accent);
+}
+
+button.text-action {
+  padding-inline: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+button.text-action:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.account-frame,
+.admin-frame {
+  min-height: 65vh;
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.account-frame .page-heading,
+.admin-frame .page-heading {
+  max-width: 62rem;
+}
+
+.account-form {
+  display: grid;
+  max-width: 38rem;
+  margin-top: clamp(3rem, 7vw, 6rem);
+  gap: 1.6rem;
+}
+
+.account-form label {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.account-form label > span,
+.field-help {
+  color: var(--color-muted-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.account-form input {
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.field-help,
+.form-message,
+.account-alternative {
+  margin: 0;
+}
+
+.form-message {
+  max-width: var(--reading-max);
+  color: var(--color-accent);
+}
+
+.account-alternative {
+  margin-top: 2.5rem;
+  color: var(--color-muted-text);
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: clamp(3rem, 7vw, 6rem);
+  gap: 1rem 2.5rem;
+}
+
+.admin-status {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  align-items: start;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.admin-status h2 {
+  margin-bottom: 0;
+}
+
+.admin-status dl {
+  margin: 0;
+}
+
+.admin-status dl div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: 1rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+  gap: 2rem;
+}
+
+.admin-status dt {
+  color: var(--color-muted-text);
+}
+
+.admin-status dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+
+.preview-player {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  align-items: start;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.preview-player h2 {
+  margin-bottom: 0;
+}
+
+.preview-player > div:last-child p {
+  margin-top: 0;
+  color: var(--color-muted-text);
 }
 
 .release-sleeve {
@@ -509,7 +650,9 @@ h3 {
   .ownership-statement,
   .page-heading,
   .plain-section,
-  .release-page__heading {
+  .release-page__heading,
+  .admin-status,
+  .preview-player {
     grid-template-columns: 1fr;
   }
 

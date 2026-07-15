@@ -4,6 +4,7 @@ import { projectRoot, readJson, writeJsonIfChanged } from './lib/command.mjs'
 import {
   getLocalStatus,
   safeSupabaseError,
+  verifyAuthorizationDemonstration,
   verifyPublicDemonstration,
 } from './lib/local-supabase.mjs'
 
@@ -18,8 +19,11 @@ try {
   console.log('Supabase connection: PASS')
 
   await verifyPublicDemonstration(status)
+  await verifyAuthorizationDemonstration(status)
   console.log('Database migration: PASS')
   console.log('Demo seed: PASS')
+  console.log('Storage buckets and policies: PASS')
+  console.log('Authentication fixtures and roles: PASS')
 
   const databaseTypes = readFileSync(resolve(projectRoot, 'shared/types/database.ts'), 'utf8')
   const generated = !databaseTypes.includes('narrow placeholder')
@@ -29,9 +33,10 @@ try {
   state.checks.localSupabase = 'pass'
   state.checks.databaseTypes = 'pass'
   state.checks.demoSeed = 'pass'
+  state.checks.authentication = 'pass'
+  state.checks.storage = 'pass'
   writeJsonIfChanged(statePath, state)
 
-  console.log('Storage policies: PENDING MILESTONE 2')
   console.log('Authentication redirects: LOCAL')
   console.log('Stripe test mode: ACTION REQUIRED')
   console.log('Stripe webhook: ACTION REQUIRED')

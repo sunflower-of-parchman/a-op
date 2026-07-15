@@ -1,9 +1,61 @@
+import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { createClient } from '@supabase/supabase-js'
 import { projectRoot, readJson, redactOutput, runSupabase, writePrivateFile } from './command.mjs'
 
 const bootstrapConfigPath = resolve(projectRoot, 'content/demo/bootstrap-config.json')
+const demoAccountsPath = resolve(projectRoot, 'content/demo/accounts.json')
 const environmentPath = resolve(projectRoot, '.env')
+
+export const demoFixtureIds = {
+  release: '10000000-0000-4000-8000-000000000001',
+  preview: '10000000-0000-4000-8000-000000000002',
+  download: '10000000-0000-4000-8000-000000000003',
+  product: '10000000-0000-4000-8000-000000000004',
+  price: '10000000-0000-4000-8000-000000000005',
+}
+
+function createAdminClient(status) {
+  return createClient(status.apiUrl, status.secretKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+}
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex')
+}
+
+function createPreviewWave() {
+  const sampleRate = 8000
+  const seconds = 1
+  const samples = sampleRate * seconds
+  const dataSize = samples * 2
+  const wave = Buffer.alloc(44 + dataSize)
+
+  wave.write('RIFF', 0)
+  wave.writeUInt32LE(36 + dataSize, 4)
+  wave.write('WAVE', 8)
+  wave.write('fmt ', 12)
+  wave.writeUInt32LE(16, 16)
+  wave.writeUInt16LE(1, 20)
+  wave.writeUInt16LE(1, 22)
+  wave.writeUInt32LE(sampleRate, 24)
+  wave.writeUInt32LE(sampleRate * 2, 28)
+  wave.writeUInt16LE(2, 32)
+  wave.writeUInt16LE(16, 34)
+  wave.write('data', 36)
+  wave.writeUInt32LE(dataSize, 40)
+
+  for (let sample = 0; sample < samples; sample += 1) {
+    const time = sample / sampleRate
+    const fade = Math.min(1, sample / 400, (samples - sample) / 400)
+    const value = Math.round(Math.sin(2 * Math.PI * 440 * time) * 2600 * fade)
+    wave.writeInt16LE(value, 44 + sample * 2)
+  }
+
+  return wave
+}
 
 function normalizeKey(value) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
@@ -136,6 +188,130 @@ export async function seedDemonstrationArtist(status) {
   }
 }
 
+export async function seedAuthorizationDemonstration(status) {
+  const admin = createAdminClient(status)
+  const fixture = readJson(demoAccountsPath)
+
+  if (!fixture.localOnly || !Array.isArray(fixture.accounts)) {
+    throw new Error('The local demonstration account fixture is invalid.')
+  }
+
+  const users = new Map()
+
+  for (const account of fixture.accounts) {
+    const { data, error } = await admin.auth.admin.createUser({
+      email: account.email,
+      password: account.password,
+      email_confirm: true,
+      user_metadata: { display_name: account.displayName },
+    })
+
+    if (error || !data.user) {
+      throw new Error(`Could not create the local ${account.key} account.`)
+    }
+
+    users.set(account.key, data.user.id)
+
+    if (account.role === 'owner') {
+      const { error: roleError } = await admin.rpc('bootstrap_owner', {
+        target_user_id: data.user.id,
+      })
+      if (roleError) throw new Error('Could not bootstrap the local owner account.')
+    } else if (account.role === 'editor') {
+      const { error: roleError } = await admin.from('app_roles').insert({
+        user_id: data.user.id,
+        role: 'editor',
+        granted_by: users.get('owner'),
+      })
+      if (roleError) throw new Error('Could not seed the local editor role.')
+    }
+  }
+
+  const release = {
+    id: demoFixtureIds.release,
+    slug: 'lines-we-carry',
+    title: 'Lines We Carry',
+    description: 'A fictional release used to verify publication and protected fulfillment.',
+    release_date: '2026-07-14',
+    state: 'published',
+    sort_order: 10,
+    published_at: '2026-07-14T00:00:00.000Z',
+    created_by: users.get('owner'),
+  }
+  const { error: releaseError } = await admin.from('releases').upsert(release)
+  if (releaseError) throw new Error('Could not seed the demonstration release.')
+
+  const previewBytes = createPreviewWave()
+  const downloadBytes = Buffer.from(
+    'Daymark Assembly local demonstration download. This fixture contains no private artist material.\n',
+    'utf8',
+  )
+  const previewPath = 'gate-a/lines-we-carry-preview.wav'
+  const downloadPath = 'gate-a/lines-we-carry-download.txt'
+
+  const { error: previewUploadError } = await admin.storage
+    .from('preview-media')
+    .upload(previewPath, previewBytes, { contentType: 'audio/wav', upsert: true })
+  if (previewUploadError) throw new Error('Could not upload the public preview fixture.')
+
+  const { error: downloadUploadError } = await admin.storage
+    .from('downloads')
+    .upload(downloadPath, downloadBytes, { contentType: 'text/plain', upsert: true })
+  if (downloadUploadError) throw new Error('Could not upload the private download fixture.')
+
+  const { error: mediaError } = await admin.from('media_objects').upsert([
+    {
+      id: demoFixtureIds.preview,
+      release_id: demoFixtureIds.release,
+      kind: 'preview_audio',
+      bucket_id: 'preview-media',
+      object_path: previewPath,
+      media_type: 'audio/wav',
+      byte_size: previewBytes.byteLength,
+      sha256: sha256(previewBytes),
+      status: 'ready',
+      is_public: true,
+      created_by: users.get('owner'),
+    },
+    {
+      id: demoFixtureIds.download,
+      release_id: demoFixtureIds.release,
+      kind: 'download',
+      bucket_id: 'downloads',
+      object_path: downloadPath,
+      media_type: 'text/plain',
+      byte_size: downloadBytes.byteLength,
+      sha256: sha256(downloadBytes),
+      status: 'ready',
+      is_public: false,
+      created_by: users.get('owner'),
+    },
+  ])
+  if (mediaError) throw new Error('Could not seed the demonstration media records.')
+
+  const { error: productError } = await admin.from('products').upsert({
+    id: demoFixtureIds.product,
+    slug: 'lines-we-carry-download',
+    product_type: 'album_download',
+    name: 'Lines We Carry download',
+    description: 'Local-only product used to verify idempotent fulfillment.',
+    resource_type: 'release',
+    resource_id: demoFixtureIds.release,
+    state: 'published',
+    created_by: users.get('owner'),
+  })
+  if (productError) throw new Error('Could not seed the demonstration product.')
+
+  const { error: priceError } = await admin.from('prices').upsert({
+    id: demoFixtureIds.price,
+    product_id: demoFixtureIds.product,
+    currency: 'USD',
+    amount_minor: 1200,
+    active: true,
+  })
+  if (priceError) throw new Error('Could not seed the demonstration price.')
+}
+
 export async function verifyPublicDemonstration(status) {
   const response = await fetch(
     `${status.apiUrl}/rest/v1/published_site_config?installation_key=eq.primary&select=config_schema_version`,
@@ -154,6 +330,64 @@ export async function verifyPublicDemonstration(status) {
   const records = await response.json()
   if (!Array.isArray(records) || records.length !== 1 || records[0].config_schema_version !== 1) {
     throw new Error('Public demonstration configuration is missing or duplicated.')
+  }
+}
+
+export async function verifyAuthorizationDemonstration(status) {
+  const publicHeaders = {
+    apikey: status.publishableKey,
+    Authorization: `Bearer ${status.publishableKey}`,
+  }
+  const releaseResponse = await fetch(
+    `${status.apiUrl}/rest/v1/releases?id=eq.${demoFixtureIds.release}&state=eq.published&select=id`,
+    { headers: publicHeaders },
+  )
+  const mediaResponse = await fetch(
+    `${status.apiUrl}/rest/v1/media_objects?id=eq.${demoFixtureIds.preview}&is_public=eq.true&select=id`,
+    { headers: publicHeaders },
+  )
+  const serviceHeaders = {
+    apikey: status.secretKey,
+    Authorization: `Bearer ${status.secretKey}`,
+  }
+  const rolesResponse = await fetch(`${status.apiUrl}/rest/v1/app_roles?select=role`, {
+    headers: serviceHeaders,
+  })
+  const bucketsResponse = await fetch(`${status.apiUrl}/storage/v1/bucket`, {
+    headers: serviceHeaders,
+  })
+
+  if (!releaseResponse.ok || !mediaResponse.ok || !rolesResponse.ok || !bucketsResponse.ok) {
+    throw new Error('The authorization or storage fixtures could not be read.')
+  }
+
+  const [releases, media, roles, buckets] = await Promise.all([
+    releaseResponse.json(),
+    mediaResponse.json(),
+    rolesResponse.json(),
+    bucketsResponse.json(),
+  ])
+  if (releases.length !== 1 || media.length !== 1) {
+    throw new Error('The public authorization fixtures are missing or duplicated.')
+  }
+
+  const roleNames = new Set(roles.map(({ role }) => role))
+  if (!['owner', 'editor', 'customer'].every((role) => roleNames.has(role))) {
+    throw new Error('The demonstration roles are incomplete.')
+  }
+
+  const bucketNames = new Set(buckets.map(({ id }) => id))
+  const expectedBuckets = [
+    'artwork',
+    'preview-media',
+    'source-audio',
+    'downloads',
+    'license-documents',
+    'lesson-media',
+    'administrative',
+  ]
+  if (!expectedBuckets.every((bucket) => bucketNames.has(bucket))) {
+    throw new Error('The demonstration storage buckets are incomplete.')
   }
 }
 

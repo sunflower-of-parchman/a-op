@@ -4,7 +4,9 @@ import { projectRoot, runSupabase } from './lib/command.mjs'
 import {
   getLocalStatus,
   safeSupabaseError,
+  seedAuthorizationDemonstration,
   seedDemonstrationArtist,
+  verifyAuthorizationDemonstration,
   verifyPublicDemonstration,
   writeLocalEnvironment,
 } from './lib/local-supabase.mjs'
@@ -20,14 +22,16 @@ try {
   const status = getLocalStatus()
   writeLocalEnvironment(status)
   await seedDemonstrationArtist(status)
+  await seedAuthorizationDemonstration(status)
   await verifyPublicDemonstration(status)
-  console.log('Demo seed: applied')
+  await verifyAuthorizationDemonstration(status)
+  console.log('Demo seed and authorization fixtures: applied')
 
   const generated = runSupabase(['gen', 'types', '--local', '--schema', 'public'], {
     capture: true,
   })
   const databaseTypesPath = resolve(projectRoot, 'shared/types/database.ts')
-  writeFileSync(databaseTypesPath, generated.stdout, 'utf8')
+  writeFileSync(databaseTypesPath, `${generated.stdout.trimEnd()}\n`, 'utf8')
   console.log('Generated database types: current')
 
   console.log(`Supabase API: ${status.apiUrl}`)

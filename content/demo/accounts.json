@@ -1,0 +1,33 @@
+{
+  "localOnly": true,
+  "accounts": [
+    {
+      "key": "owner",
+      "email": "owner@daymark.local",
+      "password": "Daymark-Owner-2026!",
+      "displayName": "Daymark Owner",
+      "role": "owner"
+    },
+    {
+      "key": "editor",
+      "email": "editor@daymark.local",
+      "password": "Daymark-Editor-2026!",
+      "displayName": "Daymark Editor",
+      "role": "editor"
+    },
+    {
+      "key": "customerOne",
+      "email": "listener-one@daymark.local",
+      "password": "Daymark-Listener-2026!",
+      "displayName": "Listener One",
+      "role": "customer"
+    },
+    {
+      "key": "customerTwo",
+      "email": "listener-two@daymark.local",
+      "password": "Daymark-Listener-2026!",
+      "displayName": "Listener Two",
+      "role": "customer"
+    }
+  ]
+}

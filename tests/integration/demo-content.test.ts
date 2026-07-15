@@ -13,6 +13,12 @@ describe('demonstration content', () => {
     expect(artist.name).toBe(artistConfig.identity.name)
     expect(catalog.fictional).toBe(true)
     expect(catalog.release.title).toBe(artistConfig.homepage.release.title)
-    expect(catalog.media).toEqual([])
+    expect(catalog.media).toEqual([
+      expect.objectContaining({
+        kind: 'preview_audio',
+        path: 'preview-media/gate-a/lines-we-carry-preview.wav',
+      }),
+    ])
+    expect(catalog.rights).toContain('code-generated audio')
   })
 })

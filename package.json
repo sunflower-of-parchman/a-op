@@ -23,6 +23,9 @@
     "test:unit": "vitest run --config vitest.config.ts",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:db": "node scripts/test-database.mjs",
+    "test:policies": "node scripts/test-policies.mjs",
+    "test:spine": "node scripts/test-spine.mjs",
+    "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
     "test:e2e": "playwright test",
     "setup:preflight": "node scripts/setup-preflight.mjs",
     "setup:local": "node scripts/setup-local.mjs",
@@ -30,6 +33,7 @@
     "seed:reset": "node scripts/reset-local-demo.mjs",
     "health:check": "node scripts/health-check.mjs",
     "verify:foundation": "node scripts/verify-foundation.mjs",
+    "verify:spine": "node scripts/verify-spine.mjs",
     "verify": "npm run verify:foundation"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "installationMode": "local",
   "artistConfigVersion": 1,
   "enabledModules": [
@@ -16,7 +16,10 @@
     "foundation": "pass",
     "localSupabase": "pass",
     "databaseTypes": "pass",
-    "demoSeed": "pass"
+    "demoSeed": "pass",
+    "authentication": "pass",
+    "storage": "pass",
+    "authoritySpine": "pass"
   },
   "externalActions": {
     "repositoryPublication": "approval-required",

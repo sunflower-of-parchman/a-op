@@ -18,6 +18,7 @@ const navigation = computed(() =>
         <li v-for="item in navigation" :key="item.to">
           <NuxtLink :to="item.to">{{ item.label }}</NuxtLink>
         </li>
+        <li><NuxtLink to="/account">Account</NuxtLink></li>
       </ul>
     </nav>
   </header>
