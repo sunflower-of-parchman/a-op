@@ -3,6 +3,7 @@
 - Date: July 15, 2026
 - Package commit: `0ab2c9e`
 - Application package commit: `aead7ab`
+- Complete verification contract commit: `6cd3575`
 - Host: macOS arm64 with Docker Desktop
 - Runtime: Node 24.14.0, npm 11.12.1
 
@@ -49,6 +50,16 @@ Observed results:
 - The browser-secret scan passed.
 - The one-command server returned HTTP `200` from its isolated port.
 - The clone retained no tracked changes.
+
+## Complete repository aggregate
+
+The supported Node 24 runtime also completed one uninterrupted run of:
+
+```text
+NUXT_IGNORE_LOCK=1 PORT=3100 npm run verify
+```
+
+The aggregate passed the foundation, authority spine, administration, catalog and media, commerce, licensing, learning, telemetry, setup, portability, hardening, and recovery gates; reset and rechecked the final installation; passed all 11 isolated desktop/mobile browser specifications; validated every tracked document and fictional asset boundary; passed the public judge journey in Chromium and WebKit; and found no browser-exposed secret. This run exercised the `verify:package` stage added in commit `6cd3575`.
 
 ## External boundary
 

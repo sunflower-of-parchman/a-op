@@ -136,16 +136,16 @@ This section will develop as we discuss the idea.
 
 ## Submission progress
 
-| Item                            | Status                                                                                                                              |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Registration                    | Confirmed                                                                                                                           |
-| Devpost plugin                  | Installed                                                                                                                           |
-| Free-credit request             | Submitted; approval not yet confirmed                                                                                               |
-| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                            |
-| Working implementation          | Milestones 0–12 approval-independent work and Integration Gate A implemented; complete local application and clean-clone judge path |
-| Repository history and evidence | Planning through Milestone 12 commits, capability evidence, model record, provenance, runbooks, and living ExecPlan recorded        |
-| README                          | Complete package and verified two-command local quickstart; final name and license pending                                          |
-| Demo and judging access         | Local route verified; hosted plan prepared; deployment and private test access pending Michael's approval                           |
-| Demo video                      | 2:55 narrated script prepared; recording, final timecodes, approval, and upload pending                                             |
-| `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                             |
-| Devpost submission              | Not started                                                                                                                         |
+| Item                            | Status                                                                                                                           |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Registration                    | Confirmed                                                                                                                        |
+| Devpost plugin                  | Installed                                                                                                                        |
+| Free-credit request             | Submitted; approval not yet confirmed                                                                                            |
+| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                         |
+| Working implementation          | Milestones 0–12 complete locally; Milestone 13 package prepared; full application, recovery, browser, and judge aggregate passed |
+| Repository history and evidence | Planning through Milestone 13, capability evidence, model record, provenance, runbooks, clean-clone proof, and ExecPlan recorded |
+| README                          | Complete package and verified two-command local quickstart; final name and license pending                                       |
+| Demo and judging access         | Local route verified; hosted plan prepared; deployment and private test access pending Michael's approval                        |
+| Demo video                      | 2:55 narrated script prepared; recording, final timecodes, approval, and upload pending                                          |
+| `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                          |
+| Devpost submission              | Not started                                                                                                                      |
