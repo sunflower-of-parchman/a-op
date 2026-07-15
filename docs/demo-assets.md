@@ -13,9 +13,9 @@ The machine-readable inventory is [`content/demo/assets.json`](../content/demo/a
 
 The external video example remains poster-first. No third-party player receives a request until the visitor explicitly consents, and the video itself is not copied into this repository.
 
-## License and publication gate
+## License and publication
 
-All demonstration material is original, but it remains `UNLICENSED` while the project license decision is pending. Michael must select the project and asset license and explicitly approve repository publication before any public release. The asset inventory is updated with that decision before the Milestone 12 package is marked complete.
+All demonstration material is original and licensed with the repository under `AGPL-3.0-or-later`. The tracked source, generating code, and deterministic generation descriptions are the preferred forms for modification. Michael must still explicitly approve repository publication before any public release.
 
 ## Replacement contract
 

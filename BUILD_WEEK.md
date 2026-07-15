@@ -147,7 +147,7 @@ This section will develop as we discuss the idea.
 | Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                         |
 | Working implementation          | Milestones 0–12 complete locally; Milestone 13 package prepared; full application, recovery, browser, and judge aggregate passed |
 | Repository history and evidence | Planning through Milestone 13, capability evidence, model record, provenance, runbooks, clean-clone proof, and ExecPlan recorded |
-| README                          | Complete package and verified two-command local quickstart; final name and license pending                                       |
+| README                          | Complete package and verified two-command local quickstart; `AGPL-3.0-or-later` selected; final name pending                     |
 | Demo and judging access         | Local route verified; hosted plan prepared; deployment and private test access pending Michael's approval                        |
 | Demo video                      | 2:55 narrated script prepared; recording, final timecodes, approval, and upload pending                                          |
 | `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                          |

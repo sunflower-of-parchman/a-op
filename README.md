@@ -166,7 +166,7 @@ The command refuses a hosted target and refuses to run without the explicit conf
 
 ## Deployment and operating costs
 
-The software will be open source after Michael selects the final license and explicitly approves publication. The initial documented path is a Node deployment on Vercel with an artist-owned Supabase project, Stripe account, domain, email provider, and a container-capable media worker. Ordinary Node-compatible hosting remains possible because the core application does not depend on a proprietary Vercel runtime.
+The software is licensed under the GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`); see [`LICENSE`](LICENSE). Repository publication remains a separate Michael-controlled action. The initial documented path is a Node deployment on Vercel with an artist-owned Supabase project, Stripe account, domain, email provider, and a container-capable media worker. Ordinary Node-compatible hosting remains possible because the core application does not depend on a proprietary Vercel runtime.
 
 Running a site may still involve domain registration, hosting, database, storage and egress, email, worker compute, and payment-processing costs. Free tiers can support evaluation but are provider-controlled and may change. Each artist owns their repository, connected accounts, domain, content, customer relationship, and a verified path for exporting and restoring the installation. No deployment, paid resource, DNS change, live payment, email send, or publication occurs without explicit approval.
 
@@ -174,7 +174,7 @@ Running a site may still involve domain registration, hosting, database, storage
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), the product contract, and the relevant architecture decision before changing behavior. Keep the single-artist authority model, human approval gates, fictional fixture boundary, and central entitlement decision intact. Add focused tests, run the relevant milestone gate, and update provenance and capability evidence for a new public claim. Never commit credentials, real customer data, private artist media, generated local exports, or machine-specific paths.
 
-The final contribution and redistribution terms follow the project license Michael selects before public release. Until then, `package.json` correctly remains `UNLICENSED`.
+Contribution and redistribution follow `AGPL-3.0-or-later`. Operators who modify the platform and make it available over a network must offer the corresponding source under the same license. Read [`LICENSE`](LICENSE) and [`docs/architecture/decisions/011-open-source-license.md`](docs/architecture/decisions/011-open-source-license.md).
 
 ## Troubleshooting
 

@@ -3,7 +3,7 @@
   "collection": "Daymark Assembly",
   "fictional": true,
   "publicationApproved": false,
-  "licenseDecision": "Pending Michael's project-license selection before public release.",
+  "licenseDecision": "AGPL-3.0-or-later, selected by Michael on July 15, 2026. Repository publication remains separately approval-gated.",
   "assets": [
     {
       "id": "daymark-identity-and-site-copy",
@@ -11,7 +11,7 @@
       "paths": ["content/demo/artist.json", "content/demo/bootstrap-config.json"],
       "source": "Original fictional identity, biography, navigation, design, and public copy written for this Build Week repository.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -20,7 +20,7 @@
       "paths": ["content/demo/catalog.json"],
       "source": "Original fictional release, track, collection, credit, commerce, membership, and licensing metadata written for this repository.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -33,7 +33,7 @@
       ],
       "source": "One-second 440 Hz, 554.37 Hz, and 659.25 Hz PCM verification tones generated during local seed by scripts/lib/local-supabase.mjs.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -45,7 +45,7 @@
       ],
       "source": "Trusted SVG artwork generated deterministically during local seed by scripts/lib/local-supabase.mjs.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -54,7 +54,7 @@
       "paths": ["public/demo/video-poster.svg"],
       "source": "Original trusted SVG poster created for the fictional privacy-gated video demonstration.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -63,7 +63,7 @@
       "paths": ["scripts/lib/local-supabase.mjs"],
       "source": "Original fictional lesson, transcript, editorial, worksheet, and protected-download copy seeded by repository code.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     },
     {
@@ -72,7 +72,7 @@
       "paths": ["docs/images/daymark-home.png", "docs/images/daymark-music-mobile.png"],
       "source": "Captured from the local Daymark Assembly demonstration on July 15, 2026 using Playwright Chromium.",
       "original": true,
-      "license": "Pending project license selection",
+      "license": "AGPL-3.0-or-later",
       "privateMaterial": false
     }
   ]

@@ -7,7 +7,7 @@
     "#artist-config-schema": "./shared/schemas/artistConfig.ts"
   },
   "description": "An open-source, Codex-operable web platform for one artist and their audience.",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "packageManager": "npm@11.12.1",
   "engines": {
     "node": ">=24.11.0 <25",

@@ -12,7 +12,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] `README.md`, `AGENTS.md`, `SETUP.md`, architecture, artist runbooks, agent runbooks, recovery, provenance, and evidence present.
 - [x] Requirement-by-requirement completion audit records every proven, prepared, decision-gated, and external-gated item.
 - [ ] Final public project name selected by Michael and applied consistently.
-- [ ] Open-source license selected by Michael; `LICENSE`, `package.json`, README, and asset ledger updated.
+- [x] Michael selected `AGPL-3.0-or-later`; `LICENSE`, package metadata, README, ADR, and original asset ledger agree.
 - [ ] Final repository state clean or intentionally documented.
 
 ## Verification
@@ -58,12 +58,12 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 
 ## Final authorization record
 
-| Action                                | Approval | Evidence                                  |
-| ------------------------------------- | -------- | ----------------------------------------- |
-| Select project name                   | Pending  | Final repository text                     |
-| Select open-source license            | Pending  | `LICENSE` and package metadata            |
-| Create/use hosted resources           | Pending  | Provider project references, kept private |
-| Promote final deployment              | Pending  | Approved URL and deployment commit        |
-| Share repository or judge credentials | Pending  | Devpost access record                     |
-| Publish YouTube video                 | Pending  | Public video URL                          |
-| Submit Devpost entry                  | Pending  | Submission confirmation                   |
+| Action                                | Approval | Evidence                                              |
+| ------------------------------------- | -------- | ----------------------------------------------------- |
+| Select project name                   | Pending  | Final repository text                                 |
+| Select open-source license            | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026 |
+| Create/use hosted resources           | Pending  | Provider project references, kept private             |
+| Promote final deployment              | Pending  | Approved URL and deployment commit                    |
+| Share repository or judge credentials | Pending  | Devpost access record                                 |
+| Publish YouTube video                 | Pending  | Public video URL                                      |
+| Submit Devpost entry                  | Pending  | Submission confirmation                               |

@@ -1,18 +1,19 @@
 # ADR 011: Open-source license
 
-- Status: Decision required before publication
+- Status: Accepted
 - Date opened: 2026-07-15
+- Date decided: 2026-07-15
 
-## Decision to make
+## Decision
 
-Michael will select the license before the repository is made public. The leading choices are MIT and AGPL-3.0.
+Michael selected the GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`) for the repository and its original fictional demonstration assets.
 
 MIT permits broad reuse, including proprietary derivatives. AGPL-3.0 requires operators who modify and provide the software over a network to offer the corresponding source under the same license.
 
-## Why Michael decides
+## Rationale
 
-The license determines how this gift can be reused and whether hosted derivatives must remain open. That is a stewardship and business decision, not an implementation default.
+This project is intended as a gift that artists can operate, study, change, and share. The AGPL permits that use while requiring modified network-hosted versions to make their corresponding source available under the same license. That keeps improvements to the transferable artist platform open.
 
-## Work that may proceed
+## Consequences
 
-All local implementation, testing, documentation, and private judging preparation may continue. Do not add a `LICENSE` file or describe the repository as publicly licensed until Michael selects the license and approves publication.
+The repository contains GNU's standard AGPL v3 text in `LICENSE`; package metadata uses the SPDX identifier `AGPL-3.0-or-later`; and the original Daymark Assembly demonstration assets use the same repository license. Publication, deployment, provider setup, and competition submission remain separate Michael-controlled actions.
