@@ -21,74 +21,75 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Authorization ledger
 
-| External action                         | Status  | Michael approval reference            | Executed by / at |
-| --------------------------------------- | ------- | ------------------------------------- | ---------------- |
-| Create or select Supabase judge project | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T18:44:42Z |
-| Create or select Stripe test resources  | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:43:37Z |
-| Create or select Vercel judge project   | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:01:29Z |
-| Link and dry-run Supabase migrations    | Executed | Stage 2A approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:44:15Z |
-| Apply Supabase migrations               | Executed | Stage 2B approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:50:39Z |
-| Seed hosted fixtures                    | Executed | Stage 3 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:01:49Z |
-| Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:24:04Z |
-| Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
-| Execute hosted reset                    | Pending |                                       |                  |
-| Assign production alias or domain       | Pending |                                       |                  |
-| Share judge URL and credentials         | Pending |                                       |                  |
-| Publish repository                      | Pending |                                       |                  |
-| Publish video                           | Pending |                                       |                  |
-| Submit Devpost entry                    | Pending |                                       |                  |
+| External action                            | Status   | Michael approval reference                   | Executed by / at                    |
+| ------------------------------------------ | -------- | -------------------------------------------- | ----------------------------------- |
+| Create or select Supabase judge project    | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T18:44:42Z |
+| Create or select Stripe test resources     | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:43:37Z |
+| Create or select Vercel judge project      | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:01:29Z |
+| Link and dry-run Supabase migrations       | Executed | Stage 2A approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:44:15Z |
+| Apply Supabase migrations                  | Executed | Stage 2B approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:50:39Z |
+| Seed hosted fixtures                       | Executed | Stage 3 approved in this task, 2026-07-15    | Primary task / 2026-07-15T21:01:49Z |
+| Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15   | Primary task / 2026-07-15T21:24:04Z |
+| Complete Stripe sandbox license catalog    | Executed | Stage 4A-2 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:37:07Z |
+| Deploy immutable Services preview          | Pending  | Includes web and both private workers        |                                     |
+| Execute hosted reset                       | Pending  |                                              |                                     |
+| Assign production alias or domain          | Pending  |                                              |                                     |
+| Share judge URL and credentials            | Pending  |                                              |                                     |
+| Publish repository                         | Pending  |                                              |                                     |
+| Publish video                              | Pending  |                                              |                                     |
+| Submit Devpost entry                       | Pending  |                                              |                                     |
 
 ## Resource boundaries
 
-| Resource         | Status  | Safe reference hash/suffix | Isolation check |
-| ---------------- | ------- | -------------------------- | --------------- |
-| Supabase project | Ready   | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
-| Stripe context   | Ready   | `sha256:24efed888794`      | Blank named sandbox; dedicated CLI profile; live mode untouched |
-| Vercel project   | Ready   | `sha256:f108c4d15ee5`         | Exact-name project; Services preset; checkout unlinked |
-| Media worker     | Pending |                            |                 |
-| Document worker  | Pending |                            |                 |
+| Resource         | Status  | Safe reference hash/suffix | Isolation check                                                                                |
+| ---------------- | ------- | -------------------------- | ---------------------------------------------------------------------------------------------- |
+| Supabase project | Ready   | `sha256:9890053715f8`      | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
+| Stripe context   | Ready   | `sha256:24efed888794`      | Blank named sandbox; dedicated CLI profile; live mode untouched                                |
+| Vercel project   | Ready   | `sha256:f108c4d15ee5`      | Exact-name project; Services preset; checkout unlinked                                         |
+| Media worker     | Pending |                            |                                                                                                |
+| Document worker  | Pending |                            |                                                                                                |
 
 ## Supabase evidence
 
-| Check                                        | Status  | Timestamp / safe result |
-| -------------------------------------------- | ------- | ----------------------- |
-| Link matches approved project                | Pass    | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched |
-| Migration dry run reviewed                   | Pass    | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after |
-| Forward migrations applied                   | Pass    | 2026-07-15T20:50:39Z; exactly 11 reviewed files; no seed, roles, reset, or repair |
-| Remote migration history exact               | Pass    | 2026-07-15T20:50:39Z; 11 local and 11 remote versions in identical order |
-| Public generated types match                 | Pass    | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata |
-| Public/private schema lint                   | Pass    | 2026-07-15T20:50:39Z; no schema errors found |
+| Check                                        | Status  | Timestamp / safe result                                                                                                   |
+| -------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Link matches approved project                | Pass    | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched                                                        |
+| Migration dry run reviewed                   | Pass    | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after                                  |
+| Forward migrations applied                   | Pass    | 2026-07-15T20:50:39Z; exactly 11 reviewed files; no seed, roles, reset, or repair                                         |
+| Remote migration history exact               | Pass    | 2026-07-15T20:50:39Z; 11 local and 11 remote versions in identical order                                                  |
+| Public generated types match                 | Pass    | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata                            |
+| Public/private schema lint                   | Pass    | 2026-07-15T20:50:39Z; no schema errors found                                                                              |
 | Anonymous publication                        | Pass    | 2026-07-15T21:01:49Z; Daymark Assembly public configuration and published content verified; fixture `sha256:ba0da2991582` |
-| Owner/editor/customer/service isolation      | Pass    | 2026-07-15T21:01:49Z; exact four-account set verified as owner, editor, customer, and customer |
-| Seven storage boundaries                     | Pass    | 2026-07-15T21:01:49Z; all seven dedicated buckets verified with 6 fictional fixture objects |
-| Security Advisor                             | Pending |                         |
-| Performance Advisor                          | Pending |                         |
-| Hosted identity domain differs from `.local` | Pass    | 2026-07-15T21:01:49Z; four unique hosted identities use non-local domains |
+| Owner/editor/customer/service isolation      | Pass    | 2026-07-15T21:01:49Z; exact four-account set verified as owner, editor, customer, and customer                            |
+| Seven storage boundaries                     | Pass    | 2026-07-15T21:01:49Z; all seven dedicated buckets verified with 6 fictional fixture objects                               |
+| Security Advisor                             | Pending |                                                                                                                           |
+| Performance Advisor                          | Pending |                                                                                                                           |
+| Hosted identity domain differs from `.local` | Pass    | 2026-07-15T21:01:49Z; four unique hosted identities use non-local domains                                                 |
 
 The successful push ended with a non-fatal local pg-delta catalog-cache warning about a missing temporary certificate path. Direct migration-history, type-generation, and linked-lint verification all passed afterward. No migration repair, reset, or retry was performed.
 
-The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and an initial Stripe provider-mapping count of zero. After Stage 4A, another independent check preserved the same fixture, account, and storage results while verifying three provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization or mapping.
+The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and an initial Stripe provider-mapping count of zero. Stage 4A then verified three provider mappings. After Stage 4A-2, another independent check preserved the same fixture, account, and storage results while verifying four provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization or mapping.
 
 ## Stripe evidence
 
-| Journey                                 | Status  | Safe event suffix/hash / result |
-| --------------------------------------- | ------- | ------------------------------- |
-| Test or sandbox mode confirmed          | Pass    | 2026-07-15T21:24:04Z; all three products and prices returned `livemode: false` |
-| Sandbox catalog and owner mappings      | Pass    | 2026-07-15T21:24:04Z; 3 products, 3 prices, and 3 mappings: download `sha256:17ba0837a9ec` / `sha256:ad6d6f333fb0`; license `sha256:3cfdd1b9bdac` / `sha256:2b580f5891ab`; membership `sha256:25eb8bdf879c` / `sha256:89a75f244374` |
-| One-time Checkout                       | Pending |                                 |
-| Signed webhook                          | Pending |                                 |
-| Same-event replay                       | Pending |                                 |
-| One order and one entitlement           | Pending |                                 |
-| Cross-account protected-delivery denial | Pending |                                 |
-| Membership activation                   | Pending |                                 |
-| Customer portal cancellation            | Pending |                                 |
-| Membership access removal               | Pending |                                 |
-| Partial and full refund                 | Pending |                                 |
-| License Checkout and frozen terms       | Pending |                                 |
-| Purchaser-only PDF delivery             | Pending |                                 |
-| Redacted webhook recovery               | Pending |                                 |
+| Journey                                 | Status  | Safe event suffix/hash / result                                                                                                                                                                                                                                                                                        |
+| --------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Test or sandbox mode confirmed          | Pass    | 2026-07-15T21:37:07Z; all four products and prices returned `livemode: false`                                                                                                                                                                                                                                          |
+| Sandbox catalog and owner mappings      | Pass    | 2026-07-15T21:37:07Z; 4 products, 4 prices, and 4 mappings: download `sha256:17ba0837a9ec` / `sha256:ad6d6f333fb0`; dance-film license `sha256:3cfdd1b9bdac` / `sha256:2b580f5891ab`; live-performance license `sha256:6a4caf5aba0d` / `sha256:6fb5baecea00`; membership `sha256:25eb8bdf879c` / `sha256:89a75f244374` |
+| One-time Checkout                       | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Signed webhook                          | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Same-event replay                       | Pending |                                                                                                                                                                                                                                                                                                                        |
+| One order and one entitlement           | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Cross-account protected-delivery denial | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Membership activation                   | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Customer portal cancellation            | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Membership access removal               | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Partial and full refund                 | Pending |                                                                                                                                                                                                                                                                                                                        |
+| License Checkout and frozen terms       | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Purchaser-only PDF delivery             | Pending |                                                                                                                                                                                                                                                                                                                        |
+| Redacted webhook recovery               | Pending |                                                                                                                                                                                                                                                                                                                        |
 
-Stage 4A created only the three approved sandbox offerings: the USD 12 one-time album download, USD 75 dance-film license, and USD 8 monthly membership. The second fictional USD 125 live-performance license remains intentionally unmapped pending a separate decision. No Checkout session, webhook endpoint, signing secret, customer-portal configuration, deployment, live-mode object, or real payment was created.
+Stage 4A created the first three approved sandbox offerings: the USD 12 one-time album download, USD 75 dance-film license, and USD 8 monthly membership. Under the separate Stage 4A-2 approval, the primary task created and owner-mapped the published USD 125 live-performance license. All four published Stripe offerings now have one complete test-only product and price mapping. No Checkout session, webhook endpoint, signing secret, customer-portal configuration, deployment, live-mode object, or real payment was created.
 
 ## Worker evidence
 
