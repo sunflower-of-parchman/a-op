@@ -11,6 +11,7 @@ const { data } = await useFetch<LicensingResponse>('/api/licensing')
 const { data: session } = await useFetch('/api/auth/session')
 const busyId = ref('')
 const message = ref('')
+const { track } = useTelemetry()
 const details = reactive<
   Record<string, { licenseeName: string; projectTitle: string; projectDescription: string }>
 >({})
@@ -34,6 +35,12 @@ function price(option: PublishedLicenseOption) {
 }
 
 async function beginCheckout(option: PublishedLicenseOption) {
+  void track('license_interest', {
+    resourceType: 'license_offer',
+    resourceKey: option.offerId.startsWith('10000000-')
+      ? 'demonstration-license'
+      : 'artist-license',
+  })
   if (!session.value?.authenticated) {
     await navigateTo(`/sign-in?redirect=${encodeURIComponent(route.fullPath)}`)
     return
@@ -41,6 +48,12 @@ async function beginCheckout(option: PublishedLicenseOption) {
   busyId.value = option.offerId
   message.value = ''
   try {
+    void track('checkout_start', {
+      resourceType: 'license_offer',
+      resourceKey: option.offerId.startsWith('10000000-')
+        ? 'demonstration-license'
+        : 'artist-license',
+    })
     const result = await $fetch('/api/licensing/checkout', {
       method: 'POST',
       body: { offerId: option.offerId, ...formFor(option.offerId), returnPath: '/account' },

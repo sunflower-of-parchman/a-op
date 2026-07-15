@@ -21,6 +21,7 @@ const form = reactive<ContactMessageInput>({
 const ready = ref(false)
 const pending = ref(false)
 const result = ref('')
+const { track } = useTelemetry()
 
 onMounted(() => {
   ready.value = true
@@ -31,6 +32,7 @@ async function submit() {
   result.value = ''
   try {
     await $fetch('/api/contact', { method: 'POST', body: form })
+    void track('contact_conversion', { resourceType: 'contact', resourceKey: 'contact-form' })
     result.value = 'Your message is stored for the artist.'
     form.name = ''
     form.email = ''

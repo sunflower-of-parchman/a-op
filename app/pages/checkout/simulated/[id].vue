@@ -8,6 +8,7 @@ const { data, error, refresh } = await useFetch<CheckoutIntentResponse>(
 )
 const confirming = ref(false)
 const message = ref('')
+const { track } = useTelemetry()
 
 if (error.value?.statusCode === 401) {
   await navigateTo(`/sign-in?redirect=${encodeURIComponent(route.fullPath)}`)
@@ -22,6 +23,16 @@ async function confirm() {
       body: { intentId: id },
     })
     await refresh()
+    void track('checkout_complete', {
+      resourceType: 'product',
+      resourceKey: data.value?.product.product_type.replaceAll('_', '-') ?? 'artist-offering',
+    })
+    if (data.value?.product.product_type === 'license') {
+      void track('license_complete', {
+        resourceType: 'license_offer',
+        resourceKey: 'issued-license',
+      })
+    }
     message.value = 'Simulation complete. Your account access is ready.'
   } catch {
     message.value = 'The local payment simulation could not complete.'

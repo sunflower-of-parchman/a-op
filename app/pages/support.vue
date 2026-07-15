@@ -10,6 +10,7 @@ const { data: catalog } = await useFetch<CommerceCatalogResponse>('/api/commerce
 const { data: session } = await useFetch('/api/auth/session')
 const busyId = ref('')
 const message = ref('')
+const { track } = useTelemetry()
 
 function priceLabel(product: CommerceProduct) {
   if (product.purchaseMode === 'external') return 'Continue with the artist'
@@ -31,6 +32,7 @@ function actionLabel(product: CommerceProduct) {
 }
 
 async function beginCheckout(product: CommerceProduct) {
+  void track('product_interest', { resourceType: 'product', resourceKey: product.slug })
   if (!session.value?.authenticated) {
     await navigateTo('/sign-in?redirect=/support')
     return
@@ -38,6 +40,7 @@ async function beginCheckout(product: CommerceProduct) {
   busyId.value = product.id
   message.value = ''
   try {
+    void track('checkout_start', { resourceType: 'product', resourceKey: product.slug })
     const result = await $fetch('/api/commerce/checkout', {
       method: 'POST',
       body: { productId: product.id, returnPath: '/account' },
@@ -50,6 +53,10 @@ async function beginCheckout(product: CommerceProduct) {
   } finally {
     busyId.value = ''
   }
+}
+
+function recordExternalInterest(product: CommerceProduct) {
+  void track('product_interest', { resourceType: 'product', resourceKey: product.slug })
 }
 </script>
 
@@ -77,6 +84,7 @@ async function beginCheckout(product: CommerceProduct) {
           class="text-action"
           :href="product.externalUrl"
           rel="noopener noreferrer"
+          @click="recordExternalInterest(product)"
         >
           Visit artist offering
         </a>

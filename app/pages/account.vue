@@ -14,6 +14,7 @@ const { data: learning, refresh: refreshLearning } =
 const signingOut = ref(false)
 const playlistTitle = ref('')
 const message = ref('')
+const { track: recordTelemetry } = useTelemetry()
 
 async function signOut() {
   signingOut.value = true
@@ -80,13 +81,21 @@ async function openPortal() {
   window.location.assign(result.url)
 }
 
-async function download(mediaId: string) {
+async function download(mediaId: string, productType: string) {
   const result = await $fetch(`/api/downloads/${mediaId}`)
+  void recordTelemetry('download', {
+    resourceType: 'product',
+    resourceKey: productType.replaceAll('_', '-'),
+  })
   window.location.assign(result.url)
 }
 
 async function downloadLicense(licenseId: string) {
   const result = await $fetch(`/api/licenses/${licenseId}/document`)
+  void recordTelemetry('download', {
+    resourceType: 'license_offer',
+    resourceKey: 'issued-license',
+  })
   window.location.assign(result.url)
 }
 </script>
@@ -146,7 +155,7 @@ async function downloadLicense(licenseId: string) {
               :key="item.resourceId"
               class="text-action"
               type="button"
-              @click="download(item.downloadMediaId!)"
+              @click="download(item.downloadMediaId!, item.productType)"
             >
               Request protected download
             </button>

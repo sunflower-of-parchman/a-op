@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          consent_state: Database["public"]["Enums"]["analytics_consent_state"]
+          event_name: Database["public"]["Enums"]["analytics_event_name"]
+          id: string
+          occurred_at: string
+          path: string
+          resource_key: string | null
+          resource_type: string | null
+          session_id: string
+          value: number | null
+        }
+        Insert: {
+          consent_state: Database["public"]["Enums"]["analytics_consent_state"]
+          event_name: Database["public"]["Enums"]["analytics_event_name"]
+          id: string
+          occurred_at?: string
+          path: string
+          resource_key?: string | null
+          resource_type?: string | null
+          session_id: string
+          value?: number | null
+        }
+        Update: {
+          consent_state?: Database["public"]["Enums"]["analytics_consent_state"]
+          event_name?: Database["public"]["Enums"]["analytics_event_name"]
+          id?: string
+          occurred_at?: string
+          path?: string
+          resource_key?: string | null
+          resource_type?: string | null
+          session_id?: string
+          value?: number | null
+        }
+        Relationships: []
+      }
       app_roles: {
         Row: {
           granted_at: string
@@ -612,6 +648,24 @@ export type Database = {
           owner_id?: string
           resource_id?: string
           resource_type?: string
+        }
+        Relationships: []
+      }
+      installation_metadata: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
         }
         Relationships: []
       }
@@ -1618,6 +1672,60 @@ export type Database = {
         }
         Relationships: []
       }
+      operational_checks: {
+        Row: {
+          checked_at: string
+          id: string
+          safe_details: Json
+          status: Database["public"]["Enums"]["operational_status"]
+          summary: string
+        }
+        Insert: {
+          checked_at?: string
+          id: string
+          safe_details?: Json
+          status: Database["public"]["Enums"]["operational_status"]
+          summary: string
+        }
+        Update: {
+          checked_at?: string
+          id?: string
+          safe_details?: Json
+          status?: Database["public"]["Enums"]["operational_status"]
+          summary?: string
+        }
+        Relationships: []
+      }
+      operational_events: {
+        Row: {
+          check_key: string
+          event_name: Database["public"]["Enums"]["operational_event_name"]
+          id: string
+          occurred_at: string
+          safe_details: Json
+          status: Database["public"]["Enums"]["operational_status"]
+          summary: string
+        }
+        Insert: {
+          check_key: string
+          event_name: Database["public"]["Enums"]["operational_event_name"]
+          id?: string
+          occurred_at?: string
+          safe_details?: Json
+          status: Database["public"]["Enums"]["operational_status"]
+          summary: string
+        }
+        Update: {
+          check_key?: string
+          event_name?: Database["public"]["Enums"]["operational_event_name"]
+          id?: string
+          occurred_at?: string
+          safe_details?: Json
+          status?: Database["public"]["Enums"]["operational_status"]
+          summary?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -2360,6 +2468,36 @@ export type Database = {
           },
         ]
       }
+      telemetry_settings: {
+        Row: {
+          consent_mode: Database["public"]["Enums"]["telemetry_consent_mode"]
+          id: string
+          meaningful_listen_seconds: number
+          optional_enabled: boolean
+          retention_days: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          consent_mode?: Database["public"]["Enums"]["telemetry_consent_mode"]
+          id?: string
+          meaningful_listen_seconds?: number
+          optional_enabled?: boolean
+          retention_days?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          consent_mode?: Database["public"]["Enums"]["telemetry_consent_mode"]
+          id?: string
+          meaningful_listen_seconds?: number
+          optional_enabled?: boolean
+          retention_days?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       tracks: {
         Row: {
           created_at: string
@@ -2817,6 +2955,7 @@ export type Database = {
           subscription_id: string
         }[]
       }
+      prune_analytics_events: { Args: never; Returns: number }
       publish_editorial_draft: {
         Args: { p_actor_id: string; p_draft_id: string }
         Returns: string
@@ -2856,6 +2995,19 @@ export type Database = {
         Args: { p_actor_id: string; p_draft_id: string }
         Returns: string
       }
+      record_analytics_event: {
+        Args: {
+          p_consent_state: Database["public"]["Enums"]["analytics_consent_state"]
+          p_event_id: string
+          p_event_name: Database["public"]["Enums"]["analytics_event_name"]
+          p_path: string
+          p_resource_key: string
+          p_resource_type: string
+          p_session_id: string
+          p_value: number
+        }
+        Returns: boolean
+      }
       record_lesson_progress: {
         Args: {
           p_completed: boolean
@@ -2868,6 +3020,16 @@ export type Database = {
           completed_at: string
           section_position: number
         }[]
+      }
+      record_operational_event: {
+        Args: {
+          p_check_key: string
+          p_event_name: Database["public"]["Enums"]["operational_event_name"]
+          p_safe_details?: Json
+          p_status: Database["public"]["Enums"]["operational_status"]
+          p_summary: string
+        }
+        Returns: string
       }
       record_webhook_failure: {
         Args: {
@@ -2894,6 +3056,16 @@ export type Database = {
       }
       retry_license_document_job: {
         Args: { p_actor_id: string; p_license_id: string }
+        Returns: undefined
+      }
+      save_telemetry_settings: {
+        Args: {
+          p_actor_id: string
+          p_consent_mode: Database["public"]["Enums"]["telemetry_consent_mode"]
+          p_meaningful_listen_seconds: number
+          p_optional_enabled: boolean
+          p_retention_days: number
+        }
         Returns: undefined
       }
       submit_contact_message: {
@@ -2926,6 +3098,20 @@ export type Database = {
       }
     }
     Enums: {
+      analytics_consent_state: "granted" | "implied"
+      analytics_event_name:
+        | "page_view"
+        | "media_start"
+        | "meaningful_listen"
+        | "catalog_search"
+        | "product_interest"
+        | "checkout_start"
+        | "checkout_complete"
+        | "download"
+        | "license_interest"
+        | "license_complete"
+        | "course_progress"
+        | "contact_conversion"
       app_role: "owner" | "editor" | "customer"
       entitlement_status: "active" | "revoked" | "expired"
       fulfillment_status: "pending" | "complete" | "failed" | "refunded"
@@ -2939,7 +3125,10 @@ export type Database = {
         | "license_document"
         | "lesson_media"
         | "administrative"
+      operational_event_name: "setup_health"
+      operational_status: "pass" | "action_required" | "fail"
       publication_state: "draft" | "published" | "archived"
+      telemetry_consent_mode: "opt_in" | "implied"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3067,6 +3256,21 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      analytics_consent_state: ["granted", "implied"],
+      analytics_event_name: [
+        "page_view",
+        "media_start",
+        "meaningful_listen",
+        "catalog_search",
+        "product_interest",
+        "checkout_start",
+        "checkout_complete",
+        "download",
+        "license_interest",
+        "license_complete",
+        "course_progress",
+        "contact_conversion",
+      ],
       app_role: ["owner", "editor", "customer"],
       entitlement_status: ["active", "revoked", "expired"],
       fulfillment_status: ["pending", "complete", "failed", "refunded"],
@@ -3081,7 +3285,10 @@ export const Constants = {
         "lesson_media",
         "administrative",
       ],
+      operational_event_name: ["setup_health"],
+      operational_status: ["pass", "action_required", "fail"],
       publication_state: ["draft", "published", "archived"],
+      telemetry_consent_mode: ["opt_in", "implied"],
     },
   },
 } as const

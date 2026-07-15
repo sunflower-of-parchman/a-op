@@ -85,6 +85,14 @@ if (error.value?.statusCode === 401) {
           >Compose essays, announcements, learning notes, and information from safe sections.</small
         >
       </NuxtLink>
+      <NuxtLink v-if="data.roles.includes('owner')" to="/admin/telemetry">
+        <span>Audience analytics and privacy</span>
+        <small>Review first-party aggregates and control consent, retention, and collection.</small>
+      </NuxtLink>
+      <NuxtLink v-if="data.roles.includes('owner')" to="/admin/system">
+        <span>System status</span>
+        <small>Check redacted storage, workers, payments, delivery, and migration readiness.</small>
+      </NuxtLink>
     </nav>
 
     <p v-else-if="error" class="form-message" role="alert">

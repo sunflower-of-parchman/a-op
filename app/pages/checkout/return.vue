@@ -6,7 +6,28 @@ const intentId = computed(() => String(route.query.intent ?? ''))
 const { data, refresh } = await useFetch<CheckoutIntentResponse>(
   () => `/api/commerce/checkout/${intentId.value}`,
 )
+const { track } = useTelemetry()
+const recordedCompletion = ref(false)
 let timer: ReturnType<typeof setInterval> | undefined
+
+watch(
+  () => data.value?.intent.status,
+  (status) => {
+    if (status !== 'complete' || recordedCompletion.value) return
+    recordedCompletion.value = true
+    void track('checkout_complete', {
+      resourceType: 'product',
+      resourceKey: data.value?.product.product_type.replaceAll('_', '-') ?? 'artist-offering',
+    })
+    if (data.value?.product.product_type === 'license') {
+      void track('license_complete', {
+        resourceType: 'license_offer',
+        resourceKey: 'issued-license',
+      })
+    }
+  },
+  { immediate: true },
+)
 
 onMounted(() => {
   if (!intentId.value || route.query.canceled) return

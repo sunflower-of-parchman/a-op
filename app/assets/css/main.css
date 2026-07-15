@@ -235,6 +235,46 @@ button.text-action:disabled {
   opacity: 0.6;
 }
 
+.telemetry-consent {
+  position: fixed;
+  z-index: 80;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
+  align-items: center;
+  padding: 1.4rem clamp(1.25rem, 4vw, 4rem);
+  border-top: var(--border-width) solid var(--color-border);
+  background: var(--color-background);
+  box-shadow: 0 -1rem 3rem rgb(0 0 0 / 10%);
+  gap: 2rem;
+}
+
+.telemetry-consent p,
+.telemetry-consent span {
+  margin: 0;
+}
+
+.telemetry-consent p {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.telemetry-consent span {
+  display: block;
+  max-width: 52rem;
+  color: var(--color-muted-text);
+  font-size: 0.85rem;
+}
+
+.telemetry-consent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.8rem 1.5rem;
+}
+
 .account-frame,
 .admin-frame {
   min-height: 65vh;
@@ -447,6 +487,42 @@ button.text-action:disabled {
   gap: clamp(3rem, 8vw, 8rem);
 }
 
+.catalog-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  max-width: 50rem;
+  margin-top: clamp(3rem, 7vw, 6rem);
+  gap: 2rem;
+}
+
+.catalog-search label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.catalog-search label span {
+  color: var(--color-muted-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.catalog-search input {
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.catalog-search__result {
+  max-width: var(--reading-max);
+  color: var(--color-muted-text);
+}
+
 .admin-status h2 {
   margin-bottom: 0;
 }
@@ -636,6 +712,102 @@ button.text-action:disabled {
 .admin-workspace-links small {
   max-width: 32rem;
   color: var(--color-muted-text);
+}
+
+.privacy-section,
+.telemetry-detail {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr);
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.privacy-section h2,
+.telemetry-detail h2 {
+  margin-bottom: 0;
+}
+
+.privacy-section > div:last-child,
+.telemetry-detail > p {
+  max-width: var(--reading-max);
+  color: var(--color-muted-text);
+}
+
+.telemetry-ranked-list,
+.system-status ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.telemetry-ranked-list li {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 1rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+  gap: 2rem;
+}
+
+.telemetry-ranked-list span {
+  text-transform: capitalize;
+}
+
+.telemetry-settings {
+  margin-top: clamp(4rem, 9vw, 8rem);
+}
+
+.system-status {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.55fr) minmax(0, 1.45fr);
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.system-status > header h2 {
+  margin-bottom: 1rem;
+}
+
+.system-status > header > p:last-child,
+.system-status li > time,
+.system-status li > div > p:not(.status-label) {
+  color: var(--color-muted-text);
+}
+
+.system-status li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-block: 1.5rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+  gap: 2rem;
+}
+
+.system-status li h3 {
+  margin-bottom: 0.6rem;
+}
+
+.system-status li p {
+  margin-block: 0.4rem;
+}
+
+.status-label {
+  display: inline-block;
+  color: var(--color-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.status-label[data-status='pass'] {
+  color: var(--color-muted-text);
+}
+
+.system-status__action {
+  font-weight: 600;
 }
 
 .admin-editor {
@@ -2332,6 +2504,9 @@ iframe.video-frame {
   .plain-section,
   .release-page__heading,
   .admin-status,
+  .privacy-section,
+  .telemetry-detail,
+  .system-status,
   .preview-player,
   .release-credits,
   .track-details,
@@ -2502,6 +2677,21 @@ iframe.video-frame {
   .section-editor-controls {
     align-items: start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 48rem) {
+  .telemetry-consent {
+    grid-template-columns: 1fr;
+  }
+
+  .telemetry-consent__actions {
+    justify-content: flex-start;
+  }
+
+  .catalog-search,
+  .system-status li {
+    grid-template-columns: 1fr;
   }
 }
 

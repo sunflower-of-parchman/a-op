@@ -51,7 +51,7 @@ export const demoFixtureIds = {
   lessonSectionNine: '10000000-0000-4000-8000-000000000028',
 }
 
-function createAdminClient(status) {
+export function createAdminClient(status) {
   return createClient(status.apiUrl, status.secretKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   })

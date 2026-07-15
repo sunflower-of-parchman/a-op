@@ -4,10 +4,19 @@ if (publishedConfig.value?.config) setArtistConfig(publishedConfig.value.config)
 
 const artist = useArtistConfig()
 const theme = useArtistTheme()
+const route = useRoute()
+const { loadPolicy, trackPage } = useTelemetry()
 const hydrated = ref(false)
-onMounted(() => {
+onMounted(async () => {
+  await loadPolicy()
   hydrated.value = true
+  await trackPage(route.path)
 })
+
+watch(
+  () => route.path,
+  (path) => void trackPage(path),
+)
 
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} · ${artist.seo.title}` : artist.seo.title),
@@ -28,5 +37,6 @@ useSeoMeta({
     </main>
     <GlobalAudioPlayer />
     <ArtistFooter />
+    <TelemetryConsent />
   </div>
 </template>

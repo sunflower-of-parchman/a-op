@@ -9,6 +9,7 @@ const { data, error, refresh } = await useFetch<LearningLessonResponse>(endpoint
 const { data: session } = await useFetch('/api/auth/session')
 const savingPosition = ref<number | null>(null)
 const progressMessage = ref('')
+const { track } = useTelemetry()
 
 useSeoMeta({
   title: () => data.value?.lesson.title ?? 'Lesson',
@@ -23,6 +24,11 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
     await $fetch('/api/learning/progress', {
       method: 'POST',
       body: { lessonId: data.value.lesson.id, sectionPosition, completed },
+    })
+    void track('course_progress', {
+      resourceType: 'lesson',
+      resourceKey: data.value.lesson.slug,
+      value: completed ? 100 : sectionPosition,
     })
     await refresh()
     progressMessage.value = completed

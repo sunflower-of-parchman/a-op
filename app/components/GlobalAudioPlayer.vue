@@ -2,8 +2,11 @@
 const { currentTrack, shouldPlay, isPlaying, currentTime, duration, toggle, previous, next } =
   useAudioPlayer()
 const audio = useTemplateRef<HTMLAudioElement>('audio')
+const { policy, track } = useTelemetry()
 const ready = ref(false)
 const lastHistorySignature = ref('')
+const lastMediaStartTrack = ref('')
+const meaningfulTracks = ref<string[]>([])
 
 function formatTime(value: number) {
   if (!Number.isFinite(value) || value < 0) return '0:00'
@@ -17,6 +20,21 @@ function updateMetadata() {
   ready.value = audio.value.readyState >= HTMLMediaElement.HAVE_METADATA
   duration.value = Number.isFinite(audio.value.duration) ? audio.value.duration : 0
   currentTime.value = audio.value.currentTime
+  const trackId = currentTrack.value?.id
+  const trackSlug = currentTrack.value?.slug
+  if (!trackId || !trackSlug || meaningfulTracks.value.includes(trackId)) return
+  const configuredThreshold = policy.value?.meaningfulListenSeconds ?? 10
+  const durationThreshold =
+    duration.value > 0 ? Math.max(0.5, duration.value * 0.8) : configuredThreshold
+  const threshold = Math.min(configuredThreshold, durationThreshold)
+  if (currentTime.value >= threshold) {
+    meaningfulTracks.value = [...meaningfulTracks.value, trackId]
+    void track('meaningful_listen', {
+      resourceType: 'track',
+      resourceKey: trackSlug,
+      value: Math.max(1, Math.round(currentTime.value)),
+    })
+  }
 }
 
 function seek(event: Event) {
@@ -74,6 +92,16 @@ function handleEnded() {
   next()
 }
 
+function handlePlay() {
+  isPlaying.value = true
+  if (!currentTrack.value || lastMediaStartTrack.value === currentTrack.value.id) return
+  lastMediaStartTrack.value = currentTrack.value.id
+  void track('media_start', {
+    resourceType: 'track',
+    resourceKey: currentTrack.value.slug,
+  })
+}
+
 watch(
   () => currentTrack.value?.src,
   async () => {
@@ -116,7 +144,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
     @loadedmetadata="updateMetadata"
     @durationchange="updateMetadata"
     @timeupdate="updateMetadata"
-    @play="isPlaying = true"
+    @play="handlePlay"
     @pause="handlePause"
     @ended="handleEnded"
   />

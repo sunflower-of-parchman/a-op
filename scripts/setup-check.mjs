@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { projectRoot, readJson, writeJsonIfChanged } from './lib/command.mjs'
 import {
+  createAdminClient,
   getLocalStatus,
   safeSupabaseError,
   verifyAuthorizationDemonstration,
@@ -66,6 +67,21 @@ try {
   if (stripeStatus === 'FAIL' || webhookStatus === 'FAIL') {
     throw new Error('Stripe configuration is not a recognizable test-mode configuration.')
   }
+  const admin = createAdminClient(status)
+  const { error: operationalError } = await admin.rpc('record_operational_event', {
+    p_event_name: 'setup_health',
+    p_check_key: 'setup.local',
+    p_status: 'pass',
+    p_summary: 'Local setup verification passed.',
+    p_safe_details: {
+      schemaVersion: '20260715070000',
+      storageBoundaries: 7,
+      authentication: 'verified',
+      stripe: stripeStatus === 'PASS' ? 'test-configured' : 'simulation',
+      stripeWebhook: webhookStatus === 'PASS' ? 'configured' : 'simulation',
+    },
+  })
+  if (operationalError) throw new Error('The redacted setup-health record could not be saved.')
   console.log('Deployment: LOCAL')
   console.log('Domain: LOCAL')
   console.log('Setup check: PASS')
