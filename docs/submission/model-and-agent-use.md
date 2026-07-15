@@ -223,6 +223,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit and candidate: `04f23fa` (`Add private bound worker services`); immutable tag `build-week-hosted-candidate-20260715-121920`.
 - Verification: Five focused service/auth/client unit tests, focused ESLint, and Nuxt type checking passed. Both Docker images built from the tracked lockfile. Live container probes returned non-sensitive health, rejected unauthenticated work, and connected through authenticated requests to the disposable local Supabase queues with zero pending jobs. `npm run test:media` passed real FFprobe, FFmpeg, immutable-source, waveform, retry, and safe-failure behavior; `npm run test:licensing` passed immutable terms, replay-safe issue, private PDF, isolation, and refund revocation. Pinned Vercel CLI `54.21.1` detected the public Nuxt service and both private containers, and the current official schema accepted the tracked configuration. Exact commit `04f23fa4b8632b04609cd2689b3b575ec2b193b0` passed the complete Node 24 `npm run verify` aggregate, npm reported zero vulnerabilities, and repository-pinned Supabase lint found no error-level findings in `public` or `private`. A temporary detached worktree resolved the immutable tag to that exact clean commit and was removed after the rehearsal. No hosted project or provider was changed.
 
+### Isolated hosted resources and Supabase migration dry run — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael approved Stage 1 creation of dedicated Build Week provider resources and separately approved Stage 2A linking, migration-history inspection, and a non-mutating Supabase dry run. Applying migrations, installing fixtures, deploying, sharing access, and publication remain separate approvals.
+- Material contribution: Created a dedicated Free/Nano Supabase project in a new Free organization, one exact-name Vercel project using the Services preset, and a blank named Stripe sandbox with a dedicated CLI profile; recorded only safe reference hashes; linked the checkout only to the approved Supabase reference; and reconciled current Supabase CLI documentation and breaking-change guidance with the tracked migration contract.
+- Commits: `2129982` (`Record isolated hosted resources`) and `23aed32` (`Record Supabase migration dry run`).
+- Verification: Stripe returned `livemode: false`. Pinned Supabase CLI `2.109.1` found 11 local and 0 remote migrations; `db push --linked --dry-run` proposed exactly the 11 tracked forward files in order and explicitly made no push; a second migration-history read still found 0 remote migrations. Documentation validation and diff checks passed, full provider references and credentials stayed out of the repository, and no Sound for Movement codebase or provider resource was changed.
+
 ## Submission reconciliation
 
 Before submission:
