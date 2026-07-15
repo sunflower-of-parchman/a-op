@@ -277,3 +277,22 @@ jobs:
 
       - name: Verify guided personalization and approval boundaries
         run: npm run verify:setup
+
+  artist-portability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.0
+          cache: npm
+
+      - name: Install pinned dependencies
+        run: npm ci
+
+      - name: Verify deterministic export and disposable restore
+        run: npm run verify:portability

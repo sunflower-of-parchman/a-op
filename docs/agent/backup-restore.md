@@ -8,7 +8,7 @@ Codex may create and verify local disposable backups and the repository's versio
 
 ## Backup procedure
 
-1. Run the portability commands documented in Milestone 10: `npm run export:artist` and `npm run export:verify`.
+1. Run `npm run export:artist -- --out exports/<artist-name>` and `npm run export:verify -- exports/<artist-name>`.
 2. For a hosted installation, present the database dump method, storage inventory/retrieval method, encrypted destination, retention, expected size/cost, and customer-data handling before action.
 3. Record migration and application versions, structured-content hashes, media bucket/path/hash/size, and redacted service connection state.
 4. Export Stripe/customer-provider data through the provider's supported process only after approval; keep it separate from the public artist snapshot.
@@ -16,7 +16,7 @@ Codex may create and verify local disposable backups and the repository's versio
 
 ## Restore procedure
 
-Restore first into a disposable local installation with `npm run restore:check`. Compare public identity, pages, catalog, product definitions, licensing, learning, video, editorial structure, media inventory, and access rules. External accounts are reconnected through their own runbooks and never restored from embedded secrets.
+Restore first into a disposable local installation with `npm run restore:check -- <export-directory> --confirm-disposable-local`. The confirmation is intentionally explicit because the command resets the local database, restores and compares every portable content table and bundled media object, then recreates the fictional demonstration. External accounts are reconnected through their own runbooks and never restored from embedded secrets.
 
 Before a hosted restore, name the target, prove it is disposable or backed up, show the overwrite scope, and obtain explicit destructive-action approval. Apply tracked migrations, import through supported schemas/APIs, reconcile storage hashes, run the complete verification suite, and keep the prior environment until acceptance.
 

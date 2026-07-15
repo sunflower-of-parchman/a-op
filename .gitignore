@@ -23,6 +23,7 @@ setup/proposals/*.json
 
 # Generated and temporary media
 content/imports/
+exports/
 tmp/
 *.log
 

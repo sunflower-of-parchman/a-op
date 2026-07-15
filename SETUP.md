@@ -100,3 +100,14 @@ This test resets only the local demonstration, creates two generated tones in a 
 Keep `setup/project-state.json` in the repository. It contains non-secret checks, enabled modules, the approved proposal hash, and remaining external checkpoints so a new Codex task or machine can resume safely. It does not replace the database as content authority.
 
 Run `npm run diagnose` for shareable operational status and `npm run setup:check` after configuration or service changes. The complete service, backup, upgrade, and failure runbooks begin at [`docs/agent/README.md`](docs/agent/README.md).
+
+## Take the artist-owned snapshot with you
+
+After personalization, create a verified portable export:
+
+    npm run export:artist -- --out exports/<artist-name>
+    npm run export:verify -- exports/<artist-name>
+
+The export includes no credentials or customer history. It bundles the artist's current published structure and local media with hashes, records which service accounts must be reconnected, and carries backup and customer-data procedures. Store it in an artist-approved encrypted location; the ignored `exports/` directory is only a local staging area.
+
+To rehearse a restore, use `npm run restore:check -- exports/<artist-name> --confirm-disposable-local`. Read the warning literally: it resets only local Supabase, restores into the clean local schema, verifies equivalence, and then returns the repository to the fictional demonstration. It refuses hosted databases and an omitted confirmation flag.

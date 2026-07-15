@@ -54,6 +54,8 @@ When the artist asks to set up or personalize the platform:
 
 For ongoing maintenance, begin with `npm run diagnose`, use the smallest relevant runbook in `docs/agent/`, keep migrations forward-only, and leave completed setup history and recovery instructions available to the next Codex task.
 
+For portability, create exports only at an artist-approved local path with `npm run export:artist -- --out <directory>`, then run `npm run export:verify -- <directory>`. Explain the exclusions and storage destination before copying an export elsewhere. `npm run restore:check -- <directory> --confirm-disposable-local` is a destructive-local rehearsal: confirm the target is the repository's local Supabase stack and never adapt its confirmation to a hosted target. Hosted backups, customer-data export, restore, or external storage always stop at the approval gate in `docs/agent/backup-restore.md`.
+
 ## Interface direction
 
 Public artist sites must feel composed rather than templated. Start with the artist identity, a dominant visual or release, rigorous typography, generous open space, and one clear action. Default to cardless layouts. Use cards only for meaningful selectable items or functional boundaries. Keep to two typefaces and one accent color unless the artist explicitly chooses otherwise.
