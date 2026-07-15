@@ -31,7 +31,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 ## Judging access
 
 - [x] Local judge quickstart and ten-minute route documented.
-- [x] Hosted topology, redaction, test-account, reset, and verification plan documented.
+- [x] Hosted topology, staged operator runbook, authorization boundaries, redaction rules, test-account/reset contract, and evidence ledger documented.
 - [ ] Michael approves the dedicated hosted resources.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.

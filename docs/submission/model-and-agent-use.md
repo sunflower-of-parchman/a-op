@@ -178,6 +178,14 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `fdbd9fa` (`Complete optional OAuth and CI coverage`).
 - Verification: Formatting, lint, type checking, 22 unit tests, the default-disabled desktop/mobile OAuth specification, the configured Chromium OAuth gate, and complete `npm run verify:spine` passed. The configured test proved provider visibility, PKCE challenge construction, callback binding, HTTP-only transaction cookies, safe return fallback, cancellation cleanup, disabled-provider refusal, and accessibility without contacting an external provider. The 15-job workflow parsed successfully. One post-audit uninterrupted Node 24 `npm run verify` then passed every local module, Integration Gate A, security, accessibility, four production performance budgets, recovery and clean restore, final setup and authority checks, 12 isolated desktop/mobile browser specifications, documentation and fictional assets, Chromium/WebKit judge journeys, and browser-secret scanning. A fresh dependency audit found zero vulnerabilities and local Supabase lint found no schema errors. The final remote workflow run remains pending publication or push approval.
 
+### Hosted operator preparation — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Keep every external state change separately authorized; validate an immutable Vercel preview before any alias or promotion; use only forward Supabase migrations; keep Stripe in test or sandbox mode; require two fingerprinted resets; preserve a safe evidence record.
+- Material contribution: Nine-stage hosted operator runbook; candidate freeze; provider-isolation rules; Supabase link, dry-run, forward-migration, lint, policy, advisor, and type checks; project-bound hosted reset contract; Stripe purchase, membership, refund, portal, replay, licensing, and document journeys; media and document worker proof; immutable Vercel preview build/deploy/inspect sequence; hosted all-browser route; reset rehearsal; availability handoff; failure and rollback rules; and a row-level evidence ledger.
+- Verification: Current official Supabase CLI and Database Advisor documentation, official Stripe testing/webhook/customer-portal documentation, and current official Vercel deployment guidance were reconciled with the repository's authority boundaries. The runbook contains no credentials, project references, deployment state, or implied authorization. Documentation validation must pass before the record is committed.
+
 ## Submission reconciliation
 
 Before submission:

@@ -79,6 +79,8 @@ Milestones 0 through 12 and Integration Gate A are implemented locally, and the 
 - Media processing: `docs/architecture/media-processing-contract.md`
 - Capability evidence: `docs/submission/capability-evidence.md`
 - Completion audit: `docs/submission/completion-audit.md`
+- Hosted operator runbook: `docs/submission/hosted-operator-runbook.md`
+- Hosted evidence record: `docs/submission/hosted-evidence-record.md`
 - Model and agent use: `docs/submission/model-and-agent-use.md`
 
 ## Requirements and supported environments

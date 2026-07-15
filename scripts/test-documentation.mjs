@@ -69,6 +69,8 @@ for (const submissionDocument of [
   'docs/submission/demo-script.md',
   'docs/submission/submission-checklist.md',
   'docs/submission/completion-audit.md',
+  'docs/submission/hosted-operator-runbook.md',
+  'docs/submission/hosted-evidence-record.md',
 ]) {
   assert.ok(
     existsSync(resolve(projectRoot, submissionDocument)),

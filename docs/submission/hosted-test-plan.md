@@ -1,6 +1,6 @@
 # Hosted judging plan
 
-This is the complete plan for a free, resettable judging environment. It contains no credentials and performs no external action. Deployment, provider connection, test-account creation, credential sharing, and public promotion each remain separate approval gates for Michael.
+This is the topology and acceptance plan for a free, resettable judging environment. The staged commands, stop conditions, and acceptance checks live in [`hosted-operator-runbook.md`](hosted-operator-runbook.md); safe results are recorded in [`hosted-evidence-record.md`](hosted-evidence-record.md). These files contain no credentials and perform no external action. Deployment, provider connection, test-account creation, credential sharing, and public promotion each remain separate approval gates for Michael.
 
 ## Intended topology
 
@@ -65,7 +65,7 @@ Before access is shared:
 - Confirm there is no payment method requirement, trial gate, usage charge to the judge, or dependency on Michael's local computer.
 - Store the recovery owner, provider project identifiers, and reset command privately.
 
-The hosted-safe reset procedure and deployment have not been created or run because they change external state. Their implementation begins only after Michael approves the specific judging resources.
+The project-specific hosted reset entrypoint and deployment have not been created or run because the approved project reference, identity domains, and external authorization record do not yet exist. Their exact safety contract is defined in the operator runbook. Implementation and execution begin only after Michael approves the specific judging resources.
 
 ## Final evidence
 
