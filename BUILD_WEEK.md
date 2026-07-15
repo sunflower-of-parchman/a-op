@@ -123,7 +123,7 @@ Show creativity and a genuine understanding of the problem space.
 
 This section will develop as we discuss the idea.
 
-- Working title: Artist-Owned Platform (provisional)
+- Final public name: Artist-Owned Platform, approved by Michael on July 15, 2026.
 - Track: Developer Tools. The personalized artist site is the proof; the transferable, agent-operable repository is the product.
 - Audience: Independent musicians first, with an architecture that can also serve accompanists, dancers, choreographers, teachers, and other performing artists.
 - Problem: Artists can distribute through large platforms but still lack an approachable way to own and operate the permanent digital home of their work, audience relationships, direct commerce, licensing, membership, and teaching.
@@ -144,10 +144,10 @@ This section will develop as we discuss the idea.
 | Registration                    | Confirmed                                                                                                                        |
 | Devpost plugin                  | Installed                                                                                                                        |
 | Free-credit request             | Submitted; approval not yet confirmed                                                                                            |
-| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                         |
+| Project idea and track          | Artist-Owned Platform and Developer Tools track selected                                                                         |
 | Working implementation          | Milestones 0–12 complete locally; Milestone 13 package prepared; full application, recovery, browser, and judge aggregate passed |
 | Repository history and evidence | Planning through Milestone 13, capability evidence, model record, provenance, runbooks, clean-clone proof, and ExecPlan recorded |
-| README                          | Complete package and verified two-command local quickstart; `AGPL-3.0-or-later` selected; final name pending                     |
+| README                          | Complete package and verified two-command local quickstart; Artist-Owned Platform and `AGPL-3.0-or-later` finalized              |
 | Demo and judging access         | Local route verified; hosted plan prepared; deployment and private test access pending Michael's approval                        |
 | Demo video                      | 2:55 narrated script prepared; recording, final timecodes, approval, and upload pending                                          |
 | `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                          |

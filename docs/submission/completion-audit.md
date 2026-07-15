@@ -26,22 +26,21 @@ This audit tests the complete objective against repository evidence. `Proven loc
 | Security, accessibility, responsive design, performance, and recovery                                | Same-origin mutation boundary, secure cookies, CSP, size/rate limits, policy tests, axe and keyboard journeys, production budgets, reset/payment/media/export/restore drills, zero dependency vulnerabilities, clean schema lint, full 12-specification browser aggregate                                                                                                          | Proven locally; hosted Supabase advisor run pending                                               |
 | Continuous integration                                                                               | Fifteen Linux jobs cover foundation and audit, authority and OAuth, administration, catalog/media, commerce, licensing, learning, telemetry, setup, portability, hardening, recovery, full browser regression, and Chromium/Firefox/WebKit judge path                                                                                                                              | Workflow prepared and parsed; final remote run pending repository publication/push approval       |
 | Clean clone, deterministic reset, and complete judge experience                                      | Untouched two-command novice clone and comprehensive clean-room clone; HTTP 200; clean tracked state; project-bound hosted initialization/check/reset entrypoint; target, marker, account-set, and fingerprint refusals; two local hosted-reset rehearsals with session rotation and provider preservation; 12 isolated desktop/mobile specifications; local Chromium/WebKit route | Proven locally; approved hosted execution, test identities, and public judge availability pending |
-| Build Week description, judging guide, demo script, evidence, and model record                       | Project description, judge guide, 2:55 script, capability matrix, provenance, task ID, `AGPL-3.0-or-later`, GPT-5.6 Sol/Pro record, and dated commits                                                                                                                                                                                                                              | Prepared; final name, `/feedback`, recording, and timecodes pending                               |
+| Build Week description, judging guide, demo script, evidence, and model record                       | Final Artist-Owned Platform name, project description, judge guide, 2:55 script, capability matrix, provenance, task ID, `AGPL-3.0-or-later`, GPT-5.6 Sol/Pro record, and dated commits                                                                                                                                                                                            | Prepared; `/feedback`, recording, and timecodes pending                                           |
 | Free judging access and final submission                                                             | Hosted topology, staged operator runbook, safe evidence record, and explicit authorization ledger exist                                                                                                                                                                                                                                                                            | Pending approval and external execution                                                           |
 
 ## Remaining completion gates
 
 These items are the complete known remainder. They must not be represented as finished until their named evidence exists.
 
-1. Michael selects the final public project name.
-2. Michael explicitly approves the dedicated hosted Supabase, Stripe test, Vercel, media-worker, and document-worker resources.
-3. The exact final commit passes Linux CI, including Firefox.
-4. Hosted Supabase advisors pass or every actionable result is resolved.
-5. The approved media fixture reaches `ready` through the deployed worker and its waveform and preview work from the hosted site.
-6. Stripe test mode proves purchase, membership, portal cancellation, refund, webhook replay, license issue, and protected document delivery.
-7. The hosted reset passes twice, the complete judge route passes afterward, and free availability through the judging deadline is confirmed.
-8. The primary task's `/feedback` Session ID and available Sol/Pro metadata are reconciled with the README, evidence, and video language.
-9. The under-three-minute video is recorded, checked frame by frame, approved, and published.
-10. Repository access, judge credentials, final Devpost preview, and Devpost submission each receive their separate approval and evidence.
+1. Michael explicitly approves the dedicated hosted Supabase, Stripe test, Vercel, media-worker, and document-worker resources.
+2. The exact final commit passes Linux CI, including Firefox.
+3. Hosted Supabase advisors pass or every actionable result is resolved.
+4. The approved media fixture reaches `ready` through the deployed worker and its waveform and preview work from the hosted site.
+5. Stripe test mode proves purchase, membership, portal cancellation, refund, webhook replay, license issue, and protected document delivery.
+6. The hosted reset passes twice, the complete judge route passes afterward, and free availability through the judging deadline is confirmed.
+7. The primary task's `/feedback` Session ID and available Sol/Pro metadata are reconciled with the README, evidence, and video language.
+8. The under-three-minute video is recorded, checked frame by frame, approved, and published.
+9. Repository access, judge credentials, final Devpost preview, and Devpost submission each receive their separate approval and evidence.
 
 No local capability is intentionally deferred outside this list. Any new contradiction discovered during hosted verification reopens the relevant requirement and must be fixed and retested before completion.

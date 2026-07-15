@@ -1,8 +1,8 @@
 # Project description
 
-## Working title
+## Project name
 
-Artist-Owned Platform. The final public name remains Michael's decision before submission.
+Artist-Owned Platform.
 
 ## Track
 

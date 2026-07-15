@@ -168,7 +168,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Lead with the musician's reason for the project; describe the work as human-directed and agent-coded; state local and external proof honestly; keep every deployment, share, video, and submission action separate and approval-gated.
 - Material contribution: Project description, complete judging guide, redacted hosted-test plan, 2:55 spoken demo script, evidence timecode table, submission checklist, final authorization record, and clean-clone evidence.
 - Commit: `0ab2c9e` (`Prepare Build Week judging materials`).
-- Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries, both independently and inside the passing full repository aggregate. Final name, hosted results, Linux CI result, `/feedback` confirmation, recorded timecodes, video, public access, and Devpost confirmation remain pending their named human or external actions.
+- Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries, both independently and inside the passing full repository aggregate. Hosted results, Linux CI result, `/feedback` confirmation, recorded timecodes, video, public access, and Devpost confirmation remain pending their named external actions.
 
 ### Completion audit, optional OAuth, and CI closure — 2026-07-15
 
