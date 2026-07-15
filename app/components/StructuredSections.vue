@@ -98,6 +98,18 @@ defineProps<{ sections: PageSection[] }>()
           <p class="preserve-lines">{{ section.transcript }}</p>
         </details>
       </section>
+
+      <section
+        v-else-if="section.type === 'contact'"
+        class="structured-section structured-section--contact"
+      >
+        <p class="section-number">Contact form</p>
+        <div>
+          <h2>{{ section.heading }}</h2>
+          <p>{{ section.introduction }}</p>
+          <p class="field-help">{{ section.consentLabel }}</p>
+        </div>
+      </section>
     </template>
   </div>
 </template>

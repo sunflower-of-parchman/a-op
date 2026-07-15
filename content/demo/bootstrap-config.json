@@ -10,7 +10,13 @@
     "statement": "Music made for attentive rooms and bodies in motion.",
     "biography": "Daymark Assembly is a fictional artist created to demonstrate an artist-owned platform. Its catalog, writing, artwork, and audio are original demonstration material and can be replaced through the guided setup process.",
     "location": "An imagined high-desert studio",
-    "socialLinks": []
+    "contact": {
+      "publicEmail": "",
+      "bookingNote": "Use the contact page for collaborations, teaching, and licensing questions.",
+      "mailingAddress": ""
+    },
+    "socialLinks": [],
+    "distributionLinks": []
   },
   "design": {
     "colors": {
@@ -45,6 +51,7 @@
     "logo": {
       "kind": "text",
       "wordmark": "DAYMARK ASSEMBLY",
+      "assetPath": "",
       "alt": ""
     },
     "motion": {
@@ -70,9 +77,19 @@
     "editorial": true,
     "telemetry": true
   },
+  "seo": {
+    "title": "Daymark Assembly",
+    "description": "Original fictional music, learning, and licensing from an artist-owned demonstration.",
+    "socialImage": { "src": "", "alt": "" }
+  },
+  "footer": {
+    "statement": "Music made for attentive rooms and bodies in motion.",
+    "copyright": "Fictional demonstration"
+  },
   "homepage": {
     "kicker": "A direct home for independent work",
     "introduction": "Listen, learn, license music, and support the work in the same place. This installation belongs to the artist who operates it.",
+    "heroImage": { "src": "", "alt": "" },
     "release": {
       "title": "Lines We Carry",
       "year": 2026,

@@ -17,7 +17,15 @@ const artist = useArtistConfig()
         </div>
       </div>
 
+      <figure v-if="artist.homepage.heroImage.src" class="hero-image">
+        <NuxtImg
+          :src="artist.homepage.heroImage.src"
+          :alt="artist.homepage.heroImage.alt"
+          sizes="sm:100vw lg:50vw"
+        />
+      </figure>
       <NuxtLink
+        v-else
         class="release-sleeve"
         :to="artist.homepage.release.href"
         :aria-label="`Open ${artist.homepage.release.title}`"

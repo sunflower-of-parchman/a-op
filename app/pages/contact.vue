@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ContactMessageInput } from '#shared/schemas/contact'
 
+const artist = useArtistConfig()
 const { data: page } = await useFetch('/api/pages/contact')
 if (!page.value) throw createError({ statusCode: 404, statusMessage: 'Contact page not found' })
 
@@ -65,7 +66,7 @@ async function submit() {
         <textarea v-model="form.message" name="message" rows="8" minlength="10" required />
       </label>
       <label class="consent-control">
-        <input v-model="form.consent" name="consent" type="checkbox" />
+        <input v-model="form.consent" name="consent" type="checkbox" required />
         <span>{{ section?.consentLabel }}</span>
       </label>
       <label class="honeypot" aria-hidden="true">
@@ -78,8 +79,20 @@ async function submit() {
       <p v-if="result" class="form-message" role="status">{{ result }}</p>
     </form>
 
-    <p class="release-note">
-      The local demonstration stores this message and sends no external email.
-    </p>
+    <div class="contact-details">
+      <p>{{ artist.identity.contact.bookingNote }}</p>
+      <a
+        v-if="artist.identity.contact.publicEmail"
+        :href="`mailto:${artist.identity.contact.publicEmail}`"
+      >
+        {{ artist.identity.contact.publicEmail }}
+      </a>
+      <p v-if="artist.identity.contact.mailingAddress" class="preserve-lines">
+        {{ artist.identity.contact.mailingAddress }}
+      </p>
+      <p class="release-note">
+        The local demonstration stores this message and sends no external email.
+      </p>
+    </div>
   </article>
 </template>

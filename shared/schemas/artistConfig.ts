@@ -11,6 +11,8 @@ const internalPathSchema = z
   .startsWith('/')
   .refine((value) => !value.startsWith('//'), 'Use an internal path, not a protocol-relative URL.')
 
+const optionalInternalPathSchema = z.union([z.literal(''), internalPathSchema])
+
 const navigationItemSchema = z
   .object({
     label: z.string().trim().min(1).max(40),
@@ -28,6 +30,40 @@ const socialLinkSchema = z
   })
   .strict()
 
+const logoSchema = z
+  .object({
+    kind: z.enum(['text', 'image']),
+    wordmark: z.string().trim().min(1).max(80),
+    assetPath: optionalInternalPathSchema,
+    alt: z.string().trim().max(120),
+  })
+  .strict()
+  .superRefine((logo, context) => {
+    if (logo.kind === 'image' && (!logo.assetPath || !logo.alt)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['assetPath'],
+        message: 'An image logo requires an internal asset path and alternative text.',
+      })
+    }
+  })
+
+const optionalImageSchema = z
+  .object({
+    src: optionalInternalPathSchema,
+    alt: z.string().trim().max(240),
+  })
+  .strict()
+  .superRefine((image, context) => {
+    if (Boolean(image.src) !== Boolean(image.alt)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['alt'],
+        message: 'An image path and alternative text must be supplied together.',
+      })
+    }
+  })
+
 export const artistConfigSchema = z
   .object({
     schemaVersion: z.literal(1),
@@ -44,7 +80,15 @@ export const artistConfigSchema = z
         statement: z.string().trim().min(1).max(180),
         biography: z.string().trim().min(1).max(1200),
         location: z.string().trim().min(1).max(100).optional(),
+        contact: z
+          .object({
+            publicEmail: z.union([z.literal(''), z.email()]),
+            bookingNote: z.string().trim().max(320),
+            mailingAddress: z.string().trim().max(320),
+          })
+          .strict(),
         socialLinks: z.array(socialLinkSchema).max(8),
+        distributionLinks: z.array(socialLinkSchema).max(8),
       })
       .strict(),
     design: z
@@ -88,14 +132,7 @@ export const artistConfigSchema = z
             borderWidth: cssLengthSchema,
           })
           .strict(),
-        logo: z
-          .object({
-            kind: z.enum(['text', 'image']),
-            wordmark: z.string().trim().min(1).max(80),
-            assetPath: internalPathSchema.optional(),
-            alt: z.string().trim().max(120),
-          })
-          .strict(),
+        logo: logoSchema,
         motion: z
           .object({
             fastMs: z.number().int().min(0).max(1000),
@@ -118,10 +155,24 @@ export const artistConfigSchema = z
         telemetry: z.boolean(),
       })
       .strict(),
+    seo: z
+      .object({
+        title: z.string().trim().min(1).max(80),
+        description: z.string().trim().min(1).max(320),
+        socialImage: optionalImageSchema,
+      })
+      .strict(),
+    footer: z
+      .object({
+        statement: z.string().trim().min(1).max(240),
+        copyright: z.string().trim().min(1).max(160),
+      })
+      .strict(),
     homepage: z
       .object({
         kicker: z.string().trim().min(1).max(80),
         introduction: z.string().trim().min(1).max(320),
+        heroImage: optionalImageSchema,
         release: z
           .object({
             title: z.string().trim().min(1).max(120),

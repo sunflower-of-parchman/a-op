@@ -23,21 +23,75 @@ onMounted(() => {
   ready.value = true
 })
 
-function addSection(type: 'prose' | 'call_to_action' | 'contact') {
+function addSection(type: PageSection['type']) {
   const id = crypto.randomUUID()
-  const section: PageSection =
-    type === 'prose'
-      ? { id, type, heading: 'New section', body: 'Write this section in your own words.' }
-      : type === 'call_to_action'
-        ? { id, type, heading: 'A clear next step', body: '', label: 'Continue', href: '/' }
-        : {
-            id,
-            type,
-            heading: 'Begin with a clear note.',
-            introduction: 'Explain what kinds of messages belong here.',
-            consentLabel: 'I understand this message will be stored so the artist can respond.',
-          }
+  let section: PageSection
+  switch (type) {
+    case 'prose':
+      section = { id, type, heading: 'New section', body: 'Write this section in your own words.' }
+      break
+    case 'image':
+      section = {
+        id,
+        type,
+        src: '/images/approved-image.jpg',
+        alt: 'Describe the approved image.',
+        caption: '',
+      }
+      break
+    case 'call_to_action':
+      section = { id, type, heading: 'A clear next step', body: '', label: 'Continue', href: '/' }
+      break
+    case 'credits':
+      section = {
+        id,
+        type,
+        heading: 'Credits',
+        items: [{ role: 'Created by', name: 'Artist name' }],
+      }
+      break
+    case 'links':
+      section = {
+        id,
+        type,
+        heading: 'Related links',
+        items: [{ label: 'Visit this resource', href: 'https://example.com' }],
+      }
+      break
+    case 'featured_release':
+      section = { id, type, heading: 'Listen to the release', releaseSlug: 'lines-we-carry' }
+      break
+    case 'featured_learning':
+      section = { id, type, heading: 'Begin this learning path', pathSlug: 'begin-here' }
+      break
+    case 'video':
+      section = {
+        id,
+        type,
+        heading: 'Watch and read',
+        url: 'https://example.com/approved-video.mp4',
+        transcript: 'Add a complete transcript for the approved video.',
+      }
+      break
+    case 'contact':
+      section = {
+        id,
+        type,
+        heading: 'Begin with a clear note.',
+        introduction: 'Explain what kinds of messages belong here.',
+        consentLabel: 'I understand this message will be stored so the artist can respond.',
+      }
+      break
+  }
   page.value.sections.push(section)
+}
+
+function addCredit(section: Extract<PageSection, { type: 'credits' }>) {
+  section.items.push({ role: 'Role', name: 'Name' })
+}
+
+function addExternalLink(section: Extract<PageSection, { type: 'links' }>) {
+  section.items.push({ label: 'New link', href: 'https://example.com' })
 }
 
 function moveSection(index: number, direction: -1 | 1) {
@@ -177,6 +231,19 @@ onBeforeUnmount(() => {
                 ><textarea v-model="section.body" rows="8" required maxlength="5000" />
               </label>
             </div>
+            <div v-else-if="section.type === 'image'" class="admin-fields">
+              <label
+                ><span>Image path or URL</span
+                ><input v-model="section.src" required maxlength="500"
+              /></label>
+              <label
+                ><span>Alternative text</span
+                ><textarea v-model="section.alt" rows="3" required maxlength="240" />
+              </label>
+              <label
+                ><span>Caption</span><textarea v-model="section.caption" rows="3" maxlength="500" />
+              </label>
+            </div>
             <div v-else-if="section.type === 'call_to_action'" class="admin-fields">
               <label
                 ><span>Heading</span><input v-model="section.heading" required maxlength="180"
@@ -191,6 +258,84 @@ onBeforeUnmount(() => {
                 ><span>Internal path</span><input v-model="section.href" required pattern="/.*"
               /></label>
             </div>
+            <div v-else-if="section.type === 'credits'" class="admin-fields">
+              <label
+                ><span>Heading</span><input v-model="section.heading" required maxlength="180"
+              /></label>
+              <div v-for="(item, itemIndex) in section.items" :key="itemIndex" class="nested-row">
+                <label
+                  ><span>Role</span><input v-model="item.role" required maxlength="100"
+                /></label>
+                <label
+                  ><span>Name</span><input v-model="item.name" required maxlength="160"
+                /></label>
+                <button
+                  class="quiet-action"
+                  type="button"
+                  :disabled="section.items.length === 1"
+                  @click="section.items.splice(itemIndex, 1)"
+                >
+                  Remove credit
+                </button>
+              </div>
+              <button class="text-action" type="button" @click="addCredit(section)">
+                Add credit
+              </button>
+            </div>
+            <div v-else-if="section.type === 'links'" class="admin-fields">
+              <label
+                ><span>Heading</span><input v-model="section.heading" required maxlength="180"
+              /></label>
+              <div v-for="(item, itemIndex) in section.items" :key="itemIndex" class="nested-row">
+                <label
+                  ><span>Label</span><input v-model="item.label" required maxlength="100"
+                /></label>
+                <label
+                  ><span>External URL</span><input v-model="item.href" required type="url"
+                /></label>
+                <button
+                  class="quiet-action"
+                  type="button"
+                  :disabled="section.items.length === 1"
+                  @click="section.items.splice(itemIndex, 1)"
+                >
+                  Remove link
+                </button>
+              </div>
+              <button class="text-action" type="button" @click="addExternalLink(section)">
+                Add link
+              </button>
+            </div>
+            <div v-else-if="section.type === 'featured_release'" class="admin-fields">
+              <label
+                ><span>Heading</span><input v-model="section.heading" required maxlength="180"
+              /></label>
+              <label
+                ><span>Release slug</span
+                ><input v-model="section.releaseSlug" required pattern="[a-z0-9]+(-[a-z0-9]+)*"
+              /></label>
+            </div>
+            <div v-else-if="section.type === 'featured_learning'" class="admin-fields">
+              <label
+                ><span>Heading</span><input v-model="section.heading" required maxlength="180"
+              /></label>
+              <label
+                ><span>Learning path slug</span
+                ><input v-model="section.pathSlug" required pattern="[a-z0-9]+(-[a-z0-9]+)*"
+              /></label>
+            </div>
+            <div v-else-if="section.type === 'video'" class="admin-fields">
+              <label
+                ><span>Heading</span><input v-model="section.heading" required maxlength="180"
+              /></label>
+              <label
+                ><span>Approved video URL</span><input v-model="section.url" required type="url"
+              /></label>
+              <label
+                ><span>Transcript</span
+                ><textarea v-model="section.transcript" rows="10" required maxlength="10000" />
+              </label>
+            </div>
             <div v-else-if="section.type === 'contact'" class="admin-fields">
               <label
                 ><span>Heading</span><input v-model="section.heading" required maxlength="180"
@@ -204,18 +349,26 @@ onBeforeUnmount(() => {
                 ><textarea v-model="section.consentLabel" rows="3" required maxlength="240" />
               </label>
             </div>
-            <p v-else class="field-help">
-              This section type is preserved and previewed. Its dedicated editor arrives with its
-              product module.
-            </p>
           </li>
         </ol>
 
         <div class="section-add-actions">
           <button class="text-action" type="button" @click="addSection('prose')">Add prose</button>
+          <button class="text-action" type="button" @click="addSection('image')">Add image</button>
           <button class="text-action" type="button" @click="addSection('call_to_action')">
             Add call to action
           </button>
+          <button class="text-action" type="button" @click="addSection('credits')">
+            Add credits
+          </button>
+          <button class="text-action" type="button" @click="addSection('links')">Add links</button>
+          <button class="text-action" type="button" @click="addSection('featured_release')">
+            Add release
+          </button>
+          <button class="text-action" type="button" @click="addSection('featured_learning')">
+            Add learning
+          </button>
+          <button class="text-action" type="button" @click="addSection('video')">Add video</button>
           <button class="text-action" type="button" @click="addSection('contact')">
             Add contact form
           </button>

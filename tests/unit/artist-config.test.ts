@@ -20,6 +20,24 @@ describe('artist configuration', () => {
     }
   })
 
+  it('requires alternative text for configured image assets', () => {
+    expect(
+      artistConfigSchema.safeParse({
+        ...artistConfig,
+        design: {
+          ...artistConfig.design,
+          logo: { ...artistConfig.design.logo, kind: 'image', assetPath: '/logo.svg', alt: '' },
+        },
+      }).success,
+    ).toBe(false)
+    expect(
+      artistConfigSchema.safeParse({
+        ...artistConfig,
+        homepage: { ...artistConfig.homepage, heroImage: { src: '/artist.jpg', alt: '' } },
+      }).success,
+    ).toBe(false)
+  })
+
   it('does not contain private reference branding', () => {
     const serialized = JSON.stringify(artistConfig).toLowerCase()
     expect(serialized).not.toContain('sound for movement')

@@ -102,6 +102,15 @@ try {
   assert.equal(publicPage.length, 1)
 
   const fingerprint = 'a'.repeat(64)
+  const { error: missingConsentError } = await admin.rpc('submit_contact_message', {
+    p_name: 'Policy contact without consent',
+    p_email: 'listener@example.com',
+    p_message: 'This otherwise valid message must not be stored.',
+    p_consent: false,
+    p_request_fingerprint: 'b'.repeat(64),
+  })
+  assert.ok(missingConsentError, 'A contact message without consent was stored')
+
   for (let index = 0; index < 3; index += 1) {
     const { error } = await admin.rpc('submit_contact_message', {
       p_name: `Policy contact ${index + 1}`,

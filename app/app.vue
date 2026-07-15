@@ -6,10 +6,12 @@ const artist = useArtistConfig()
 const theme = useArtistTheme()
 
 useSeoMeta({
-  titleTemplate: (title) => (title ? `${title} · ${artist.identity.name}` : artist.identity.name),
-  description: artist.identity.statement,
+  titleTemplate: (title) => (title ? `${title} · ${artist.seo.title}` : artist.seo.title),
+  description: artist.seo.description,
   ogSiteName: artist.identity.name,
   ogType: 'website',
+  ogImage: artist.seo.socialImage.src || undefined,
+  ogImageAlt: artist.seo.socialImage.alt || undefined,
 })
 </script>
 

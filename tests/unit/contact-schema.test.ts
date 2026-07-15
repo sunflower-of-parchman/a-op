@@ -25,4 +25,16 @@ describe('contact message schema', () => {
       }).success,
     ).toBe(false)
   })
+
+  it('requires explicit storage consent', () => {
+    expect(
+      contactMessageSchema.safeParse({
+        name: 'Listener',
+        email: 'listener@example.com',
+        message: 'This is a valid message with no consent.',
+        consent: false,
+        company: '',
+      }).success,
+    ).toBe(false)
+  })
 })

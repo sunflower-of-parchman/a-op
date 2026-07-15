@@ -180,6 +180,10 @@ as $$
 declare
   message_id uuid;
 begin
+  if not p_consent then
+    raise exception 'Contact storage consent is required.';
+  end if;
+
   if (
     select count(*)
     from public.contact_messages

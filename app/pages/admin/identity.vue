@@ -21,6 +21,7 @@ const publishing = ref(false)
 const ready = ref(false)
 const unsaved = computed(() => JSON.stringify(config.value) !== savedSnapshot.value)
 const previewTheme = computed(() => artistThemeFromConfig(config.value))
+const featureKeys = Object.keys(startingConfig.features) as Array<keyof ArtistConfig['features']>
 
 function addNavigationItem() {
   config.value.navigation.push({ label: 'New page', to: '/new-page' })
@@ -28,6 +29,14 @@ function addNavigationItem() {
 
 function removeNavigationItem(index: number) {
   if (config.value.navigation.length > 1) config.value.navigation.splice(index, 1)
+}
+
+function addLink(kind: 'socialLinks' | 'distributionLinks') {
+  config.value.identity[kind].push({ label: 'New link', url: 'https://example.com' })
+}
+
+function removeLink(kind: 'socialLinks' | 'distributionLinks', index: number) {
+  config.value.identity[kind].splice(index, 1)
 }
 
 async function saveDraft() {
@@ -120,6 +129,18 @@ function beforeUnload(event: BeforeUnloadEvent) {
           <label
             ><span>Location</span><input v-model="config.identity.location" maxlength="100"
           /></label>
+          <label
+            ><span>Public email</span
+            ><input v-model="config.identity.contact.publicEmail" type="email" maxlength="160"
+          /></label>
+          <label
+            ><span>Contact note</span
+            ><textarea v-model="config.identity.contact.bookingNote" rows="4" maxlength="320" />
+          </label>
+          <label
+            ><span>Mailing address</span
+            ><textarea v-model="config.identity.contact.mailingAddress" rows="4" maxlength="320" />
+          </label>
         </div>
       </section>
 
@@ -135,11 +156,92 @@ function beforeUnload(event: BeforeUnloadEvent) {
             <code>{{ config.design.colors[key] }}</code>
           </label>
         </div>
+        <div class="admin-fields admin-fields--spaced">
+          <label>
+            <span>Display typeface</span>
+            <select v-model="config.design.typography.displayFamily">
+              <option value="Iowan Old Style, Baskerville, Georgia, serif">Editorial serif</option>
+              <option value="Georgia, Times New Roman, serif">Classic serif</option>
+              <option value="Inter, Avenir Next, Helvetica Neue, sans-serif">Modern sans</option>
+            </select>
+          </label>
+          <label>
+            <span>Body typeface</span>
+            <select v-model="config.design.typography.bodyFamily">
+              <option value="Inter, Avenir Next, Helvetica Neue, sans-serif">Modern sans</option>
+              <option value="Iowan Old Style, Baskerville, Georgia, serif">Editorial serif</option>
+              <option value="system-ui, sans-serif">System sans</option>
+            </select>
+          </label>
+          <label
+            ><span>Base type size</span
+            ><input v-model="config.design.typography.baseSize" pattern="\d+(\.\d+)?(px|rem|em)"
+          /></label>
+          <label
+            ><span>Display weight</span
+            ><input
+              v-model.number="config.design.typography.displayWeight"
+              type="number"
+              min="300"
+              max="900"
+              step="100"
+          /></label>
+          <label
+            ><span>Body weight</span
+            ><input
+              v-model.number="config.design.typography.bodyWeight"
+              type="number"
+              min="300"
+              max="700"
+              step="100"
+          /></label>
+        </div>
+      </section>
+
+      <section aria-labelledby="imagery-heading">
+        <div class="admin-section-heading">
+          <p class="section-number">03 / Logo and imagery</p>
+          <h2 id="imagery-heading">Accessible visual identity</h2>
+        </div>
+        <div class="admin-fields">
+          <label
+            ><span>Logo treatment</span
+            ><select v-model="config.design.logo.kind">
+              <option value="text">Text wordmark</option>
+              <option value="image">Image asset</option>
+            </select></label
+          >
+          <label
+            ><span>Logo asset path</span
+            ><input
+              v-model="config.design.logo.assetPath"
+              placeholder="/images/logo.svg"
+              pattern="/.*"
+          /></label>
+          <label
+            ><span>Logo alternative text</span
+            ><input v-model="config.design.logo.alt" maxlength="120"
+          /></label>
+          <label
+            ><span>Home image path</span
+            ><input
+              v-model="config.homepage.heroImage.src"
+              placeholder="/images/artist.jpg"
+              pattern="/.*"
+          /></label>
+          <label
+            ><span>Home image alternative text</span
+            ><input v-model="config.homepage.heroImage.alt" maxlength="240"
+          /></label>
+          <p class="field-help">
+            Every published image requires an internal path and meaningful alternative text.
+          </p>
+        </div>
       </section>
 
       <section aria-labelledby="navigation-heading">
         <div class="admin-section-heading">
-          <p class="section-number">03 / Navigation</p>
+          <p class="section-number">04 / Navigation</p>
           <h2 id="navigation-heading">Authored order</h2>
         </div>
         <ol class="navigation-editor">
@@ -167,9 +269,60 @@ function beforeUnload(event: BeforeUnloadEvent) {
         </button>
       </section>
 
+      <section aria-labelledby="links-heading">
+        <div class="admin-section-heading">
+          <p class="section-number">05 / Links</p>
+          <h2 id="links-heading">Social and distribution destinations</h2>
+        </div>
+        <div class="link-groups">
+          <div>
+            <h3>Social</h3>
+            <ol class="link-editor">
+              <li v-for="(link, index) in config.identity.socialLinks" :key="index">
+                <label
+                  ><span>Label</span><input v-model="link.label" required maxlength="40"
+                /></label>
+                <label><span>URL</span><input v-model="link.url" required type="url" /></label>
+                <button
+                  class="quiet-action"
+                  type="button"
+                  @click="removeLink('socialLinks', index)"
+                >
+                  Remove
+                </button>
+              </li>
+            </ol>
+            <button class="text-action" type="button" @click="addLink('socialLinks')">
+              Add social link
+            </button>
+          </div>
+          <div>
+            <h3>Distribution</h3>
+            <ol class="link-editor">
+              <li v-for="(link, index) in config.identity.distributionLinks" :key="index">
+                <label
+                  ><span>Label</span><input v-model="link.label" required maxlength="40"
+                /></label>
+                <label><span>URL</span><input v-model="link.url" required type="url" /></label>
+                <button
+                  class="quiet-action"
+                  type="button"
+                  @click="removeLink('distributionLinks', index)"
+                >
+                  Remove
+                </button>
+              </li>
+            </ol>
+            <button class="text-action" type="button" @click="addLink('distributionLinks')">
+              Add distribution link
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section aria-labelledby="home-heading">
         <div class="admin-section-heading">
-          <p class="section-number">04 / Home</p>
+          <p class="section-number">06 / Home</p>
           <h2 id="home-heading">Opening invitation</h2>
         </div>
         <div class="admin-fields">
@@ -196,8 +349,50 @@ function beforeUnload(event: BeforeUnloadEvent) {
         </div>
       </section>
 
+      <section aria-labelledby="systems-heading">
+        <div class="admin-section-heading">
+          <p class="section-number">07 / Site systems</p>
+          <h2 id="systems-heading">Search, footer, and modules</h2>
+        </div>
+        <div class="admin-fields">
+          <label
+            ><span>Search title</span><input v-model="config.seo.title" required maxlength="80"
+          /></label>
+          <label
+            ><span>Search description</span
+            ><textarea v-model="config.seo.description" rows="4" required maxlength="320" />
+          </label>
+          <label
+            ><span>Social image path</span
+            ><input
+              v-model="config.seo.socialImage.src"
+              placeholder="/images/share.jpg"
+              pattern="/.*"
+          /></label>
+          <label
+            ><span>Social image alternative text</span
+            ><input v-model="config.seo.socialImage.alt" maxlength="240"
+          /></label>
+          <label
+            ><span>Footer statement</span
+            ><input v-model="config.footer.statement" required maxlength="240"
+          /></label>
+          <label
+            ><span>Footer copyright</span
+            ><input v-model="config.footer.copyright" required maxlength="160"
+          /></label>
+        </div>
+        <fieldset class="feature-fields">
+          <legend>Enabled modules</legend>
+          <label v-for="key in featureKeys" :key="key">
+            <input v-model="config.features[key]" type="checkbox" />
+            <span>{{ key }}</span>
+          </label>
+        </fieldset>
+      </section>
+
       <section class="admin-preview" :style="previewTheme" aria-labelledby="preview-heading">
-        <p class="section-number">05 / Preview</p>
+        <p class="section-number">08 / Preview</p>
         <div>
           <p class="preview-artist-name">{{ config.identity.name }}</p>
           <p class="eyebrow">{{ config.homepage.kicker }}</p>

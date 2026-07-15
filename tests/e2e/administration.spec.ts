@@ -28,6 +28,8 @@ test('drafts, previews, and publishes database-authoritative artist configuratio
     .fill(
       'A browser-published biography proving that the database, rather than a source edit, controls the public artist identity.',
     )
+  await page.getByLabel('Public email').fill('hello@daymark.example')
+  await page.getByLabel('Display typeface').selectOption('Georgia, Times New Roman, serif')
   await page
     .locator('.color-fields label')
     .filter({ hasText: 'accent' })
@@ -39,8 +41,18 @@ test('drafts, previews, and publishes database-authoritative artist configuratio
     .fill(
       'A published browser journey now controls this invitation from a validated database version.',
     )
+  await page.getByRole('button', { name: 'Add social link' }).click()
+  const socialLink = page.locator('.link-groups > div').first().locator('.link-editor li').last()
+  await socialLink.getByLabel('Label').fill('Artist archive')
+  await socialLink.getByLabel('URL').fill('https://example.com/daymark')
+  await page
+    .getByLabel('Search description')
+    .fill('A browser-published search description for the fictional artist demonstration.')
+  await page
+    .getByLabel('Footer statement')
+    .fill('An artist-controlled footer, published from the database.')
 
-  await expect(page.getByText('Daymark Assembly Published', { exact: true })).toBeVisible()
+  await expect(page.locator('.preview-artist-name')).toHaveText('Daymark Assembly Published')
   await page.getByRole('button', { name: 'Save draft' }).click()
   await expect(page.getByText('Draft saved. The public site is unchanged.')).toBeVisible()
 
@@ -56,10 +68,45 @@ test('drafts, previews, and publishes database-authoritative artist configuratio
   const after = await page.request.get('/api/site-config?phase=after')
   const published = (await after.json()).config
   expect(published.identity.name).toBe('Daymark Assembly Published')
+  expect(published.identity.contact.publicEmail).toBe('hello@daymark.example')
+  expect(published.identity.socialLinks).toContainEqual({
+    label: 'Artist archive',
+    url: 'https://example.com/daymark',
+  })
   expect(published.design.colors.accent).toBe('#0b6e4f')
+  expect(published.design.typography.displayFamily).toBe('Georgia, Times New Roman, serif')
+  expect(published.footer.statement).toBe(
+    'An artist-controlled footer, published from the database.',
+  )
   expect(published.navigation).toEqual(
     expect.arrayContaining([expect.objectContaining({ label: 'Write to us' })]),
   )
+})
+
+test('provides a dedicated editor for every structured section type', async ({ page }) => {
+  await signInAsOwner(page, '/admin/pages/about')
+  await expect(page.getByRole('button', { name: 'Save page draft' })).toBeEnabled()
+
+  for (const name of [
+    'Add image',
+    'Add call to action',
+    'Add credits',
+    'Add links',
+    'Add release',
+    'Add learning',
+    'Add video',
+    'Add contact form',
+  ]) {
+    await page.getByRole('button', { name }).click()
+  }
+
+  await expect(page.getByLabel('Alternative text')).toBeVisible()
+  await expect(page.getByLabel('Role')).toBeVisible()
+  await expect(page.getByLabel('External URL')).toBeVisible()
+  await expect(page.getByLabel('Release slug')).toBeVisible()
+  await expect(page.getByLabel('Learning path slug')).toBeVisible()
+  await expect(page.getByLabel('Approved video URL')).toBeVisible()
+  await expect(page.getByLabel('Consent label')).toBeVisible()
 })
 
 test('drafts and publishes an ordered structured page', async ({ page }) => {
