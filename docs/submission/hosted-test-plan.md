@@ -65,7 +65,7 @@ Before access is shared:
 - Confirm there is no payment method requirement, trial gate, usage charge to the judge, or dependency on Michael's local computer.
 - Store the recovery owner, provider project identifiers, and reset command privately.
 
-The project-specific hosted reset entrypoint and deployment have not been created or run because the approved project reference, identity domains, and external authorization record do not yet exist. Their exact safety contract is defined in the operator runbook. Implementation and execution begin only after Michael approves the specific judging resources.
+The project-bound hosted initialization, check, and reset entrypoint is implemented and passes its disposable local contract, including target and fingerprint refusals, two idempotent resets, fixture-session rotation, and provider-mapping preservation. No hosted deployment or reset has run because the approved project reference, private identities, and external authorization record do not yet exist. The exact operator commands and safety contract are defined in the operator runbook. External execution begins only after Michael approves the specific judging resources and action.
 
 ## Final evidence
 

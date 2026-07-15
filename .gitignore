@@ -19,6 +19,7 @@ supabase/.temp/
 
 # Machine-specific paths and setup proposals
 setup/local-paths.json
+setup/hosted-accounts.json
 setup/proposals/*.json
 !setup/proposals/.gitkeep
 

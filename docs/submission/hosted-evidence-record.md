@@ -114,20 +114,20 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Reset and judge evidence
 
-| Check                                 | Status  | Timestamp / safe hash / result |
-| ------------------------------------- | ------- | ------------------------------ |
-| Hosted reset entrypoint reviewed      | Pending |                                |
-| Unknown-project refusal               | Pending |                                |
-| Fingerprint mismatch refusal          | Pending |                                |
-| First approved reset                  | Pending |                                |
-| Representative state created          | Pending |                                |
-| Second approved reset                 | Pending |                                |
-| Reset hashes and counts match         | Pending |                                |
-| Fixture sessions rotated              | Pending |                                |
-| Provider configuration preserved      | Pending |                                |
-| Complete post-reset judge route       | Pending |                                |
-| No private reference data             | Pending |                                |
-| Availability through judging deadline | Pending |                                |
+| Check                                 | Status  | Timestamp / safe hash / result                |
+| ------------------------------------- | ------- | --------------------------------------------- |
+| Hosted reset entrypoint reviewed      | Ready   | Version `2026-07-15.1`; local contract passed |
+| Unknown-project refusal               | Pass    | Local target/link/marker guards passed        |
+| Fingerprint mismatch refusal          | Pass    | Canonical content drift was refused locally   |
+| First approved reset                  | Pending |                                               |
+| Representative state created          | Pending |                                               |
+| Second approved reset                 | Pending |                                               |
+| Reset hashes and counts match         | Pending |                                               |
+| Fixture sessions rotated              | Pending |                                               |
+| Provider configuration preserved      | Pending |                                               |
+| Complete post-reset judge route       | Pending |                                               |
+| No private reference data             | Pending |                                               |
+| Availability through judging deadline | Pending |                                               |
 
 ## Submission reconciliation
 

@@ -93,19 +93,43 @@ Acceptance:
 
 ## Stage 3: install fictional content and hosted identities
 
-This stage uses a project-specific hosted seed entrypoint created after the approved project reference and hosted identity domains are known. The entrypoint must:
+The repository includes a project-bound initialization, check, and reset entrypoint. It uses the current Supabase CLI `db query --linked --file` contract to execute a single atomic PostgreSQL guard and targeted application reset. It never invokes a linked `db reset`.
+
+Prepare private operator input from the tracked shape. Both resulting files are ignored:
+
+```text
+cp setup/hosted-accounts.example.json setup/hosted-accounts.json
+chmod 600 setup/hosted-accounts.json
+```
+
+Set `projectRef` to the exact approved reference, replace all four account emails and passwords, and keep `localOnly` false. The four keys and roles are exact. Hosted emails must be unique, non-`.local` addresses. Put the dedicated Supabase URL, publishable key, and server-only secret in an ignored environment file such as `.env.hosted`; do not add Stripe or worker secrets unless another approved stage needs them.
+
+Derive the project-bound confirmation without recording the project reference:
+
+```text
+npm run hosted:confirmation -- initialize [APPROVED_PROJECT_REF]
+```
+
+After the separate hosted-fixture initialization approval:
+
+```text
+npm run hosted:initialize -- --project-ref [APPROVED_PROJECT_REF] --accounts setup/hosted-accounts.json --env-file .env.hosted --confirm [EXACT_INITIALIZE_CONFIRMATION]
+npm run hosted:check -- --project-ref [APPROVED_PROJECT_REF] --accounts setup/hosted-accounts.json --env-file .env.hosted
+```
+
+The versioned entrypoint:
 
 1. require `--project-ref [APPROVED_PROJECT_REF]` and an exact second confirmation value derived from the same reference;
-2. refuse localhost, an unknown reference, a project without the expected installation marker, and any environment with an unrecognized data fingerprint;
+2. refuses localhost, a malformed or unlinked reference, an unexpected schema version, an existing initialization marker, an unknown marker, unexpected Auth users, and any environment with an unrecognized canonical fixture fingerprint;
 3. preserve provider configuration, migration history, webhook endpoints, storage buckets, and server secrets;
-4. delete only the documented fictional transaction, progress, telemetry, contact, and fixture-user state;
+4. targets only the application tables, the seven dedicated bucket contents, and the exact four fictional fixture users;
 5. restore the versioned Daymark Assembly configuration, catalog, generated media, learning, video, editorial, licensing, and offering fixtures;
 6. create distinct hosted owner, editor, and two-listener identities from private operator input;
 7. rotate hosted fixture sessions after reset;
-8. verify expected row counts, stable IDs, media hashes, and public reads before returning success; and
-9. emit a redacted JSON result suitable for the evidence record.
+8. verifies canonical fixture identity, generated media hashes, public reads, required roles, storage buckets, and account count before returning success; and
+9. emits only redacted JSON containing result status, version, project-reference hash, fixture hash, counts, and the session-rotation result.
 
-The project-specific reference and identity input are unavailable before resource approval, so this entrypoint is generated and locally reviewed at this stage. Its first execution requires a separate reset approval.
+`npm run test:hosted-reset` tests the same core against disposable local Supabase state. It proves target, marker, account-set, and real content-fingerprint refusals; performs clean initialization and two resets; rotates all four identities on each reset; preserves fake Stripe mappings; verifies publication, roles, and storage; and restores the ordinary local demonstration.
 
 Acceptance:
 
@@ -207,13 +231,21 @@ Acceptance:
 
 After the reset execution approval:
 
-1. Run the project-specific hosted reset once and save the redacted JSON result.
+1. Derive the exact reset confirmation and run the reviewed entrypoint once:
+
+   ```text
+   npm run hosted:confirmation -- reset [APPROVED_PROJECT_REF]
+   npm run hosted:reset -- --project-ref [APPROVED_PROJECT_REF] --accounts setup/hosted-accounts.json --env-file .env.hosted --confirm [EXACT_RESET_CONFIRMATION]
+   ```
+
+   Save only its redacted JSON result.
+
 2. Sign in with all four hosted identities and verify role boundaries.
 3. Create representative purchase, membership, licensing, learning, library, telemetry, and contact state.
-4. Run the same reset a second time.
+4. Run the same exact reset command a second time under the recorded rehearsal approval.
 5. Compare the two reset hashes and expected row/media counts.
 6. Run the complete judge route after the second reset.
-7. Confirm Stripe mappings, webhook configuration, provider secrets, and worker deployments remain connected.
+7. Run `npm run hosted:check` and confirm Stripe mappings, webhook configuration, provider secrets, and worker deployments remain connected.
 
 Acceptance requires two idempotent reset passes, a complete post-reset judge route, rotated fixture sessions, preserved provider configuration, and zero private reference data.
 

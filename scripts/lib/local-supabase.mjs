@@ -294,7 +294,7 @@ export function writeLocalEnvironment(status) {
   writePrivateFile(environmentPath, `${order.map((key) => `${key}=${values[key]}`).join('\n')}\n`)
 }
 
-export async function seedDemonstrationArtist(status) {
+export async function seedDemonstrationArtist(status, { attempts = 12 } = {}) {
   const config = readJson(bootstrapConfigPath)
   const response = await fetchLocalService(
     `${status.apiUrl}/rest/v1/site_config_versions?on_conflict=id`,
@@ -315,6 +315,7 @@ export async function seedDemonstrationArtist(status) {
         published_at: '2026-07-14T00:00:00.000Z',
       }),
     },
+    attempts,
   )
 
   if (!response.ok) {
@@ -322,12 +323,17 @@ export async function seedDemonstrationArtist(status) {
   }
 }
 
-export async function seedAuthorizationDemonstration(status) {
+export async function seedAuthorizationDemonstration(
+  status,
+  { fixture = readJson(demoAccountsPath), allowHosted = false } = {},
+) {
   const admin = createAdminClient(status)
-  const fixture = readJson(demoAccountsPath)
 
-  if (!fixture.localOnly || !Array.isArray(fixture.accounts)) {
-    throw new Error('The local demonstration account fixture is invalid.')
+  if (
+    !Array.isArray(fixture.accounts) ||
+    (allowHosted ? fixture.localOnly !== false : fixture.localOnly !== true)
+  ) {
+    throw new Error('The demonstration account fixture is invalid for this environment.')
   }
 
   const users = new Map()
@@ -343,7 +349,7 @@ export async function seedAuthorizationDemonstration(status) {
       })
     } catch (error) {
       const safeDetail = error instanceof Error ? ` ${error.message}` : ''
-      throw new Error(`Could not create the local ${account.key} account.${safeDetail}`, {
+      throw new Error(`Could not create the ${account.key} demonstration account.${safeDetail}`, {
         cause: error,
       })
     }
@@ -354,14 +360,14 @@ export async function seedAuthorizationDemonstration(status) {
       const { error: roleError } = await admin.rpc('bootstrap_owner', {
         target_user_id: user.id,
       })
-      if (roleError) throw new Error('Could not bootstrap the local owner account.')
+      if (roleError) throw new Error('Could not bootstrap the demonstration owner account.')
     } else if (account.role === 'editor') {
       const { error: roleError } = await admin.from('app_roles').insert({
         user_id: user.id,
         role: 'editor',
         granted_by: users.get('owner'),
       })
-      if (roleError) throw new Error('Could not seed the local editor role.')
+      if (roleError) throw new Error('Could not seed the demonstration editor role.')
     }
   }
 
