@@ -28,7 +28,7 @@ This record stays pending until an approved operator executes the corresponding 
 | Create or select Vercel judge project   | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:01:29Z |
 | Link and dry-run Supabase migrations    | Executed | Stage 2A approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:44:15Z |
 | Apply Supabase migrations               | Executed | Stage 2B approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:50:39Z |
-| Seed hosted fixtures                    | Pending |                                       |                  |
+| Seed hosted fixtures                    | Executed | Stage 3 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:01:49Z |
 | Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
 | Execute hosted reset                    | Pending |                                       |                  |
 | Assign production alias or domain       | Pending |                                       |                  |
@@ -57,14 +57,16 @@ This record stays pending until an approved operator executes the corresponding 
 | Remote migration history exact               | Pass    | 2026-07-15T20:50:39Z; 11 local and 11 remote versions in identical order |
 | Public generated types match                 | Pass    | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata |
 | Public/private schema lint                   | Pass    | 2026-07-15T20:50:39Z; no schema errors found |
-| Anonymous publication                        | Pending |                         |
-| Owner/editor/customer/service isolation      | Pending |                         |
-| Seven storage boundaries                     | Pending |                         |
+| Anonymous publication                        | Pass    | 2026-07-15T21:01:49Z; Daymark Assembly public configuration and published content verified; fixture `sha256:ba0da2991582` |
+| Owner/editor/customer/service isolation      | Pass    | 2026-07-15T21:01:49Z; exact four-account set verified as owner, editor, customer, and customer |
+| Seven storage boundaries                     | Pass    | 2026-07-15T21:01:49Z; all seven dedicated buckets verified with 6 fictional fixture objects |
 | Security Advisor                             | Pending |                         |
 | Performance Advisor                          | Pending |                         |
-| Hosted identity domain differs from `.local` | Pending |                         |
+| Hosted identity domain differs from `.local` | Pass    | 2026-07-15T21:01:49Z; four unique hosted identities use non-local domains |
 
 The successful push ended with a non-fatal local pg-delta catalog-cache warning about a missing temporary certificate path. Direct migration-history, type-generation, and linked-lint verification all passed afterward. No migration repair, reset, or retry was performed.
+
+The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and zero Stripe provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization.
 
 ## Stripe evidence
 
