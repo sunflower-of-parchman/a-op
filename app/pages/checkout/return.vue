@@ -44,7 +44,7 @@ useSeoMeta({ title: 'Checkout status' })
 </script>
 
 <template>
-  <main class="page-frame interior-page">
+  <div class="page-frame interior-page">
     <p class="eyebrow">Checkout status</p>
     <h1 v-if="route.query.canceled">Checkout stopped before completion.</h1>
     <h1 v-else-if="data?.intent.status === 'complete'">Your access is ready.</h1>
@@ -54,5 +54,5 @@ useSeoMeta({ title: 'Checkout status' })
       at this return URL.
     </p>
     <NuxtLink class="text-action" to="/account">Open your account</NuxtLink>
-  </main>
+  </div>
 </template>

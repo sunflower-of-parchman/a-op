@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
+import { existsSync } from 'node:fs'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { getAuthorityTestContext, requireNoError } from './lib/authority-test.mjs'
 import { projectRoot, run } from './lib/command.mjs'
 import { safeSupabaseError } from './lib/local-supabase.mjs'
@@ -184,7 +185,13 @@ try {
   requireNoError(otherCustomerError, 'Cross-account license isolation query failed')
   assert.equal(otherCustomerLicenses.length, 0)
 
-  const python = process.env.LICENSE_DOCUMENT_PYTHON ?? 'python3'
+  const localPython = resolve(
+    projectRoot,
+    '.venv-documents',
+    process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python',
+  )
+  const python =
+    process.env.LICENSE_DOCUMENT_PYTHON ?? (existsSync(localPython) ? localPython : 'python3')
   const worker = run(
     process.execPath,
     ['--experimental-strip-types', 'workers/documents/index.ts'],

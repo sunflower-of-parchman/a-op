@@ -134,7 +134,7 @@ async function retryDocument(licenseId: string) {
 </script>
 
 <template>
-  <main class="page-frame admin-frame licensing-admin">
+  <div class="page-frame admin-frame licensing-admin">
     <header class="page-heading">
       <p class="eyebrow">Licensing administration</p>
       <h1>The artist publishes the supported use before a buyer can choose it.</h1>
@@ -345,5 +345,5 @@ async function retryDocument(licenseId: string) {
     <p v-if="error && error.statusCode !== 401" class="form-message" role="alert">
       Licensing administration is available only to the installation owner.
     </p>
-  </main>
+  </div>
 </template>

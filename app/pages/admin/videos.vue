@@ -79,7 +79,7 @@ async function publishDraft() {
 </script>
 
 <template>
-  <main class="page-frame admin-editor video-admin">
+  <div class="page-frame admin-editor video-admin">
     <header class="page-heading">
       <p class="eyebrow">Artist administration / Video</p>
       <h1>Publish the source, context, and transcript together.</h1>
@@ -205,5 +205,5 @@ async function publishDraft() {
       </div>
       <p v-if="message" class="form-message" role="status">{{ message }}</p>
     </form>
-  </main>
+  </div>
 </template>

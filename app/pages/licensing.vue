@@ -7,7 +7,7 @@ useSeoMeta({
 })
 
 const route = useRoute()
-const { data } = await useFetch<LicensingResponse>('/api/licensing')
+const { data, error, status, refresh } = await useFetch<LicensingResponse>('/api/licensing')
 const { data: session } = await useFetch('/api/auth/session')
 const busyId = ref('')
 const message = ref('')
@@ -58,8 +58,8 @@ async function beginCheckout(option: PublishedLicenseOption) {
       method: 'POST',
       body: { offerId: option.offerId, ...formFor(option.offerId), returnPath: '/account' },
     })
-    if (result.url.startsWith('http')) window.location.assign(result.url)
-    else await navigateTo(result.url)
+    if (result.provider === 'simulation') assignSafeDestination(result.url, 'same-origin')
+    else assignSafeDestination(result.url, 'stripe-checkout')
   } catch {
     message.value = 'This license could not be prepared. Review the project details and try again.'
   } finally {
@@ -69,7 +69,7 @@ async function beginCheckout(option: PublishedLicenseOption) {
 </script>
 
 <template>
-  <main class="page-frame licensing-page">
+  <div class="page-frame licensing-page">
     <header class="page-heading licensing-heading">
       <p class="eyebrow">Music licensing</p>
       <h1>Choose a use whose boundaries are already clear.</h1>
@@ -78,6 +78,21 @@ async function beginCheckout(option: PublishedLicenseOption) {
         before checkout and becomes the issued document after verified payment.
       </p>
     </header>
+
+    <ServiceState
+      v-if="status === 'pending'"
+      eyebrow="Music licensing"
+      title="Loading artist-approved uses…"
+      message="Published terms and prices are being gathered before any project form is shown."
+    />
+    <ServiceState
+      v-else-if="error"
+      eyebrow="Licensing unavailable"
+      title="The licensing service is not responding."
+      message="No terms have been frozen and no checkout has started. Try again when the service is available."
+      retryable
+      @retry="refresh"
+    />
 
     <section
       v-for="template in visibleTemplates"
@@ -186,5 +201,5 @@ async function beginCheckout(option: PublishedLicenseOption) {
     </section>
 
     <p v-if="message" class="form-message" role="alert">{{ message }}</p>
-  </main>
+  </div>
 </template>

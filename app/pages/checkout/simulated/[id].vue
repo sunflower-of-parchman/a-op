@@ -6,9 +6,14 @@ const id = String(route.params.id)
 const { data, error, refresh } = await useFetch<CheckoutIntentResponse>(
   () => `/api/commerce/checkout/${id}`,
 )
+const hydrated = ref(false)
 const confirming = ref(false)
 const message = ref('')
 const { track } = useTelemetry()
+
+onMounted(() => {
+  hydrated.value = true
+})
 
 if (error.value?.statusCode === 401) {
   await navigateTo(`/sign-in?redirect=${encodeURIComponent(route.fullPath)}`)
@@ -45,7 +50,7 @@ useSeoMeta({ title: 'Local checkout simulation' })
 </script>
 
 <template>
-  <main class="page-frame simulated-checkout">
+  <div class="page-frame simulated-checkout">
     <header class="page-heading">
       <p class="eyebrow">Local demonstration</p>
       <h1>{{ data?.product.name ?? 'Checkout simulation' }}</h1>
@@ -72,10 +77,16 @@ useSeoMeta({ title: 'Local checkout simulation' })
       v-if="data?.intent.status === 'open'"
       class="text-action text-action--primary"
       type="button"
-      :disabled="confirming"
+      :disabled="!hydrated || confirming"
       @click="confirm"
     >
-      {{ confirming ? 'Completing…' : 'Complete simulated payment' }}
+      {{
+        !hydrated
+          ? 'Preparing checkout…'
+          : confirming
+            ? 'Completing…'
+            : 'Complete simulated payment'
+      }}
     </button>
     <NuxtLink v-else-if="data?.intent.status === 'complete'" class="text-action" to="/account">
       Continue to your account
@@ -84,5 +95,5 @@ useSeoMeta({ title: 'Local checkout simulation' })
     <p v-if="error && error.statusCode !== 401" class="form-message" role="alert">
       This checkout could not be found for the current account.
     </p>
-  </main>
+  </div>
 </template>

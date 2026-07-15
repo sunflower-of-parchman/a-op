@@ -59,7 +59,7 @@ async function replayWebhook(eventId: string) {
 </script>
 
 <template>
-  <main class="page-frame admin-frame commerce-admin">
+  <div class="page-frame admin-frame commerce-admin">
     <header class="page-heading">
       <p class="eyebrow">Commerce and memberships</p>
       <h1>The artist defines the offer. Providers move the money.</h1>
@@ -203,5 +203,5 @@ async function replayWebhook(eventId: string) {
     <p v-if="error && error.statusCode !== 401" class="form-message" role="alert">
       Commerce administration is available only to the installation owner.
     </p>
-  </main>
+  </div>
 </template>

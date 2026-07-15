@@ -32,6 +32,7 @@ useSeoMeta({
   <div class="site-shell" :style="theme" :data-hydrated="hydrated ? 'true' : 'false'">
     <NuxtRouteAnnouncer />
     <ArtistHeader />
+    <ConnectivityNotice />
     <main id="main-content" tabindex="-1">
       <NuxtPage />
     </main>

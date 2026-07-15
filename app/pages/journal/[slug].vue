@@ -13,16 +13,16 @@ useSeoMeta({
 </script>
 
 <template>
-  <main v-if="data" class="page-frame journal-page">
+  <div v-if="data" class="page-frame journal-page">
     <header class="page-heading">
       <p class="eyebrow">{{ data.post.kind.replace('_', ' ') }} · {{ data.post.publishedOn }}</p>
       <h1>{{ data.post.title }}</h1>
       <p>{{ data.post.summary }}</p>
     </header>
     <StructuredSections :sections="data.post.sections" />
-  </main>
-  <main v-else class="page-frame interior-page">
+  </div>
+  <div v-else class="page-frame interior-page">
     <p class="eyebrow">Journal</p>
     <h1>{{ error ? 'Editorial note not found.' : 'Loading note…' }}</h1>
-  </main>
+  </div>
 </template>

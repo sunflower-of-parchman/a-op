@@ -2,11 +2,30 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { createClient } from '@supabase/supabase-js'
-import { projectRoot, readJson, redactOutput, runSupabase, writePrivateFile } from './command.mjs'
+import {
+  projectRoot,
+  readJson,
+  redactOutput,
+  run,
+  runSupabase,
+  writePrivateFile,
+} from './command.mjs'
 
 const bootstrapConfigPath = resolve(projectRoot, 'content/demo/bootstrap-config.json')
 const demoAccountsPath = resolve(projectRoot, 'content/demo/accounts.json')
 const environmentPath = resolve(projectRoot, '.env')
+
+export function isLocalSupabaseUrl(value) {
+  try {
+    const url = new URL(value)
+    return (
+      url.protocol === 'http:' &&
+      ['127.0.0.1', 'localhost', '::1'].includes(url.hostname.replace(/^\[|\]$/g, ''))
+    )
+  } catch {
+    return false
+  }
+}
 
 export const demoFixtureIds = {
   release: '10000000-0000-4000-8000-000000000001',
@@ -55,6 +74,83 @@ export function createAdminClient(status) {
   return createClient(status.apiUrl, status.secretKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
+}
+
+async function fetchLocalService(url, options = {}, attempts = 12) {
+  let lastError
+  let lastStatus
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      const response = await fetch(url, options)
+      if (response.status < 500) return response
+      lastStatus = response.status
+      await response.arrayBuffer()
+    } catch (error) {
+      lastError = error
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, Math.min(250 * (attempt + 1), 1_000)))
+  }
+
+  if (lastStatus) {
+    throw new Error(`Local Supabase service did not recover after reset (HTTP ${lastStatus}).`)
+  }
+  throw new Error(
+    `Local Supabase service did not recover after reset (${lastError?.code ?? 'unavailable'}).`,
+  )
+}
+
+export async function waitForLocalAuth(status, attempts = 90) {
+  if (!isLocalSupabaseUrl(status.apiUrl)) {
+    throw new Error('Refusing to poll Auth because the active Supabase project is not local.')
+  }
+
+  const response = await fetchLocalService(
+    `${status.apiUrl}/auth/v1/health`,
+    { headers: { apikey: status.publishableKey } },
+    attempts,
+  )
+  if (!response.ok) {
+    throw new Error(`Local Auth health check failed with HTTP ${response.status}.`)
+  }
+}
+
+export async function recoverLocalAuthGateway(status) {
+  try {
+    await waitForLocalAuth(status, 3)
+    return
+  } catch {
+    const supabaseConfig = readFileSync(resolve(projectRoot, 'supabase/config.toml'), 'utf8')
+    const projectId = supabaseConfig.match(/^project_id\s*=\s*"([A-Za-z0-9_-]+)"$/m)?.[1]
+    if (!projectId) {
+      throw new Error('Could not determine the local Supabase project identifier.')
+    }
+
+    run('docker', ['restart', `supabase_kong_${projectId}`], { capture: true })
+  }
+
+  await waitForLocalAuth(status)
+}
+
+export async function ensureLocalUser(admin, attributes) {
+  let lastError
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    const { data, error } = await admin.auth.admin.createUser(attributes)
+    if (!error && data.user) return data.user
+    lastError = error
+
+    const { data: existing } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 })
+    const user = existing?.users.find(
+      ({ email }) => email?.toLowerCase() === attributes.email.toLowerCase(),
+    )
+    if (user) return user
+
+    await new Promise((resolve) => setTimeout(resolve, Math.min(250 * (attempt + 1), 1_000)))
+  }
+
+  const safeCode = lastError?.code ?? lastError?.status ?? 'unavailable'
+  throw new Error(`Local Auth did not recover after reset (${safeCode}).`)
 }
 
 function sha256(value) {
@@ -200,23 +296,26 @@ export function writeLocalEnvironment(status) {
 
 export async function seedDemonstrationArtist(status) {
   const config = readJson(bootstrapConfigPath)
-  const response = await fetch(`${status.apiUrl}/rest/v1/site_config_versions?on_conflict=id`, {
-    method: 'POST',
-    headers: {
-      apikey: status.secretKey,
-      Authorization: `Bearer ${status.secretKey}`,
-      'Content-Type': 'application/json',
-      Prefer: 'resolution=merge-duplicates,return=minimal',
+  const response = await fetchLocalService(
+    `${status.apiUrl}/rest/v1/site_config_versions?on_conflict=id`,
+    {
+      method: 'POST',
+      headers: {
+        apikey: status.secretKey,
+        Authorization: `Bearer ${status.secretKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates,return=minimal',
+      },
+      body: JSON.stringify({
+        id: '00000000-0000-4000-8000-000000000001',
+        installation_key: 'primary',
+        status: 'published',
+        config_schema_version: config.schemaVersion,
+        config,
+        published_at: '2026-07-14T00:00:00.000Z',
+      }),
     },
-    body: JSON.stringify({
-      id: '00000000-0000-4000-8000-000000000001',
-      installation_key: 'primary',
-      status: 'published',
-      config_schema_version: config.schemaVersion,
-      config,
-      published_at: '2026-07-14T00:00:00.000Z',
-    }),
-  })
+  )
 
   if (!response.ok) {
     throw new Error(`Demonstration seed failed with HTTP ${response.status}.`)
@@ -234,27 +333,31 @@ export async function seedAuthorizationDemonstration(status) {
   const users = new Map()
 
   for (const account of fixture.accounts) {
-    const { data, error } = await admin.auth.admin.createUser({
-      email: account.email,
-      password: account.password,
-      email_confirm: true,
-      user_metadata: { display_name: account.displayName },
-    })
-
-    if (error || !data.user) {
-      throw new Error(`Could not create the local ${account.key} account.`)
+    let user
+    try {
+      user = await ensureLocalUser(admin, {
+        email: account.email,
+        password: account.password,
+        email_confirm: true,
+        user_metadata: { display_name: account.displayName },
+      })
+    } catch (error) {
+      const safeDetail = error instanceof Error ? ` ${error.message}` : ''
+      throw new Error(`Could not create the local ${account.key} account.${safeDetail}`, {
+        cause: error,
+      })
     }
 
-    users.set(account.key, data.user.id)
+    users.set(account.key, user.id)
 
     if (account.role === 'owner') {
       const { error: roleError } = await admin.rpc('bootstrap_owner', {
-        target_user_id: data.user.id,
+        target_user_id: user.id,
       })
       if (roleError) throw new Error('Could not bootstrap the local owner account.')
     } else if (account.role === 'editor') {
       const { error: roleError } = await admin.from('app_roles').insert({
-        user_id: data.user.id,
+        user_id: user.id,
         role: 'editor',
         granted_by: users.get('owner'),
       })
@@ -978,7 +1081,7 @@ export async function seedAuthorizationDemonstration(status) {
 }
 
 export async function verifyPublicDemonstration(status) {
-  const response = await fetch(
+  const response = await fetchLocalService(
     `${status.apiUrl}/rest/v1/published_site_config?installation_key=eq.primary&select=config_schema_version`,
     {
       headers: {
@@ -1003,11 +1106,11 @@ export async function verifyAuthorizationDemonstration(status) {
     apikey: status.publishableKey,
     Authorization: `Bearer ${status.publishableKey}`,
   }
-  const releaseResponse = await fetch(
+  const releaseResponse = await fetchLocalService(
     `${status.apiUrl}/rest/v1/releases?id=eq.${demoFixtureIds.release}&state=eq.published&select=id`,
     { headers: publicHeaders },
   )
-  const mediaResponse = await fetch(
+  const mediaResponse = await fetchLocalService(
     `${status.apiUrl}/rest/v1/media_objects?id=eq.${demoFixtureIds.preview}&is_public=eq.true&select=id`,
     { headers: publicHeaders },
   )
@@ -1015,13 +1118,13 @@ export async function verifyAuthorizationDemonstration(status) {
     apikey: status.secretKey,
     Authorization: `Bearer ${status.secretKey}`,
   }
-  const rolesResponse = await fetch(`${status.apiUrl}/rest/v1/app_roles?select=role`, {
+  const rolesResponse = await fetchLocalService(`${status.apiUrl}/rest/v1/app_roles?select=role`, {
     headers: serviceHeaders,
   })
-  const bucketsResponse = await fetch(`${status.apiUrl}/storage/v1/bucket`, {
+  const bucketsResponse = await fetchLocalService(`${status.apiUrl}/storage/v1/bucket`, {
     headers: serviceHeaders,
   })
-  const pagesResponse = await fetch(
+  const pagesResponse = await fetchLocalService(
     `${status.apiUrl}/rest/v1/pages?status=eq.published&select=slug`,
     { headers: publicHeaders },
   )

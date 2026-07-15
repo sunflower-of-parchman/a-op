@@ -9,7 +9,7 @@ onMounted(loadPolicy)
 </script>
 
 <template>
-  <main class="page-frame interior-page privacy-page">
+  <div class="page-frame interior-page privacy-page">
     <header class="page-heading">
       <p class="eyebrow">Privacy</p>
       <h1>Small signals, held by the artist.</h1>
@@ -83,5 +83,5 @@ onMounted(loadPolicy)
         </p>
       </div>
     </section>
-  </main>
+  </div>
 </template>

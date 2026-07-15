@@ -160,7 +160,9 @@ export const videoInputSchema = z
         .trim()
         .max(500)
         .refine(
-          (value) => value.startsWith('/') || /^https:\/\//.test(value),
+          (value) =>
+            (value.startsWith('/') && !value.startsWith('//') && !value.includes('\\')) ||
+            /^https:\/\//.test(value),
           'Poster URL must be an internal path or HTTPS URL.',
         )
         .nullable(),

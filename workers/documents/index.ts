@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { hostname, tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -27,7 +27,13 @@ function requireEnvironment(name: string) {
 loadLocalEnvironment()
 const watch = process.argv.includes('--watch')
 const workerId = process.env.LICENSE_DOCUMENT_WORKER_ID ?? `${hostname()}-${process.pid}`
-const python = process.env.LICENSE_DOCUMENT_PYTHON ?? 'python3'
+const localPython = resolve(
+  process.cwd(),
+  '.venv-documents',
+  process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python',
+)
+const python =
+  process.env.LICENSE_DOCUMENT_PYTHON ?? (existsSync(localPython) ? localPython : 'python3')
 const admin = createClient<Database>(
   requireEnvironment('NUXT_PUBLIC_SUPABASE_URL'),
   requireEnvironment('NUXT_SUPABASE_SECRET_KEY'),

@@ -6,11 +6,11 @@ This repository demonstrates a business workflow and an auditable record. Its sa
 
 ## Install the document renderer
 
-The application issues license authority in PostgreSQL. A separate worker renders the resulting immutable snapshot as a private PDF. Install Python 3.12 or newer and the pinned renderer packages:
+The application issues license authority in PostgreSQL. A separate worker renders the resulting immutable snapshot as a private PDF. Install Python 3.12 or newer and create the repository's ignored, isolated renderer environment:
 
-    python3 -m pip install -r workers/documents/requirements.txt
+    npm run setup:documents
 
-If the packages are installed for a different Python executable, point the worker to it:
+The setup command uses `python3` by default. Set `DOCUMENT_BOOTSTRAP_PYTHON` when the Python used to create the environment has another name. The worker automatically uses `.venv-documents`; a hosted worker or existing managed environment can still select another executable:
 
     export LICENSE_DOCUMENT_PYTHON=/absolute/path/to/python3
 

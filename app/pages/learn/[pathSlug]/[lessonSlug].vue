@@ -43,7 +43,7 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
 </script>
 
 <template>
-  <main v-if="data" class="page-frame lesson-page">
+  <div v-if="data" class="page-frame lesson-page">
     <header class="page-heading lesson-heading">
       <p class="eyebrow">{{ data.path.title }} / {{ data.course.title }}</p>
       <h1>{{ data.lesson.title }}</h1>
@@ -185,9 +185,9 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
         >Next: {{ data.nextLesson.title }}</NuxtLink
       >
     </nav>
-  </main>
-  <main v-else class="page-frame interior-page">
+  </div>
+  <div v-else class="page-frame interior-page">
     <p class="eyebrow">Learn</p>
     <h1>{{ error ? 'Lesson not found.' : 'Loading lesson…' }}</h1>
-  </main>
+  </div>
 </template>

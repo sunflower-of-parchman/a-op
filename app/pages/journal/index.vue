@@ -5,12 +5,14 @@ useSeoMeta({
   title: 'Journal',
   description: 'Essays, announcements, and learning notes from the artist.',
 })
-const { data, refresh } = await useFetch<{ posts: EditorialRecord[] }>('/api/editorial')
+const { data, error, status, refresh } = await useFetch<{ posts: EditorialRecord[] }>(
+  '/api/editorial',
+)
 onMounted(refresh)
 </script>
 
 <template>
-  <main class="page-frame journal-index">
+  <div class="page-frame journal-index">
     <header class="page-heading">
       <p class="eyebrow">Journal</p>
       <h1>Notes that remain part of the work.</h1>
@@ -19,7 +21,27 @@ onMounted(refresh)
         structured publishing system.
       </p>
     </header>
-    <ol class="journal-list">
+    <ServiceState
+      v-if="status === 'pending'"
+      eyebrow="Journal"
+      title="Loading the artist's published notes…"
+      message="Essays and announcements are being gathered in publication order."
+    />
+    <ServiceState
+      v-else-if="error"
+      eyebrow="Journal unavailable"
+      title="The journal service is not responding."
+      message="Published drafts remain unchanged. Try again when the service is available."
+      retryable
+      @retry="refresh"
+    />
+    <ServiceState
+      v-else-if="!data?.posts.length"
+      eyebrow="Journal"
+      title="No journal entry has been published yet."
+      message="Draft writing remains private until the artist publishes it."
+    />
+    <ol v-else class="journal-list">
       <li v-for="post in data?.posts ?? []" :key="post.id">
         <div>
           <p class="section-number">{{ post.kind.replace('_', ' ') }} · {{ post.publishedOn }}</p>
@@ -31,5 +53,5 @@ onMounted(refresh)
         >
       </li>
     </ol>
-  </main>
+  </div>
 </template>

@@ -1,5 +1,20 @@
 import { z } from 'zod'
 
+const internalPathSchema = z
+  .string()
+  .trim()
+  .startsWith('/')
+  .max(500)
+  .refine(
+    (value) =>
+      !value.startsWith('//') &&
+      !value.includes('\\') &&
+      [...value].every((character) => character.charCodeAt(0) >= 32),
+    'Use a safe internal path.',
+  )
+
+const publicResourceSchema = z.union([internalPathSchema, z.url({ protocol: /^https$/ })])
+
 const sectionBase = z.object({
   id: z.uuid(),
 })
@@ -13,7 +28,7 @@ const proseSection = sectionBase.extend({
 
 const imageSection = sectionBase.extend({
   type: z.literal('image'),
-  src: z.string().trim().min(1).max(500),
+  src: publicResourceSchema,
   alt: z.string().trim().min(1).max(240),
   caption: z.string().trim().max(500).optional(),
 })
@@ -23,7 +38,7 @@ const callToActionSection = sectionBase.extend({
   heading: z.string().trim().min(1).max(180),
   body: z.string().trim().max(1000).optional(),
   label: z.string().trim().min(1).max(80),
-  href: z.string().trim().startsWith('/').max(300),
+  href: internalPathSchema,
 })
 
 const creditsSection = sectionBase.extend({
@@ -47,7 +62,7 @@ const linksSection = sectionBase.extend({
     .array(
       z.object({
         label: z.string().trim().min(1).max(100),
-        href: z.url({ protocol: /^https?$/ }),
+        href: z.url({ protocol: /^https$/ }),
       }),
     )
     .min(1)
@@ -69,7 +84,7 @@ const featuredLearningSection = sectionBase.extend({
 const videoSection = sectionBase.extend({
   type: z.literal('video'),
   heading: z.string().trim().min(1).max(180),
-  url: z.url({ protocol: /^https?$/ }),
+  url: z.url({ protocol: /^https$/ }),
   transcript: z.string().trim().min(1).max(10000),
 })
 

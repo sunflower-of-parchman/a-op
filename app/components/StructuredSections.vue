@@ -56,7 +56,7 @@ defineProps<{ sections: PageSection[] }>()
         <h2>{{ section.heading }}</h2>
         <ul>
           <li v-for="item in section.items" :key="item.href">
-            <a :href="item.href" rel="noreferrer">{{ item.label }}</a>
+            <a :href="item.href" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
           </li>
         </ul>
       </section>

@@ -1,5 +1,13 @@
 import { createClient, type Session, type SupabaseClient, type User } from '@supabase/supabase-js'
-import { createError, deleteCookie, getCookie, getRequestHeader, setCookie, type H3Event } from 'h3'
+import {
+  createError,
+  deleteCookie,
+  getCookie,
+  getRequestHeader,
+  getRequestProtocol,
+  setCookie,
+  type H3Event,
+} from 'h3'
 import type { Database, Enums } from '#shared/types/database'
 
 const accessCookie = 'artist-access-token'
@@ -45,7 +53,7 @@ function cookieOptions(event: H3Event, maxAge: number) {
   return {
     httpOnly: true,
     sameSite: 'lax' as const,
-    secure: forwarded === 'https',
+    secure: forwarded === 'https' || getRequestProtocol(event) === 'https',
     path: '/',
     maxAge,
   }

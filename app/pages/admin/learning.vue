@@ -233,7 +233,7 @@ async function uploadLessonMedia(lesson: LessonInput, event: Event) {
 </script>
 
 <template>
-  <main class="page-frame admin-editor learning-admin">
+  <div class="page-frame admin-editor learning-admin">
     <header class="page-heading">
       <p class="eyebrow">Artist administration / Learning</p>
       <h1>Author the sequence, access, and return.</h1>
@@ -659,5 +659,5 @@ async function uploadLessonMedia(lesson: LessonInput, event: Event) {
       </div>
       <p v-if="message" class="form-message" role="status">{{ message }}</p>
     </form>
-  </main>
+  </div>
 </template>

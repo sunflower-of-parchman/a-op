@@ -101,7 +101,7 @@ async function publishDraft() {
 </script>
 
 <template>
-  <main class="page-frame admin-editor editorial-admin">
+  <div class="page-frame admin-editor editorial-admin">
     <header class="page-heading">
       <p class="eyebrow">Artist administration / Editorial</p>
       <h1>Keep notes and announcements inside the work.</h1>
@@ -272,5 +272,5 @@ async function publishDraft() {
       </div>
       <p v-if="message" class="form-message" role="status">{{ message }}</p>
     </form>
-  </main>
+  </div>
 </template>

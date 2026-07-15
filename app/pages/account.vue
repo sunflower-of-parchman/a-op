@@ -77,26 +77,41 @@ function formatMoney(amountMinor: number, currency: string) {
 }
 
 async function openPortal() {
-  const result = await $fetch('/api/commerce/portal', { method: 'POST' })
-  window.location.assign(result.url)
+  message.value = ''
+  try {
+    const result = await $fetch('/api/commerce/portal', { method: 'POST' })
+    assignSafeDestination(result.url, 'stripe-portal')
+  } catch {
+    message.value = 'The billing portal could not be opened safely.'
+  }
 }
 
 async function download(mediaId: string, productType: string) {
-  const result = await $fetch(`/api/downloads/${mediaId}`)
-  void recordTelemetry('download', {
-    resourceType: 'product',
-    resourceKey: productType.replaceAll('_', '-'),
-  })
-  window.location.assign(result.url)
+  message.value = ''
+  try {
+    const result = await $fetch(`/api/downloads/${mediaId}`)
+    void recordTelemetry('download', {
+      resourceType: 'product',
+      resourceKey: productType.replaceAll('_', '-'),
+    })
+    assignSafeDestination(result.url, 'https-or-local')
+  } catch {
+    message.value = 'The protected download could not be opened safely.'
+  }
 }
 
 async function downloadLicense(licenseId: string) {
-  const result = await $fetch(`/api/licenses/${licenseId}/document`)
-  void recordTelemetry('download', {
-    resourceType: 'license_offer',
-    resourceKey: 'issued-license',
-  })
-  window.location.assign(result.url)
+  message.value = ''
+  try {
+    const result = await $fetch(`/api/licenses/${licenseId}/document`)
+    void recordTelemetry('download', {
+      resourceType: 'license_offer',
+      resourceKey: 'issued-license',
+    })
+    assignSafeDestination(result.url, 'https-or-local')
+  } catch {
+    message.value = 'The protected license could not be opened safely.'
+  }
 }
 </script>
 

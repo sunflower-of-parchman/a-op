@@ -6,7 +6,12 @@ useSeoMeta({
   description: 'Downloads, memberships, free resources, and artist-directed ways to participate.',
 })
 
-const { data: catalog } = await useFetch<CommerceCatalogResponse>('/api/commerce/products')
+const {
+  data: catalog,
+  error: catalogError,
+  status: catalogStatus,
+  refresh: refreshCatalog,
+} = await useFetch<CommerceCatalogResponse>('/api/commerce/products')
 const { data: session } = await useFetch('/api/auth/session')
 const busyId = ref('')
 const message = ref('')
@@ -46,8 +51,9 @@ async function beginCheckout(product: CommerceProduct) {
       body: { productId: product.id, returnPath: '/account' },
     })
     if (!result.url) throw new Error('Checkout did not return a destination.')
-    if (result.url.startsWith('http')) window.location.assign(result.url)
-    else await navigateTo(result.url)
+    if (result.provider === 'simulation') assignSafeDestination(result.url, 'same-origin')
+    else if (result.provider === 'stripe') assignSafeDestination(result.url, 'stripe-checkout')
+    else assignSafeDestination(result.url, 'https-or-local')
   } catch {
     message.value = 'Checkout is not available for this offering yet.'
   } finally {
@@ -61,7 +67,7 @@ function recordExternalInterest(product: CommerceProduct) {
 </script>
 
 <template>
-  <main class="page-frame support-page">
+  <div class="page-frame support-page">
     <header class="page-heading support-heading">
       <p class="eyebrow">Direct support</p>
       <h1>Choose what the relationship makes possible.</h1>
@@ -71,7 +77,28 @@ function recordExternalInterest(product: CommerceProduct) {
       </p>
     </header>
 
-    <div v-if="catalog" class="offering-list">
+    <ServiceState
+      v-if="catalogStatus === 'pending'"
+      eyebrow="Direct support"
+      title="Loading the artist's offerings…"
+      message="Prices and access paths are being checked before an action is shown."
+    />
+    <ServiceState
+      v-else-if="catalogError"
+      eyebrow="Support unavailable"
+      title="The offering service is not responding."
+      message="No payment has started. Try again when the service is available."
+      retryable
+      @retry="refreshCatalog"
+    />
+    <ServiceState
+      v-else-if="catalog && !catalog.products.length"
+      eyebrow="Direct support"
+      title="No offering has been published yet."
+      message="The artist can publish a free resource, direct purchase, membership, or external offering."
+    />
+
+    <div v-if="catalog?.products.length" class="offering-list">
       <article v-for="(product, index) in catalog.products" :key="product.id">
         <p class="section-number">{{ String(index + 1).padStart(2, '0') }}</p>
         <div class="offering-copy">
@@ -105,5 +132,5 @@ function recordExternalInterest(product: CommerceProduct) {
       redirects mapped products to Stripe Checkout in the artist's own account.
     </p>
     <p v-if="message" class="form-message" role="alert">{{ message }}</p>
-  </main>
+  </div>
 </template>

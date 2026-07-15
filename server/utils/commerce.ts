@@ -1,5 +1,6 @@
 import type { H3Event } from 'h3'
 import type { Database } from '#shared/types/database'
+import { resolvePublicSiteOrigin } from '#shared/utils/urlSafety'
 import { getAdminSupabase } from './supabase'
 
 type CommerceProductRow = Database['public']['Tables']['products']['Row']
@@ -65,7 +66,23 @@ export async function requirePublishedProduct(event: H3Event, productId: string)
 export function publicSiteOrigin(event: H3Event) {
   const config = useRuntimeConfig(event)
   const configured = config.public.siteUrl
-  if (configured) return configured.replace(/\/$/, '')
+  if (configured) {
+    const origin = resolvePublicSiteOrigin(configured)
+    if (!origin) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'The public site origin must use HTTPS or a local loopback address.',
+      })
+    }
+    return origin
+  }
   const requestUrl = getRequestURL(event)
-  return `${requestUrl.protocol}//${requestUrl.host}`
+  const origin = resolvePublicSiteOrigin(requestUrl.origin)
+  if (!origin) {
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'The request origin cannot be used for payment return URLs.',
+    })
+  }
+  return origin
 }

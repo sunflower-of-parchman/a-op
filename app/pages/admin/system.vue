@@ -12,7 +12,7 @@ function statusLabel(status: string) {
 </script>
 
 <template>
-  <main class="page-frame admin-editor system-status-page">
+  <div class="page-frame admin-editor system-status-page">
     <header class="page-heading">
       <p class="eyebrow">Artist administration · Operations</p>
       <h1>Shareable status without private configuration.</h1>
@@ -49,5 +49,5 @@ function statusLabel(status: string) {
     <p v-else-if="error" class="form-message" role="alert">
       System status is available to the installation owner.
     </p>
-  </main>
+  </div>
 </template>

@@ -9,7 +9,14 @@ const cssLengthSchema = z
 const internalPathSchema = z
   .string()
   .startsWith('/')
-  .refine((value) => !value.startsWith('//'), 'Use an internal path, not a protocol-relative URL.')
+  .max(500)
+  .refine(
+    (value) =>
+      !value.startsWith('//') &&
+      !value.includes('\\') &&
+      [...value].every((character) => character.charCodeAt(0) >= 32),
+    'Use a safe internal path, not a protocol-relative URL.',
+  )
 
 const optionalInternalPathSchema = z.union([z.literal(''), internalPathSchema])
 
@@ -26,7 +33,7 @@ const navigationItemSchema = z
 const socialLinkSchema = z
   .object({
     label: z.string().trim().min(1).max(40),
-    url: z.url({ protocol: /^https?$/ }),
+    url: z.url({ protocol: /^https$/ }),
   })
   .strict()
 

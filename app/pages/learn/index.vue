@@ -5,11 +5,11 @@ useSeoMeta({
   title: 'Learn',
   description: 'Artist-authored paths with public, account, purchase, and membership access.',
 })
-const { data } = await useFetch<LearningCatalogResponse>('/api/learning')
+const { data, error, status, refresh } = await useFetch<LearningCatalogResponse>('/api/learning')
 </script>
 
 <template>
-  <main class="page-frame learning-index">
+  <div class="page-frame learning-index">
     <header class="page-heading">
       <p class="eyebrow">Learn</p>
       <h1>Teaching that stays close to the music.</h1>
@@ -18,6 +18,27 @@ const { data } = await useFetch<LearningCatalogResponse>('/api/learning')
         access resolve through one visible authority.
       </p>
     </header>
+
+    <ServiceState
+      v-if="status === 'pending'"
+      eyebrow="Learning"
+      title="Loading the artist's learning paths…"
+      message="Lesson order and account access are being checked."
+    />
+    <ServiceState
+      v-else-if="error"
+      eyebrow="Learning unavailable"
+      title="The learning service is not responding."
+      message="Published work remains unchanged. Try again when the service is available."
+      retryable
+      @retry="refresh"
+    />
+    <ServiceState
+      v-else-if="!data?.paths.length"
+      eyebrow="Learning"
+      title="No learning path has been published yet."
+      message="Private lessons remain in the artist workspace until publication."
+    />
 
     <section
       v-for="(path, index) in data?.paths ?? []"
@@ -52,5 +73,5 @@ const { data } = await useFetch<LearningCatalogResponse>('/api/learning')
       <NuxtLink to="/video">Video and transcripts</NuxtLink>
       <NuxtLink to="/journal">Editorial notes</NuxtLink>
     </nav>
-  </main>
+  </div>
 </template>

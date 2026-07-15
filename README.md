@@ -52,11 +52,12 @@ Milestones 0 through 10 and Integration Gate A are implemented locally. The repo
 Use Node 24.14, npm 11, and a running Docker Desktop installation. From a fresh clone:
 
     npm ci
+    npm run setup:documents
     npm run setup:preflight
     npm run setup:local
     npm run dev
 
-`setup:local` starts the local Supabase stack, applies migrations, inserts the fictional demonstration artist, generates `shared/types/database.ts`, and writes local credentials only to ignored `.env`.
+`setup:documents` creates an ignored, isolated Python environment for the pinned private-license PDF renderer. `setup:local` starts the local Supabase stack, applies migrations, inserts the fictional demonstration artist, generates `shared/types/database.ts`, and writes local credentials only to ignored `.env`.
 
 Verify the current foundation with:
 
@@ -72,13 +73,17 @@ Verify the current foundation with:
     npm run verify:telemetry
     npm run verify:setup
     npm run verify:portability
+    npm run verify:hardening
+    npm run verify:recovery
     npm run diagnose
     npm run verify
     npm run test:e2e
 
-`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `verify:catalog` proves catalog authority, idempotent media intake, local and container media processing, and browser-secret boundaries. `verify:commerce` proves replay-safe fulfillment, changed-fact denial, subscription expiry, partial and full refunds, redacted webhook recovery records, raw-body Stripe signature verification, and customer isolation. `verify:licensing` proves immutable terms, replay-safe issue, private PDF rendering, account isolation, and refund revocation. `verify:learning` proves authored ordering, four access modes, private lesson media, progress, account isolation, safe content, and publication. `verify:telemetry` proves consent enforcement, global disablement, retention, raw-event isolation, operational separation, and diagnostic redaction. `verify:setup` proves the 14-topic interview, read-only preview, explicit approval guard, identity and two-track application, verification, external checkpoints, state update, idempotency, and output redaction. `verify:portability` proves deterministic versioned exports, structured and relationship validation, bundled-media hashes, private-data exclusion, explicit destructive-local confirmation, clean database restore, exact content-table comparison, anonymous public access, service reconnection checkpoints, tamper denial, and demonstration recovery. `npm run diagnose` prints shareable aggregate and operational status without credentials, URLs, account identities, or raw sessions. `npm run test:e2e` resets the fictional demonstration before each specification so stateful desktop and mobile journeys remain deterministic. `npm run verify` runs the current aggregate gate and will continue to expand as judge journeys are integrated.
+`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `verify:catalog` proves catalog authority, idempotent media intake, local and container media processing, and browser-secret boundaries. `verify:commerce` proves replay-safe fulfillment, changed-fact denial, subscription expiry, partial and full refunds, redacted webhook recovery records, raw-body Stripe signature verification, and customer isolation. `verify:licensing` proves immutable terms, replay-safe issue, private PDF rendering, account isolation, and refund revocation. `verify:learning` proves authored ordering, four access modes, private lesson media, progress, account isolation, safe content, and publication. `verify:telemetry` proves consent enforcement, global disablement, retention, raw-event isolation, operational separation, and diagnostic redaction. `verify:setup` proves the 14-topic interview, read-only preview, explicit approval guard, identity and two-track application, verification, external checkpoints, state update, idempotency, and output redaction. `verify:portability` proves deterministic versioned exports, structured and relationship validation, bundled-media hashes, private-data exclusion, explicit destructive-local confirmation, clean database restore, exact content-table comparison, anonymous public access, service reconnection checkpoints, tamper denial, and demonstration recovery. `verify:hardening` builds and starts the production server, checks the strict browser/request boundaries, keyboard and reduced-motion behavior, offline state, landmarks, viewports, axe results, four public-route performance budgets, database policies, and browser-secret boundary. `verify:recovery` proves safe setup reruns, payment reconciliation, media lease recovery, portable database/storage restore, and a final redacted installation check. `npm run diagnose` prints shareable aggregate and operational status without credentials, URLs, account identities, or raw sessions. `npm run test:e2e` resets the fictional demonstration before each specification so stateful desktop and mobile journeys remain deterministic. `npm run verify` runs the aggregate local gate.
 
 The guided personalization command sequence and nontechnical explanation are in [`SETUP.md`](SETUP.md). Provider-neutral operations and recovery runbooks begin at [`docs/agent/README.md`](docs/agent/README.md). The local lifecycle records hosted Supabase, OAuth, Stripe, email, Vercel, DNS, and deployed media processing as approval checkpoints; it performs none of those external actions.
+
+The security review is recorded in [`security_best_practices_report.md`](security_best_practices_report.md), recovery authority in [`docs/operations/recovery.md`](docs/operations/recovery.md), and the measured production budgets in [`docs/submission/performance-evidence.md`](docs/submission/performance-evidence.md).
 
 ## Export and restore ownership
 

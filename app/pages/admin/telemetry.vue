@@ -43,7 +43,7 @@ async function save() {
 </script>
 
 <template>
-  <main class="page-frame admin-editor">
+  <div class="page-frame admin-editor">
     <header class="page-heading">
       <p class="eyebrow">Artist administration · Privacy</p>
       <h1>Useful counts with a deliberate boundary.</h1>
@@ -149,5 +149,5 @@ async function save() {
     <p v-else-if="error" class="form-message" role="alert">
       Audience analytics are available to the installation owner.
     </p>
-  </main>
+  </div>
 </template>

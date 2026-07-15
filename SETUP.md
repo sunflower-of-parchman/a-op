@@ -24,6 +24,7 @@ Your setup proposal is an ignored local working file. It may contain approved pu
 Install Node 24.14, npm 11, and Docker Desktop. Then run:
 
     npm ci
+    npm run setup:documents
     npm run setup:preflight
     npm run setup:local
     npm run setup:check
@@ -51,9 +52,10 @@ webhook, customer-portal, verification, and recovery procedure is in
 judging.
 
 The demonstration also includes complete, non-exclusive music licensing. Install Python 3.12 or
-newer and the pinned PDF renderer before running its worker or verification:
+newer, then create the ignored isolated renderer environment before running its worker or
+verification:
 
-    python3 -m pip install -r workers/documents/requirements.txt
+    npm run setup:documents
     npm run documents:work
     npm run verify:licensing
 
@@ -100,6 +102,8 @@ This test resets only the local demonstration, creates two generated tones in a 
 Keep `setup/project-state.json` in the repository. It contains non-secret checks, enabled modules, the approved proposal hash, and remaining external checkpoints so a new Codex task or machine can resume safely. It does not replace the database as content authority.
 
 Run `npm run diagnose` for shareable operational status and `npm run setup:check` after configuration or service changes. The complete service, backup, upgrade, and failure runbooks begin at [`docs/agent/README.md`](docs/agent/README.md).
+
+Before a release or hosted-service change, run `npm run verify:hardening` and `npm run verify:recovery`. The first command verifies the production server's browser and request boundaries, accessibility, responsive layout, and explicit performance budgets. The second proves local reset, payment reconciliation, media retry, and database/storage restore. The joined recovery authority is in [`docs/operations/recovery.md`](docs/operations/recovery.md).
 
 ## Take the artist-owned snapshot with you
 

@@ -3,6 +3,8 @@ import { resolve } from 'node:path'
 import { projectRoot, runSupabase } from './lib/command.mjs'
 import {
   getLocalStatus,
+  isLocalSupabaseUrl,
+  recoverLocalAuthGateway,
   safeSupabaseError,
   seedAuthorizationDemonstration,
   seedDemonstrationArtist,
@@ -16,11 +18,17 @@ try {
   runSupabase(['start', '--exclude', 'studio'], { capture: true })
   console.log('Local Supabase: running')
 
+  const resetTarget = getLocalStatus()
+  if (!isLocalSupabaseUrl(resetTarget.apiUrl)) {
+    throw new Error('Refusing to reset because the active Supabase project is not local.')
+  }
+
   runSupabase(['db', 'reset', '--local'], { capture: true })
   console.log('Migrations: current')
 
   const status = getLocalStatus()
   writeLocalEnvironment(status)
+  await recoverLocalAuthGateway(status)
   await seedDemonstrationArtist(status)
   await seedAuthorizationDemonstration(status)
   await verifyPublicDemonstration(status)

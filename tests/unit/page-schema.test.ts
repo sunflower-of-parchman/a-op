@@ -51,4 +51,35 @@ describe('structured page schema', () => {
     })
     expect(result.success).toBe(false)
   })
+
+  it('rejects protocol-relative paths and insecure external media', () => {
+    expect(
+      pageInputSchema.safeParse({
+        ...basePage,
+        sections: [
+          {
+            id: '30000000-0000-4000-8000-000000000004',
+            type: 'call_to_action',
+            heading: 'Continue',
+            label: 'Open',
+            href: '//malicious.example',
+          },
+        ],
+      }).success,
+    ).toBe(false)
+    expect(
+      pageInputSchema.safeParse({
+        ...basePage,
+        sections: [
+          {
+            id: '30000000-0000-4000-8000-000000000005',
+            type: 'video',
+            heading: 'Watch',
+            url: 'http://media.example/video.mp4',
+            transcript: 'A complete transcript.',
+          },
+        ],
+      }).success,
+    ).toBe(false)
+  })
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/catalog')
+const { data, error, status, refresh } = await useFetch('/api/catalog')
 const { track: recordTelemetry } = useTelemetry()
 const query = ref('')
 const appliedQuery = ref('')
@@ -44,7 +44,28 @@ useSeoMeta({ title: 'Music' })
       <p>Releases keep their sequence, credits, writing, listening, and direct support together.</p>
     </header>
 
-    <form class="catalog-search" role="search" @submit.prevent="searchCatalog">
+    <ServiceState
+      v-if="status === 'pending'"
+      eyebrow="Catalog"
+      title="Loading the artist's music…"
+      message="Published releases and collections are being gathered in their authored order."
+    />
+    <ServiceState
+      v-else-if="error"
+      eyebrow="Catalog unavailable"
+      title="The music service is not responding."
+      message="Nothing has been changed. Try the request again when the service is available."
+      retryable
+      @retry="refresh"
+    />
+    <ServiceState
+      v-else-if="!data?.releases.length && !data?.collections.length"
+      eyebrow="Catalog"
+      title="No music has been published yet."
+      message="Draft releases stay private until the artist publishes them."
+    />
+
+    <form v-if="data" class="catalog-search" role="search" @submit.prevent="searchCatalog">
       <label>
         <span>Search this artist's catalog</span>
         <input v-model="query" type="search" autocomplete="off" />

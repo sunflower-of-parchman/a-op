@@ -43,4 +43,16 @@ describe('artist configuration', () => {
     expect(serialized).not.toContain('sound for movement')
     expect(serialized).not.toContain('soundformovement')
   })
+
+  it('requires HTTPS for artist-controlled external links', () => {
+    expect(
+      artistConfigSchema.safeParse({
+        ...artistConfig,
+        identity: {
+          ...artistConfig.identity,
+          socialLinks: [{ label: 'Unsafe', url: 'http://example.com/artist' }],
+        },
+      }).success,
+    ).toBe(false)
+  })
 })

@@ -9,7 +9,12 @@ import {
 } from '../shared/schemas/portable.ts'
 import type { Database, Json } from '../shared/types/database.ts'
 import { run, runSupabase } from './lib/command.mjs'
-import { createAdminClient, getLocalStatus, safeSupabaseError } from './lib/local-supabase.mjs'
+import {
+  createAdminClient,
+  ensureLocalUser,
+  getLocalStatus,
+  safeSupabaseError,
+} from './lib/local-supabase.mjs'
 import {
   assertPortableValue,
   readPortableExport,
@@ -294,19 +299,18 @@ try {
   runSupabase(['db', 'reset', '--local'], { capture: true })
   const status = getLocalStatus()
   const admin = createAdminClient(status)
-  const { data: userData, error: userError } = await admin.auth.admin.createUser({
+  const user = await ensureLocalUser(admin, {
     email: 'portable-owner@local.invalid',
     password: 'portable-local-check-only-password',
     email_confirm: true,
     user_metadata: { display_name: 'Portable restore owner' },
   })
-  if (userError || !userData.user) throw new Error('Could not create the disposable restore owner.')
   const { error: ownerError } = await admin.rpc('bootstrap_owner', {
-    target_user_id: userData.user.id,
+    target_user_id: user.id,
   })
   if (ownerError) throw new Error('Could not authorize the disposable restore owner.')
 
-  await restoreContent(admin, userData.user.id, portable.content, portable.media)
+  await restoreContent(admin, user.id, portable.content, portable.media)
   const projection = await verifyRestoredProjection(status, portable.content, portable.media)
   result = {
     event: 'artist-restore-checked',

@@ -88,6 +88,33 @@ a {
   text-transform: uppercase;
 }
 
+.connectivity-notice {
+  margin: 0;
+  padding: 0.8rem clamp(1.25rem, 4vw, 4rem);
+  border-bottom: var(--border-width) solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.service-state {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.32fr) minmax(0, 0.68fr);
+  padding-block: clamp(3rem, 7vw, 6rem);
+  border-top: var(--border-width) solid var(--color-border);
+  gap: 2rem;
+}
+
+.service-state h2 {
+  max-width: 16ch;
+}
+
+.service-state p:last-of-type {
+  max-width: var(--reading-max);
+  color: var(--color-muted-text);
+}
+
 .site-header,
 .site-footer,
 .page-frame {
@@ -2515,6 +2542,7 @@ iframe.video-frame {
   .commerce-account > section,
   .license-template > header,
   .license-option,
+  .service-state,
   .licensing-inquiry,
   .license-template-history,
   .issued-license-admin,

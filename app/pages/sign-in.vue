@@ -20,7 +20,7 @@ async function signIn() {
   try {
     await $fetch('/api/auth/sign-in', { method: 'POST', body: credentials })
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/account'
-    await navigateTo(redirect)
+    await navigateTo(resolveSafeInternalPath(redirect, '/account'))
   } catch {
     message.value = 'That email and password were not accepted.'
   } finally {
