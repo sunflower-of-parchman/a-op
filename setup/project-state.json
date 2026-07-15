@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "installationMode": "local",
+  "artistConfigVersion": 1,
+  "enabledModules": [
+    "music",
+    "commerce",
+    "licensing",
+    "memberships",
+    "learning",
+    "video",
+    "editorial",
+    "telemetry"
+  ],
+  "checks": {
+    "foundation": "pass",
+    "localSupabase": "pass",
+    "databaseTypes": "pass",
+    "demoSeed": "pass"
+  },
+  "externalActions": {
+    "repositoryPublication": "approval-required",
+    "hostedDeployment": "approval-required",
+    "domain": "approval-required",
+    "stripeTestConnection": "approval-required",
+    "stripeLiveMode": "approval-required"
+  }
+}

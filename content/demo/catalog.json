@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fictional": true,
+  "release": {
+    "slug": "lines-we-carry",
+    "title": "Lines We Carry",
+    "year": 2026,
+    "subtitle": "Seven studies for movement",
+    "tracks": [
+      { "position": 1, "title": "First Light, Repeated", "durationSeconds": null },
+      { "position": 2, "title": "A Measure of Distance", "durationSeconds": null },
+      { "position": 3, "title": "Turn Toward Home", "durationSeconds": null }
+    ]
+  },
+  "media": [],
+  "rights": "Original fictional metadata. No audio or artwork is included at this stage."
+}

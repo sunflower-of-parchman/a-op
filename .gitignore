@@ -6,6 +6,7 @@ dist/
 coverage/
 playwright-report/
 test-results/
+output/playwright/
 
 # Local environment and service state
 .env
