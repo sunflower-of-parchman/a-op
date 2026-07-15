@@ -16,6 +16,7 @@ const markdownFiles = [
   'SETUP.md',
   'BUILD_WEEK.md',
   'AGENTS.md',
+  'CONTRIBUTING.md',
   ...listMarkdown('docs'),
   ...listMarkdown('plans'),
 ]
@@ -52,6 +53,19 @@ for (const heading of [
 const packageJson = readJson(resolve(projectRoot, 'package.json'))
 for (const script of ['demo:local', 'demo:reset', 'test:docs', 'test:cross-browser']) {
   assert.ok(packageJson.scripts[script], `package.json is missing ${script}.`)
+}
+
+for (const submissionDocument of [
+  'docs/submission/hosted-test-plan.md',
+  'docs/submission/judging-guide.md',
+  'docs/submission/project-description.md',
+  'docs/submission/demo-script.md',
+  'docs/submission/submission-checklist.md',
+]) {
+  assert.ok(
+    existsSync(resolve(projectRoot, submissionDocument)),
+    `${submissionDocument} is missing.`,
+  )
 }
 
 const manifest = readJson(resolve(projectRoot, 'content/demo/assets.json'))

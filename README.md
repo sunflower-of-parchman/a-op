@@ -66,7 +66,7 @@ npm run demo:local
 
 The second command prepares the pinned PDF environment, runs preflight, installs and verifies the complete fictional Daymark Assembly state, and starts Nuxt at `http://127.0.0.1:3000`. Reset at any time with `npm run demo:reset`.
 
-The complete role credentials, ten-minute product route, technical proof commands, and explicit external limitations are in [`docs/submission/judge-quickstart.md`](docs/submission/judge-quickstart.md).
+The complete role credentials, ten-minute product route, technical proof commands, and explicit external limitations are in [`docs/submission/judge-quickstart.md`](docs/submission/judge-quickstart.md). The final judging route and hosted plan are in [`docs/submission/judging-guide.md`](docs/submission/judging-guide.md) and [`docs/submission/hosted-test-plan.md`](docs/submission/hosted-test-plan.md).
 
 ## Current status
 
@@ -168,7 +168,7 @@ Running a site may still involve domain registration, hosting, database, storage
 
 ## Contributing
 
-Read [`AGENTS.md`](AGENTS.md), the product contract, and the relevant architecture decision before changing behavior. Keep the single-artist authority model, human approval gates, fictional fixture boundary, and central entitlement decision intact. Add focused tests, run the relevant milestone gate, and update provenance and capability evidence for a new public claim. Never commit credentials, real customer data, private artist media, generated local exports, or machine-specific paths.
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), the product contract, and the relevant architecture decision before changing behavior. Keep the single-artist authority model, human approval gates, fictional fixture boundary, and central entitlement decision intact. Add focused tests, run the relevant milestone gate, and update provenance and capability evidence for a new public claim. Never commit credentials, real customer data, private artist media, generated local exports, or machine-specific paths.
 
 The final contribution and redistribution terms follow the project license Michael selects before public release. Until then, `package.json` correctly remains `UNLICENSED`.
 
