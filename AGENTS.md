@@ -39,6 +39,21 @@ Michael remains the authority for identity, writing, music and media rights, pri
 
 Do not publish or expose the repository, deploy or promote publicly, create paid resources, change DNS, enable live Stripe, send email, upload a public video, share judging access, or submit to Devpost without Michael's explicit approval for that specific action. Local development, deterministic simulations, and test-mode preparation may proceed.
 
+## Codex-guided setup
+
+When the artist asks to set up or personalize the platform:
+
+1. Read `SETUP.md`, `docs/architecture/configuration-authority.md`, `docs/architecture/media-processing-contract.md`, and `setup/project-state.json`.
+2. Run `npm run setup:preflight`, bring up the local demonstration with `npm run setup:local` when needed, and run `npm run setup:check`. Explain any missing external service as a checkpoint, not as a reason to weaken local verification.
+3. Run `npm run setup:interview -- --json` and discuss all 14 topics conversationally. Preserve the artist's wording. The artist remains the authority for identity, rights, pricing, accounts, costs, and publication.
+4. Write the complete validated proposal only under ignored `setup/proposals/`. Never put a secret, customer record, private task detail, or unapproved personal data in it. Inspect media only at a path the artist identifies; never infer rights or approval.
+5. Run `npm run setup:preview -- <proposal>`. Present the stale-state result, configuration diff, media approvals, and every external action. Preview must remain non-mutating.
+6. Apply only after the human explicitly approves the displayed proposal and the approval record is complete. Use `npm run setup:apply -- <proposal> --confirm-approved-proposal`. This command supports local Supabase only.
+7. Run `npm run setup:check`, inspect the personalized public result, and retain the non-secret `setup/project-state.json` update. Reapply is supported and must not duplicate configuration, media, or jobs.
+8. Use the runbook named by each `remainingExternalSteps` entry. Connected plugins and CLIs accelerate the documented contract; they do not grant authority. Stop before any external mutation or cost until the artist approves that exact action.
+
+For ongoing maintenance, begin with `npm run diagnose`, use the smallest relevant runbook in `docs/agent/`, keep migrations forward-only, and leave completed setup history and recovery instructions available to the next Codex task.
+
 ## Interface direction
 
 Public artist sites must feel composed rather than templated. Start with the artist identity, a dominant visual or release, rigorous typography, generous open space, and one clear action. Default to cardless layouts. Use cards only for meaningful selectable items or functional boundaries. Keep to two typefaces and one accent color unless the artist explicitly chooses otherwise.

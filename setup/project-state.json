@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "installationMode": "local",
   "artistConfigVersion": 1,
   "enabledModules": [
@@ -20,13 +20,20 @@
     "authentication": "pass",
     "storage": "pass",
     "authoritySpine": "pass",
-    "administration": "pass"
+    "administration": "pass",
+    "setupLifecycle": "not-run",
+    "personalization": "not-run"
   },
   "externalActions": {
     "repositoryPublication": "approval-required",
     "hostedDeployment": "approval-required",
     "domain": "approval-required",
     "stripeTestConnection": "approval-required",
-    "stripeLiveMode": "approval-required"
-  }
+    "stripeLiveMode": "approval-required",
+    "oauth": "not-requested",
+    "emailProvider": "not-requested",
+    "mediaWorkerDeployment": "approval-required"
+  },
+  "personalization": null,
+  "remainingExternalSteps": []
 }

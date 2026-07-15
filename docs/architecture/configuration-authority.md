@@ -40,6 +40,6 @@ The Codex-guided setup lifecycle is:
     -> verification
     -> project-state update
 
-`npm run setup:interview` emits the interview contract. Codex asks the questions conversationally and writes `setup/proposals/<proposal-id>.json`. `npm run setup:preview -- <proposal>` validates the file and shows intended changes without mutating state. After explicit approval, `npm run setup:apply -- <proposal>` applies the deterministic changes. `npm run setup:check` verifies the database, services, and public result before `setup/project-state.json` is updated.
+`npm run setup:interview` emits the interview contract. Codex asks the questions conversationally and writes `setup/proposals/<proposal-id>.json`. `npm run setup:preview -- <proposal>` validates the file and shows intended changes without mutating state. After explicit approval is recorded, `npm run setup:apply -- <proposal> --confirm-approved-proposal` applies deterministic changes only to the local installation. It runs `npm run setup:check` before recording personalization and remaining external checkpoints in `setup/project-state.json`. Applying the same approved proposal again is idempotent.
 
 Application code must never choose between two conflicting sources at runtime. If a field becomes artist-editable, migrate its authority into the database and leave only a bootstrap default in `artist.config.ts`. If a field becomes secret, migrate it to environment configuration and remove it from public schemas and exports.

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "imports": {
+    "#artist-config-schema": "./shared/schemas/artistConfig.ts"
+  },
   "description": "An open-source, Codex-operable web platform for one artist and their audience.",
   "license": "UNLICENSED",
   "packageManager": "npm@11.12.1",
@@ -34,11 +37,15 @@
     "test:licensing": "node scripts/test-licensing.mjs",
     "test:learning": "node --experimental-strip-types scripts/test-learning.mjs",
     "test:telemetry": "node scripts/test-telemetry.mjs",
+    "test:setup": "node --experimental-strip-types scripts/test-setup.ts",
     "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
     "test:e2e": "node scripts/run-e2e.mjs",
     "setup:preflight": "node scripts/setup-preflight.mjs",
+    "setup:interview": "node --experimental-strip-types scripts/setup-interview.ts",
+    "setup:preview": "node --experimental-strip-types scripts/setup-preview.ts",
+    "setup:apply": "node --experimental-strip-types scripts/setup-apply.ts",
     "setup:local": "node scripts/setup-local.mjs",
-    "setup:check": "node scripts/setup-check.mjs",
+    "setup:check": "node --experimental-strip-types scripts/setup-check.mjs",
     "seed:reset": "node scripts/reset-local-demo.mjs",
     "health:check": "node scripts/health-check.mjs",
     "diagnose": "node scripts/diagnose.mjs",
@@ -56,7 +63,8 @@
     "verify:licensing": "npm run test:policies && npm run test:licensing && npm run test:browser-secrets",
     "verify:learning": "npm run test:policies && npm run test:learning && npm run test:browser-secrets",
     "verify:telemetry": "npm run test:policies && npm run test:telemetry && npm run test:browser-secrets",
-    "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run setup:local && npm run test:spine && npm run test:e2e"
+    "verify:setup": "npm run test:setup && npm run test:browser-secrets",
+    "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run verify:setup && npm run setup:local && npm run test:spine && npm run test:e2e"
   },
   "dependencies": {
     "@nuxt/image": "2.0.0",

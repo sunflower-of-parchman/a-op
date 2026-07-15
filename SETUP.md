@@ -17,6 +17,8 @@ You will be asked about:
 
 Codex prepares a proposal before changing the project. You review the proposal and its diff. Nothing is applied until you approve it. Publishing, paid resources, live payments, DNS, and other consequential external actions always require a separate explicit approval.
 
+Your setup proposal is an ignored local working file. It may contain approved public identity and content decisions, but it must never contain passwords, API keys, customer information, private task metadata, or credentials.
+
 ## Start the local demonstration
 
 Install Node 24.14, npm 11, and Docker Desktop. Then run:
@@ -72,11 +74,29 @@ draft and publication lifecycle, and recovery procedure are documented in
 
 ## Guided personalization
 
-The setup commands are implemented and verified during the build. Their stable contract is:
+After the local demonstration passes, ask Codex to begin the interview. Codex reads the current published configuration, discusses each decision with you, and creates a proposal under `setup/proposals/`:
 
     npm run setup:interview
     npm run setup:preview -- setup/proposals/<proposal-id>.json
-    npm run setup:apply -- setup/proposals/<proposal-id>.json
+    npm run setup:apply -- setup/proposals/<proposal-id>.json --confirm-approved-proposal
     npm run setup:check
 
-These guided personalization commands are implemented and tested in Milestone 9. Until then, the verified local setup uses the fictional demonstration identity and the complete lifecycle remains the controlling contract for later artist changes.
+The interview covers identity, audience, site goals, visual direction, pages, catalog, commerce, licensing, memberships, learning, video, contact, privacy, and deployment. Codex places complete answers and a full validated public configuration in the proposal. If you supplied an approved media directory, Codex first creates and reviews a media manifest with you.
+
+`setup:preview` is read-only. It reports every configuration path that changes, the media release and track count, whether media approvals are complete, whether the proposal is stale, and every external-service checkpoint. Review that output and the proposal itself. Approval means changing the proposal's approval block to name the approving person and time, with `localApplyConfirmation` set to `true`; Codex must not infer or prefill that approval.
+
+`setup:apply` accepts only an approved proposal, only with the confirmation flag, and only against the local Supabase stack. It publishes the artist configuration, idempotently imports approved media, runs the shared media worker when requested, verifies the result, and then updates `setup/project-state.json`. Repeating the same approved proposal is a safe no-op for already-applied configuration and media.
+
+Missing hosted Supabase, OAuth, Stripe, email, Vercel, domain, or deployed-worker configuration does not make local setup fail. Those intentions become named `approval-required` entries in project state with exact runbooks under `docs/agent/`. No external account is changed by interview, preview, apply, or check.
+
+To prove the complete lifecycle with disposable fictional media, run:
+
+    npm run verify:setup
+
+This test resets only the local demonstration, creates two generated tones in a temporary directory, exercises preview and approval guards, applies and verifies the fictional identity and catalog twice, and restores the original repository state.
+
+## Maintenance and recovery
+
+Keep `setup/project-state.json` in the repository. It contains non-secret checks, enabled modules, the approved proposal hash, and remaining external checkpoints so a new Codex task or machine can resume safely. It does not replace the database as content authority.
+
+Run `npm run diagnose` for shareable operational status and `npm run setup:check` after configuration or service changes. The complete service, backup, upgrade, and failure runbooks begin at [`docs/agent/README.md`](docs/agent/README.md).
