@@ -43,7 +43,8 @@
     "verify:foundation": "node scripts/verify-foundation.mjs",
     "verify:spine": "node scripts/verify-spine.mjs",
     "verify:administration": "node scripts/verify-administration.mjs",
-    "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run setup:local && npm run test:spine && npm run test:e2e"
+    "verify:catalog": "npm run test:policies && npm run test:catalog && npm run test:media && npm run test:media-import && npm run test:browser-secrets",
+    "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run setup:local && npm run test:spine && npm run test:e2e"
   },
   "dependencies": {
     "@nuxt/image": "2.0.0",

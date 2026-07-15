@@ -929,6 +929,38 @@ export type Database = {
         }
         Relationships: []
       }
+      release_drafts: {
+        Row: {
+          created_at: string
+          payload: Json
+          release_id: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          created_at?: string
+          payload: Json
+          release_id: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          created_at?: string
+          payload?: Json
+          release_id?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "release_drafts_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: true
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       release_tracks: {
         Row: {
           created_at: string
@@ -1158,6 +1190,72 @@ export type Database = {
           },
         ]
       }
+      upload_intents: {
+        Row: {
+          actor_id: string
+          bucket_id: string
+          byte_size: number
+          completed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          kind: Database["public"]["Enums"]["media_kind"]
+          media_type: string
+          object_path: string
+          release_id: string | null
+          sha256: string
+          status: string
+          track_id: string | null
+        }
+        Insert: {
+          actor_id: string
+          bucket_id: string
+          byte_size: number
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["media_kind"]
+          media_type: string
+          object_path: string
+          release_id?: string | null
+          sha256: string
+          status?: string
+          track_id?: string | null
+        }
+        Update: {
+          actor_id?: string
+          bucket_id?: string
+          byte_size?: number
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["media_kind"]
+          media_type?: string
+          object_path?: string
+          release_id?: string | null
+          sha256?: string
+          status?: string
+          track_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "upload_intents_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "upload_intents_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       published_site_config: {
@@ -1186,6 +1284,10 @@ export type Database = {
       }
     }
     Functions: {
+      apply_release_draft: {
+        Args: { p_actor_id: string; p_release_id: string }
+        Returns: string
+      }
       bootstrap_owner: { Args: { target_user_id: string }; Returns: undefined }
       claim_media_job: {
         Args: { p_lease_seconds?: number; p_worker_id: string }

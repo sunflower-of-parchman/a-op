@@ -51,6 +51,10 @@ if (error.value?.statusCode === 401) {
           >Edit ordered, validated sections without allowing arbitrary scripts or markup.</small
         >
       </NuxtLink>
+      <NuxtLink to="/admin/music">
+        <span>Music, media, and listening</span>
+        <small>Build releases, upload sources, follow processing, and publish the catalog.</small>
+      </NuxtLink>
     </nav>
 
     <p v-else-if="error" class="form-message" role="alert">

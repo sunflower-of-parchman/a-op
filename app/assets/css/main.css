@@ -741,6 +741,150 @@ button.text-action:disabled {
   gap: 2rem;
 }
 
+.catalog-workspace {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.28fr) minmax(0, 1.72fr);
+  align-items: start;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.catalog-release-index {
+  position: sticky;
+  top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.catalog-release-index > button {
+  display: grid;
+  width: 100%;
+  padding: 1.25rem 0;
+  border: 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.catalog-release-index > button[aria-current='true'] span {
+  color: var(--color-accent);
+}
+
+.catalog-release-index > button span {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.catalog-release-index > button small,
+.catalog-edit-form p {
+  color: var(--color-muted-text);
+}
+
+.catalog-edit-form {
+  margin-top: 0;
+}
+
+.bulk-track-entry {
+  display: grid;
+  margin-bottom: 4rem;
+  gap: 1rem;
+}
+
+.bulk-track-entry label,
+.source-upload-row label,
+.catalog-musical-fields label,
+.credit-editor label {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bulk-track-entry label > span,
+.source-upload-row label > span,
+.catalog-musical-fields label > span,
+.credit-editor label > span {
+  color: var(--color-muted-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bulk-track-entry textarea,
+.catalog-musical-fields input,
+.credit-editor input {
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.catalog-track-editor,
+.credit-editor {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.catalog-track-editor > li {
+  padding: 2.5rem 0 4rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.track-editor-heading {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  align-items: baseline;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+.track-editor-heading > span {
+  color: var(--color-accent);
+  font-size: 0.72rem;
+}
+
+.track-editor-heading h3 {
+  margin: 0;
+}
+
+.track-editor-heading > div {
+  display: flex;
+  gap: 1rem;
+}
+
+.catalog-musical-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.source-upload-row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.8fr) minmax(14rem, 1.2fr);
+  align-items: end;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: 1rem 3rem;
+}
+
+.source-upload-row p {
+  margin: 0.25rem 0 0;
+}
+
+.catalog-message {
+  position: sticky;
+  z-index: 10;
+  bottom: 1rem;
+  width: fit-content;
+  margin: 2rem 0 0 auto;
+  padding: 0.75rem 1rem;
+  color: var(--color-background);
+  background: var(--color-text);
+}
+
 .page-admin-list {
   margin-top: clamp(4rem, 9vw, 8rem);
 }
@@ -1322,10 +1466,20 @@ button.text-action:disabled {
   }
 
   .admin-workspace-links,
+  .catalog-workspace,
   .color-fields,
   .link-groups,
+  .source-upload-row,
   .feature-fields {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-release-index {
+    position: static;
+  }
+
+  .catalog-musical-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .admin-workspace-links a:nth-child(even) {
@@ -1396,6 +1550,15 @@ button.text-action:disabled {
   .artist-facts,
   .site-footer {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-musical-fields,
+  .track-editor-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .track-editor-heading > div {
+    flex-wrap: wrap;
   }
 
   .site-footer__meta {

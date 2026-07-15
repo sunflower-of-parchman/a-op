@@ -99,6 +99,20 @@ try {
   requireNoError(customerConfigError, 'Customer configuration query failed')
   assert.equal(customerConfigs.length, 1)
 
+  for (const [label, client] of [
+    ['anonymous', anonymous],
+    ['owner', owner.client],
+    ['customer', customerOne.client],
+  ]) {
+    const { error: intentReadError } = await client.from('upload_intents').select('id').limit(1)
+    assert.ok(intentReadError, `${label} read server-only upload intents`)
+    const { error: releaseDraftReadError } = await client
+      .from('release_drafts')
+      .select('release_id')
+      .limit(1)
+    assert.ok(releaseDraftReadError, `${label} read server-only release drafts`)
+  }
+
   const { data: ownerProfiles, error: ownerProfileError } = await owner.client
     .from('profiles')
     .select('id')
