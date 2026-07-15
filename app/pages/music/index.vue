@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const artist = useArtistConfig()
-const catalog = {
-  tracks: ['First Light, Repeated', 'A Measure of Distance', 'Turn Toward Home'],
-}
+const { data } = await useFetch('/api/catalog')
 
 useSeoMeta({ title: 'Music' })
 </script>
@@ -15,22 +12,42 @@ useSeoMeta({ title: 'Music' })
       <p>Releases keep their sequence, credits, writing, listening, and direct support together.</p>
     </header>
 
-    <section class="release-row" aria-labelledby="release-title">
+    <section
+      v-for="release in data?.releases"
+      :key="release.id"
+      class="release-row"
+      :aria-labelledby="`release-${release.id}`"
+    >
       <div>
-        <p class="section-number">DAY 001 · {{ artist.homepage.release.year }}</p>
-        <h2 id="release-title">
-          <NuxtLink :to="artist.homepage.release.href">{{
-            artist.homepage.release.title
-          }}</NuxtLink>
+        <p class="section-number">
+          {{ release.release_type }} · {{ release.release_date?.slice(0, 4) ?? 'Unscheduled' }}
+        </p>
+        <h2 :id="`release-${release.id}`">
+          <NuxtLink :to="`/music/${release.slug}`">{{ release.title }}</NuxtLink>
         </h2>
-        <p>{{ artist.homepage.release.description }}</p>
+        <p>{{ release.description }}</p>
       </div>
       <ol class="compact-tracklist">
-        <li v-for="(track, index) in catalog.tracks" :key="track">
-          <span>0{{ index + 1 }}</span>
-          <span>{{ track }}</span>
+        <li v-for="track in release.tracks" :key="track.id">
+          <span>{{ String(track.position).padStart(2, '0') }}</span>
+          <NuxtLink :to="`/music/tracks/${track.slug}`">{{ track.title }}</NuxtLink>
         </li>
       </ol>
+    </section>
+
+    <section
+      v-if="data?.collections.length"
+      class="catalog-collections"
+      aria-labelledby="collections-heading"
+    >
+      <p class="section-number">Collections</p>
+      <h2 id="collections-heading">Another way through the catalog.</h2>
+      <ul>
+        <li v-for="collection in data.collections" :key="collection.id">
+          <NuxtLink :to="`/music/collections/${collection.slug}`">{{ collection.title }}</NuxtLink>
+          <p>{{ collection.description }}</p>
+        </li>
+      </ul>
     </section>
   </div>
 </template>

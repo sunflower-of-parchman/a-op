@@ -1041,6 +1041,150 @@ button.text-action:disabled {
   font-size: clamp(1.3rem, 2.4vw, 2rem);
 }
 
+.tracklist__title,
+.compact-tracklist a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+}
+
+.tracklist__play,
+.global-player button {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tracklist__play {
+  color: var(--color-accent);
+}
+
+.release-credits,
+.track-details,
+.catalog-collections {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-top: 2rem;
+  border-top: var(--border-width) solid var(--color-border);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.release-credits h2,
+.track-details h2,
+.catalog-collections h2 {
+  margin-bottom: 0;
+}
+
+.release-credits dl,
+.track-details dl,
+.catalog-collections ul {
+  margin: 0;
+  padding: 0;
+}
+
+.release-credits dl div,
+.track-details dl div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.45fr) 1fr;
+  padding-block: 1rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+  gap: 1rem;
+}
+
+.release-credits dd,
+.track-details dd {
+  margin: 0;
+}
+
+.catalog-collections {
+  grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1.65fr);
+}
+
+.catalog-collections h2 {
+  grid-column: 2;
+}
+
+.catalog-collections ul {
+  grid-column: 2;
+  list-style: none;
+}
+
+.catalog-collections li {
+  padding-block: 1.5rem;
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.catalog-collections li a {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+.catalog-collections li p {
+  max-width: var(--reading-max);
+  color: var(--color-muted-text);
+}
+
+.global-player {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.8fr) auto minmax(16rem, 1.2fr);
+  align-items: center;
+  width: 100%;
+  padding: 1rem clamp(1.25rem, 4vw, 4rem);
+  border-top: var(--border-width) solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.global-player__identity {
+  display: grid;
+}
+
+.global-player__identity .section-number {
+  margin-bottom: 0.15rem;
+  color: var(--color-text);
+}
+
+.global-player__identity a {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  text-decoration: none;
+}
+
+.global-player__identity span {
+  color: var(--color-text);
+  font-size: 0.72rem;
+}
+
+.global-player__transport {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.global-player button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.global-player__timeline {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr 2.75rem;
+  align-items: center;
+  color: var(--color-text);
+  font-size: 0.68rem;
+  gap: 0.75rem;
+}
+
+.global-player__timeline input {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
 .release-note {
   max-width: var(--reading-max);
   margin: 3rem 0 0 auto;
@@ -1125,12 +1269,28 @@ button.text-action:disabled {
   .release-page__heading,
   .admin-status,
   .preview-player,
+  .release-credits,
+  .track-details,
+  .catalog-collections,
   .structured-section--prose,
   .structured-section--action,
   .structured-section--feature,
   .structured-section--contact,
   .admin-edit-form > section {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-collections h2,
+  .catalog-collections ul {
+    grid-column: 1;
+  }
+
+  .global-player {
+    grid-template-columns: 1fr auto;
+  }
+
+  .global-player__timeline {
+    grid-column: 1 / -1;
   }
 
   .admin-section-heading {
@@ -1218,6 +1378,19 @@ button.text-action:disabled {
 
   .tracklist__status {
     grid-column: 2;
+  }
+
+  .tracklist__play {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .global-player {
+    grid-template-columns: 1fr;
+  }
+
+  .global-player__timeline {
+    grid-column: 1;
   }
 
   .artist-facts,

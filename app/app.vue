@@ -22,6 +22,7 @@ useSeoMeta({
     <main id="main-content" tabindex="-1">
       <NuxtPage />
     </main>
+    <GlobalAudioPlayer />
     <ArtistFooter />
   </div>
 </template>
