@@ -1,0 +1,31 @@
+# Dependencies and build output
+node_modules/
+.nuxt/
+.output/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Local environment and service state
+.env
+.env.*
+!.env.example
+.supabase/
+supabase/.branches/
+supabase/.temp/
+
+# Machine-specific paths and setup proposals
+setup/local-paths.json
+setup/proposals/*.json
+!setup/proposals/.gitkeep
+
+# Generated and temporary media
+content/imports/
+tmp/
+*.log
+
+# macOS and editors
+.DS_Store
+.idea/
+.vscode/

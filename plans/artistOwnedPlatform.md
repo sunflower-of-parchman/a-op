@@ -22,7 +22,8 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - [x] (2026-07-14 23:19Z) Added the repository planning convention in `PLANS.md` and created this full-product ExecPlan.
 - [x] (2026-07-15 00:03Z) Designated this as the primary implementation task, recorded GPT-5.6 Sol and GPT-5.6 Pro, and created the model-and-agent-use and capability-evidence records.
 - [x] (2026-07-15 00:03Z) Established the configuration-authority and local/deployed media-processing contracts before application implementation.
-- [ ] Establish repository provenance, product language, the supported single-artist model, the module contract, the initial open-source license decision, and the competition track decision record.
+- [x] (2026-07-15 00:19Z) Established the product contract, repository instructions, public language, provenance boundary, visual direction, architecture decision records, and Developer Tools track.
+- [ ] Complete the open-source license gate (completed: MIT and AGPL-3.0 consequences recorded; remaining: Michael selects the license before public release).
 - [ ] Bootstrap the independently runnable Nuxt application, local Supabase development environment, demonstration identity, test harness, and continuous verification commands.
 - [ ] Implement the consolidated database schema, migrations, storage buckets, authentication, OAuth configuration, roles, Row Level Security policies, and generated TypeScript database types.
 - [ ] Pass Integration Gate A by proving the complete authority and fulfillment spine from authentication through idempotent entitlement and protected delivery.
@@ -54,6 +55,12 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 - Observation: A capability can be implemented without yet being integrated, tested, demonstrated, or documented.
   Evidence: `docs/submission/capability-evidence.md` now tracks those evidence states separately so the complete product claim remains auditable throughout Build Week.
+
+- Observation: Current Supabase Data API exposure and row authorization are separate controls.
+  Evidence: The July 2026 Supabase quickstart and breaking-change index require explicit grants when tables are not automatically exposed, while RLS independently controls which rows an exposed role may use. New migrations must implement and test both layers.
+
+- Observation: Current Supabase guidance recommends TUS resumable uploads and the direct storage hostname for large files.
+  Evidence: The official resumable-upload guide recommends TUS above 6 MB, supports signed upload tokens, and advises versioned new object paths instead of overwrites. This reinforces the immutable-source media contract.
 
 ## Decision Log
 
@@ -109,6 +116,14 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
   Rationale: Artist ownership includes a versioned export of configuration and content, a verified media inventory, database and customer-data procedures, and a tested path away from the current hosting arrangement.
   Date/Author: 2026-07-15 / Michael and Codex
 
+- Decision: Enter the Developer Tools track.
+  Rationale: The personalized artist site proves the system works. The transferable Build Week product is the agent-operable repository with schemas, setup, security boundaries, media processing, runbooks, verification, portability, and ongoing Codex maintenance.
+  Date/Author: 2026-07-15 / Codex
+
+- Decision: Reserve the final open-source license choice for Michael.
+  Rationale: MIT and AGPL-3.0 express materially different stewardship outcomes. Local implementation may proceed, but no `LICENSE` file or public-release claim will be made until Michael chooses.
+  Date/Author: 2026-07-15 / Codex
+
 - Decision: Make setup executable and testable. Human documentation, `AGENTS.md`, agent runbooks, configuration schemas, preflight scripts, and health checks are all product features.
   Rationale: Codex can only reliably guide a nontechnical artist when the repository expresses its requirements and can verify each service connection without exposing secrets.
   Date/Author: 2026-07-14 / Michael and Codex
@@ -131,7 +146,7 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 ## Outcomes & Retrospective
 
-The planning baseline is complete. The full product is now defined as a single-artist, Codex-native platform covering public identity, catalog and audio, direct commerce, licensing, memberships and entitlements, education, video and editorial publishing, administration, telemetry, guided self-hosting, and executable portability. This task and both GPT-5.6 Sol and GPT-5.6 Pro are recorded before implementation begins. The configuration authority, media-processing boundary, evidence matrix, and early Authority and Fulfillment Spine are explicit. Application implementation has not started.
+Milestone 0 is complete apart from the approval-gated license selection. The repository now carries the product contract, public introduction, setup entrypoint, agent rules, provenance ledger, visual direction, primary-task and model evidence, capability matrix, and architecture decisions for deployment, stack, schema, entitlements, configuration, setup, media, portability, design, track, and license choice. The Developer Tools track is selected. Application implementation has not started.
 
 At the end of each implementation milestone, append a dated paragraph here describing what a new artist can now do, what evidence proves it, and any capability that remains incomplete. At project completion, compare the working fresh-clone and judge journeys with the Purpose / Big Picture section, and distinguish finished features from documented future extensions.
 
@@ -574,3 +589,5 @@ Revision note, 2026-07-14: Added the dated Build Week cadence and critical depen
 Revision note, 2026-07-14: Reframed the delivery commitment after Michael identified that preemptively comparing the project with years of production maturity weakened the intended Build Week ambition. The complete platform is now explicit as the competition outcome; schedule discoveries may change implementation order but do not lower the definition of completion.
 
 Revision note, 2026-07-15: Incorporated the independent GPT-5.6 Pro review and Michael's confirmation that Build Week uses GPT-5.6 Sol and GPT-5.6 Pro. Added the primary-task record, model evidence contract, configuration authority, Integration Gate A, shared local and deployed media worker, executable portability, capability evidence matrix, public-path hygiene, continuous integration, deterministic judge path, and revised milestone numbering. These additions strengthen integration and evidence while preserving the complete product definition.
+
+Revision note, 2026-07-15: Completed the Milestone 0 product, provenance, agent, design, and architecture contracts; selected Developer Tools; recorded the license as a Michael decision before publication; and incorporated current Supabase guidance on Data API grants, RLS, and signed TUS storage uploads.

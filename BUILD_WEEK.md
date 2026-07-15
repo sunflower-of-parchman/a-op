@@ -122,7 +122,7 @@ Show creativity and a genuine understanding of the problem space.
 This section will develop as we discuss the idea.
 
 - Working title: Artist-Owned Platform (provisional)
-- Track: To be determined between Work and Productivity and Developer Tools after the working demo clarifies the strongest fit.
+- Track: Developer Tools. The personalized artist site is the proof; the transferable, agent-operable repository is the product.
 - Audience: Independent musicians first, with an architecture that can also serve accompanists, dancers, choreographers, teachers, and other performing artists.
 - Problem: Artists can distribute through large platforms but still lack an approachable way to own and operate the permanent digital home of their work, audience relationships, direct commerce, licensing, membership, and teaching.
 - Core idea: A complete open-source Nuxt platform that Codex can configure and maintain with a nontechnical artist. Each deployment belongs to one artist or artist-led organization and connects to the artist's own Supabase, Stripe, hosting, and domain.
@@ -141,8 +141,8 @@ This section will develop as we discuss the idea.
 | Registration | Confirmed |
 | Devpost plugin | Installed |
 | Free-credit request | Submitted; approval not yet confirmed |
-| Project idea and track | Product direction selected; final name and track pending |
-| Working implementation | Full execution plan complete; application not started |
+| Project idea and track | Product direction and Developer Tools track selected; final name pending |
+| Working implementation | Milestone 0 product and architecture contracts complete; application scaffolding next |
 | Repository history and evidence | Started |
 | README | Not started |
 | Demo and judging access | Not started |
