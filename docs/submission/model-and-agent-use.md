@@ -196,6 +196,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `c3dcf2d` (`Add guarded hosted judge reset`).
 - Verification: Node 24 formatting, lint, documentation, and browser-secret checks passed. The same reset core refused a local hosted target, a mismatched linked project, wrong confirmation, marker mismatch, unexpected account, nonempty dedicated bucket, and real page-content drift; initialized a migration-clean local project; preserved fake Stripe mappings; cleared and restored storage; performed two identical canonical resets; rotated all four users on each pass; verified public configuration, roles, pages, and all seven buckets; restored the ordinary local demo; and passed inside the complete uninterrupted Node 24 `npm run verify` from checkpoint `b226602`. That aggregate also passed every module, Integration Gate A, production hardening and budgets, 12 isolated desktop/mobile specifications, documentation/assets, Chromium/WebKit judge routes, and secret scanning. The refreshed dependency audit found zero vulnerabilities and database lint found no `public` or `private` schema errors. No hosted project or provider was contacted.
 
+### Open-source license decision — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task.
+- Human decision: Michael approved `AGPL-3.0-or-later` for the repository and its original fictional demonstration assets. Repository publication remains separately approval-gated.
+- Material contribution: Official GNU AGPL v3 text; SPDX package and lockfile metadata; accepted license ADR; README contribution terms; machine-readable asset licensing; completion-audit, hosted-evidence, submission-checklist, and ExecPlan reconciliation.
+- Commit: `fd9dfd8` (`Adopt AGPL-3.0-or-later license`).
+- Verification: The official license text contains 661 lines and has local SHA-256 `0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0`; `npm pkg get license` returned `AGPL-3.0-or-later`; formatting, documentation, fictional-asset, JSON, and diff checks passed.
+
 ## Submission reconciliation
 
 Before submission:
