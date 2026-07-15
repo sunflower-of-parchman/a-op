@@ -1,0 +1,33 @@
+# Build Week capability evidence
+
+This matrix distinguishes planned, implemented, integrated, tested, demonstrated, and documented work. Update it in the primary implementation task at every milestone and before any public claim.
+
+Status values are `planned`, `implemented`, `integrated`, `tested`, `demonstrated`, and `documented`. A capability may advance through several values; record the strongest currently supported state and place detailed evidence in the named files.
+
+| Capability | Build Week implementation files | Relevant commit | Automated test | Manual or judge verification | Demo timecode | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Reproducible Nuxt and local Supabase foundation | Pending Milestone 1 | Pending | `npm run verify:foundation` | Fresh clone reaches the demo home page | Pending | planned |
+| Configuration authority and artist identity | `docs/architecture/configuration-authority.md`; implementation pending | Pending | Configuration schema and round-trip tests pending | Owner changes identity and sees the published site update | Pending | planned |
+| Authentication, roles, and RLS | Pending Milestone 2 | Pending | Anonymous, customer, editor, owner, and service-role policy tests pending | Cross-account access is denied | Pending | planned |
+| Authority and Fulfillment Spine | Pending Integration Gate A | Pending | Payment replay, transactional grant, protected download, and denial tests pending | Seeded customer receives one entitlement; second customer is denied | Pending | planned |
+| Catalog and artist-authored ordering | Pending Milestone 4 | Pending | Catalog and ordering tests pending | Artist publishes an album and ordered collection | Pending | planned |
+| Audio intake, processing, preview, and waveform | `docs/architecture/media-processing-contract.md`; implementation pending | Pending | Worker retry, idempotency, and output tests pending | Local and deployed workers move an upload to `ready` | Pending | planned |
+| Public listening experience | Pending Milestone 4 | Pending | Player and route-transition browser tests pending | Visitor queues and listens to a release | Pending | planned |
+| One-time commerce and protected downloads | Pending Milestone 5 | Pending | Stripe simulation and webhook replay tests pending | Test purchase produces one order and protected download | Pending | planned |
+| Memberships and customer portal | Pending Milestone 5 | Pending | Subscription lifecycle tests pending | Test member gains and later loses time-bound access correctly | Pending | planned |
+| Music licensing and license documents | Pending Milestone 6 | Pending | Pricing, immutable-term, webhook, and document tests pending | Buyer licenses a track and retrieves the issued document | Pending | planned |
+| Learning paths and progress | Pending Milestone 7 | Pending | Ordering, access, and progress tests pending | Member completes and resumes a protected lesson | Pending | planned |
+| Video and editorial publishing | Pending Milestone 7 | Pending | Sanitization and publication tests pending | Artist publishes accessible video and editorial content | Pending | planned |
+| First-party telemetry and diagnostics | Pending Milestone 8 | Pending | Consent, redaction, and aggregation tests pending | Owner views events; diagnostics reveal no secrets | Pending | planned |
+| Codex-guided setup lifecycle | Pending Milestone 9 | Pending | Interview, proposal, preview, apply, and check tests pending | A new task personalizes a fresh clone from approved inputs | Pending | planned |
+| Artist portability and verified export | Pending Milestone 10 | Pending | Export schema, manifest, and restore-check tests pending | Artist creates and verifies a portable export | Pending | planned |
+| Security, accessibility, performance, and recovery | Pending Milestone 11 | Pending | Full verification suite pending | Defined recovery drills and mobile/desktop review pass | Pending | planned |
+| Clean-clone and hosted judge path | Pending Milestone 12 | Pending | CI and deterministic demo reset pending | Judge completes the written journey without rebuilding | Pending | planned |
+| Codex, GPT-5.6 Sol, and GPT-5.6 Pro evidence | `docs/submission/model-and-agent-use.md` | Pending | Evidence reconciliation check pending | README, task metadata, `/feedback`, and video agree | Pending | planned |
+| Competition package | Pending Milestone 13 | Pending | Submission checklist pending | Sub-three-minute rehearsal and judge guide pass | Pending | planned |
+
+## Evidence rules
+
+Use repository-relative paths and short commit identifiers. Link only to evidence that exists. Automated test evidence must name the exact command and test. Manual verification must name the role, action, and observable outcome. Demo timecodes remain pending until the final recording is approved and produced.
+
+Pre-existing Sound for Movement concepts may be cited in `docs/provenance.md`, but this matrix must point to the new Build Week implementation. Do not mark a row `demonstrated` because a similar capability exists in the private reference system.

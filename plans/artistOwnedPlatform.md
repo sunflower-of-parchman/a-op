@@ -1,0 +1,576 @@
+# Build the complete artist-owned web platform
+
+This ExecPlan is a living document. The sections `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be kept up to date as work proceeds.
+
+This plan must be maintained in accordance with `PLANS.md` at the repository root.
+
+## Purpose / Big Picture
+
+Build a complete, open-source, web-only platform that lets an independent musician operate a distinctive digital home on infrastructure they control. After implementation, an artist can use Codex to configure the project, connect a Supabase database and Stripe account, apply their identity, import and maintain albums and tracks, publish audio and video, sell downloads, offer music licenses and memberships, create educational paths, manage customer entitlements, view privacy-conscious telemetry, and deploy the site to a host such as Vercel under their own domain.
+
+The platform is not an artificial-intelligence feature embedded in a music site. It is software designed to be understood, configured, and maintained by Codex in partnership with a nontechnical artist. The repository must therefore serve two audiences: the artist who makes creative and business decisions, and the coding agent that performs technical setup and implementation. A fresh clone must include safe agent instructions, human-readable guidance, working demonstration content, repeatable setup checks, and a path from local development to an explicitly approved deployment.
+
+The working result is visible through one complete journey. Starting from a fresh clone, an artist tells Codex about their work and points it to a small approved media folder. Codex prepares the local environment, asks for creative and business choices, imports an album and tracks for approval, and launches a personalized site. A visitor can listen, create an account, complete a Stripe test purchase or license, receive the correct entitlement, access protected material, follow a learning path, and see video and editorial content. The artist can maintain these areas through an authenticated administration workspace. Automated tests, health checks, and a seeded judging deployment prove the system behaves safely.
+
+This ExecPlan delivers the full product during OpenAI Build Week. The milestones are ordered by technical dependency so the application remains runnable while the complete surface is assembled. “Complete” means every capability described above works coherently in the supported single-artist deployment model. The defined product is a web platform for one artist or artist-led organization; multi-tenant marketplaces, native applications, digital-rights-management systems, tax-compliance services, general-purpose drag-and-drop builders, and AI features inside the deployed website are separate products outside this definition.
+
+## Progress
+
+- [x] (2026-07-14 23:19Z) Confirmed Build Week registration, submission requirements, deadlines, evidence requirements, and external-publication approval boundaries in `BUILD_WEEK.md`.
+- [x] (2026-07-14 23:19Z) Chose the product direction: a web-only, artist-owned platform built and configured with Codex, without a required AI runtime feature.
+- [x] (2026-07-14 23:19Z) Inspected the private Sound for Movement web stack read-only and confirmed that it contains proven patterns for Nuxt, Supabase, Stripe, music cataloging, audio, memberships, licensing, learning, video, administration, and telemetry.
+- [x] (2026-07-14 23:19Z) Added the repository planning convention in `PLANS.md` and created this full-product ExecPlan.
+- [x] (2026-07-15 00:03Z) Designated this as the primary implementation task, recorded GPT-5.6 Sol and GPT-5.6 Pro, and created the model-and-agent-use and capability-evidence records.
+- [x] (2026-07-15 00:03Z) Established the configuration-authority and local/deployed media-processing contracts before application implementation.
+- [ ] Establish repository provenance, product language, the supported single-artist model, the module contract, the initial open-source license decision, and the competition track decision record.
+- [ ] Bootstrap the independently runnable Nuxt application, local Supabase development environment, demonstration identity, test harness, and continuous verification commands.
+- [ ] Implement the consolidated database schema, migrations, storage buckets, authentication, OAuth configuration, roles, Row Level Security policies, and generated TypeScript database types.
+- [ ] Pass Integration Gate A by proving the complete authority and fulfillment spine from authentication through idempotent entitlement and protected delivery.
+- [ ] Implement artist onboarding, site configuration, design tokens, navigation, editable pages, contact surface, search-engine metadata, and the authenticated administration workspace.
+- [ ] Implement album, track, collection, artwork, audio-upload, audio-processing, preview-streaming, playlist, favorite, and catalog-management capabilities.
+- [ ] Implement Stripe products and prices, cart and checkout, signed webhook processing, orders, downloads, subscriptions, membership tiers, customer portal access, and the entitlement engine.
+- [ ] Implement configurable music licensing, license checkout, license records, license documents, account history, and protected delivery.
+- [ ] Implement educational areas, learning paths, courses, lessons, mixed media, learner progress, membership access rules, video pages, and editorial publishing.
+- [ ] Implement first-party telemetry, consent and privacy controls, artist-facing metrics, operational status, and redacted diagnostics.
+- [ ] Implement the Codex-native setup interview, media intake, configuration state, service-connection runbooks, guarded automation, validation commands, and ongoing agent maintenance instructions.
+- [ ] Implement artist export, export verification, media inventory, database backup guidance, and restore checks as executable ownership capabilities.
+- [ ] Complete security hardening, accessibility, responsive behavior, performance, failure recovery, backup and restore documentation, cross-browser journeys, and production-build verification.
+- [ ] Package the project for a fresh clone, prepare original demonstration content, verify the complete judge journey, and create all repository documentation.
+- [ ] Prepare the Build Week README evidence, project description, judging guide, sub-three-minute demo script and recording plan, deployment plan, and `/feedback` session evidence without publishing or submitting until Michael explicitly approves each external action.
+
+## Surprises & Discoveries
+
+- Observation: The Build Week repository began with only `BUILD_WEEK.md`; it had no application files or local ExecPlan convention.
+  Evidence: `rg --files` returned only `BUILD_WEEK.md` before `PLANS.md` and this plan were added.
+
+- Observation: The reference Sound for Movement application already demonstrates far more than catalog display. Its current dependency and source inventory includes Nuxt 4, Supabase, Stripe, audio processing, PDF generation, learning content, memberships, entitlements, video, first-party analytics, extensive administration, and Playwright/Vitest coverage.
+  Evidence: The private reference repository's `package.json` and its `types/`, `composables/`, `server/`, and `supabase/migrations/` inventories contain the corresponding modules. This supports planning the complete product while also showing that safe generalization is substantial work.
+
+- Observation: The difficult product problem is not merely producing pages. It is making infrastructure that normally requires a developer understandable and safely operable by a musician working with Codex.
+  Evidence: The envisioned journey crosses database migrations, storage permissions, OAuth redirects, Stripe webhooks, DNS, secrets, audio files, content modeling, and deployment. These must be represented as guarded workflows with validation rather than prose-only instructions.
+
+- Observation: Hosted audio administration requires a deployed processing path as well as a local Codex-operated command.
+  Evidence: The private reference system proves ffmpeg-based preview and waveform work through local scripts. The reusable platform adds a durable job contract and one worker implementation that runs locally and as a deployed container, so hosted uploads reach a verifiable `ready` state.
+
+- Observation: A capability can be implemented without yet being integrated, tested, demonstrated, or documented.
+  Evidence: `docs/submission/capability-evidence.md` now tracks those evidence states separately so the complete product claim remains auditable throughout Build Week.
+
+## Decision Log
+
+- Decision: Build the complete described platform rather than presenting only a catalog prototype.
+  Rationale: The reference system supplies proven concepts and the Build Week thesis depends on showing that Codex can transfer a sophisticated artist-owned operating model, not merely generate a themed site.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Treat the complete platform as the Build Week outcome and preserve that definition throughout execution.
+  Rationale: The product logic and working reference architecture already exist. The one-week accomplishment is using Codex to generalize, implement, document, validate, and package the entire system for another artist. Schedule discoveries may change milestone order, but they do not preemptively reduce the product to a slice.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Keep the product web-only and do not add a model call, chatbot, agent runtime, native iOS application, or other AI feature to the deployed visitor experience.
+  Rationale: Build Week requires the project to be built with Codex and GPT-5.6; the artist-owned platform is itself the product. Codex belongs in setup, customization, maintenance, and evidence of how the product was made.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Record GPT-5.6 Sol and GPT-5.6 Pro as the Build Week models and keep their use explicit, inspectable, and separate from the visitor runtime.
+  Rationale: Both models contribute through Codex during planning, implementation, setup reasoning, debugging, validation, and documentation. The public site remains independently operable without an OpenAI API key. Exact task-level contributions must be reconciled with session metadata rather than inferred.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Use this Codex task as the primary implementation task.
+  Rationale: It contains the product origin, competition research, architecture, full plan, and milestone decisions. The majority of core implementation, integration, and verification will remain here so the final `/feedback` Session ID represents the project accurately.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Design one deployment for one artist or artist-led organization, with multiple authorized administrators and many customer accounts.
+  Rationale: A single-artist deployment preserves data ownership, branding freedom, simpler security boundaries, and understandable operations. A hosted multi-artist marketplace would be a materially different business and architecture.
+  Date/Author: 2026-07-14 / Codex
+
+- Decision: Use Nuxt 4, Vue, TypeScript, Supabase, and Stripe as the primary platform architecture, with Vercel as the documented initial hosting path while keeping ordinary Node-compatible deployment possible.
+  Rationale: This reflects the proven Sound for Movement web architecture, provides a full server-rendered application with authentication and commerce, and matches the services discussed for artist setup.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Treat the private Sound for Movement repository as a read-only, user-owned reference and keep all Build Week implementation in this separate repository.
+  Rationale: This prevents interference with the production application, preserves unrelated work, and makes competition-period contributions and provenance legible.
+  Date/Author: 2026-07-14 / Codex
+
+- Decision: Build a clean consolidated Supabase baseline rather than copying the private application's entire historical migration chain.
+  Rationale: A new adopter needs a comprehensible schema representing the current public platform contract. Historical production repairs and Sound for Movement-specific data changes would add risk and obscure the reusable design.
+  Date/Author: 2026-07-14 / Codex
+
+- Decision: Separate configuration authority by category.
+  Rationale: Shared schemas define the contract; `artist.config.ts` supplies bootstrap defaults; Supabase is authoritative for artist-editable runtime identity, design, content, navigation, and module settings; environment configuration is authoritative for secrets; and `setup/project-state.json` records only non-secret setup progress. This prevents drift while preserving fresh-clone reproducibility.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Prove the Authority and Fulfillment Spine immediately after the database and authentication foundation.
+  Rationale: Authentication, RLS, simulated signed payment fulfillment, entitlements, and protected delivery are shared by purchases, licensing, memberships, learning, and private media. An early walking skeleton lets every later module extend a verified authority model while preserving the complete product scope.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Keep audio processing outside ordinary Nuxt requests and support the same worker locally and as a deployed container.
+  Rationale: Original audio can be large and ffmpeg processing can outlive ordinary requests. Direct private-storage uploads, durable `media_jobs`, and one idempotent worker make local Codex operation and hosted administration equally real.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Treat artist portability as an executable product capability.
+  Rationale: Artist ownership includes a versioned export of configuration and content, a verified media inventory, database and customer-data procedures, and a tested path away from the current hosting arrangement.
+  Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Make setup executable and testable. Human documentation, `AGENTS.md`, agent runbooks, configuration schemas, preflight scripts, and health checks are all product features.
+  Rationale: Codex can only reliably guide a nontechnical artist when the repository expresses its requirements and can verify each service connection without exposing secrets.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Keep musicians as the primary first-release audience while allowing the content, education, and licensing models to serve accompanists, dancers, choreographers, teachers, and other performing artists.
+  Rationale: A precise initial audience makes the product and demonstration understandable. The architecture can support related performing-arts practices without weakening the music-centered story.
+  Date/Author: 2026-07-14 / Michael and Codex
+
+- Decision: Keep the public design configurable and open in composition. Do not make every control, object, or content surface an enclosing card by default.
+  Rationale: Artists need expressive sites rather than a visibly generic dashboard template. Cards should communicate a meaningful group, selectable item, or functional boundary.
+  Date/Author: 2026-07-14 / Michael's repository guidance
+
+- Decision: Require explicit approval before any public deployment, repository publication, domain or DNS change, paid-resource creation, live Stripe operation, email send, demo-video publication, or Devpost submission.
+  Rationale: These operations change external state, may create costs, or communicate publicly. Local development and test-mode verification can proceed without them.
+  Date/Author: 2026-07-14 / Michael's repository guidance
+
+- Decision: Defer the project name, precise open-source license, final Build Week track, email provider, and public demonstration media choice until their dedicated decision gates, while allowing independent implementation to continue.
+  Rationale: These choices matter but do not block establishing the application architecture. Before publication, the license and media provenance must be resolved explicitly.
+  Date/Author: 2026-07-14 / Codex
+
+## Outcomes & Retrospective
+
+The planning baseline is complete. The full product is now defined as a single-artist, Codex-native platform covering public identity, catalog and audio, direct commerce, licensing, memberships and entitlements, education, video and editorial publishing, administration, telemetry, guided self-hosting, and executable portability. This task and both GPT-5.6 Sol and GPT-5.6 Pro are recorded before implementation begins. The configuration authority, media-processing boundary, evidence matrix, and early Authority and Fulfillment Spine are explicit. Application implementation has not started.
+
+At the end of each implementation milestone, append a dated paragraph here describing what a new artist can now do, what evidence proves it, and any capability that remains incomplete. At project completion, compare the working fresh-clone and judge journeys with the Purpose / Big Picture section, and distinguish finished features from documented future extensions.
+
+## Context and Orientation
+
+The repository root is referred to as `<repository-root>` in tracked documentation. `BUILD_WEEK.md` records event dates, rules, official links, submission requirements, approval boundaries, and progress. `PLANS.md` defines how to maintain this plan. `plans/artistOwnedPlatform.md` is the controlling implementation plan. The repository is new and has no application code or commits at the time this plan is created. Machine-specific paths belong only in ignored local configuration.
+
+The private Sound for Movement application is referred to as `<private-reference-repository>`. Its machine-specific path belongs in an ignored `setup/local-paths.json` file. It may be inspected read-only to understand user-owned architecture and behavior. Do not edit it, import its secrets, copy its private data, or assume that a production-specific migration belongs in this project. When a reusable implementation is adapted from it, record the source concept or file and the new generalized result in `docs/provenance.md`. Search the new repository for Sound for Movement names and private URLs before every public-release candidate.
+
+The project is a single-artist platform. “Single-artist” means one deployed instance represents one musician, ensemble, accompanist, composer, or artist-led organization. That instance may have multiple owner or editor accounts. Visitors and customers have separate accounts. The database is not shared across unrelated artists.
+
+“Entitlement” means a durable record granting an account access to something, such as an album download, a licensed track, a course, or membership-only material. Stripe confirms a payment; the platform's server verifies that event and atomically creates the corresponding order and entitlements. Browser code must never grant access based only on a success-page redirect.
+
+“Row Level Security,” abbreviated RLS, means database policies that decide which rows a Supabase user may read or change. Public visitors may only read published public content. Customers may only read their own private records and content granted by entitlements. Editors and owners may maintain the artist's content. Server-only credentials must never appear in browser code.
+
+“Codex-native” means the repository includes stable instructions, scripts, configuration contracts, and checks that allow Codex to guide setup and maintenance safely. It does not mean the public website calls an AI model. The human supplies creative identity, rights decisions, prices, service accounts, and approval for consequential actions. Codex writes and changes code, organizes approved content, performs local setup, explains service checkpoints, and validates results.
+
+The initial repository layout must become:
+
+    AGENTS.md                       repository-wide agent rules and product boundaries
+    README.md                       human introduction, quick start, and project explanation
+    SETUP.md                        artist-facing guided setup entrypoint
+    artist.config.ts                typed public identity, feature, navigation, and design configuration
+    app/                            Nuxt pages, layouts, components, composables, middleware, and assets
+    server/                         private API routes, Stripe handlers, media delivery, and service adapters
+    shared/                         types and validation schemas used by browser and server code
+    supabase/                       local configuration, consolidated migrations, seed data, and database tests
+    scripts/                        preflight, setup, import, validation, backup, and redacted diagnostic commands
+    docs/agent/                     Codex runbooks for setup, services, content, maintenance, and recovery
+    docs/artist/                    human guides for identity, catalog, commerce, licensing, learning, and operations
+    docs/architecture/              data model, authorization, entitlements, media, and deployment explanations
+    docs/provenance.md              pre-existing reference concepts and Build Week generalization record
+    docs/submission/                model, capability, judging, demo, and submission evidence
+    content/demo/                   redistribution-safe sample identity, writing, artwork, audio, and video metadata
+    setup/project-state.json        non-secret record of completed setup stages and enabled modules
+    workers/media/                  shared local and deployed audio-processing worker
+    tests/                          unit, integration, database-policy, and browser journey tests
+
+The public application must provide home, music, release, track, collection, licensing, learn, course or path, video, about, contact, sign-in, account, and legal surfaces when their modules are enabled. The authenticated administration workspace must provide overview, identity and theme, pages and navigation, music, media, commerce, licensing, memberships, learning, video, telemetry, and system-status areas. Features may be disabled through validated configuration without leaving broken navigation.
+
+The core data model must include site settings, administrator roles, profiles, pages, navigation, albums, tracks, collections, ordered collection membership, artwork and media objects, playlists, favorites, products, prices, carts or checkout intents, orders, order items, subscriptions, membership tiers, entitlement grants, download records, license templates, license selections, issued licenses, learning areas, paths, courses, lessons, lesson progress, videos, contact messages, consent records, analytics events, and operational audit records. Use stable UUID identifiers internally and human-readable slugs in URLs.
+
+## Plan of Work
+
+The critical dependency chain is database authority, secure media, central entitlements, commerce and licensing fulfillment, and finally the agent-guided setup that composes those systems. Public pages and administration can advance alongside that chain once the shared schemas exist, but no feature is considered finished until it uses the real authorization and publication rules. This prevents an impressive-looking interface from concealing incomplete ownership or payment behavior.
+
+The Build Week cadence is organized to complete the whole platform. July 14 establishes the initial contract and plan. July 15 completes the reviewed planning baseline, application, schema, authentication, storage, and Authority and Fulfillment Spine. July 16 completes artist identity, administration, catalog intake, deployed media processing, and listening. July 17 completes Stripe commerce, memberships, entitlements, and licensing. July 18 completes learning, video, editorial publishing, and telemetry. July 19 completes the Codex-native setup, maintenance, and portability experience. July 20 completes full integration, security, accessibility, performance, clean-clone packaging, and the judging environment. July 21 completes final regression work, evidence, the demo, and submission preparation before the 6:00 PM Mountain deadline.
+
+Every product module remains part of the completion standard. If implementation evidence changes the most effective order, update `Progress` and `Surprises & Discoveries`, keep the application runnable, and continue through all remaining milestones. Every final control and public claim must be backed by working behavior. Test-mode external services provide real integration evidence for judging; decorative mocks do not satisfy a milestone.
+
+### Milestone 0: Establish the product contract and provenance boundary
+
+Write `README.md`, `AGENTS.md`, `docs/architecture/product-contract.md`, and `docs/provenance.md` before porting functional code. Preserve `docs/architecture/configuration-authority.md`, `docs/architecture/media-processing-contract.md`, `docs/submission/model-and-agent-use.md`, and `docs/submission/capability-evidence.md` as controlling contracts created during the reviewed planning baseline. The product contract must define the single-artist model, supported modules, administrator and customer roles, external-action approval gates, data ownership, and what “artist-owned” means. The provenance record must distinguish pre-existing Sound for Movement concepts from new Build Week generalization work and must be updated with each adapted area.
+
+Create an Architecture Decision Record directory at `docs/architecture/decisions/`. Add short records for the single-artist deployment, Nuxt/Supabase/Stripe stack, consolidated schema, entitlement authority, configuration authority, agent-readable setup, media processing, portability, and public design configuration. Decide the Build Week track by the end of this milestone; Developer Tools is the leading candidate because the agent-operable repository is the transferable product and the personalized site proves it works. Record the open-source license decision before the repository becomes public. Compare a permissive license such as MIT, which allows proprietary derivatives, with a network-copyleft license such as AGPL-3.0, which requires published modified network software to remain open. Michael must choose the license based on the intended gift and stewardship model.
+
+Acceptance for this milestone is a repository whose purpose and boundaries can be understood without prior conversation. `rg -n "Sound for Movement|soundformovement" .` may find explanatory provenance references, but it must find no copied branding, production URL, personal data, credentials, or redistributable media assumptions.
+
+### Milestone 1: Bootstrap a reproducible application and local demonstration
+
+Create the Nuxt 4 TypeScript application at the repository root using Node 24 and npm. Add Nuxt Image, Supabase, Pinia, VueUse, Tailwind, Zod, Nuxt Security, Vitest, Playwright, axe-core, ESLint, and Prettier. Add `package.json` scripts for development, type checking, linting, unit tests, integration tests, database tests, end-to-end tests, production build, setup preflight, local setup, seed reset, health checks, and the complete verification suite. Generate and commit the npm lockfile. Use `npm ci` for clean-clone, continuous-integration, and judging verification after the initial dependency resolution.
+
+Create `artist.config.ts` and validate it through a Zod schema in `shared/schemas/artistConfig.ts`. The initial demo identity must be clearly fictional and use only redistribution-safe content in `content/demo/`. Design tokens must cover color, typography, spacing, corners, surface treatment, logo assets, navigation, and feature flags. Public components must consume semantic tokens rather than embedding a Sound for Movement palette.
+
+Add local Supabase configuration and a setup script that checks Node, npm, Docker, Supabase CLI availability, writable paths, and environment variables without printing secret values. `npm run setup:local` must be safe to rerun and must start Supabase, apply migrations, seed the demonstration artist, generate TypeScript database types, and report the local URLs. `npm run dev` must then show a coherent demonstration home page and navigation even before later modules are complete.
+
+Add a continuous-integration workflow under `.github/workflows/verify.yml` that runs every verification step not requiring private credentials. Acceptance is a fresh-clone sequence that reaches a running local page with one documented command path. `npm run verify:foundation` must run formatting checks, linting, type checking, unit tests, and a production build, and the same foundation checks must pass in the visible workflow.
+
+### Milestone 2: Create the database, authentication, storage, and authorization foundation
+
+Create consolidated migrations in `supabase/migrations/` in dependency order. Separate public content, account data, commerce records, learning records, and operational events into understandable tables and database functions. Add the base products, simulated payment events, orders, entitlements, media objects, and download records needed by Integration Gate A even though the complete Stripe catalog is delivered in Milestone 5. Add indexes for slugs, published-state queries, ownership, entitlement lookup, payment identifiers, and chronological metrics. Generate `shared/types/database.ts` from the local schema rather than hand-maintaining it.
+
+Configure Supabase authentication for email sign-in and optional OAuth providers. OAuth providers remain disabled until an artist supplies provider credentials and configures redirect URLs. Implement `owner`, `editor`, and `customer` roles. Use an invitation or explicit owner bootstrap process; never let the first arbitrary public signup become an administrator.
+
+Create public artwork and preview-media buckets plus private source-audio, download, license-document, lesson-media, and administrative buckets. Storage policies must mirror database access. Full-resolution audio and purchased files must be delivered through short-lived signed URLs from server routes after entitlement checks.
+
+Implement the initial `decideAccess` contract and a protected download route backed by one seeded release, one public preview, and one private fixture. Add database-policy tests that run as anonymous, customer, editor, owner, and service-role identities. They must prove public users cannot read drafts, customers cannot read another customer's orders or licenses, editors cannot modify server-owned payment records, and owners can maintain content without gaining access to secret material.
+
+Acceptance is a local site where a visitor can sign up and sign in, an explicitly seeded owner can enter the administration area, the seeded release and preview are publicly readable, and all role-policy tests pass. The generated browser bundle must contain no service-role key or Stripe secret.
+
+### Integration Gate A: Prove the Authority and Fulfillment Spine
+
+Before expanding the administration and product surfaces, prove the shared authority path end to end. Start from a clean local database. Sign in as the seeded owner and two seeded customers. Read the one published release and play its public preview. Submit one deterministically signed simulated payment event for the first customer. Process the event transactionally into exactly one order and one entitlement. Request the private fixture through the protected download route and receive it as the entitled customer. Request the same fixture as the second customer and receive a denial. Replay the payment event at least three times and prove that no duplicate order or entitlement appears.
+
+This gate uses the production-shaped event, fulfillment, entitlement, and signed-delivery interfaces even though Stripe test mode is connected later. It must pass database-policy, integration, and Playwright tests. Record the exact files, commit, tests, manual actions, and outcome in `docs/submission/capability-evidence.md`. Later commerce, license, membership, learning, and media features extend this spine rather than defining separate access systems.
+
+Acceptance is a single verification command, `npm run verify:spine`, that resets the local fixtures, runs the payment replay and cross-account denial tests, and exits successfully with one order, one entitlement, one allowed protected delivery, and one denied delivery.
+
+### Milestone 3: Build artist onboarding, identity, navigation, and administration
+
+Implement `app/pages/admin/` as an accessible workspace rather than a generic grid of cards. The artist must be able to edit site name, biography, contact information, social and distribution links, logo and imagery, semantic colors, typography choices, navigation, footer, search metadata, and enabled modules. Follow `docs/architecture/configuration-authority.md`: shared schemas define the contract, `artist.config.ts` supplies bootstrap defaults, Supabase is authoritative for artist-editable runtime values, environment configuration is authoritative for secrets, and `setup/project-state.json` records only non-secret setup status.
+
+Implement reusable page sections for prose, images, calls to action, credits, links, featured releases, featured learning paths, video, and contact. This is a structured page composer, not a freeform drag-and-drop HTML editor. The schema must preserve authored order and allow draft, preview, and publish states. Create home, about, and contact defaults that the artist can replace.
+
+Add unsaved-change protection, preview, explicit publish controls, image alternative-text requirements, keyboard operation, and responsive layouts. Add a server-owned contact endpoint with validation, rate limiting, spam resistance, and an optional mail adapter. The local demonstration stores contact messages without sending external email.
+
+Acceptance is an owner changing the fictional artist's name, colors, biography, navigation, and home content through the administration workspace, previewing the result, publishing it, and seeing the public site change without editing source code.
+
+### Milestone 4: Build the catalog, media intake, and listening experience
+
+Implement albums, tracks, collections, artwork, credits, genres or artist-defined taxonomies, release dates, duration, key, meter, tempo, mood, instruments, descriptive text, explicit ordering, and publish state. The schema must allow a track to appear on one primary album and in multiple ordered collections without duplicating the audio record.
+
+Build administration forms for single and bulk entry. Add resumable direct-to-storage uploads for large source audio, image validation and optimization, durable `media_jobs`, audio metadata inspection, duration verification, waveform generation, and preview generation. Implement the shared worker described by `docs/architecture/media-processing-contract.md` at `workers/media/index.ts`, with `npm run media:work` and `npm run media:watch` locally and `workers/media/Dockerfile` for hosted processing. Keep the original source immutable in private storage. Generate or accept a public preview according to artist-configured policy. Never overwrite a source file during conversion.
+
+Build public music, release, track, and collection pages with a persistent accessible player. Support queueing, play and pause, seeking, next and previous, keyboard control, route changes, responsive behavior, and one active audio source at a time. Add customer playlists, album and track favorites, and recently played history behind account access. Preserve artist-authored release and collection order.
+
+Create `scripts/import-media.ts` for the Codex-guided intake journey. It may inspect approved files with ffprobe or equivalent local metadata tools and propose records, slugs, track order, and missing fields in a review manifest. It must not publish, upload, or infer rights without explicit confirmation. Applying an approved manifest must be idempotent by content hash and stable identifier.
+
+Acceptance is an artist importing or manually creating an album with artwork and at least two tracks, editing the proposed metadata, publishing it, and listening through the public site. Reapplying the same approved import manifest must not duplicate albums, tracks, or media. The same approved audio fixture must reach `ready` through both the local worker and the explicitly approved deployed worker configuration, and the hosted site must retrieve its waveform and play its generated preview.
+
+### Milestone 5: Build commerce, memberships, and the entitlement engine
+
+Create a service-neutral product model that maps artist offerings to Stripe product and price identifiers without making Stripe the database of editorial truth. Support free items, externally linked items, one-time album or track downloads, recurring membership tiers, and licensing products. Price display must include currency and clearly distinguish purchase, membership, and license actions.
+
+Implement server-created Stripe Checkout sessions, a signed webhook endpoint, idempotent event storage, atomic order fulfillment, subscription updates, refund and cancellation handling, and customer portal sessions. “Atomic” means the database either records the complete payment result and its entitlements together or records neither, preventing half-finished access grants. Treat webhook verification as authoritative; a browser return URL only displays current server state.
+
+Implement the entitlement engine as a small stable module shared by downloads, membership content, education, and licenses. It must answer whether a user can access a resource, why access exists, when it expires, and whether it was revoked. Keep grants auditable. Signed download routes must check the entitlement at request time and log successful delivery without exposing permanent storage URLs.
+
+Provide a deterministic local Stripe simulation for automated integration tests and a separate documented Stripe test-mode journey using official test credentials. Never require live mode for development or judging. The administration workspace must show product mappings and fulfillment status without exposing secret keys.
+
+Acceptance is a customer completing a simulated and then test-mode one-time purchase, receiving exactly one order and the correct album entitlement despite webhook retries, downloading the protected file, subscribing to a membership, accessing member material, and losing future membership access after a tested cancellation or expiry rule while retaining any explicitly permanent purchase.
+
+### Milestone 6: Build music licensing and license delivery
+
+Implement artist-defined license templates containing plain-language usage categories, allowed media, audience or distribution ranges, term, territory, attribution, exclusivity, and pricing rules. Keep the initial rule engine intentionally explicit: supported choices and calculated prices must be visible to the buyer before checkout. Unusual requests must route to an inquiry rather than silently inventing legal terms.
+
+Create a licensing journey from a track page through usage selection, price explanation, account or buyer details, Stripe checkout, signed fulfillment, and an issued license record. Generate a human-readable license document from the exact selected terms and immutable template version. Store the document privately and expose it through the customer's account with entitlement checks. Make clear that the provided templates are artist-configurable business documents and not legal advice.
+
+Implement an artist view of issued licenses with track, licensee, terms, date, amount, payment state, and document status. Add recovery for delayed webhooks and document-generation failures without double charging or issuing conflicting records.
+
+Acceptance is a test buyer licensing a demonstration track, seeing the same terms before and after payment, receiving one issued license and protected document after webhook retries, and finding that license in their account. An unsupported use must produce an inquiry path rather than checkout.
+
+### Milestone 7: Build education, learning paths, video, and editorial publishing
+
+Implement learning areas, paths, courses, ordered lessons, lesson sections, rich text, images, audio, video, downloadable resources, and learner progress. Allow each unit to be public, account-required, individually entitled, or membership-entitled. Reuse the central entitlement engine and private media-delivery routes rather than creating separate authorization logic.
+
+The artist administration workspace must create, reorder, preview, and publish paths, courses, lessons, and mixed-media sections. The learner experience must preserve deliberate authored order, resume progress, mark completion, and show the next meaningful lesson. Add video pages with credits, poster imagery, transcript or description, accessible playback or approved external embeds, and explicit publication state.
+
+Add an editorial publishing surface for essays, announcements, learning notes, or artist-defined informational pages using the same safe structured-content renderer. Sanitize rich text on the server and prevent untrusted script or embed injection.
+
+Acceptance is an artist building a three-lesson learning path containing prose, image, audio, and video, placing one lesson behind membership, and publishing it. An anonymous visitor can view the public lesson, a non-member is shown the configured access explanation, a test member can continue and record progress, and the account accurately resumes the next lesson.
+
+### Milestone 8: Build privacy-conscious telemetry and operational status
+
+Implement first-party events for page views, media starts and meaningful listens, catalog searches, product interest, checkout initiation and completion, downloads, license interest and completion, course progress, contact conversion, and setup health. “First-party” means the event is sent directly to the artist's own application and database rather than to a third-party advertising network.
+
+Define event purpose, retention, identifiers, and consent behavior in `docs/artist/privacy.md`. Collect the minimum needed fields, avoid raw secret or payment data, and provide a configuration that disables optional analytics. Respect browser privacy signals where required by the chosen policy. Separate operational logs needed for security or fulfillment from optional audience analytics.
+
+Build an artist-facing metrics area showing understandable trends and content performance, plus a system-status area for failed webhooks, media processing, email adapter status, storage configuration, and migration version. All diagnostics must redact tokens, connection strings, personal addresses, and payment details.
+
+Acceptance is a visitor journey producing the documented events, the owner seeing aggregated results, consent settings changing optional collection behavior, and `npm run diagnose` producing a useful redacted report that can be safely shared with Codex.
+
+### Milestone 9: Build the Codex-native artist setup and maintenance experience
+
+Create `SETUP.md` as the nontechnical entrypoint. It should tell an artist how to obtain or open the repository with Codex and give one starting request, such as “Help me set up my artist-owned site.” `AGENTS.md` must then instruct Codex to run preflight, explain the human-agent responsibility boundary, conduct the interview, preserve user work, avoid unapproved external state, and update `setup/project-state.json` as stages finish.
+
+Implement `npm run setup:interview` to emit a structured interview covering artist identity, audience, site goals, visual direction, pages, catalog location, commerce, licensing, memberships, learning, video, contact, privacy, and deployment intentions. Codex asks those questions conversationally and writes `setup/proposals/<proposal-id>.json`. `npm run setup:preview -- <proposal>` validates the proposal and produces a non-mutating diff. After explicit artist approval, `npm run setup:apply -- <proposal>` performs deterministic changes. `npm run setup:check` verifies the result before updating `setup/project-state.json`.
+
+Create agent runbooks for Supabase local and hosted projects, authentication and OAuth, storage, Stripe test mode and later live mode, Vercel, custom domains and DNS, email, media import, backup, restore, upgrades, and common failures. Each runbook must state which steps Codex can perform locally, which require a connected plugin or CLI, which create external state or cost, and which require explicit human approval. Instructions must work without assuming a particular plugin; connected Supabase, Vercel, or payment tooling may accelerate the same documented contract.
+
+Completed setup instructions must not simply disappear. `setup/project-state.json` must retain a non-secret, auditable record of enabled modules, migration version, completed checks, and remaining external steps. The human-facing setup UI may collapse completed stages, while the recovery instructions remain available for future maintenance or a new machine.
+
+Acceptance is a new Codex task reading only the repository, taking a fictional artist through the guided local setup, applying an approved identity and two-track import, detecting intentionally missing service configuration, explaining the exact human checkpoint, and reaching a passing `npm run setup:check` without exposing credentials or mutating an external account.
+
+### Milestone 10: Make artist ownership portable and verifiable
+
+Implement `npm run export:artist`, `npm run export:verify`, and `npm run restore:check`. The export must include a versioned snapshot of public configuration and design, navigation and pages, catalog metadata and credits, product and licensing definitions without secret Stripe values, learning and editorial structure, a media inventory with hashes and storage paths, the current schema and application versions, database backup instructions, customer-data export procedures, and a redacted service-connection manifest.
+
+The export may reference large media through a verified manifest rather than forcing every file into one archive. `export:verify` must validate every structured artifact and confirm that each media reference has a matching hash and documented retrieval path. `restore:check` must prove that a fresh local installation can accept the portable content and identify any artist action required to reconnect external accounts. Exports must never contain service secrets, private task metadata, unapproved personal data, or permanent signed URLs.
+
+Acceptance is an artist producing an export from the configured demonstration, verifying it, initializing a clean local database, importing the portable configuration and content, and seeing equivalent public catalog, licensing, learning, video, and design behavior. The evidence matrix must record the export manifest, tests, and manual comparison.
+
+### Milestone 11: Harden security, accessibility, reliability, and performance
+
+Audit all trust boundaries: browser to server, server to Supabase, Stripe to webhook, uploads to media processing, public content to renderer, and administrator actions to database. Add schema validation, rate limiting, content-type and size enforcement, signed URL expiry, webhook replay protection, idempotency keys, secure headers, cross-site request protections where applicable, and explicit server-only modules. Run Supabase advisors against a disposable or approved environment and resolve new actionable findings in the clean schema.
+
+Test keyboard navigation, visible focus, semantic landmarks, form labels and errors, alternative text, captions or transcripts, color contrast, reduced motion, and screen-width behavior. Use axe checks in Playwright for critical public and administrative pages, followed by manual browser review. The visual system must permit artist expression while retaining accessible token constraints.
+
+Measure public home, music, release, and learning pages under production build. Optimize images, audio loading, database queries, cache headers, and client bundles based on evidence. Do not preload full audio. Add graceful empty, loading, offline, service-unavailable, payment-pending, and media-processing states.
+
+Document database and storage backup and restore, Stripe reconciliation, failed media retry, and versioned upgrade procedures. Setup and migrations must be safe to rerun. Destructive reset commands must be clearly local-only and reject a production connection.
+
+Acceptance is a passing full verification suite; zero known critical or high security findings within the project scope; no serious axe violations in defined journeys; a successful production build; documented recovery drills for database reset, failed webhook replay, and media retry; and a responsive manual review on mobile and desktop viewports.
+
+### Milestone 12: Package the complete fresh-clone and judging experience
+
+Replace temporary fixtures with a coherent fictional demonstration artist using original or explicitly redistribution-approved audio, artwork, text, and video. Record provenance and license for each asset. The demonstration must exercise every enabled module without using Michael's private catalog or Sound for Movement branding.
+
+Complete `README.md` with the purpose, screenshots, architecture, requirements, five-minute local path, full service path, supported platforms, module overview, test commands, security model, deployment model, costs that may exist despite free software, open-source license, contribution guidance, and troubleshooting. Complete `docs/submission/judge-quickstart.md`, the artist and agent documentation, and all internal links. Add `npm run demo:local` and `npm run demo:reset` so the judge path is deterministic.
+
+Run a clean-room rehearsal from a new clone or temporary directory with no untracked local configuration. A novice-following-Codex path and a judge path must both work. The judge path may use an approved hosted demonstration and test account, but must not require rebuilding the project or using a live payment method.
+
+Acceptance is a clean clone that reaches the demonstration locally using the documented commands, an agent-guided personalization rehearsal that changes identity and imports media, a complete hosted-test plan with redacted credentials, and no dependency on the private Sound for Movement repository.
+
+### Milestone 13: Assemble the Build Week submission evidence
+
+Update `BUILD_WEEK.md` and `README.md` with the final project name, selected track, working description, scope of new competition-period work, important decisions made by Michael, and specific contributions from Codex, GPT-5.6 Sol, and GPT-5.6 Pro. Reconcile `docs/submission/model-and-agent-use.md` and `docs/submission/capability-evidence.md` with task metadata and dated commits, then capture the `/feedback` session ID from this primary implementation task.
+
+Prepare `docs/submission/judging-guide.md`, `docs/submission/project-description.md`, and `docs/submission/demo-script.md`. The video script must fit under three minutes, show a fresh or near-fresh artist setup, reveal the functioning personalized site, demonstrate at least one direct transaction or entitlement, and briefly explain the agent-readable repository and how Codex performed the implementation. The script should describe the work honestly as agent-coded and human-directed.
+
+Verify that judges have free and unrestricted access through the required period, that any test payment path uses Stripe test mode, and that every public asset is authorized. Prepare but do not perform repository publication, hosted production promotion, video upload, external sharing, or Devpost submission without Michael's explicit action-specific approval.
+
+Acceptance is a complete submission package satisfying every item in `BUILD_WEEK.md`, a final judge rehearsal under three minutes, a recorded session ID, a clean or intentionally documented Git state, and explicit approval checkpoints remaining for each publication action.
+
+## Concrete Steps
+
+Run all commands from `<repository-root>` unless a step says otherwise. Keep the application runnable and commit after each coherent milestone.
+
+The initial implementation sequence is:
+
+    git status --short --branch
+    npm install
+    npm ci
+    npm run setup:preflight
+    npm run setup:local
+    npm run dev
+
+After Milestone 1, the expected setup transcript should resemble:
+
+    Preflight: PASS
+    Local Supabase: running
+    Migrations: current
+    Demo seed: applied
+    Generated database types: current
+    Nuxt: http://localhost:3000
+
+After Milestone 2, prove the shared authority path before expanding dependent modules:
+
+    npm run verify:spine
+
+The expected semantic result is:
+
+    Public release and preview: PASS
+    Signed simulated payment: PASS
+    Transactional order and entitlement: PASS
+    Entitled protected delivery: PASS
+    Cross-account denial: PASS
+    Three-event replay idempotency: PASS
+
+The deterministic setup lifecycle must expose:
+
+    npm run setup:interview
+    npm run setup:preview -- setup/proposals/<proposal-id>.json
+    npm run setup:apply -- setup/proposals/<proposal-id>.json
+    npm run setup:check
+
+The media worker and portability commands must expose:
+
+    npm run media:work
+    npm run media:watch
+    npm run export:artist
+    npm run export:verify
+    npm run restore:check
+
+The judge environment must expose:
+
+    npm run demo:local
+    npm run demo:reset
+
+The routine focused verification commands must be:
+
+    npm run format:check
+    npm run lint
+    npm run typecheck
+    npm run test:unit
+    npm run test:integration
+    npm run test:db
+    npm run test:e2e
+    npm run build
+
+The repository must expose one aggregate command:
+
+    npm run verify
+
+The expected final summary is semantic rather than tied to a brittle test count:
+
+    Formatting: PASS
+    Lint: PASS
+    Typecheck: PASS
+    Unit: PASS
+    Integration: PASS
+    Database policies: PASS
+    End-to-end: PASS
+    Production build: PASS
+
+Use `npm run setup:check` after any service or environment change. It must report named checks and redact all values:
+
+    Artist configuration: PASS
+    Supabase connection: PASS
+    Database migration: PASS
+    Storage policies: PASS
+    Authentication redirects: PASS or ACTION REQUIRED
+    Stripe test mode: PASS or ACTION REQUIRED
+    Stripe webhook: PASS or ACTION REQUIRED
+    Deployment: LOCAL or ACTION REQUIRED
+    Domain: LOCAL or ACTION REQUIRED
+
+Use Stripe simulation for automated tests. When Michael separately approves connecting a Stripe test account, use the documented test-mode command and record only non-secret evidence in `docs/submission/judging-guide.md`. Never include keys or webhook secrets in terminal transcripts, Git, screenshots, or diagnostics.
+
+Before any release candidate, run:
+
+    rg -n --hidden --glob '!node_modules/**' --glob '!.git/**' '/Users/|michaelwall|file://|Sound for Movement|soundformovement|SUPABASE_SERVICE_ROLE|STRIPE_SECRET|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY' .
+    npm run diagnose
+    npm run verify
+    git status --short
+
+Review every match. Explanatory provenance and public author-credit matches are allowed; machine-specific paths, private usernames, branding outside provenance, production endpoints, secrets, private data, local credentials, personal email addresses, and unauthorized media are not.
+
+## Validation and Acceptance
+
+The project is accepted as complete only when all of the following behaviors work together in one supported installation.
+
+An artist can start from a fresh clone, ask Codex to begin setup, complete the identity interview, run local Supabase, apply an approved configuration, and launch the demonstration without editing source code manually. The system gives specific, non-secret guidance for any unconnected external service.
+
+The setup lifecycle produces a structured proposal, a validated non-mutating preview, an explicit approval boundary, a deterministic application, a verification result, and an updated non-secret project-state record. GPT-5.6 Sol and GPT-5.6 Pro operate through Codex; the installed public application remains functional without an OpenAI API key.
+
+An owner can sign in to the administration workspace; change the artist identity and public navigation; create, import, reorder, preview, and publish albums and tracks; maintain pages, videos, licensing terms, membership tiers, and a learning path; and view redacted operational and audience information. An editor can maintain content but cannot alter server-owned payment events or owner-only settings.
+
+An owner or editor can upload approved source audio directly to private storage in the hosted demonstration. The durable job becomes visible, the deployed worker creates versioned preview and waveform derivatives, and the public player uses them only after the job reaches `ready`. The same worker behavior passes locally.
+
+A visitor can navigate an expressive responsive site, listen to public previews, explore releases and collections, view public educational and video content, contact the artist through a protected endpoint, create an account, and manage consent. Keyboard and screen-reader fundamentals must work on all critical journeys.
+
+A test customer can purchase a download, receive exactly the intended entitlement after repeated webhook delivery, retrieve a protected file through a short-lived URL, buy a supported license with consistent terms and a private document, join a membership, access a protected lesson, record course progress, and manage the subscription through the Stripe test customer portal. Another customer cannot read or use those records.
+
+The site records only documented first-party events, honors its configured consent rules, and gives the owner understandable aggregate metrics. Operational diagnostics identify broken service connections without revealing secret or personal values.
+
+The artist can create and verify a portable export, initialize a clean local installation, restore public configuration and content, reconcile media through the hashed inventory, and receive explicit instructions for reconnecting external accounts without carrying secrets into the export.
+
+The complete automated suite passes against the local environment and continuous integration, the production build starts successfully, and a clean-clone rehearsal follows the documented `npm ci` path. The hosted judge environment supports deterministic reset and does not require judges to rebuild the application. The public demonstration and competition artifacts must contain only approved assets and must remain unpublished until explicitly approved.
+
+## Idempotence and Recovery
+
+All setup and import commands must be safe to rerun. Database migrations are forward-only and versioned. Local development may use a clearly named reset command that refuses any non-local Supabase URL. Hosted database changes require a generated migration, a review of the SQL and policies, and explicit approval before applying to an external project.
+
+Media imports use stable identifiers and content hashes. Reapplying an approved manifest updates the matching draft record or reports a no-op; it never creates silent duplicates. Original source media remains unchanged. Interrupted uploads and conversions can resume or restart into a temporary object before an atomic final record is created. Media workers claim jobs through leases, use versioned derivative identifiers, and cannot let a stale attempt overwrite a later successful result.
+
+Stripe webhook handling stores event identifiers and makes fulfillment idempotent. Retrying the same event must not duplicate orders, entitlements, subscriptions, or licenses. Failed fulfillment remains visible and can be replayed from a documented local or test-mode command. Refund and cancellation operations append auditable state changes rather than erasing payment history.
+
+Configuration application writes a preview and diff before changing tracked files or database settings. `setup/project-state.json` contains no secrets and can be regenerated from checks. Secrets live only in ignored environment files or connected service stores. `.env.example` contains names and explanations, never usable values.
+
+Artist export is repeatable and versioned. Creating an export twice from unchanged state produces equivalent structured content and hashes. Restore checks operate against a disposable local database and never overwrite an existing installation without an explicit reviewed target.
+
+Deployment, DNS, OAuth-provider, live Stripe, email, and public-release steps stop at an approval checkpoint. If approval is not given, local and test-mode verification remain valid and the plan records the external step as pending rather than attempting a workaround.
+
+## Artifacts and Notes
+
+The central Build Week evidence set must eventually include:
+
+    BUILD_WEEK.md
+    README.md
+    AGENTS.md
+    SETUP.md
+    plans/artistOwnedPlatform.md
+    docs/provenance.md
+    docs/architecture/configuration-authority.md
+    docs/architecture/media-processing-contract.md
+    docs/architecture/product-contract.md
+    docs/architecture/decisions/
+    docs/submission/model-and-agent-use.md
+    docs/submission/capability-evidence.md
+    docs/submission/project-description.md
+    docs/submission/judging-guide.md
+    docs/submission/judge-quickstart.md
+    docs/submission/demo-script.md
+    setup/project-state.json
+    test-results/ or a concise checked-in verification summary
+
+The Git history is part of the evidence. Commit messages should describe observable milestones, and `docs/provenance.md` should identify which generalized capabilities were informed by pre-existing user-owned work. `docs/submission/capability-evidence.md` must connect every public claim to the new files, commit, automated test, manual or judge action, and final demo timecode. The README must avoid claiming that Codex supplied the artistic purpose or business judgment. A precise description is that Michael directed the product, supplied the operating knowledge and creative decisions, and Codex performed the implementation, generalization, tests, setup automation, and technical documentation using GPT-5.6 Sol and GPT-5.6 Pro.
+
+The provisional demonstration story is: a dance accompanist opens the repository with Codex, describes a warm and direct identity, supplies approved cover art and two original tracks, enables licensing and a rhythm-learning path, reviews Codex's proposal, and launches a personalized local site. A visitor listens, licenses a track in Stripe test mode, signs into the resulting account, retrieves the license, and opens a membership lesson. The final demo may simplify screen time, but the underlying judge environment must retain the complete modules.
+
+## Interfaces and Dependencies
+
+Use Node 24, npm, Nuxt 4, Vue 3, and TypeScript. Use Supabase for PostgreSQL, authentication, Row Level Security, and object storage. Use Stripe Checkout, Billing, webhooks, and the customer portal for payment flows. Use Zod at every untrusted configuration and request boundary. Use Pinia only for genuine client-side state such as the player and cart; server and database data should use Nuxt data utilities and typed service modules. Use Vitest for unit and integration tests, Supabase SQL tests or an equivalent local policy harness for database authorization, and Playwright with axe-core for complete browser journeys.
+
+The stable shared configuration interface in `shared/schemas/artistConfig.ts` must validate an `ArtistConfig` with identity, design, navigation, feature, contact, commerce, licensing, learning, telemetry, and deployment-safe public settings. Follow `docs/architecture/configuration-authority.md`: repository code defines schemas and bootstrap defaults, Supabase owns artist-editable runtime state, environment variables own secrets, and `setup/project-state.json` owns only non-secret setup status. Secret settings must use a separate server-only `ServiceConfig` validated from environment variables.
+
+The server entitlement module must expose behavior equivalent to:
+
+    type ResourceRef = {
+      kind: 'track' | 'album' | 'collection' | 'download' | 'license' | 'course' | 'lesson' | 'video'
+      id: string
+    }
+
+    type AccessDecision = {
+      allowed: boolean
+      reason: 'public' | 'purchase' | 'license' | 'membership' | 'admin' | 'expired' | 'missing'
+      entitlementId?: string
+      expiresAt?: string
+    }
+
+    async function decideAccess(userId: string | null, resource: ResourceRef): Promise<AccessDecision>
+
+All protected server routes must call the same decision layer or a database function implementing the same contract. Do not duplicate membership or purchase checks in individual page components.
+
+The media-import interface must separate inspection from application:
+
+    async function inspectMedia(inputDirectory: string): Promise<ImportProposal>
+    async function validateImportProposal(proposal: unknown): Promise<ImportProposal>
+    async function applyApprovedImport(proposal: ImportProposal): Promise<ImportResult>
+
+`ImportProposal` contains proposed files, content hashes, metadata, order, slugs, rights confirmations still required, and planned destinations. `applyApprovedImport` must reject a proposal whose required confirmations are incomplete.
+
+The media worker must expose behavior equivalent to:
+
+    type MediaJobStatus = 'pending' | 'processing' | 'ready' | 'failed'
+
+    type MediaJobClaim = {
+      jobId: string
+      mediaId: string
+      sourceHash: string
+      sourcePath: string
+      processingProfileVersion: string
+      leaseExpiresAt: string
+    }
+
+    async function claimMediaJob(workerId: string): Promise<MediaJobClaim | null>
+    async function processMediaJob(claim: MediaJobClaim): Promise<void>
+
+The same worker library must serve `npm run media:work`, `npm run media:watch`, and the container entrypoint. Derivatives are keyed by source hash, processing-profile version, and kind. Job finalization must reject stale leases.
+
+The setup checker must return structured results as well as readable terminal output:
+
+    type SetupCheck = {
+      id: string
+      status: 'pass' | 'action-required' | 'fail'
+      summary: string
+      safeDetails?: Record<string, string | number | boolean>
+      runbook?: string
+    }
+
+The Stripe webhook layer must verify signatures before parsing business data, store the event identifier, perform fulfillment transactionally, and return a successful retry-safe response only after the event is durably recorded. The license generator must render from a versioned immutable snapshot of the selected terms, not from a mutable current template.
+
+Avoid unnecessary platform dependencies. Email is an adapter with local capture as the default. Vercel is the first documented host, not a hard runtime dependency. OAuth providers are optional. Telemetry is first-party and can be disabled. The public site must continue to present published content and public previews when Stripe is not configured; commerce actions must then display an honest artist-configured unavailable state.
+
+Revision note, 2026-07-14: Created the initial full-product ExecPlan from the Build Week requirements, the ideation conversation, and a read-only inventory of the proven Sound for Movement web architecture. The plan intentionally covers the entire artist-owned platform while ordering milestones around database authority, entitlements, and Codex-guided setup so implementation can remain demonstrable throughout the week.
+
+Revision note, 2026-07-14: Added the dated Build Week cadence and critical dependency chain so the complete scope has an explicit path to the competition deadline without presenting unintegrated mock surfaces as finished features.
+
+Revision note, 2026-07-14: Reframed the delivery commitment after Michael identified that preemptively comparing the project with years of production maturity weakened the intended Build Week ambition. The complete platform is now explicit as the competition outcome; schedule discoveries may change implementation order but do not lower the definition of completion.
+
+Revision note, 2026-07-15: Incorporated the independent GPT-5.6 Pro review and Michael's confirmation that Build Week uses GPT-5.6 Sol and GPT-5.6 Pro. Added the primary-task record, model evidence contract, configuration authority, Integration Gate A, shared local and deployed media worker, executable portability, capability evidence matrix, public-path hygiene, continuous integration, deterministic judge path, and revised milestone numbering. These additions strengthen integration and evidence while preserving the complete product definition.
