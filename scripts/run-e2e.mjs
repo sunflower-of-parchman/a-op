@@ -28,7 +28,7 @@ if (requested.length > 0) {
 }
 
 const specifications = readdirSync(join(root, 'tests', 'e2e'))
-  .filter((file) => file.endsWith('.spec.ts'))
+  .filter((file) => file.endsWith('.spec.ts') && file !== 'cross-browser.spec.ts')
   .sort()
   .map((file) => `tests/e2e/${file}`)
 

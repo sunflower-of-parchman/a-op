@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "collection": "Daymark Assembly",
+  "fictional": true,
+  "publicationApproved": false,
+  "licenseDecision": "Pending Michael's project-license selection before public release.",
+  "assets": [
+    {
+      "id": "daymark-identity-and-site-copy",
+      "kind": "text",
+      "paths": ["content/demo/artist.json", "content/demo/bootstrap-config.json"],
+      "source": "Original fictional identity, biography, navigation, design, and public copy written for this Build Week repository.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "lines-we-carry-catalog",
+      "kind": "metadata",
+      "paths": ["content/demo/catalog.json"],
+      "source": "Original fictional release, track, collection, credit, commerce, membership, and licensing metadata written for this repository.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "deterministic-preview-tones",
+      "kind": "audio",
+      "paths": [
+        "preview-media/gate-a/first-light-repeated-preview.wav",
+        "preview-media/gate-a/a-measure-of-distance-preview.wav",
+        "preview-media/gate-a/turn-toward-home-preview.wav"
+      ],
+      "source": "One-second 440 Hz, 554.37 Hz, and 659.25 Hz PCM verification tones generated during local seed by scripts/lib/local-supabase.mjs.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "generated-demonstration-artwork",
+      "kind": "image",
+      "paths": [
+        "artwork-originals/gate-a/lines-we-carry.svg",
+        "learning-media/gate-a/phrase-arc.svg"
+      ],
+      "source": "Trusted SVG artwork generated deterministically during local seed by scripts/lib/local-supabase.mjs.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "external-video-poster",
+      "kind": "image",
+      "paths": ["public/demo/video-poster.svg"],
+      "source": "Original trusted SVG poster created for the fictional privacy-gated video demonstration.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "learning-editorial-and-download-copy",
+      "kind": "text",
+      "paths": ["scripts/lib/local-supabase.mjs"],
+      "source": "Original fictional lesson, transcript, editorial, worksheet, and protected-download copy seeded by repository code.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    },
+    {
+      "id": "judge-readme-screenshots",
+      "kind": "screenshot",
+      "paths": ["docs/images/daymark-home.png", "docs/images/daymark-music-mobile.png"],
+      "source": "Captured from the local Daymark Assembly demonstration on July 15, 2026 using Playwright Chromium.",
+      "original": true,
+      "license": "Pending project license selection",
+      "privateMaterial": false
+    }
+  ]
+}

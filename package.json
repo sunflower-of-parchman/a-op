@@ -42,6 +42,8 @@
     "test:hardening": "node scripts/run-production-hardening.mjs",
     "test:performance": "node scripts/test-performance.mjs",
     "test:recovery": "node scripts/test-recovery.mjs",
+    "test:docs": "node scripts/test-documentation.mjs",
+    "test:cross-browser": "node scripts/run-cross-browser.mjs",
     "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
     "test:e2e": "node scripts/run-e2e.mjs",
     "setup:preflight": "node scripts/setup-preflight.mjs",
@@ -55,6 +57,8 @@
     "export:verify": "node --experimental-strip-types scripts/verify-export.ts",
     "restore:check": "node --experimental-strip-types scripts/restore-check.ts",
     "seed:reset": "node scripts/reset-local-demo.mjs",
+    "demo:local": "node scripts/demo-local.mjs",
+    "demo:reset": "node scripts/reset-local-demo.mjs",
     "health:check": "node scripts/health-check.mjs",
     "diagnose": "node scripts/diagnose.mjs",
     "media:work": "node --experimental-strip-types workers/media/index.ts --once",
@@ -75,6 +79,7 @@
     "verify:portability": "npm run test:portability && npm run test:browser-secrets",
     "verify:hardening": "npm run setup:local && npm run test:unit && npm run test:policies && npm run build && npm run test:hardening && npm run test:browser-secrets",
     "verify:recovery": "npm run test:recovery && npm run test:browser-secrets",
+    "verify:package": "npm run test:docs && npm run test:cross-browser && npm run test:browser-secrets",
     "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run verify:commerce && npm run verify:licensing && npm run verify:learning && npm run verify:telemetry && npm run verify:setup && npm run verify:portability && npm run verify:hardening && npm run verify:recovery && npm run setup:local && npm run test:spine && npm run test:e2e"
   },
   "dependencies": {

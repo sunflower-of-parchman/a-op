@@ -7,6 +7,7 @@ const steps = [
   ['Type checking', ['run', 'typecheck']],
   ['Unit tests', ['run', 'test:unit']],
   ['Integration tests', ['run', 'test:integration']],
+  ['Documentation and demo package', ['run', 'test:docs']],
   ['Production build', ['run', 'build']],
 ]
 
