@@ -70,6 +70,24 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `12f5d66` (`Build authority and fulfillment spine`).
 - Verification: `npm run verify:foundation`, `npm run verify:spine`, Supabase `db lint` for `public,private`, the exact browser-secret scan, and the full 10-test desktop/mobile Playwright suite passed. Visual acceptance inspected the desktop administration and mobile release-preview surfaces. Four identical simulated event deliveries produced one event, one order, and one entitlement; the entitled customer received the signed file and the second customer received HTTP 403.
 
+### Milestone 3 artist administration — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Give the artist direct application-based operation; preserve an expressive open public composition; keep identity, writing, imagery, publishing, and external communication under human authority.
+- Material contribution: Database-authoritative identity and design; private configuration and page drafts; explicit publication; nine ordered structured-section types; complete responsive administration; local contact capture with consent, honeypot, rate limiting, and audit records.
+- Commits: `0982946` (`Build database-authoritative artist administration`) and `37a7b12` (`Complete artist configuration and page composition`).
+- Verification: `npm run verify:administration`, aggregate `npm run verify`, unit and policy tests, schema lint, browser-secret scan, and desktop/mobile administration, contact, accessibility, and publication journeys passed.
+
+### Milestone 4 catalog, media, and listening — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Support the complete musician-operated catalog; keep source media immutable; require rights approval before import; preserve authored release and collection order; use one worker implementation locally and in a deployed container; keep listener libraries private by account.
+- Material contribution: Catalog and media schema; release, track, credit, artwork, and collection administration; draft-safe atomic publication; direct signed TUS uploads; durable leased processing jobs; shared ffmpeg worker and Docker entrypoint; rights-gated idempotent Codex import; public catalog and persistent player; customer favorites, atomic playlists, and listening history.
+- Commits: `bc89195`, `021bc7a`, `ea7c0f9`, `fd17435`, `57587c1`, `db4e560`, and `21476f6`.
+- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:catalog`, production build, browser-secret scan, and desktop/mobile catalog, administration, upload, customer-isolation, viewport, and accessibility journeys passed. The same worker passed local direct and Docker image execution. Hosted deployment evidence remains pending Michael's explicit approval.
+
 ## Submission reconciliation
 
 Before submission:

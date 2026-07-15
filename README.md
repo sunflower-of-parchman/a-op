@@ -37,7 +37,7 @@ The setup lifecycle is:
 
 ## Current status
 
-Milestones 0 through 3 and Integration Gate A are complete. The repository now includes the Nuxt 4 and local Supabase foundation, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, all nine structured page-section types, consent-based local contact storage, audit records, and a complete responsive administration workspace. Milestone 4 expands this foundation into catalog management, media intake and processing, and the persistent listening experience.
+Milestones 0 through 4 and Integration Gate A are implemented locally. The repository now includes the Nuxt 4 and local Supabase foundation, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, structured pages, consent-based contact storage, catalog and collection authorship, signed resumable media intake, one local/container processing worker, a persistent public player, and private listener libraries. The prepared media worker still requires an explicitly approved deployment before the hosted upload-to-ready evidence can be recorded.
 
 - Build record: `BUILD_WEEK.md`
 - Complete execution plan: `plans/artistOwnedPlatform.md`
