@@ -26,13 +26,13 @@ If the overview and official rules differ, follow the official rules.
 
 ## Key dates
 
-| Milestone | Pacific time | Mountain time |
-| --- | --- | --- |
-| Submission period opened | July 13, 2026 at 9:00 AM | July 13, 2026 at 10:00 AM |
-| Free-credit request deadline | July 17, 2026 at 12:00 PM | July 17, 2026 at 1:00 PM |
-| Registration and submission deadline | July 21, 2026 at 5:00 PM | July 21, 2026 at 6:00 PM |
-| Judging period | July 22 at 10:00 AM through August 5 at 5:00 PM | July 22 at 11:00 AM through August 5 at 6:00 PM |
-| Winners expected | Around August 12, 2026 at 2:00 PM | Around August 12, 2026 at 3:00 PM |
+| Milestone                            | Pacific time                                    | Mountain time                                   |
+| ------------------------------------ | ----------------------------------------------- | ----------------------------------------------- |
+| Submission period opened             | July 13, 2026 at 9:00 AM                        | July 13, 2026 at 10:00 AM                       |
+| Free-credit request deadline         | July 17, 2026 at 12:00 PM                       | July 17, 2026 at 1:00 PM                        |
+| Registration and submission deadline | July 21, 2026 at 5:00 PM                        | July 21, 2026 at 6:00 PM                        |
+| Judging period                       | July 22 at 10:00 AM through August 5 at 5:00 PM | July 22 at 11:00 AM through August 5 at 6:00 PM |
+| Winners expected                     | Around August 12, 2026 at 2:00 PM               | Around August 12, 2026 at 3:00 PM               |
 
 ## Build requirements
 
@@ -136,16 +136,16 @@ This section will develop as we discuss the idea.
 
 ## Submission progress
 
-| Item | Status |
-| --- | --- |
-| Registration | Confirmed |
-| Devpost plugin | Installed |
-| Free-credit request | Submitted; approval not yet confirmed |
-| Project idea and track | Product direction and Developer Tools track selected; final name pending |
-| Working implementation | Milestone 0 product and architecture contracts complete; application scaffolding next |
-| Repository history and evidence | Started |
-| README | Not started |
-| Demo and judging access | Not started |
-| Demo video | Not started |
-| `/feedback` session ID | Primary task/thread ID recorded; final `/feedback` confirmation pending |
-| Devpost submission | Not started |
+| Item                            | Status                                                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Registration                    | Confirmed                                                                                                          |
+| Devpost plugin                  | Installed                                                                                                          |
+| Free-credit request             | Submitted; approval not yet confirmed                                                                              |
+| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                           |
+| Working implementation          | Milestones 0 and 1 complete; Nuxt, local Supabase, typed configuration, setup, CI, and browser foundation verified |
+| Repository history and evidence | Planning, product-contract, and runnable-foundation commits recorded                                               |
+| README                          | Product introduction and verified local quickstart complete                                                        |
+| Demo and judging access         | Not started                                                                                                        |
+| Demo video                      | Not started                                                                                                        |
+| `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                            |
+| Devpost submission              | Not started                                                                                                        |

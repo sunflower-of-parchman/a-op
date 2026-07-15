@@ -52,6 +52,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `ebdc320` (`Define artist-owned platform contract`).
 - Verification: Required documents exist; tracked paths are public-safe; local-path example is valid JSON; documentation contains no secret values; ExecPlan and evidence records are synchronized.
 
+### Milestone 1 reproducible foundation — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Build a complete agent-operable platform; keep the demonstration fictional and free of private music or branding; make local operation real; retain explicit approval over external accounts, deployment, payment mode, media, and publication.
+- Material contribution: Pinned Nuxt 4 and Node 24 application; typed artist and service configuration; semantic public design system; fictional public routes; local Supabase configuration, migration, RLS policy, seed, and generated types; secret-redacting setup scripts; deterministic project state; unit, integration, database, Playwright, axe, and continuous-integration foundations.
+- Commit: `83c3b4f` (`Bootstrap reproducible artist platform`).
+- Verification: `npm ci`, `npm run setup:preflight`, `npm run setup:local`, `npm run setup:check`, `npm run test:db`, `npm run verify:foundation`, and the four-test desktop/mobile `npm run test:e2e` suite passed. Desktop and mobile screenshots were inspected locally after correcting transient animation contrast and heading-to-body spacing.
+
 ## Submission reconciliation
 
 Before submission:

@@ -23,8 +23,8 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - [x] (2026-07-15 00:03Z) Designated this as the primary implementation task, recorded GPT-5.6 Sol and GPT-5.6 Pro, and created the model-and-agent-use and capability-evidence records.
 - [x] (2026-07-15 00:03Z) Established the configuration-authority and local/deployed media-processing contracts before application implementation.
 - [x] (2026-07-15 00:19Z) Established the product contract, repository instructions, public language, provenance boundary, visual direction, architecture decision records, and Developer Tools track.
+- [x] (2026-07-15 01:12Z) Completed Milestone 1: pinned and clean-installed the Nuxt 4 foundation; validated the fictional artist and semantic theme; started, migrated, seeded, and checked local Supabase; generated database types; passed unit, integration, database, production-build, desktop/mobile navigation, axe, and visual acceptance checks; and committed the implementation as `83c3b4f`.
 - [ ] Complete the open-source license gate (completed: MIT and AGPL-3.0 consequences recorded; remaining: Michael selects the license before public release).
-- [ ] Bootstrap the independently runnable Nuxt application, local Supabase development environment, demonstration identity, test harness, and continuous verification commands.
 - [ ] Implement the consolidated database schema, migrations, storage buckets, authentication, OAuth configuration, roles, Row Level Security policies, and generated TypeScript database types.
 - [ ] Pass Integration Gate A by proving the complete authority and fulfillment spine from authentication through idempotent entitlement and protected delivery.
 - [ ] Implement artist onboarding, site configuration, design tokens, navigation, editable pages, contact surface, search-engine metadata, and the authenticated administration workspace.
@@ -61,6 +61,15 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 - Observation: Current Supabase guidance recommends TUS resumable uploads and the direct storage hostname for large files.
   Evidence: The official resumable-upload guide recommends TUS above 6 MB, supports signed upload tokens, and advises versioned new object paths instead of overwrites. This reinforces the immutable-source media contract.
+
+- Observation: Nuxt 4.4.8 requires Node `^22.12.0 || ^24.11.0 || >=26.0.0`; the host's default Node 25 is intentionally unsupported.
+  Evidence: The project pins Node 24.14 and npm 11 in `.nvmrc`, `.node-version`, `.npmrc`, and `package.json`. A clean `npm ci` and the full foundation suite pass under the bundled Node 24.14 runtime.
+
+- Observation: The first local Supabase startup delay came from Docker Desktop's container-start engine, not the migration or Supabase CLI.
+  Evidence: Both Supabase CLI 2.109.1 and the installed 2.98.2 stopped at the Docker API start call, and a harmless one-shot `docker run` also blocked. `docker desktop restart` restored one-shot containers, after which the pinned CLI started Supabase and completed migration, seed, RLS read, and type generation.
+
+- Observation: An opacity-based entrance animation can temporarily violate text contrast even when its final colors pass.
+  Evidence: The mobile axe journey detected serious contrast violations while the hero was fading in. Removing opacity from the entrance keyframes preserved motion and produced zero serious axe violations on desktop and mobile.
 
 ## Decision Log
 
@@ -146,7 +155,9 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 ## Outcomes & Retrospective
 
-Milestone 0 is complete apart from the approval-gated license selection. The repository now carries the product contract, public introduction, setup entrypoint, agent rules, provenance ledger, visual direction, primary-task and model evidence, capability matrix, and architecture decisions for deployment, stack, schema, entitlements, configuration, setup, media, portability, design, track, and license choice. The Developer Tools track is selected. Application implementation has not started.
+Milestone 0 is complete apart from the approval-gated license selection. The repository carries the product contract, public introduction, setup entrypoint, agent rules, provenance ledger, visual direction, primary-task and model evidence, capability matrix, and architecture decisions for deployment, stack, schema, entitlements, configuration, setup, media, portability, design, track, and license choice. The Developer Tools track is selected.
+
+Milestone 1 is complete. A new artist can now clean-install a pinned Node 24 and Nuxt 4 application, run a named preflight, start and reset the local Supabase stack, apply the first migration, insert and anonymously verify a fictional published artist, generate database types, launch a coherent responsive public site, and run deterministic foundation and browser verification. The evidence is commit `83c3b4f`, the passing setup and verification commands, generated `setup/project-state.json`, and inspected desktop/mobile output. Authentication, administrator roles, storage policies, and the full authority schema remain Milestone 2 work.
 
 At the end of each implementation milestone, append a dated paragraph here describing what a new artist can now do, what evidence proves it, and any capability that remains incomplete. At project completion, compare the working fresh-clone and judge journeys with the Purpose / Big Picture section, and distinguish finished features from documented future extensions.
 
@@ -591,3 +602,5 @@ Revision note, 2026-07-14: Reframed the delivery commitment after Michael identi
 Revision note, 2026-07-15: Incorporated the independent GPT-5.6 Pro review and Michael's confirmation that Build Week uses GPT-5.6 Sol and GPT-5.6 Pro. Added the primary-task record, model evidence contract, configuration authority, Integration Gate A, shared local and deployed media worker, executable portability, capability evidence matrix, public-path hygiene, continuous integration, deterministic judge path, and revised milestone numbering. These additions strengthen integration and evidence while preserving the complete product definition.
 
 Revision note, 2026-07-15: Completed the Milestone 0 product, provenance, agent, design, and architecture contracts; selected Developer Tools; recorded the license as a Michael decision before publication; and incorporated current Supabase guidance on Data API grants, RLS, and signed TUS storage uploads.
+
+Revision note, 2026-07-15: Completed Milestone 1 with the pinned Nuxt 4 application, validated fictional artist configuration, semantic public design, local Supabase migration and RLS-backed seed, generated types, setup automation, CI, clean `npm ci`, production build, desktop/mobile Playwright and axe checks, visual acceptance, and implementation commit `83c3b4f`.

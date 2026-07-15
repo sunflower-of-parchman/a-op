@@ -17,6 +17,22 @@ You will be asked about:
 
 Codex prepares a proposal before changing the project. You review the proposal and its diff. Nothing is applied until you approve it. Publishing, paid resources, live payments, DNS, and other consequential external actions always require a separate explicit approval.
 
+## Start the local demonstration
+
+Install Node 24.14, npm 11, and Docker Desktop. Then run:
+
+    npm ci
+    npm run setup:preflight
+    npm run setup:local
+    npm run setup:check
+    npm run dev
+
+The setup script operates only on the local Supabase stack. It applies the tracked migration, inserts the fictional Daymark Assembly configuration, verifies anonymous access to the published configuration, generates database types, and writes local credentials to ignored `.env` without printing their values.
+
+The development site opens at `http://127.0.0.1:3000`. Supabase API and local mail URLs are reported after setup. Rerunning `setup:local` is supported.
+
+## Guided personalization
+
 The setup commands are implemented and verified during the build. Their stable contract is:
 
     npm run setup:interview
@@ -24,4 +40,4 @@ The setup commands are implemented and verified during the build. Their stable c
     npm run setup:apply -- setup/proposals/<proposal-id>.json
     npm run setup:check
 
-Until Milestone 9 marks these commands as tested, follow `plans/artistOwnedPlatform.md` rather than treating this file as a working installer.
+These guided personalization commands are implemented and tested in Milestone 9. Until then, the verified local setup uses the fictional demonstration identity and the complete lifecycle remains the controlling contract for later artist changes.

@@ -37,7 +37,7 @@ The setup lifecycle is:
 
 ## Current status
 
-OpenAI Build Week implementation is underway. The full product contract and execution plan are established; application scaffolding follows next.
+Milestone 1 is complete. The repository now starts as a Nuxt 4 application with a typed fictional artist, semantic design tokens, a local Supabase migration and seed, generated database types, deterministic setup checks, browser journeys, and visible continuous integration. Milestone 2 expands this foundation into authentication, roles, storage, and the complete authorization schema.
 
 - Build record: `BUILD_WEEK.md`
 - Complete execution plan: `plans/artistOwnedPlatform.md`
@@ -49,18 +49,23 @@ OpenAI Build Week implementation is underway. The full product contract and exec
 
 ## Development
 
-The verified development commands will be added during Milestone 1. The target clean-clone sequence is:
+Use Node 24.14, npm 11, and a running Docker Desktop installation. From a fresh clone:
 
     npm ci
     npm run setup:preflight
     npm run setup:local
     npm run dev
 
-The target complete verification command is:
+`setup:local` starts the local Supabase stack, applies migrations, inserts the fictional demonstration artist, generates `shared/types/database.ts`, and writes local credentials only to ignored `.env`.
 
-    npm run verify
+Verify the current foundation with:
 
-Do not rely on these commands until Milestone 1 records them as implemented and tested in `docs/submission/capability-evidence.md`.
+    npm run setup:check
+    npm run test:db
+    npm run verify:foundation
+    npm run test:e2e
+
+`npm run verify` currently aliases the verified foundation suite. It will expand as the database, authority spine, media, commerce, learning, portability, and judge journeys are integrated.
 
 ## Ownership and operating costs
 
