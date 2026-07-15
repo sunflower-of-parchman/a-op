@@ -198,6 +198,39 @@ Vercel documents `vercel pull`, `vercel build`, and `vercel deploy --prebuilt` a
 
 The tracked Services configuration deploys the Nuxt application and both worker containers together. Only `web` receives a public rewrite; caller-side bindings grant it private access to the two workers.
 
+### First-deployment rule and separate bootstrap approval
+
+Vercel's [default production domain record](https://vercel.com/blog/default-production-domain) states that the first deployment in every newly created project is automatically promoted to Production. This rule takes precedence over the ordinary [CLI Preview behavior](https://vercel.com/docs/projects/deploy-from-cli). Deleting that deployment returns a project with no deployment history to the same first-deployment state, so repeating `vercel deploy` or adding `--target preview` does not cross this boundary.
+
+For a new project whose safe provider read reports `hasDeployments: false`, Stage 6 therefore requires a separate, explicit approval for one temporary Production-classified bootstrap deployment before the approved immutable Preview can exist. Preview approval alone does not authorize the bootstrap.
+
+The approved bootstrap contract must be all of the following:
+
+1. Generate it in a fresh disposable directory with the repository command below. The output contains one static, `noindex` HTML file, Build Output API configuration, and no application code, environment value, credential, database identifier, media, or customer data.
+2. Deploy it with `--prod --skip-domain`. This still creates a Production-classified deployment and a unique deployment URL, but requests no production-domain assignment.
+3. Do not share or visit the bootstrap URL. Keep the deployment only while creating and confirming the real immutable Preview.
+4. Remove the exact bootstrap deployment after the Preview is confirmed. Verify that the project retains the Preview, has no current Production deployment or production-domain assignment, and still has no custom domain.
+5. If any requested condition is unavailable or the bootstrap is assigned a domain, remove it immediately and stop.
+
+Local preparation does not create provider state:
+
+```text
+npm run hosted:vercel-bootstrap -- \
+  --output [FRESH_PRIVATE_BOOTSTRAP_DIRECTORY] \
+  --confirm TEMPORARY_PRODUCTION_BOOTSTRAP
+npm run test:vercel-bootstrap
+```
+
+Only after the separate bootstrap approval, link that disposable directory to the exact guarded project and execute:
+
+```text
+cd [FRESH_PRIVATE_BOOTSTRAP_DIRECTORY]
+npx vercel@[PINNED_VERSION] link --yes --project [EXACT_PROJECT_NAME]
+npx vercel@[PINNED_VERSION] deploy --prebuilt --prod --skip-domain
+```
+
+Record the bootstrap deployment identifier privately so it can be removed exactly. Do not copy its URL into tracked evidence.
+
 After explicit approval to create one preview containing all three services:
 
 1. Pin one reviewed Vercel CLI version for the deployment record.
@@ -217,8 +250,8 @@ npm ci
 
 ```text
 npx vercel@[PINNED_VERSION] pull --yes --environment=preview
-npx vercel@[PINNED_VERSION] build
-npx vercel@[PINNED_VERSION] deploy --prebuilt
+npx vercel@[PINNED_VERSION] build --target preview
+npx vercel@[PINNED_VERSION] deploy --prebuilt --target preview
 ```
 
 6. Record stdout as `IMMUTABLE_PREVIEW_URL` and inspect the deployment:
@@ -241,7 +274,7 @@ Acceptance:
 - `npx playwright test --config playwright.cross-browser.config.ts` with `BASE_URL` set to the preview passes Chromium, Firefox, and WebKit on Linux.
 - Browser-secret scanning, response headers, accessibility, viewport containment, and production performance budgets pass against the preview.
 
-No alias, custom domain, or production promotion is implied by this stage. If a stable production alias is later approved, validate the exact preview first and then record a separate `vercel promote [IMMUTABLE_PREVIEW_URL]` approval and result.
+No alias, custom domain, permanent Production deployment, or production promotion is implied by this stage. The temporary first-deployment bootstrap is a separate action-specific approval and must be removed after the Preview is confirmed. If a stable production alias is later approved, validate the exact preview first and then record a separate `vercel promote [IMMUTABLE_PREVIEW_URL]` approval and result.
 
 After the deployment evidence is recorded and no further inspection needs the detached source, remove the private candidate worktree from the ordinary evidence-branch checkout. Worktree cleanup does not change the immutable tag or deployed preview.
 
