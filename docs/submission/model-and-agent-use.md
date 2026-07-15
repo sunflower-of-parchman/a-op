@@ -115,6 +115,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `b49c36c` (`Build learning video and editorial publishing`).
 - Verification: Clean local reset and schema lint, `npm run verify:learning`, `npm run verify:catalog`, formatting, lint, type checking, setup health, production build, browser-secret scan, and the complete nine-specification desktop/mobile Playwright regression passed. That full run isolated each specification with a fresh deterministic seed and used the prepared pinned PDF runtime for the licensing prerequisite.
 
+### Milestone 8 privacy-conscious telemetry and operations — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Give the artist useful first-party measurement without advertising profiles; preserve visitor control; keep search words, identities, payment details, and secrets out of audience events; make diagnostic output safe to share with Codex; retain explicit approval for external service connections.
+- Material contribution: Dedicated optional-event, policy, operational-history, current-check, and installation-metadata records; forced RLS and service-only RPCs; strict allowlisted schemas; session-only client identity; consent, global disable, GPC, DNT, retention, and dynamic-path enforcement; named product instrumentation; owner aggregate and system-status interfaces; redacted setup recording and diagnostic command; artist privacy guide; CI; authority and desktop/mobile browser proofs.
+- Commit: `1b585c9` (`Build privacy telemetry and redacted operations`).
+- Verification: `npm run verify:telemetry`, `npm run setup:check`, Supabase schema lint, formatting, lint, type checking, production build, browser-secret scan, focused desktop/mobile Playwright journeys, and the complete ten-specification isolated browser regression passed. The browser proof produced page-view, catalog-search, media-start, meaningful-listen, and contact-conversion aggregates from real visitor actions and proved GPC refusal, owner-only status, redaction, viewport containment, and critical/serious axe compliance.
+
 ## Submission reconciliation
 
 Before submission:
