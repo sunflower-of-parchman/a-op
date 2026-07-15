@@ -179,11 +179,10 @@ This stage creates no hosted state. Execute it at `FINAL_COMMIT` before requesti
 npm run test:unit
 npm run test:media
 npm run test:licensing
-docker build --pull=false -f Dockerfile.media -t artist-owned-platform-media-worker:candidate .
-docker build --pull=false -f Dockerfile.documents -t artist-owned-platform-document-worker:candidate .
+docker build --pull=false -f Dockerfile -t artist-owned-platform-worker-runtime:candidate .
 ```
 
-Start each image with the disposable local environment, an overridden container-reachable local Supabase URL, and a temporary invocation secret. Prove:
+Start the image once with each service command, the disposable local environment, an overridden container-reachable local Supabase URL, and a temporary invocation secret. Prove:
 
 1. `/health` returns only service identity and `supabase-durable` queue status.
 2. `/jobs/process-one` returns 401 without the exact bearer secret.

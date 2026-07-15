@@ -22,12 +22,14 @@
     "media_worker": {
       "root": ".",
       "runtime": "container",
-      "entrypoint": "Dockerfile.media"
+      "entrypoint": "Dockerfile",
+      "command": ["node", "--experimental-strip-types", "workers/media/service.ts"]
     },
     "document_worker": {
       "root": ".",
       "runtime": "container",
-      "entrypoint": "Dockerfile.documents"
+      "entrypoint": "Dockerfile",
+      "command": ["node", "--experimental-strip-types", "workers/documents/service.ts"]
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": { "service": "web" } }]
