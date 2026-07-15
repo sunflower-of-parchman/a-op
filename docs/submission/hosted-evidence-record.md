@@ -4,15 +4,15 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                     | Status  | Safe evidence                                   |
-| ------------------------- | ------- | ----------------------------------------------- |
-| Final public name         | Ready   | Artist-Owned Platform                           |
-| License                   | Ready   | `AGPL-3.0-or-later`                             |
-| Exact 40-character commit | Pending | Name decision requires a new verified candidate |
-| Local full aggregate      | Ready   | `b226602`: complete Node 24 aggregate passed    |
-| Dependency audit          | Ready   | `b226602`: zero vulnerabilities                 |
-| Local schema lint         | Ready   | `b226602`: no `public,private` schema errors    |
-| Linux CI all jobs         | Pending |                                                 |
+| Field                     | Status  | Safe evidence                                           |
+| ------------------------- | ------- | ------------------------------------------------------- |
+| Final public name         | Ready   | Artist-Owned Platform                                   |
+| License                   | Ready   | `AGPL-3.0-or-later`                                     |
+| Exact 40-character commit | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`              |
+| Local full aggregate      | Ready   | `fe2062a`: complete Node 24 aggregate passed            |
+| Dependency audit          | Ready   | `fe2062a`: zero vulnerabilities                         |
+| Local schema lint         | Ready   | `fe2062a`: no `public` or `private` error-level results |
+| Linux CI all jobs         | Pending |                                                         |
 
 ## Authorization ledger
 

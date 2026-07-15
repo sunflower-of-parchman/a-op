@@ -205,6 +205,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `fd9dfd8` (`Adopt AGPL-3.0-or-later license`).
 - Verification: The official license text contains 661 lines and has local SHA-256 `0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0`; `npm pkg get license` returned `AGPL-3.0-or-later`; formatting, documentation, fictional-asset, JSON, and diff checks passed.
 
+### Final public name and local candidate — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task.
+- Human decisions: Michael finalized Artist-Owned Platform as the public name and retained every hosted resource, publication, credential-sharing, video, and Devpost action as a separate approval.
+- Material contribution: Public-name reconciliation across the competition and submission records; completed-playback terminal accounting for meaningful-listen telemetry; response-backed Playwright evidence that removes an arbitrary timing delay; final candidate and remaining-gates reconciliation.
+- Commits: `4487b7e` (`Finalize Artist-Owned Platform name`) and `fe2062a` (`Stabilize meaningful-listen browser proof`).
+- Verification: Three fresh-demo focused Chromium telemetry suites and `npm run verify:telemetry` passed. Exact commit `fe2062aacaa9c808d6b05103d9fbcff144248ea0` then passed the complete uninterrupted Node 24 `npm run verify` aggregate: every local module, Integration Gate A, optional OAuth, setup and portability, production hardening and four performance budgets, guarded reset and recovery, all 12 isolated desktop/mobile specifications, documentation and fictional assets, Chromium/WebKit judge journeys, and browser-secret scanning. The fresh dependency audit found zero vulnerabilities, and the repository-pinned Supabase CLI found no error-level findings in `public` or `private`. No hosted project or provider was contacted.
+
 ## Submission reconciliation
 
 Before submission:
