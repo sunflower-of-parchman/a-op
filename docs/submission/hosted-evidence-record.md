@@ -4,50 +4,51 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                           | Status  | Safe evidence                                                    |
-| ------------------------------- | ------- | ---------------------------------------------------------------- |
-| Final public name               | Ready   | Artist-Owned Platform                                            |
-| License                         | Ready   | `AGPL-3.0-or-later`                                              |
-| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                       |
-| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-121920`                    |
-| Current exact commit            | Ready   | `04f23fa4b8632b04609cd2689b3b575ec2b193b0`                       |
-| Evidence branch relationship    | Ready   | Later documentation commits stay outside the candidate worktree  |
-| Detached worktree rehearsal     | Pass    | Clean worktree resolved the tag to exact commit `04f23fa`        |
-| Local worker-service contract   | Pass    | Unit, FFmpeg, PDF, two image builds, auth, and queue checks pass |
-| Current local full aggregate    | Pass    | Complete Node 24 aggregate passed at the tagged commit           |
-| Dependency audit                | Pass    | Zero vulnerabilities at the candidate lockfile                   |
-| Local schema lint               | Pass    | No error-level findings in `public` or `private`                 |
-| Linux CI all jobs               | Pending |                                                                  |
+| Field                           | Status  | Safe evidence                                                                                                    |
+| ------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| Final public name               | Ready   | Artist-Owned Platform                                                                                            |
+| License                         | Ready   | `AGPL-3.0-or-later`                                                                                              |
+| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                       |
+| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-161907`                                                                    |
+| Current exact commit            | Ready   | `048fe057a677c0c4e54e29e0825483b0c7ae41ba`                                                                       |
+| Evidence branch relationship    | Ready   | The deployment candidate is a detached exact-commit worktree; later evidence commits remain outside it           |
+| Detached worktree rehearsal     | Pass    | Clean tracked worktree resolved the tag to exact commit `048fe05`                                                |
+| Prior local full aggregate      | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`           |
+| Current focused verification    | Pass    | Worker units, service contract, docs, typecheck, format, and shared-container route/authentication probes passed |
+| Current Vercel preview build    | Pass    | CLI `54.21.1` built `web`, `media_worker`, and `document_worker` from the exact candidate                        |
+| Dependency audit                | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                         |
+| Local schema lint               | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                      |
+| Linux CI all jobs               | Pending |                                                                                                                  |
 
 ## Authorization ledger
 
-| External action                            | Status   | Michael approval reference                   | Executed by / at                    |
-| ------------------------------------------ | -------- | -------------------------------------------- | ----------------------------------- |
-| Create or select Supabase judge project    | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T18:44:42Z |
-| Create or select Stripe test resources     | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:43:37Z |
-| Create or select Vercel judge project      | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:01:29Z |
-| Link and dry-run Supabase migrations       | Executed | Stage 2A approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:44:15Z |
-| Apply Supabase migrations                  | Executed | Stage 2B approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:50:39Z |
-| Seed hosted fixtures                       | Executed | Stage 3 approved in this task, 2026-07-15    | Primary task / 2026-07-15T21:01:49Z |
-| Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15   | Primary task / 2026-07-15T21:24:04Z |
-| Complete Stripe sandbox license catalog    | Executed | Stage 4A-2 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:37:07Z |
-| Deploy immutable Services preview          | Pending  | Includes web and both private workers        |                                     |
-| Execute hosted reset                       | Pending  |                                              |                                     |
-| Assign production alias or domain          | Pending  |                                              |                                     |
-| Share judge URL and credentials            | Pending  |                                              |                                     |
-| Publish repository                         | Pending  |                                              |                                     |
-| Publish video                              | Pending  |                                              |                                     |
-| Submit Devpost entry                       | Pending  |                                              |                                     |
+| External action                            | Status   | Michael approval reference                   | Executed by / at                                                           |
+| ------------------------------------------ | -------- | -------------------------------------------- | -------------------------------------------------------------------------- |
+| Create or select Supabase judge project    | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T18:44:42Z                                        |
+| Create or select Stripe test resources     | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:43:37Z                                        |
+| Create or select Vercel judge project      | Executed | Stage 1 approved in this task, 2026-07-15    | Primary task / 2026-07-15T19:01:29Z                                        |
+| Link and dry-run Supabase migrations       | Executed | Stage 2A approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:44:15Z                                        |
+| Apply Supabase migrations                  | Executed | Stage 2B approved in this task, 2026-07-15   | Primary task / 2026-07-15T20:50:39Z                                        |
+| Seed hosted fixtures                       | Executed | Stage 3 approved in this task, 2026-07-15    | Primary task / 2026-07-15T21:01:49Z                                        |
+| Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15   | Primary task / 2026-07-15T21:24:04Z                                        |
+| Complete Stripe sandbox license catalog    | Executed | Stage 4A-2 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:37:07Z                                        |
+| Deploy immutable Services preview          | Blocked  | Stage 6 approved in this task, 2026-07-15    | Two provider-classified Production attempts removed / 2026-07-15T22:30:00Z |
+| Execute hosted reset                       | Pending  |                                              |                                                                            |
+| Assign production alias or domain          | Pending  |                                              |                                                                            |
+| Share judge URL and credentials            | Pending  |                                              |                                                                            |
+| Publish repository                         | Pending  |                                              |                                                                            |
+| Publish video                              | Pending  |                                              |                                                                            |
+| Submit Devpost entry                       | Pending  |                                              |                                                                            |
 
 ## Resource boundaries
 
-| Resource         | Status  | Safe reference hash/suffix | Isolation check                                                                                |
-| ---------------- | ------- | -------------------------- | ---------------------------------------------------------------------------------------------- |
-| Supabase project | Ready   | `sha256:9890053715f8`      | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
-| Stripe context   | Ready   | `sha256:24efed888794`      | Blank named sandbox; dedicated CLI profile; live mode untouched                                |
-| Vercel project   | Ready   | `sha256:f108c4d15ee5`      | Exact-name project; Services preset; checkout unlinked                                         |
-| Media worker     | Pending |                            |                                                                                                |
-| Document worker  | Pending |                            |                                                                                                |
+| Resource         | Status | Safe reference hash/suffix    | Isolation check                                                                                |
+| ---------------- | ------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| Supabase project | Ready  | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
+| Stripe context   | Ready  | `sha256:24efed888794`         | Blank named sandbox; dedicated CLI profile; live mode untouched                                |
+| Vercel project   | Ready  | `sha256:f108c4d15ee5`         | Exact-name project; Services preset; checkout unlinked                                         |
+| Media worker     | Built  | `sha256:83df3068df4e…a6fd45`  | Private image built in the dedicated project registry; no deployed runtime remains             |
+| Document worker  | Built  | `sha256:b30b286c24e9…18d6d0b` | Private image built in the dedicated project registry; no deployed runtime remains             |
 
 ## Supabase evidence
 
@@ -93,42 +94,54 @@ Stage 4A created the first three approved sandbox offerings: the USD 12 one-time
 
 ## Worker evidence
 
-| Check                                     | Status  | Safe digest/job suffix / result                      |
-| ----------------------------------------- | ------- | ---------------------------------------------------- |
-| Local media image builds                  | Pass    | `sha256:07b378557cfd…b5ec7de`                        |
-| Local document image builds               | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                       |
-| Private HTTP auth and redaction contract  | Pass    | Health 200; no-auth 401; generic failure only        |
-| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`             |
-| Media image matches final commit          | Pass    | Candidate source and lockfile; digest recorded above |
-| Approved source upload                    | Pending |                                                      |
-| `queued -> processing -> ready`           | Pending |                                                      |
-| Immutable source hash                     | Pending |                                                      |
-| Preview and waveform                      | Pending |                                                      |
-| Hosted public playback                    | Pending |                                                      |
-| Media retry and expired-lease recovery    | Pending |                                                      |
-| Document runtime matches pinned lock      | Pass    | Candidate source and lockfile; digest recorded above |
-| License document reaches `ready`          | Pending |                                                      |
-| PDF text and purchaser-only delivery      | Pending |                                                      |
-| Document retry and expired-lease recovery | Pending |                                                      |
+| Check                                     | Status  | Safe digest/job suffix / result                                                                    |
+| ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------- |
+| Prior local media image build             | Pass    | `sha256:07b378557cfd…b5ec7de`                                                                      |
+| Prior local document image build          | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                                                                     |
+| Current shared local image build          | Pass    | `sha256:f1ae8fc036db…ce87f`; both qualified service routes responded correctly                     |
+| Private HTTP auth and redaction contract  | Pass    | Media and document health returned 200; unauthenticated work returned 401; base route returned 404 |
+| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`                                                           |
+| Vercel media image build                  | Pass    | `sha256:83df3068df4e…a6fd45`; Linux AMD64 image in the dedicated private registry                  |
+| Media image matches final commit          | Pass    | Exact candidate `048fe05`; source and lockfile recorded above                                      |
+| Approved source upload                    | Pending |                                                                                                    |
+| `queued -> processing -> ready`           | Pending |                                                                                                    |
+| Immutable source hash                     | Pending |                                                                                                    |
+| Preview and waveform                      | Pending |                                                                                                    |
+| Hosted public playback                    | Pending |                                                                                                    |
+| Media retry and expired-lease recovery    | Pending |                                                                                                    |
+| Vercel document image build               | Pass    | `sha256:b30b286c24e9…18d6d0b`; Linux AMD64 image in the dedicated private registry                 |
+| Document runtime matches pinned lock      | Pass    | Exact candidate `048fe05`; source and lockfile recorded above                                      |
+| License document reaches `ready`          | Pending |                                                                                                    |
+| PDF text and purchaser-only delivery      | Pending |                                                                                                    |
+| Document retry and expired-lease recovery | Pending |                                                                                                    |
 
 ## Vercel and browser evidence
 
-| Check                                    | Status  | Safe URL hash / result                                                                |
-| ---------------------------------------- | ------- | ------------------------------------------------------------------------------------- |
-| Pinned Vercel CLI                        | Pass    | `54.21.1` detected `web`, `media_worker`, and `document_worker`                       |
-| Services configuration schema            | Pass    | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs` |
-| Immutable preview ready                  | Pending |                                                                                       |
-| Deployment identifies final commit       | Pending |                                                                                       |
-| Free unauthenticated public reachability | Pending |                                                                                       |
-| Public health check                      | Pending |                                                                                       |
-| Chromium hosted route                    | Pending |                                                                                       |
-| Firefox hosted route                     | Pending |                                                                                       |
-| WebKit hosted route                      | Pending |                                                                                       |
-| Browser-secret scan                      | Pending |                                                                                       |
-| Production response boundaries           | Pending |                                                                                       |
-| Accessibility and viewport checks        | Pending |                                                                                       |
-| Performance budgets                      | Pending |                                                                                       |
-| Error-log review                         | Pending |                                                                                       |
+| Check                                    | Status  | Safe URL hash / result                                                                                       |
+| ---------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| Pinned Vercel CLI                        | Pass    | `54.21.1` detected and built `web`, `media_worker`, and `document_worker`                                    |
+| Services configuration schema            | Pass    | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs`                        |
+| Immutable preview build                  | Pass    | `vercel build --target preview` completed from tag `build-week-hosted-candidate-20260715-161907`             |
+| Preview deployment classification        | Blocked | Default preview and explicit `--target preview` attempts were both listed as Production while still Building |
+| Containment                              | Pass    | Both misclassified attempts were removed immediately; a third attempt was not made                           |
+| Current deployment inventory             | Pass    | Exact-project CLI read at 2026-07-15T22:30:00Z returned zero deployments                                     |
+| Environment scope boundary               | Pass    | Exactly seven encrypted variables exist; every one is Preview-only; Production and Development have zero     |
+| Project target boundary                  | Pass    | Standard Production, Preview, and Development targets exist; Preview covers all unassigned Git branches      |
+| Domain boundary                          | Pass    | One automatic `.vercel.app` project domain; zero custom, branch, custom-environment, or redirect domains     |
+| Immutable preview ready                  | Pending | Provider must create a Preview-classified deployment before hosted verification can begin                    |
+| Deployment identifies final commit       | Pending |                                                                                                              |
+| Free unauthenticated public reachability | Pending |                                                                                                              |
+| Public health check                      | Pending |                                                                                                              |
+| Chromium hosted route                    | Pending |                                                                                                              |
+| Firefox hosted route                     | Pending |                                                                                                              |
+| WebKit hosted route                      | Pending |                                                                                                              |
+| Browser-secret scan                      | Pending |                                                                                                              |
+| Production response boundaries           | Pending |                                                                                                              |
+| Accessibility and viewport checks        | Pending |                                                                                                              |
+| Performance budgets                      | Pending |                                                                                                              |
+| Error-log review                         | Pending |                                                                                                              |
+
+Vercel's [CLI deployment guide](https://vercel.com/docs/projects/deploy-from-cli) and [deploy command reference](https://vercel.com/docs/cli/deploy) describe the default deployment as Preview and `--prod` as the Production switch. In this project, the provider listed the default attempt and a second attempt with explicit `--target preview` as Production while each was still Building. Both were removed immediately. The exact project now has zero deployments. No production alias, custom domain, webhook endpoint, or judge share was created; no deployment URL remains available or was shared; and no hosted runtime or browser claim is recorded from either attempt.
 
 ## Reset and judge evidence
 
@@ -166,4 +179,4 @@ Stage 4A created the first three approved sandbox offerings: the USD 12 one-time
 
 Status: **Pending**
 
-The hosted judging environment is complete only when every required row above is `Pass` or carries a written, approved, non-capability-reducing disposition. A failure or contradiction reopens the corresponding implementation requirement.
+The immutable three-service build is ready, while hosted verification is blocked on Vercel producing a Preview-classified deployment within the approved boundary. The hosted judging environment is complete only when every required row above is `Pass` or carries a written, approved, non-capability-reducing disposition. A failure or contradiction reopens the corresponding implementation requirement.
