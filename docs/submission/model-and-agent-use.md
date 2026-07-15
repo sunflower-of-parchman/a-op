@@ -151,6 +151,24 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `8d1fca5` (`Harden security reliability and performance`).
 - Verification: One uninterrupted `NUXT_IGNORE_LOCK=1 PORT=3100 npm run verify` passed foundation, Integration Gate A, all modules, security, accessibility, performance, recovery, final setup, the authority spine, and eleven isolated desktop/mobile browser specifications. `npm audit` found zero vulnerabilities; Supabase `db lint` found no schema errors; the production hardening gate passed six browser journeys and four budgets; five consecutive resets and the complete recovery drill passed. Hosted advisor, worker, and Stripe sandbox evidence remains behind Michael's action-specific approval.
 
+### Milestone 12 clean-clone and judge package — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Use a complete original fictional artist; keep the public package independent of Sound for Movement; make the novice path two commands; keep final naming, licensing, hosted resources, and publication under Michael's authority.
+- Material contribution: Machine-readable asset provenance; desktop/mobile screenshots; comprehensive README and contributor guidance; deterministic demo start and reset; recursive documentation validation; isolated cross-browser orchestration; Linux CI browser matrix; judge quickstart; hosted topology and redaction plan; and two clean-clone rehearsals.
+- Commits: `aead7ab` (`Package deterministic judge experience`) and `0ab2c9e` (`Prepare Build Week judging materials`).
+- Verification: One untouched clone ran only `npm ci` and `npm run demo:local`, passed document setup, preflight, Supabase setup and checks, returned HTTP 200, and retained a clean tracked state. A second clone passed deterministic reset, complete foundation/build, Codex personalization with generated media, browser-secret scan, Chromium/WebKit public route, and the same server smoke check. Firefox remains mandatory in Linux CI because the local Playwright Firefox runtime reproduces an upstream macOS headless startup failure before page creation.
+
+### Milestone 13 submission preparation — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Lead with the musician's reason for the project; describe the work as human-directed and agent-coded; state local and external proof honestly; keep every deployment, share, video, and submission action separate and approval-gated.
+- Material contribution: Project description, complete judging guide, redacted hosted-test plan, 2:55 spoken demo script, evidence timecode table, submission checklist, final authorization record, and clean-clone evidence.
+- Commit: `0ab2c9e` (`Prepare Build Week judging materials`).
+- Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries. Final name, license, hosted results, Linux CI result, `/feedback` Session ID, model metadata, recorded timecodes, video, public access, and Devpost confirmation remain pending their named human or external actions.
+
 ## Submission reconciliation
 
 Before submission:

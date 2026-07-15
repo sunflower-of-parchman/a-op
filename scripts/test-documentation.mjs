@@ -57,6 +57,7 @@ for (const script of ['demo:local', 'demo:reset', 'test:docs', 'test:cross-brows
 
 for (const submissionDocument of [
   'docs/submission/hosted-test-plan.md',
+  'docs/submission/clean-clone-evidence.md',
   'docs/submission/judging-guide.md',
   'docs/submission/project-description.md',
   'docs/submission/demo-script.md',
