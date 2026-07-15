@@ -4,15 +4,15 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                     | Status  | Safe evidence |
-| ------------------------- | ------- | ------------- |
-| Final public name         | Pending |               |
-| License                   | Pending |               |
-| Exact 40-character commit | Pending |               |
-| Local full aggregate      | Pending |               |
-| Dependency audit          | Pending |               |
-| Local schema lint         | Pending |               |
-| Linux CI all jobs         | Pending |               |
+| Field                     | Status  | Safe evidence                                   |
+| ------------------------- | ------- | ----------------------------------------------- |
+| Final public name         | Pending |                                                 |
+| License                   | Pending |                                                 |
+| Exact 40-character commit | Pending | Final name/license may create a later candidate |
+| Local full aggregate      | Ready   | `b226602`: complete Node 24 aggregate passed    |
+| Dependency audit          | Ready   | `b226602`: zero vulnerabilities                 |
+| Local schema lint         | Ready   | `b226602`: no `public,private` schema errors    |
+| Linux CI all jobs         | Pending |                                                 |
 
 ## Authorization ledger
 
