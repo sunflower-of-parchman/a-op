@@ -39,6 +39,15 @@ export default defineNuxtConfig({
     headers: {
       crossOriginEmbedderPolicy: false,
     },
+    rateLimiter: {
+      // The application is request-rich by design: SSR, account authority, media,
+      // and administration can share one public IP. Keep a short burst boundary
+      // without letting the package's 150-requests-per-five-minutes default block
+      // an artist completing a normal publishing session.
+      tokensPerInterval: 600,
+      interval: 60_000,
+      headers: true,
+    },
   },
   app: {
     head: {

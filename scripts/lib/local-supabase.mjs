@@ -30,6 +30,25 @@ export const demoFixtureIds = {
   freeProduct: '10000000-0000-4000-8000-000000000013',
   freePrice: '10000000-0000-4000-8000-000000000014',
   externalProduct: '10000000-0000-4000-8000-000000000015',
+  learningArea: '10000000-0000-4000-8000-000000000016',
+  learningPath: '10000000-0000-4000-8000-000000000017',
+  learningCourse: '10000000-0000-4000-8000-000000000018',
+  lessonOne: '10000000-0000-4000-8000-000000000019',
+  lessonTwo: '10000000-0000-4000-8000-00000000001a',
+  lessonThree: '10000000-0000-4000-8000-00000000001b',
+  lessonImage: '10000000-0000-4000-8000-00000000001c',
+  lessonResource: '10000000-0000-4000-8000-00000000001d',
+  video: '10000000-0000-4000-8000-00000000001e',
+  editorial: '10000000-0000-4000-8000-00000000001f',
+  lessonSectionOne: '10000000-0000-4000-8000-000000000020',
+  lessonSectionTwo: '10000000-0000-4000-8000-000000000021',
+  lessonSectionThree: '10000000-0000-4000-8000-000000000022',
+  lessonSectionFour: '10000000-0000-4000-8000-000000000023',
+  lessonSectionFive: '10000000-0000-4000-8000-000000000024',
+  lessonSectionSix: '10000000-0000-4000-8000-000000000025',
+  lessonSectionSeven: '10000000-0000-4000-8000-000000000026',
+  lessonSectionEight: '10000000-0000-4000-8000-000000000027',
+  lessonSectionNine: '10000000-0000-4000-8000-000000000028',
 }
 
 function createAdminClient(status) {
@@ -629,6 +648,275 @@ export async function seedAuthorizationDemonstration(status) {
     })
     if (licenseTemplateError) throw new Error('Could not seed the demonstration license template.')
   }
+
+  const lessonImage = Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Phrase arc study</title>
+  <desc id="description">Three warm arcs rise, suspend, and return across a dark field.</desc>
+  <rect width="1200" height="675" fill="#17201d"/>
+  <path d="M90 500 C280 120 470 120 650 430 C770 620 930 590 1110 220" fill="none" stroke="#ef8354" stroke-width="24" stroke-linecap="round"/>
+  <path d="M90 545 C300 280 500 270 690 495" fill="none" stroke="#f3d6b5" stroke-width="8" stroke-linecap="round" opacity="0.9"/>
+  <circle cx="650" cy="430" r="18" fill="#f3d6b5"/>
+</svg>
+`)
+  const lessonResource = Buffer.from(
+    'Daymark Assembly phrase observation sheet\n\n1. Name the first arrival.\n2. Mark the suspended moment.\n3. Describe how the phrase returns.\n',
+    'utf8',
+  )
+  const lessonImagePath = 'daymark/learning/phrase-arc-study.svg'
+  const lessonResourcePath = 'daymark/learning/phrase-observation-sheet.txt'
+  const [{ error: lessonImageUploadError }, { error: lessonResourceUploadError }] =
+    await Promise.all([
+      admin.storage.from('lesson-media').upload(lessonImagePath, lessonImage, {
+        contentType: 'image/svg+xml',
+        upsert: true,
+      }),
+      admin.storage.from('lesson-media').upload(lessonResourcePath, lessonResource, {
+        contentType: 'text/plain',
+        upsert: true,
+      }),
+    ])
+  if (lessonImageUploadError || lessonResourceUploadError) {
+    throw new Error('Could not upload the fictional lesson media.')
+  }
+  const { error: lessonMediaError } = await admin.from('media_objects').upsert([
+    {
+      id: demoFixtureIds.lessonImage,
+      lesson_id: demoFixtureIds.lessonOne,
+      kind: 'lesson_media',
+      bucket_id: 'lesson-media',
+      object_path: lessonImagePath,
+      media_type: 'image/svg+xml',
+      byte_size: lessonImage.byteLength,
+      sha256: sha256(lessonImage),
+      status: 'ready',
+      is_public: false,
+      metadata: { generated: true, use: 'image' },
+      created_by: users.get('owner'),
+    },
+    {
+      id: demoFixtureIds.lessonResource,
+      lesson_id: demoFixtureIds.lessonTwo,
+      kind: 'lesson_media',
+      bucket_id: 'lesson-media',
+      object_path: lessonResourcePath,
+      media_type: 'text/plain',
+      byte_size: lessonResource.byteLength,
+      sha256: sha256(lessonResource),
+      status: 'ready',
+      is_public: false,
+      metadata: { generated: true, use: 'download' },
+      created_by: users.get('owner'),
+    },
+  ])
+  if (lessonMediaError) throw new Error('Could not seed the fictional lesson media records.')
+
+  const videoPayload = {
+    id: demoFixtureIds.video,
+    slug: 'external-video-with-context',
+    title: 'External video, presented with context',
+    summary:
+      'A fictional teaching entry demonstrates an approved privacy-gated embed, complete transcript, and visible source credit.',
+    provider: 'youtube',
+    externalId: 'M7lc1UVf-VE',
+    hostedMediaId: null,
+    posterUrl: '/demo/video-poster.svg',
+    transcript:
+      'This demonstration entry uses the official YouTube IFrame API sample video. The external player remains unloaded until the visitor chooses to load it. In a real artist installation, replace this transcript with the complete accessible transcript for the approved video.',
+    credits: [{ role: 'External demonstration source', name: 'YouTube Developers' }],
+  }
+  const { error: videoDraftError } = await admin.from('video_drafts').upsert({
+    id: demoFixtureIds.video,
+    slug: videoPayload.slug,
+    payload: videoPayload,
+    updated_by: users.get('owner'),
+  })
+  if (videoDraftError) throw new Error('Could not seed the demonstration video draft.')
+  const { error: videoPublishError } = await admin.rpc('publish_video_draft', {
+    p_actor_id: users.get('owner'),
+    p_draft_id: demoFixtureIds.video,
+  })
+  if (videoPublishError) throw new Error('Could not publish the demonstration video.')
+
+  const learningPayload = {
+    area: {
+      id: demoFixtureIds.learningArea,
+      slug: 'listening-practice',
+      name: 'Listening practice',
+      description: 'Short paths for hearing form, weight, and return in music for movement.',
+    },
+    id: demoFixtureIds.learningPath,
+    slug: 'listening-with-the-whole-phrase',
+    title: 'Listening with the whole phrase',
+    summary:
+      'Three ordered lessons move from a public first listening through member study and an account-based return practice.',
+    introduction:
+      'Begin with one complete phrase. Notice where its weight gathers, where it suspends, and what makes the return feel earned.',
+    courses: [
+      {
+        id: demoFixtureIds.learningCourse,
+        slug: 'phrase-weight-and-return',
+        title: 'Phrase, weight, and return',
+        summary: 'A compact course in listening across the full arc instead of counting moments.',
+        lessons: [
+          {
+            id: demoFixtureIds.lessonOne,
+            slug: 'hear-the-first-arc',
+            title: 'Hear the first arc',
+            summary: 'Listen once without stopping and name the first real arrival.',
+            estimatedMinutes: 8,
+            accessMode: 'public',
+            accessExplanation: 'This opening lesson is public.',
+            membershipTierId: null,
+            price: null,
+            sections: [
+              {
+                id: demoFixtureIds.lessonSectionOne,
+                type: 'prose',
+                eyebrow: 'First listening',
+                heading: 'Let the complete phrase arrive before naming it.',
+                body: 'Listen once without **counting**. On the second pass, notice the first point that feels like an _arrival_ rather than a pause.\n\n- Follow the rise\n- Stay with the suspension\n- Hear what makes the return possible',
+              },
+              {
+                id: demoFixtureIds.lessonSectionTwo,
+                type: 'image',
+                heading: 'A phrase can rise, suspend, and continue.',
+                mediaId: demoFixtureIds.lessonImage,
+                alt: 'Three warm arcs rise, suspend, and return across a dark field.',
+                caption: 'A fictional visual score for following the whole phrase.',
+              },
+              {
+                id: demoFixtureIds.lessonSectionThree,
+                type: 'audio',
+                heading: 'Listen to Turn Toward Home',
+                mediaId: demoFixtureIds.previewThree,
+                prompt: 'Where does the phrase gather enough weight to turn?',
+                transcript: 'Instrumental audio with no spoken text.',
+              },
+            ],
+          },
+          {
+            id: demoFixtureIds.lessonTwo,
+            slug: 'hold-the-suspended-moment',
+            title: 'Hold the suspended moment',
+            summary:
+              'A member lesson connects phrase suspension with a deliberate movement prompt.',
+            estimatedMinutes: 12,
+            accessMode: 'membership',
+            accessExplanation: 'Daymark Circle members can open this studio lesson.',
+            membershipTierId: demoFixtureIds.membershipTier,
+            price: null,
+            sections: [
+              {
+                id: demoFixtureIds.lessonSectionFour,
+                type: 'prose',
+                heading: 'Suspension still has direction.',
+                body: 'A held moment is not empty. Listen for the energy that continues through it and decide what the next motion inherits.',
+              },
+              {
+                id: demoFixtureIds.lessonSectionFive,
+                type: 'video',
+                heading: 'See the external-player pattern',
+                videoId: demoFixtureIds.video,
+              },
+              {
+                id: demoFixtureIds.lessonSectionSix,
+                type: 'download',
+                heading: 'Take the observation sheet',
+                mediaId: demoFixtureIds.lessonResource,
+                label: 'Download the phrase observation sheet',
+                description:
+                  'A private fictional text resource delivered only after lesson access is verified.',
+              },
+              {
+                id: demoFixtureIds.lessonSectionSeven,
+                type: 'prompt',
+                heading: 'Movement prompt',
+                body: 'Choose one suspended moment. Continue its direction without rushing its arrival.',
+              },
+            ],
+          },
+          {
+            id: demoFixtureIds.lessonThree,
+            slug: 'return-with-context',
+            title: 'Return with context',
+            summary: 'A signed-in listener carries the earlier observations into one final pass.',
+            estimatedMinutes: 7,
+            accessMode: 'account',
+            accessExplanation: 'Create a free account to save and resume this return practice.',
+            membershipTierId: null,
+            price: null,
+            sections: [
+              {
+                id: demoFixtureIds.lessonSectionEight,
+                type: 'prose',
+                heading: 'The return contains what came before it.',
+                body: 'Listen again and notice which earlier event changes the meaning of the final arrival.',
+              },
+              {
+                id: demoFixtureIds.lessonSectionNine,
+                type: 'audio',
+                heading: 'One final pass',
+                mediaId: demoFixtureIds.preview,
+                prompt: 'What does the ending remember?',
+                transcript: 'Instrumental audio with no spoken text.',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  }
+  const { error: learningDraftError } = await admin.from('learning_path_drafts').upsert({
+    id: demoFixtureIds.learningPath,
+    slug: learningPayload.slug,
+    payload: learningPayload,
+    updated_by: users.get('owner'),
+  })
+  if (learningDraftError) throw new Error('Could not seed the demonstration learning draft.')
+  const { error: learningPublishError } = await admin.rpc('publish_learning_path_draft', {
+    p_actor_id: users.get('owner'),
+    p_draft_id: demoFixtureIds.learningPath,
+  })
+  if (learningPublishError) throw new Error('Could not publish the demonstration learning path.')
+
+  const editorialPayload = {
+    id: demoFixtureIds.editorial,
+    kind: 'learning_note',
+    slug: 'what-a-phrase-carries',
+    title: 'What a phrase carries',
+    summary: 'A fictional editorial note about hearing continuity through arrival and suspension.',
+    publishedOn: '2026-07-15',
+    sections: [
+      {
+        id: '10000000-0000-4000-8000-000000000029',
+        type: 'prose',
+        eyebrow: 'Studio note',
+        heading: 'An arrival belongs to the path that made it possible.',
+        body: 'When listening supports movement, the useful question is rarely where the phrase stops. It is what the phrase has carried into that moment and what remains available afterward.',
+      },
+      {
+        id: '10000000-0000-4000-8000-00000000002a',
+        type: 'call_to_action',
+        heading: 'Listen through the full arc.',
+        body: 'The demonstration learning path turns this note into a short practice.',
+        label: 'Open the learning path',
+        href: '/learn/listening-with-the-whole-phrase',
+      },
+    ],
+  }
+  const { error: editorialDraftError } = await admin.from('editorial_drafts').upsert({
+    id: demoFixtureIds.editorial,
+    slug: editorialPayload.slug,
+    payload: editorialPayload,
+    updated_by: users.get('owner'),
+  })
+  if (editorialDraftError) throw new Error('Could not seed the demonstration editorial draft.')
+  const { error: editorialPublishError } = await admin.rpc('publish_editorial_draft', {
+    p_actor_id: users.get('owner'),
+    p_draft_id: demoFixtureIds.editorial,
+  })
+  if (editorialPublishError) throw new Error('Could not publish the demonstration editorial note.')
 
   const { error: pageError } = await admin.from('pages').upsert([
     {

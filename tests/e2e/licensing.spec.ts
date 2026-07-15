@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { gotoHydrated } from './helpers'
 
 const accounts = {
   listenerOne: { email: 'listener-one@daymark.local', password: 'Daymark-Listener-2026!' },
@@ -11,7 +12,7 @@ const accounts = {
 test.describe.configure({ mode: 'serial' })
 
 async function signIn(page: Page, account: (typeof accounts)['listenerOne'], redirect: string) {
-  await page.goto(`/sign-in?redirect=${encodeURIComponent(redirect)}`)
+  await gotoHydrated(page, `/sign-in?redirect=${encodeURIComponent(redirect)}`)
   const button = page.getByRole('button', { name: 'Sign in', exact: true })
   await expect(button).toBeEnabled()
   await page.getByLabel('Email').fill(account.email)
@@ -82,7 +83,7 @@ test('shows unsupported uses as inquiry and exposes owner versioning controls', 
     testInfo.project.name === 'mobile-chromium',
     'The owner licensing journey runs once against the shared local database.',
   )
-  await page.goto('/licensing')
+  await gotoHydrated(page, '/licensing')
   await expect(
     page.getByRole('heading', {
       name: 'Unusual, broadcast, commercial, or exclusive uses begin with an inquiry.',
@@ -108,7 +109,7 @@ test('keeps public and owner licensing surfaces accessible and within the viewpo
   page,
 }) => {
   for (const path of ['/licensing', '/music/tracks/turn-toward-home']) {
-    await page.goto(path)
+    await gotoHydrated(page, path)
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true)
@@ -118,6 +119,6 @@ test('keeps public and owner licensing surfaces accessible and within the viewpo
     ).toEqual([])
   }
 
-  await page.goto('/support')
+  await gotoHydrated(page, '/support')
   await expect(page.getByText(/Turn Toward Home supported uses/)).toHaveCount(0)
 })

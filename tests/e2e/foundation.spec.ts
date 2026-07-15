@@ -1,8 +1,9 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers'
 
 test('presents the fictional artist and working navigation', async ({ page }) => {
-  await page.goto('/')
+  await gotoHydrated(page, '/')
 
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Music made for attentive rooms',
@@ -15,7 +16,7 @@ test('presents the fictional artist and working navigation', async ({ page }) =>
 })
 
 test('has no automatically detectable serious accessibility violations', async ({ page }) => {
-  await page.goto('/')
+  await gotoHydrated(page, '/')
   const results = await new AxeBuilder({ page }).analyze()
   const serious = results.violations.filter(
     ({ impact }) => impact === 'critical' || impact === 'serious',

@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { gotoHydrated, reloadHydrated } from './helpers'
 
 const owner = { email: 'owner@daymark.local', password: 'Daymark-Owner-2026!' }
 
@@ -29,7 +30,7 @@ function waveFile() {
 }
 
 async function signInAsOwner(page: Page, redirect: string) {
-  await page.goto(`/sign-in?redirect=${encodeURIComponent(redirect)}`)
+  await gotoHydrated(page, `/sign-in?redirect=${encodeURIComponent(redirect)}`)
   const button = page.getByRole('button', { name: 'Sign in', exact: true })
   await expect(button).toBeEnabled()
   await page.getByLabel('Email').fill(owner.email)
@@ -121,7 +122,7 @@ test('authors, uploads, processes, and explicitly publishes a release', async ({
   )
   expect(workerOutput).toContain('"event":"media-job-ready"')
 
-  await page.reload()
+  await reloadHydrated(page)
   await expect(page.getByText(/Source ready · job ready/).first()).toBeVisible()
   await expect(page.getByText('Public preview ready.').first()).toBeVisible()
 
@@ -134,10 +135,11 @@ test('authors, uploads, processes, and explicitly publishes a release', async ({
   await page.getByRole('button', { name: 'Publish release' }).click()
   await expect(page.getByText('Release published from the approved draft.')).toBeVisible()
 
-  await page.goto('/music/browser-session')
+  await gotoHydrated(page, '/music/browser-session')
   await expect(page.getByRole('heading', { name: 'Browser Session' })).toBeVisible()
-  await expect(page.getByText('Opening Tone', { exact: true })).toBeVisible()
-  await expect(page.getByText('Second Motion', { exact: true })).toBeVisible()
+  const releaseTrackList = page.getByRole('list', { name: 'Release track list' })
+  await expect(releaseTrackList.getByRole('link', { name: 'Opening Tone' })).toBeVisible()
+  await expect(releaseTrackList.getByRole('link', { name: 'Second Motion' })).toBeVisible()
   await expect(page.getByText('Browser Artist', { exact: true })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Play public preview' })).toBeVisible()
 })
@@ -185,7 +187,7 @@ test('drafts, orders, and explicitly publishes a collection', async ({ page }, t
   await page.getByRole('button', { name: 'Publish collection' }).click()
   await expect(page.getByText('Collection published from the approved draft.')).toBeVisible()
 
-  await page.goto('/music/collections/browser-path')
+  await gotoHydrated(page, '/music/collections/browser-path')
   await expect(page.getByRole('heading', { name: 'Browser Path' })).toBeVisible()
   await expect(page.locator('.tracklist__title')).toHaveText([
     'Turn Toward Home',
@@ -210,7 +212,7 @@ test('keeps music administration accessible within desktop and mobile viewports'
     results.violations.filter(({ impact }) => impact === 'critical' || impact === 'serious'),
   ).toEqual([])
 
-  await page.goto('/admin/collections')
+  await gotoHydrated(page, '/admin/collections')
   await expect(
     page.getByRole('heading', { name: 'Make another authored way through the music.' }),
   ).toBeVisible()

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       .eq('id', input.trackId)
       .maybeSingle()
     if (error || !track) throw createError({ statusCode: 404, statusMessage: 'Track not found.' })
-  } else {
+  } else if (input.kind === 'artwork') {
     const { data: release, error } = await admin
       .from('releases')
       .select('id')
@@ -34,11 +34,27 @@ export default defineEventHandler(async (event) => {
     if (error || !release) {
       throw createError({ statusCode: 404, statusMessage: 'Release not found.' })
     }
+  } else {
+    const [{ data: lesson }, { data: drafts, error: draftError }] = await Promise.all([
+      admin.from('lessons').select('id').eq('id', input.lessonId).maybeSingle(),
+      admin.from('learning_path_drafts').select('payload'),
+    ])
+    const draftContainsLesson = drafts?.some((draft) => {
+      const payload = draft.payload as {
+        courses?: Array<{ lessons?: Array<{ id?: string }> }>
+      }
+      return payload.courses?.some((course) =>
+        course.lessons?.some(({ id }) => id === input.lessonId),
+      )
+    })
+    if (draftError || (!lesson && !draftContainsLesson)) {
+      throw createError({ statusCode: 404, statusMessage: 'Lesson not found.' })
+    }
   }
 
   const { data: existingMedia, error: existingMediaError } = await admin
     .from('media_objects')
-    .select('id, track_id, release_id, status')
+    .select('id, track_id, release_id, lesson_id, status')
     .eq('sha256', input.sha256)
     .eq('kind', input.kind)
     .maybeSingle()
@@ -68,9 +84,31 @@ export default defineEventHandler(async (event) => {
     return { reused: true, mediaId: existingMedia.id, status: existingMedia.status }
   }
 
-  const bucket = input.kind === 'source_audio' ? 'source-audio' : 'artwork'
-  const extension = input.kind === 'artwork' ? '.webp' : extname(input.filename).toLowerCase()
-  const objectPath = `uploads/${input.sha256}/${input.kind === 'artwork' ? 'artwork' : 'source'}${extension}`
+  const bucket =
+    input.kind === 'source_audio'
+      ? 'source-audio'
+      : input.kind === 'artwork'
+        ? 'artwork'
+        : 'lesson-media'
+  const extensionByType: Record<string, string> = {
+    'image/webp': '.webp',
+    'image/png': '.png',
+    'image/jpeg': '.jpg',
+    'audio/mpeg': '.mp3',
+    'audio/wav': '.wav',
+    'video/mp4': '.mp4',
+    'video/webm': '.webm',
+    'application/pdf': '.pdf',
+    'text/plain': '.txt',
+  }
+  const extension =
+    input.kind === 'source_audio'
+      ? extname(input.filename).toLowerCase()
+      : extensionByType[input.mediaType]
+  const objectPath =
+    input.kind === 'lesson_media'
+      ? `lessons/${input.lessonId}/${input.sha256}/resource${extension}`
+      : `uploads/${input.sha256}/${input.kind === 'artwork' ? 'artwork' : 'source'}${extension}`
   const now = new Date()
   const { data: existingIntent, error: intentLookupError } = await admin
     .from('upload_intents')
@@ -95,6 +133,7 @@ export default defineEventHandler(async (event) => {
         kind: input.kind,
         release_id: input.kind === 'artwork' ? input.releaseId : null,
         track_id: input.kind === 'source_audio' ? input.trackId : null,
+        lesson_id: input.kind === 'lesson_media' ? input.lessonId : null,
         bucket_id: bucket,
         object_path: objectPath,
         media_type: input.mediaType,

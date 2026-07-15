@@ -45,6 +45,8 @@ export default defineEventHandler(async (event) => {
       return
     }
 
+    if (uploadIntent.kind === 'lesson_media') return
+
     if (!uploadIntent.release_id) return
     const { data: draft, error: draftReadError } = await admin
       .from('release_drafts')
@@ -94,26 +96,51 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  if (intent.kind === 'artwork') {
-    const { data: image, error: imageError } = await admin.storage
+  if (intent.kind === 'artwork' || intent.kind === 'lesson_media') {
+    const { data: signed, error: signedError } = await admin.storage
       .from(intent.bucket_id)
-      .download(intent.object_path)
-    if (imageError)
-      throw createError({ statusCode: 409, statusMessage: 'Artwork could not be read.' })
-    const signature = Buffer.from(await image.arrayBuffer()).subarray(0, 12)
-    if (
-      signature.subarray(0, 4).toString('ascii') !== 'RIFF' ||
-      signature.subarray(8).toString('ascii') !== 'WEBP'
-    ) {
-      throw createError({ statusCode: 415, statusMessage: 'Artwork is not a valid WebP image.' })
+      .createSignedUrl(intent.object_path, 60)
+    if (signedError || !signed?.signedUrl) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'Uploaded media could not be inspected.',
+      })
+    }
+    const response = await fetch(signed.signedUrl, { headers: { range: 'bytes=0-511' } })
+    if (!response.ok) {
+      throw createError({ statusCode: 409, statusMessage: 'Uploaded media could not be read.' })
+    }
+    const signature = Buffer.from(await response.arrayBuffer())
+    const ascii = signature.toString('ascii')
+    const valid =
+      intent.media_type === 'text/plain' ||
+      (intent.media_type === 'image/webp' &&
+        ascii.startsWith('RIFF') &&
+        ascii.slice(8, 12) === 'WEBP') ||
+      (intent.media_type === 'image/png' &&
+        signature.subarray(0, 8).toString('hex') === '89504e470d0a1a0a') ||
+      (intent.media_type === 'image/jpeg' &&
+        signature.subarray(0, 3).toString('hex') === 'ffd8ff') ||
+      (intent.media_type === 'audio/wav' &&
+        ascii.startsWith('RIFF') &&
+        ascii.slice(8, 12) === 'WAVE') ||
+      (intent.media_type === 'audio/mpeg' &&
+        (ascii.startsWith('ID3') || (signature[0] === 0xff && (signature[1]! & 0xe0) === 0xe0))) ||
+      (intent.media_type === 'video/mp4' && ascii.slice(4, 8) === 'ftyp') ||
+      (intent.media_type === 'video/webm' &&
+        signature.subarray(0, 4).toString('hex') === '1a45dfa3') ||
+      (intent.media_type === 'application/pdf' && ascii.startsWith('%PDF-'))
+    if (!valid) {
+      throw createError({ statusCode: 415, statusMessage: 'Uploaded media signature is invalid.' })
     }
   }
 
-  const ready = intent.kind === 'artwork'
+  const ready = intent.kind === 'artwork' || intent.kind === 'lesson_media'
   const { error: mediaError } = await admin.from('media_objects').insert({
     id: intent.id,
     release_id: intent.release_id,
     track_id: intent.track_id,
+    lesson_id: intent.lesson_id,
     kind: intent.kind,
     bucket_id: intent.bucket_id,
     object_path: intent.object_path,

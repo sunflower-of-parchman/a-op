@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { gotoHydrated } from './helpers'
 
 const owner = { email: 'owner@daymark.local', password: 'Daymark-Owner-2026!' }
 
@@ -7,7 +8,7 @@ test.beforeEach(({ isMobile }) => {
 })
 
 async function signInAsOwner(page: Page, redirect: string) {
-  await page.goto(`/sign-in?redirect=${encodeURIComponent(redirect)}`)
+  await gotoHydrated(page, `/sign-in?redirect=${encodeURIComponent(redirect)}`)
   const button = page.getByRole('button', { name: 'Sign in', exact: true })
   await expect(button).toBeEnabled()
   await page.getByLabel('Email').fill(owner.email)
@@ -142,7 +143,7 @@ test('drafts and publishes an ordered structured page', async ({ page }) => {
 })
 
 test('stores a validated contact message without sending external email', async ({ page }) => {
-  await page.goto('/contact')
+  await gotoHydrated(page, '/contact')
   const button = page.getByRole('button', { name: 'Send message' })
   await expect(button).toBeEnabled()
   await page.getByLabel('Name').fill('Browser Listener')

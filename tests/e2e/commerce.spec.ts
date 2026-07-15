@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { gotoHydrated } from './helpers'
 
 const accounts = {
   listenerOne: { email: 'listener-one@daymark.local', password: 'Daymark-Listener-2026!' },
@@ -10,7 +11,7 @@ const accounts = {
 test.describe.configure({ mode: 'serial' })
 
 async function signIn(page: Page, account: (typeof accounts)['listenerOne'], redirect: string) {
-  await page.goto(`/sign-in?redirect=${encodeURIComponent(redirect)}`)
+  await gotoHydrated(page, `/sign-in?redirect=${encodeURIComponent(redirect)}`)
   const button = page.getByRole('button', { name: 'Sign in', exact: true })
   await expect(button).toBeEnabled()
   await page.getByLabel('Email').fill(account.email)
@@ -20,21 +21,21 @@ async function signIn(page: Page, account: (typeof accounts)['listenerOne'], red
 }
 
 async function completeSimulation(page: Page, offeringName: string, actionName: string) {
-  await page.goto('/support')
+  await gotoHydrated(page, '/support')
   const offering = page.locator('.offering-list article').filter({ hasText: offeringName })
   await offering.getByRole('button', { name: actionName }).click()
   await expect(page).toHaveURL(/\/checkout\/simulated\/[0-9a-f-]+$/)
   await expect(page.getByText('This screen never charges a card.')).toBeVisible()
   const intentId = page.url().split('/').at(-1)!
 
-  await page.goto(`/checkout/return?intent=${intentId}`)
+  await gotoHydrated(page, `/checkout/return?intent=${intentId}`)
   await expect(
     page.getByRole('heading', { name: 'Waiting for verified payment confirmation.' }),
   ).toBeVisible()
   const openIntent = await page.request.get(`/api/commerce/checkout/${intentId}`)
   expect((await openIntent.json()).intent.status).toBe('open')
 
-  await page.goto(`/checkout/simulated/${intentId}`)
+  await gotoHydrated(page, `/checkout/simulated/${intentId}`)
   await page.getByRole('button', { name: 'Complete simulated payment' }).click()
   await expect(page.getByText('Simulation complete. Your account access is ready.')).toBeVisible()
   await expect(page.getByText('complete', { exact: true })).toBeVisible()
@@ -114,7 +115,7 @@ test('keeps the offerings and account surfaces accessible and within the viewpor
   page,
 }) => {
   for (const path of ['/support', '/account']) {
-    await page.goto(path)
+    await gotoHydrated(page, path)
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true)

@@ -32,8 +32,9 @@
     "test:commerce": "node scripts/test-commerce.mjs",
     "test:stripe-signature": "node --experimental-strip-types scripts/test-stripe-signature.mjs",
     "test:licensing": "node scripts/test-licensing.mjs",
+    "test:learning": "node --experimental-strip-types scripts/test-learning.mjs",
     "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "node scripts/run-e2e.mjs",
     "setup:preflight": "node scripts/setup-preflight.mjs",
     "setup:local": "node scripts/setup-local.mjs",
     "setup:check": "node scripts/setup-check.mjs",
@@ -51,6 +52,7 @@
     "verify:catalog": "npm run test:policies && npm run test:catalog && npm run test:media && npm run test:media-import && npm run test:browser-secrets",
     "verify:commerce": "npm run test:policies && npm run test:commerce && npm run test:stripe-signature && npm run test:browser-secrets",
     "verify:licensing": "npm run test:policies && npm run test:licensing && npm run test:browser-secrets",
+    "verify:learning": "npm run test:policies && npm run test:learning && npm run test:browser-secrets",
     "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run setup:local && npm run test:spine && npm run test:e2e"
   },
   "dependencies": {

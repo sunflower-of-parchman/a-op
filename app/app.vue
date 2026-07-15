@@ -4,6 +4,10 @@ if (publishedConfig.value?.config) setArtistConfig(publishedConfig.value.config)
 
 const artist = useArtistConfig()
 const theme = useArtistTheme()
+const hydrated = ref(false)
+onMounted(() => {
+  hydrated.value = true
+})
 
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} · ${artist.seo.title}` : artist.seo.title),
@@ -16,7 +20,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="site-shell" :style="theme">
+  <div class="site-shell" :style="theme" :data-hydrated="hydrated ? 'true' : 'false'">
     <NuxtRouteAnnouncer />
     <ArtistHeader />
     <main id="main-content" tabindex="-1">

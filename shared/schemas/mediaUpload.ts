@@ -19,6 +19,24 @@ export const mediaUploadTargetSchema = z.discriminatedUnion('kind', [
     byteSize: z.number().int().positive().max(20_971_520),
     sha256: sha256Schema,
   }),
+  z.object({
+    kind: z.literal('lesson_media'),
+    lessonId: z.uuid(),
+    filename: z.string().min(1).max(255),
+    mediaType: z.enum([
+      'image/webp',
+      'image/png',
+      'image/jpeg',
+      'audio/mpeg',
+      'audio/wav',
+      'video/mp4',
+      'video/webm',
+      'application/pdf',
+      'text/plain',
+    ]),
+    byteSize: z.number().int().positive().max(262_144_000),
+    sha256: sha256Schema,
+  }),
 ])
 
 export const mediaUploadCompleteSchema = z.object({ intentId: z.uuid() })

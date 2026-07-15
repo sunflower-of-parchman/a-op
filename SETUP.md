@@ -59,6 +59,17 @@ The public terms, immutable versioning, local and Stripe test checkout paths, pr
 worker, retry procedure, and hosted worker contract are documented in
 [`docs/artist/licensing.md`](docs/artist/licensing.md).
 
+The fictional demonstration includes one three-lesson learning path, public and protected mixed
+media, account resume, a privacy-gated external video, and a structured editorial note. Run:
+
+    npm run verify:learning
+    npm run seed:reset
+    npm run test:e2e -- tests/e2e/learning.spec.ts
+
+The complete access modes, safe rich-text subset, private media workflow, video consent boundary,
+draft and publication lifecycle, and recovery procedure are documented in
+[`docs/artist/learning-video-editorial.md`](docs/artist/learning-video-editorial.md).
+
 ## Guided personalization
 
 The setup commands are implemented and verified during the build. Their stable contract is:

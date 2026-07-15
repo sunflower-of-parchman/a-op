@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { LibraryPlaylist, LibraryResponse } from '#shared/types/library'
 import type { AccountCommerceResponse } from '#shared/types/commerce'
+import type { LearningAccountResponse } from '#shared/types/learning'
 
 useSeoMeta({ title: 'Account' })
 
@@ -8,6 +9,8 @@ const { data: session, refresh } = await useFetch('/api/auth/session')
 const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
 const { data: commerce, refresh: refreshCommerce } =
   await useFetch<AccountCommerceResponse>('/api/commerce/account')
+const { data: learning, refresh: refreshLearning } =
+  await useFetch<LearningAccountResponse>('/api/learning/account')
 const signingOut = ref(false)
 const playlistTitle = ref('')
 const message = ref('')
@@ -15,7 +18,7 @@ const message = ref('')
 async function signOut() {
   signingOut.value = true
   await $fetch('/api/auth/sign-out', { method: 'POST' })
-  await Promise.all([refresh(), refreshLibrary(), refreshCommerce()])
+  await Promise.all([refresh(), refreshLibrary(), refreshCommerce(), refreshLearning()])
   signingOut.value = false
 }
 
@@ -230,6 +233,35 @@ async function downloadLicense(licenseId: string) {
         <p v-else>No purchase or membership access has been granted yet.</p>
       </section>
     </div>
+
+    <section
+      v-if="learning?.authenticated"
+      class="account-learning"
+      aria-labelledby="account-learning-heading"
+    >
+      <div class="library-section-heading">
+        <p class="section-number">Learning</p>
+        <h2 id="account-learning-heading">Resume the next meaningful lesson.</h2>
+      </div>
+      <ol v-if="learning.paths?.length" class="learning-account-list">
+        <li v-for="path in learning.paths" :key="path.id">
+          <div>
+            <h3>{{ path.title }}</h3>
+            <p>{{ path.completedLessons }} of {{ path.totalLessons }} lessons completed</p>
+          </div>
+          <NuxtLink
+            v-if="path.nextLesson"
+            class="text-action"
+            :to="`/learn/${path.slug}/${path.nextLesson.slug}`"
+          >
+            {{ path.nextLesson.accessible ? 'Continue' : 'Review access for' }}
+            {{ path.nextLesson.title }}
+          </NuxtLink>
+          <span v-else>Path complete</span>
+        </li>
+      </ol>
+      <p v-else>Published learning paths will appear here.</p>
+    </section>
 
     <div v-if="library?.authenticated" class="customer-library">
       <section aria-labelledby="favorites-heading">

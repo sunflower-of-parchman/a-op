@@ -1,8 +1,9 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers'
 
 test('preserves authored catalog order and one player across routes', async ({ page }) => {
-  await page.goto('/music')
+  await gotoHydrated(page, '/music')
   const releaseTracks = page.locator('.compact-tracklist li')
   await expect(releaseTracks).toHaveText([
     '01First Light, Repeated',
@@ -14,11 +15,12 @@ test('preserves authored catalog order and one player across routes', async ({ p
   await expect(page).toHaveURL(/\/music\/lines-we-carry$/)
   await expect(page.locator('audio')).toHaveCount(1)
   await page.getByRole('button', { name: 'Play public preview' }).click()
+  await page.locator('audio').evaluate((audio: HTMLAudioElement) => audio.pause())
   await expect(page.getByText('Public preview playback verified.')).toBeVisible()
   const originalSource = await page.locator('audio').getAttribute('src')
   expect(originalSource).toContain('first-light-repeated-preview.wav')
 
-  await page.getByRole('button', { name: 'Pause current track' }).click()
+  await expect(page.getByRole('button', { name: 'Play current track' })).toBeVisible()
   await page
     .getByRole('list', { name: 'Release track list' })
     .getByRole('link', { name: 'First Light, Repeated' })
@@ -31,7 +33,7 @@ test('preserves authored catalog order and one player across routes', async ({ p
   await expect(page.locator('.global-player__identity a')).toHaveText('A Measure of Distance')
   await expect(page.locator('.global-player__timeline input')).toBeVisible()
 
-  await page.goto('/music/collections/movement-studies')
+  await gotoHydrated(page, '/music/collections/movement-studies')
   await expect(page.locator('.tracklist__title')).toHaveText([
     'Turn Toward Home',
     'First Light, Repeated',

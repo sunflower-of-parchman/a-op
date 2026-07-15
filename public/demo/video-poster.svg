@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract phrase study</title>
+  <desc id="desc">Warm arcs gather around a suspended point and continue toward an open horizon.</desc>
+  <rect width="1600" height="900" fill="#1f1e1a"/>
+  <path d="M-80 710 C260 730 320 180 680 245 S1040 740 1680 310" fill="none" stroke="#e5ddd0" stroke-width="52"/>
+  <path d="M-40 780 C310 800 410 335 730 360 S1110 790 1650 455" fill="none" stroke="#b9462a" stroke-width="18"/>
+  <circle cx="790" cy="383" r="34" fill="#f2eee6"/>
+  <text x="92" y="124" fill="#f2eee6" font-family="Georgia, serif" font-size="54">A phrase remains in motion.</text>
+  <text x="96" y="178" fill="#b9ad9d" font-family="Arial, sans-serif" font-size="24" letter-spacing="5">FICTIONAL VIDEO STUDY</text>
+</svg>

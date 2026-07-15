@@ -67,6 +67,24 @@ if (error.value?.statusCode === 401) {
           >Publish explicit use packages, immutable terms, issued records, and documents.</small
         >
       </NuxtLink>
+      <NuxtLink to="/admin/learning">
+        <span>Learning paths and lessons</span>
+        <small
+          >Author ordered mixed-media study with explicit account and entitlement access.</small
+        >
+      </NuxtLink>
+      <NuxtLink to="/admin/videos">
+        <span>Video and transcripts</span>
+        <small
+          >Publish approved hosted or privacy-gated external video with complete context.</small
+        >
+      </NuxtLink>
+      <NuxtLink to="/admin/editorial">
+        <span>Editorial publishing</span>
+        <small
+          >Compose essays, announcements, learning notes, and information from safe sections.</small
+        >
+      </NuxtLink>
     </nav>
 
     <p v-else-if="error" class="form-message" role="alert">

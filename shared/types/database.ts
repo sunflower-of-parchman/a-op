@@ -391,6 +391,53 @@ export type Database = {
         }
         Relationships: []
       }
+      courses: {
+        Row: {
+          created_at: string
+          id: string
+          path_id: string
+          position: number
+          published_at: string
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          path_id: string
+          position: number
+          published_at?: string
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          path_id?: string
+          position?: number
+          published_at?: string
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_path_id_fkey"
+            columns: ["path_id"]
+            isOneToOne: false
+            referencedRelation: "learning_paths"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       download_records: {
         Row: {
           delivered_at: string
@@ -432,6 +479,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      editorial_drafts: {
+        Row: {
+          created_at: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payload?: Json
+          slug?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: []
+      }
+      editorial_posts: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          published_at: string
+          published_on: string
+          sections: Json
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id: string
+          kind: string
+          published_at?: string
+          published_on: string
+          sections?: Json
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          published_at?: string
+          published_on?: string
+          sections?: Json
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       entitlement_grants: {
         Row: {
@@ -595,6 +714,291 @@ export type Database = {
             columns: ["track_id"]
             isOneToOne: false
             referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      learning_areas: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          state: Database["public"]["Enums"]["publication_state"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id: string
+          name: string
+          slug: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      learning_path_drafts: {
+        Row: {
+          created_at: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payload?: Json
+          slug?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: []
+      }
+      learning_paths: {
+        Row: {
+          area_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          introduction: string
+          published_at: string
+          slug: string
+          sort_order: number
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          area_id: string
+          created_at?: string
+          created_by?: string | null
+          id: string
+          introduction?: string
+          published_at?: string
+          slug: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          area_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          introduction?: string
+          published_at?: string
+          slug?: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learning_paths_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "learning_areas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          lesson_id: string
+          section_position: number
+          started_at: string
+          subject_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          lesson_id: string
+          section_position?: number
+          started_at?: string
+          subject_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          lesson_id?: string
+          section_position?: number
+          started_at?: string
+          subject_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_sections: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          lesson_id: string
+          media_object_id: string | null
+          position: number
+          section_type: string
+          video_id: string | null
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id: string
+          lesson_id: string
+          media_object_id?: string | null
+          position: number
+          section_type: string
+          video_id?: string | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          media_object_id?: string | null
+          position?: number
+          section_type?: string
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_sections_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_sections_media_object_id_fkey"
+            columns: ["media_object_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_sections_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          access_explanation: string
+          access_mode: Database["public"]["Enums"]["lesson_access_mode"]
+          course_id: string
+          created_at: string
+          entitlement_product_id: string | null
+          estimated_minutes: number
+          id: string
+          membership_tier_id: string | null
+          position: number
+          published_at: string
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          access_explanation?: string
+          access_mode?: Database["public"]["Enums"]["lesson_access_mode"]
+          course_id: string
+          created_at?: string
+          entitlement_product_id?: string | null
+          estimated_minutes?: number
+          id: string
+          membership_tier_id?: string | null
+          position: number
+          published_at?: string
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          access_explanation?: string
+          access_mode?: Database["public"]["Enums"]["lesson_access_mode"]
+          course_id?: string
+          created_at?: string
+          entitlement_product_id?: string | null
+          estimated_minutes?: number
+          id?: string
+          membership_tier_id?: string | null
+          position?: number
+          published_at?: string
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_entitlement_product_id_fkey"
+            columns: ["entitlement_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_membership_tier_id_fkey"
+            columns: ["membership_tier_id"]
+            isOneToOne: false
+            referencedRelation: "membership_tiers"
             referencedColumns: ["id"]
           },
         ]
@@ -1097,6 +1501,7 @@ export type Database = {
           id: string
           is_public: boolean
           kind: Database["public"]["Enums"]["media_kind"]
+          lesson_id: string | null
           media_type: string
           metadata: Json
           object_path: string
@@ -1117,6 +1522,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           kind: Database["public"]["Enums"]["media_kind"]
+          lesson_id?: string | null
           media_type: string
           metadata?: Json
           object_path: string
@@ -1137,6 +1543,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           kind?: Database["public"]["Enums"]["media_kind"]
+          lesson_id?: string | null
           media_type?: string
           metadata?: Json
           object_path?: string
@@ -2031,6 +2438,7 @@ export type Database = {
           expires_at: string
           id: string
           kind: Database["public"]["Enums"]["media_kind"]
+          lesson_id: string | null
           media_type: string
           object_path: string
           release_id: string | null
@@ -2047,6 +2455,7 @@ export type Database = {
           expires_at?: string
           id?: string
           kind: Database["public"]["Enums"]["media_kind"]
+          lesson_id?: string | null
           media_type: string
           object_path: string
           release_id?: string | null
@@ -2063,6 +2472,7 @@ export type Database = {
           expires_at?: string
           id?: string
           kind?: Database["public"]["Enums"]["media_kind"]
+          lesson_id?: string | null
           media_type?: string
           object_path?: string
           release_id?: string | null
@@ -2083,6 +2493,95 @@ export type Database = {
             columns: ["track_id"]
             isOneToOne: false
             referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_drafts: {
+        Row: {
+          created_at: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          payload: Json
+          slug: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payload?: Json
+          slug?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          credits: Json
+          external_id: string | null
+          hosted_media_id: string | null
+          id: string
+          poster_url: string | null
+          provider: string
+          published_at: string
+          slug: string
+          state: Database["public"]["Enums"]["publication_state"]
+          summary: string
+          title: string
+          transcript: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          credits?: Json
+          external_id?: string | null
+          hosted_media_id?: string | null
+          id: string
+          poster_url?: string | null
+          provider: string
+          published_at?: string
+          slug: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title: string
+          transcript: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          credits?: Json
+          external_id?: string | null
+          hosted_media_id?: string | null
+          id?: string
+          poster_url?: string | null
+          provider?: string
+          published_at?: string
+          slug?: string
+          state?: Database["public"]["Enums"]["publication_state"]
+          summary?: string
+          title?: string
+          transcript?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_hosted_media_id_fkey"
+            columns: ["hosted_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_objects"
             referencedColumns: ["id"]
           },
         ]
@@ -2222,6 +2721,10 @@ export type Database = {
         }
         Returns: Json
       }
+      decide_lesson_access: {
+        Args: { p_lesson_id: string; p_subject_id: string }
+        Returns: Json
+      }
       fail_license_document_job: {
         Args: { p_error_code: string; p_job_id: string; p_lease_token: string }
         Returns: undefined
@@ -2314,6 +2817,14 @@ export type Database = {
           subscription_id: string
         }[]
       }
+      publish_editorial_draft: {
+        Args: { p_actor_id: string; p_draft_id: string }
+        Returns: string
+      }
+      publish_learning_path_draft: {
+        Args: { p_actor_id: string; p_draft_id: string }
+        Returns: string
+      }
       publish_license_template_version: {
         Args: {
           p_actor_id: string
@@ -2340,6 +2851,23 @@ export type Database = {
       publish_site_config: {
         Args: { p_actor_id: string; p_version_id: string }
         Returns: string
+      }
+      publish_video_draft: {
+        Args: { p_actor_id: string; p_draft_id: string }
+        Returns: string
+      }
+      record_lesson_progress: {
+        Args: {
+          p_completed: boolean
+          p_lesson_id: string
+          p_section_position: number
+          p_subject_id: string
+        }
+        Returns: {
+          completed: boolean
+          completed_at: string
+          section_position: number
+        }[]
       }
       record_webhook_failure: {
         Args: {
@@ -2401,6 +2929,7 @@ export type Database = {
       app_role: "owner" | "editor" | "customer"
       entitlement_status: "active" | "revoked" | "expired"
       fulfillment_status: "pending" | "complete" | "failed" | "refunded"
+      lesson_access_mode: "public" | "account" | "entitlement" | "membership"
       media_job_status: "pending" | "processing" | "ready" | "failed"
       media_kind:
         | "artwork"
@@ -2541,6 +3070,7 @@ export const Constants = {
       app_role: ["owner", "editor", "customer"],
       entitlement_status: ["active", "revoked", "expired"],
       fulfillment_status: ["pending", "complete", "failed", "refunded"],
+      lesson_access_mode: ["public", "account", "entitlement", "membership"],
       media_job_status: ["pending", "processing", "ready", "failed"],
       media_kind: [
         "artwork",

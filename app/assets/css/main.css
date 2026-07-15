@@ -1967,6 +1967,354 @@ button.text-action:disabled {
   font-size: 0.82rem;
 }
 
+.learning-index,
+.learning-path-page,
+.lesson-page,
+.video-index,
+.video-page,
+.journal-index,
+.journal-page,
+.learning-admin,
+.video-admin,
+.editorial-admin {
+  display: grid;
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.learning-path-introduction,
+.learning-course,
+.lesson-access-boundary,
+.lesson-completion,
+.account-learning {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.3fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  padding-block: clamp(2rem, 5vw, 4rem);
+  border-block: var(--border-width) solid var(--color-border);
+}
+
+.learning-path-introduction + .learning-path-introduction,
+.learning-course + .learning-course {
+  border-top: 0;
+}
+
+.learning-path-introduction > div:not(.learning-path-actions),
+.learning-path-actions,
+.learning-course > header,
+.learning-course > .lesson-order,
+.lesson-access-boundary > div,
+.lesson-completion > div,
+.account-learning > :not(.library-section-heading) {
+  grid-column: 2;
+}
+
+.learning-path-actions,
+.learning-related,
+.lesson-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+}
+
+.learning-progress-summary,
+.lesson-access-state,
+.lesson-position {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lesson-order,
+.video-list,
+.journal-list,
+.learning-account-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-order li,
+.video-list li,
+.journal-list li,
+.learning-account-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+  padding-block: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.lesson-order li > div {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.lesson-order h3,
+.video-list h2,
+.journal-list h2,
+.learning-account-list h3 {
+  margin-block: 0 0.35rem;
+}
+
+.lesson-heading {
+  align-items: end;
+}
+
+.lesson-sections {
+  display: grid;
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.lesson-section {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.4fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.lesson-section > audio,
+.lesson-section > details,
+.lesson-section > .video-experience,
+.lesson-section > .text-action,
+.lesson-section > figure,
+.lesson-progress-action {
+  grid-column: 2;
+}
+
+.lesson-section figure {
+  margin: 0;
+}
+
+.lesson-section img {
+  display: block;
+  width: 100%;
+  max-height: 42rem;
+  object-fit: cover;
+}
+
+.lesson-section figcaption {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  color: var(--color-muted);
+}
+
+.lesson-section audio {
+  width: min(100%, 46rem);
+}
+
+.safe-rich-text {
+  display: grid;
+  gap: 1rem;
+}
+
+.safe-rich-text p,
+.safe-rich-text ul {
+  margin: 0;
+}
+
+.safe-rich-text ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.safe-rich-text a {
+  text-underline-offset: 0.18em;
+}
+
+.lesson-progress-action {
+  justify-self: start;
+}
+
+.lesson-access-boundary {
+  border-color: var(--color-accent);
+}
+
+.lesson-navigation {
+  justify-content: space-between;
+  padding-block: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.video-experience {
+  display: grid;
+  gap: 2rem;
+}
+
+.video-frame,
+.video-frame video,
+iframe.video-frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  background: var(--color-surface);
+}
+
+.external-video-consent {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  padding: clamp(2rem, 6vw, 6rem);
+  border: var(--border-width) solid var(--color-border);
+  text-align: center;
+}
+
+.external-video-consent > div {
+  display: grid;
+  max-width: 56rem;
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.external-video-poster {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.external-video-consent:has(iframe) {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+}
+
+.video-transcript {
+  padding-block: 1rem;
+  border-block: var(--border-width) solid var(--color-border);
+}
+
+.video-transcript summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.video-credits {
+  margin: 0;
+}
+
+.video-credits div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.4fr) 1fr;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.video-credits dt {
+  color: var(--color-muted);
+}
+
+.admin-record-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.learning-course-editor,
+.learning-lesson-editor,
+.lesson-section-editor {
+  display: grid;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.learning-course-editor > li,
+.learning-lesson-editor > li,
+.lesson-section-editor > li {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.learning-lesson-editor {
+  margin-left: clamp(0rem, 4vw, 4rem);
+}
+
+.lesson-section-editor {
+  margin-left: clamp(0rem, 4vw, 4rem);
+  border-left: var(--border-width) solid var(--color-border);
+  padding-left: clamp(1rem, 3vw, 3rem);
+}
+
+.compact-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.compact-fields label:has(textarea),
+.compact-fields label:has(select) {
+  grid-column: 1 / -1;
+}
+
+.lesson-media-upload {
+  margin-left: clamp(0rem, 4vw, 4rem);
+  padding-block: 1rem;
+  border-block: var(--border-width) solid var(--color-border);
+}
+
+.learning-draft-preview > ol,
+.video-draft-preview > .video-draft-experience,
+.editorial-draft-preview > .structured-sections {
+  grid-column: 2;
+}
+
+.learning-draft-preview ol {
+  margin-block: 0.5rem;
+}
+
+.learning-preview-courses,
+.learning-preview-sections {
+  padding: 0;
+  list-style: none;
+}
+
+.learning-preview-courses > li,
+.learning-preview-sections > li {
+  padding-block: 1rem;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.learning-preview-courses summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.learning-preview-sections h4 {
+  margin-block: 0.25rem 0.75rem;
+}
+
+.learning-preview-sections figure {
+  margin: 0;
+}
+
+.learning-preview-sections img,
+.video-draft-experience > img {
+  width: 100%;
+  max-height: 34rem;
+  object-fit: cover;
+}
+
+.learning-preview-sections audio {
+  width: 100%;
+}
+
+.video-draft-experience {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.learning-account-list {
+  width: 100%;
+}
+
 @keyframes enter {
   from {
     transform: translateY(var(--motion-distance));
@@ -1997,6 +2345,12 @@ button.text-action:disabled {
   .issued-license-admin,
   .commerce-editor-list form > header,
   .commerce-operations,
+  .learning-path-introduction,
+  .learning-course,
+  .lesson-access-boundary,
+  .lesson-completion,
+  .account-learning,
+  .lesson-section,
   .offering-list article,
   .catalog-collections,
   .structured-section--prose,
@@ -2005,6 +2359,25 @@ button.text-action:disabled {
   .structured-section--contact,
   .admin-edit-form > section {
     grid-template-columns: 1fr;
+  }
+
+  .learning-path-introduction > div:not(.learning-path-actions),
+  .learning-path-actions,
+  .learning-course > header,
+  .learning-course > .lesson-order,
+  .lesson-access-boundary > div,
+  .lesson-completion > div,
+  .account-learning > :not(.library-section-heading),
+  .lesson-section > audio,
+  .lesson-section > details,
+  .lesson-section > .video-experience,
+  .lesson-section > .text-action,
+  .lesson-section > figure,
+  .lesson-progress-action,
+  .learning-draft-preview > ol,
+  .video-draft-preview > .video-draft-experience,
+  .editorial-draft-preview > .structured-sections {
+    grid-column: 1;
   }
 
   .license-history,
@@ -2116,6 +2489,15 @@ button.text-action:disabled {
     align-items: start;
   }
 
+  .compact-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-fields label:has(textarea),
+  .compact-fields label:has(select) {
+    grid-column: 1;
+  }
+
   .admin-publish-bar,
   .section-editor-controls {
     align-items: start;
@@ -2197,6 +2579,21 @@ button.text-action:disabled {
   .playlist-library article > header,
   .playlist-library li {
     grid-template-columns: 1fr;
+  }
+
+  .lesson-order li,
+  .video-list li,
+  .journal-list li,
+  .learning-account-list li,
+  .video-credits div {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .learning-lesson-editor,
+  .lesson-section-editor,
+  .lesson-media-upload {
+    margin-left: 0;
   }
 
   .playlist-library li > div {

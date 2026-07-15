@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { gotoHydrated, reloadHydrated } from './helpers'
 
 const listeners = {
   one: { email: 'listener-one@daymark.local', password: 'Daymark-Listener-2026!' },
@@ -7,7 +8,7 @@ const listeners = {
 }
 
 async function signIn(page: Page, account: (typeof listeners)['one'], redirect: string) {
-  await page.goto(`/sign-in?redirect=${encodeURIComponent(redirect)}`)
+  await gotoHydrated(page, `/sign-in?redirect=${encodeURIComponent(redirect)}`)
   const button = page.getByRole('button', { name: 'Sign in', exact: true })
   await expect(button).toBeEnabled()
   await page.getByLabel('Email').fill(account.email)
@@ -42,11 +43,11 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
   )) {
     await page.request.delete(`/api/library/playlists/${playlist.id}`)
   }
-  await page.reload()
+  await reloadHydrated(page)
 
   await page.getByRole('button', { name: 'Save to favorites' }).click()
   await expect(page.getByText('Track saved to favorites.')).toBeVisible()
-  await page.goto('/account')
+  await gotoHydrated(page, '/account')
   const favorites = page.getByRole('region', { name: 'Music you chose to keep close.' })
   await expect(favorites.getByRole('link', { name: 'First Light, Repeated' })).toBeVisible()
 
@@ -58,7 +59,7 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
   await expect(page.getByText('Playlist created.')).toBeVisible()
 
   for (const slug of ['first-light-repeated', 'a-measure-of-distance']) {
-    await page.goto(`/music/tracks/${slug}`)
+    await gotoHydrated(page, `/music/tracks/${slug}`)
     const playlistSelect = page.getByLabel('Playlist')
     await expect(playlistSelect).toBeEnabled()
     await playlistSelect.selectOption({ label: 'Quiet Sequence' })
@@ -69,7 +70,7 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
     await expect(page.getByText('Track added to Quiet Sequence.')).toBeVisible()
   }
 
-  await page.goto('/music/tracks/first-light-repeated')
+  await gotoHydrated(page, '/music/tracks/first-light-repeated')
   await page.getByRole('button', { name: 'Play public preview' }).click()
   const playerPlay = page.getByRole('button', { name: 'Play current track' })
   await expect(playerPlay).toBeEnabled()
@@ -86,7 +87,7 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
     })
     .toBeGreaterThan(0)
 
-  await page.goto('/account')
+  await gotoHydrated(page, '/account')
   const playlist = page.locator('.playlist-library article').filter({ hasText: 'Quiet Sequence' })
   await expect(playlist.locator('li a')).toHaveText([
     'First Light, Repeated',
@@ -114,7 +115,7 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
 })
 
 test('keeps the customer account surface accessible and within the viewport', async ({ page }) => {
-  await page.goto('/account')
+  await gotoHydrated(page, '/account')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   )
