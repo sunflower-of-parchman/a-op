@@ -109,12 +109,13 @@ Show creativity and a genuine understanding of the problem space.
 ## Primary implementation task
 
 - Primary implementation task: This Codex task.
+- Primary Codex task/thread ID: `019f6291-c1c9-7cf3-9da7-be2a19b7154c`
 - Primary models: GPT-5.6 Sol and GPT-5.6 Pro, confirmed by Michael on July 14, 2026.
 - Purpose: Architecture integration, core implementation, milestone decisions, and full verification.
 - Supporting tasks: Bounded research and isolated investigations only; their results must return here for integration and verification.
 - Model and agent evidence: `docs/submission/model-and-agent-use.md`
 - Capability evidence: `docs/submission/capability-evidence.md`
-- Final `/feedback` Session ID: Pending completion.
+- Final `/feedback` Session ID: Pending completion and confirmation through `/feedback`; do not assume it is identical to the task/thread ID.
 
 ## Project brief
 
@@ -146,5 +147,5 @@ This section will develop as we discuss the idea.
 | README | Not started |
 | Demo and judging access | Not started |
 | Demo video | Not started |
-| `/feedback` session ID | Not captured |
+| `/feedback` session ID | Primary task/thread ID recorded; final `/feedback` confirmation pending |
 | Devpost submission | Not started |

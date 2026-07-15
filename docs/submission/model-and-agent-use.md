@@ -5,11 +5,12 @@ This document records how Codex, GPT-5.6 Sol, and GPT-5.6 Pro contribute to the 
 ## Declared implementation record
 
 - Primary implementation task: This Codex task.
+- Primary Codex task/thread ID: `019f6291-c1c9-7cf3-9da7-be2a19b7154c`
 - Models used: GPT-5.6 Sol and GPT-5.6 Pro.
 - Model confirmation: Michael confirmed both models on July 14, 2026.
 - Primary-task purpose: Architecture integration, core implementation, milestone decisions, and full verification.
 - Supporting-task boundary: Supporting tasks may perform bounded research or isolated investigations. Core integration, milestone decisions, major verification, and the majority of implementation remain in the primary task.
-- Final `/feedback` Session ID: Pending completion.
+- Final `/feedback` Session ID: Pending completion and confirmation through `/feedback`; do not infer equivalence with the task/thread ID.
 
 ## Product runtime boundary
 
