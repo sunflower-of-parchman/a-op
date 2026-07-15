@@ -39,7 +39,7 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - [x] (2026-07-15 08:04Z) Implemented Milestone 8: optional first-party event collection with explicit consent and GPC/DNT enforcement; minimal session-only identifiers and bounded allowlisted fields; retention pruning; owner-only aggregates and settings; separate redacted setup, storage, worker, payment, delivery-adapter, and migration status; `npm run diagnose`; CI; and deterministic desktop/mobile browser verification. Commit `1b585c9` contains the implementation.
 - [x] (2026-07-15 08:24Z) Implemented Milestone 9: a 14-topic Codex interview contract; ignored structured proposals; stale-aware read-only preview and diff; explicit local approval; deterministic configuration and two-track media application; post-apply verification; idempotent project-state updates; provider-neutral service, recovery, and maintenance runbooks; CI; and a complete fictional-artist integration proof. Commit `ce976ff` contains the implementation.
 - [x] (2026-07-15 08:52Z) Implemented Milestone 10: deterministic versioned artist exports; strict content, media, service, operations, and manifest schemas; SHA-256 artifact and media inventories; explicit private/customer-data exclusions; tamper detection; local-only restore confirmation; migration-clean disposable restoration; exact comparison of all 25 portable tables; direct-public data and media checks; six service reconnection runbooks; CI; and automatic fictional-demo recovery. Commit `e12d3be` contains the implementation.
-- [ ] Complete security hardening, accessibility, responsive behavior, performance, failure recovery, backup and restore documentation, cross-browser journeys, and production-build verification.
+- [x] (2026-07-15 11:05Z) Implemented Milestone 11: same-origin request and redirect boundaries; strict production headers and content security policy; safe external-link schemas; secure cookies; request-size and rate limits; responsive empty, loading, offline, and unavailable states; one-main semantics; keyboard, focus, reduced-motion, viewport, and axe checks; explicit production performance budgets; pinned isolated PDF rendering; recovery runbooks and executable drills; local-only destructive guards; Auth/Kong reset recovery; CI; zero dependency vulnerabilities; clean database lint; and one passing uninterrupted full verification aggregate. Commit `8d1fca5` contains the implementation.
 - [ ] Package the project for a fresh clone, prepare original demonstration content, verify the complete judge journey, and create all repository documentation.
 - [ ] Prepare the Build Week README evidence, project description, judging guide, sub-three-minute demo script and recording plan, deployment plan, and `/feedback` session evidence without publishing or submitting until Michael explicitly approves each external action.
 
@@ -123,6 +123,18 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - Observation: Repeatable ownership evidence requires content-derived identity rather than an export-time timestamp.
   Evidence: Milestone 10 writes stable, sorted JSON; derives the export ID from the artist slug and artifact hashes; and stores application and migration versions without a changing creation time. Two independent exports of unchanged state are byte-for-byte identical and share the same snapshot hash.
 
+- Observation: A local database reset can restart Supabase Auth without refreshing Kong's retained upstream route.
+  Evidence: The aggregate recovery drill observed a healthy replacement Auth container while `/auth/v1/health` still returned HTTP 502 through Kong. Restarting only this repository's Kong container immediately restored HTTP 200. Shared setup and reset code now polls Auth, performs that project-scoped recovery only when needed, and passed the complete reset-heavy aggregate.
+
+- Observation: A machine-level Python upgrade can silently invalidate an otherwise pinned license-document workflow.
+  Evidence: The host changed to Python 3.14 without ReportLab during the full browser gate. `npm run setup:documents` now creates an ignored isolated environment from exact worker requirements, and both local execution and tests resolve that interpreter deterministically.
+
+- Observation: Server-rendered checkout controls need an explicit hydration boundary before consequential browser actions.
+  Evidence: A full page load could expose the simulated completion button before Vue attached its handler. The control now remains disabled until mounted, and the complete commerce and licensing browser journeys pass from fresh navigation.
+
+- Observation: Performance evidence is most useful when expressed as an executable production-build budget rather than a one-time score.
+  Evidence: The hardening command starts the built Node server, fails on response, request, console, media-loading, and byte-budget regressions, and records four critical routes. The final aggregate measured 60–70 ms load events, 7–8 requests, 374–377 KB total transfer, and zero initial media bytes.
+
 ## Decision Log
 
 - Decision: Build the complete described platform rather than presenting only a catalog prototype.
@@ -176,6 +188,18 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - Decision: Treat artist portability as an executable product capability.
   Rationale: Artist ownership includes a versioned export of configuration and content, a verified media inventory, database and customer-data procedures, and a tested path away from the current hosting arrangement.
   Date/Author: 2026-07-15 / Michael and Codex
+
+- Decision: Use a same-origin browser boundary and allow only validated internal, HTTPS, loopback-development, and exact Stripe destinations.
+  Rationale: The application uses server-owned sessions and does not need blanket cross-origin credential access. Central URL validation, mutation-origin checks, secure headers, and explicit redirect policies prevent configuration or provider data from becoming an open redirect or cross-site mutation path.
+  Date/Author: 2026-07-15 / Codex
+
+- Decision: Make performance and recovery executable repository contracts.
+  Rationale: Fixed production-load budgets and repeatable recovery drills provide evidence that future artist changes preserve usable pages, rerunnable setup, payment reconciliation, media retries, and portable restore behavior. Documentation alone cannot detect regression.
+  Date/Author: 2026-07-15 / Codex
+
+- Decision: Isolate the license-document renderer in a pinned project-local Python environment.
+  Rationale: ReportLab output and PDF inspection must remain reproducible across machines and host Python upgrades. The renderer environment contains no payment credential and is rebuilt from exact requirements.
+  Date/Author: 2026-07-15 / Codex
 
 - Decision: Separate the portable artist definition from customer and provider account backups.
   Rationale: Published identity, pages, catalog, offers, licensing definitions, learning, video, editorial structure, privacy settings, and hashed media can move safely through a strict artifact contract. Customers, messages, behavioral events, payment history, subscriptions, issued licenses, credentials, and provider identifiers require their own approved encrypted provider exports and retention decisions.
@@ -256,6 +280,8 @@ Milestone 8 is complete. A visitor can explicitly allow or decline optional arti
 Milestone 9 is complete. A fresh Codex task can read the repository, emit and conduct the complete artist interview, produce a validated proposal, preview a field-level diff without mutation, stop for explicit human approval, and then apply only the approved local configuration and media. The integration proof creates a fictional North Window Practice identity and two generated WAV tracks, rejects an unapproved apply, processes both tracks, detects five intentionally unconnected services, records exact runbooks, verifies the installation, and reapplies without duplication before restoring the Daymark Assembly demonstration. Evidence is commit `ce976ff`, `npm run verify:setup`, formatting, lint, type checking, production build, browser-secret scanning, and the provider-neutral setup, service, maintenance, and recovery documentation. No external account was mutated and no credential or local service URL appeared in the setup result.
 
 Milestone 10 is complete. An artist can create a deterministic portable directory containing four hashed structured artifacts and bundled content media, verify every schema, relationship, artifact hash, object size, and object hash, and retain exact instructions for the separately approved provider/customer backup. The restore rehearsal refuses an omitted confirmation or any non-local target, resets the local schema to migrations, creates a disposable owner, restores all 25 content and relationship tables plus storage objects, compares every record count, verifies direct-public surfaces and public media, reports six external-account reconnection runbooks, rejects a tampered artifact, and recreates the fictional demonstration. Evidence is commit `e12d3be`, `npm run verify:portability`, formatting, lint, type checking, production build, browser-secret scanning, and a final passing `npm run setup:check`. No customer record, credential, provider identifier, signed URL, private task identifier, or local service URL appeared in the export or restore result.
+
+Milestone 11 is complete locally. A new artist receives strict same-origin request and redirect handling, nonce-based production security headers, bounded requests and rates, validated public links, secure sessions, graceful empty/offline/unavailable states, one semantic main landmark, visible keyboard navigation, reduced-motion behavior, responsive public and administrative routes, and deterministic PDF tooling. Production budgets now fail regressions in home, catalog, release, and learning loads; recovery drills prove safe repeated setup, payment reconciliation, media retry, deterministic export, clean restore, local-only reset refusal, and final installation health. Evidence is commit `8d1fca5`, the zero-finding dependency audit and database lint, six passing desktop/mobile hardening journeys, four passing performance budgets, the complete recovery drill, and one uninterrupted `npm run verify` ending in all eleven isolated browser specifications. Hosted Supabase advisor, media-worker, and Stripe sandbox evidence remains approval-gated and will be recorded only against Michael-approved external targets.
 
 At the end of each implementation milestone, append a dated paragraph here describing what a new artist can now do, what evidence proves it, and any capability that remains incomplete. At project completion, compare the working fresh-clone and judge journeys with the Purpose / Big Picture section, and distinguish finished features from documented future extensions.
 
@@ -720,3 +746,5 @@ Revision note, 2026-07-15: Completed Milestone 8 with first-party session-only a
 Revision note, 2026-07-15: Completed Milestone 9 with the 14-topic Codex interview, complete ignored proposals, stale-aware read-only preview, explicit local approval, deterministic artist and media application, post-apply verification, idempotent non-secret project state, provider-neutral service and recovery runbooks, CI, and implementation commit `ce976ff`.
 
 Revision note, 2026-07-15: Completed Milestone 10 with deterministic versioned artist exports, strict portable schemas, hashed structured artifacts and bundled media, explicit private-data exclusions, redacted service state, backup procedures, tamper detection, migration-clean disposable restore, all-table equivalence and public-access checks, automatic demonstration recovery, CI, and implementation commit `e12d3be`.
+
+Revision note, 2026-07-15: Completed Milestone 11 locally with same-origin security and redirect contracts, strict production headers, secure sessions, responsive service states, keyboard and axe coverage, explicit production performance budgets, reproducible PDF tooling, executable recovery drills, local reset safeguards, project-scoped Supabase gateway recovery, CI, a zero-finding dependency and schema audit, and implementation commit `8d1fca5`.

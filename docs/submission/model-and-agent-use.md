@@ -142,6 +142,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `e12d3be` (`Build verified artist portability`).
 - Verification: `npm run verify:portability`, formatting, lint, type checking, production build, browser-secret scanning, and a final `npm run setup:check` passed. Two unchanged exports were byte-identical; a missing confirmation was refused; all 25 portable tables and every bundled media object restored into a clean local schema; direct-public records and media remained accessible; six external reconnections stayed approval-gated; modified content failed verification; and the original fictional installation was recreated.
 
+### Milestone 11 security, reliability, accessibility, and performance — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Keep the complete platform and artist-controlled external-action boundary; make local and production-shaped verification real; preserve expressive design with accessible constraints; treat failure recovery and performance as product behavior.
+- Material contribution: Central same-origin and safe-destination policies; cross-site mutation refusal; nonce content security policy and strict response headers; secure cookie handling; request and rate limits; validated public links; responsive empty, loading, offline, and unavailable states; one-main semantics; keyboard, focus, reduced-motion, viewport, and axe coverage; explicit production performance budgets; isolated pinned PDF tooling; local-only destructive guards; executable setup, payment, media, export, and restore drills; project-scoped Supabase Auth gateway recovery; CI; security review and performance evidence.
+- Commit: `8d1fca5` (`Harden security reliability and performance`).
+- Verification: One uninterrupted `NUXT_IGNORE_LOCK=1 PORT=3100 npm run verify` passed foundation, Integration Gate A, all modules, security, accessibility, performance, recovery, final setup, the authority spine, and eleven isolated desktop/mobile browser specifications. `npm audit` found zero vulnerabilities; Supabase `db lint` found no schema errors; the production hardening gate passed six browser journeys and four budgets; five consecutive resets and the complete recovery drill passed. Hosted advisor, worker, and Stripe sandbox evidence remains behind Michael's action-specific approval.
+
 ## Submission reconciliation
 
 Before submission:
