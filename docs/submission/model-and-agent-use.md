@@ -88,6 +88,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commits: `bc89195`, `021bc7a`, `ea7c0f9`, `fd17435`, `57587c1`, `db4e560`, and `21476f6`.
 - Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:catalog`, production build, browser-secret scan, and desktop/mobile catalog, administration, upload, customer-isolation, viewport, and accessibility journeys passed. The same worker passed local direct and Docker image execution. Hosted deployment evidence remains pending Michael's explicit approval.
 
+### Milestone 5 commerce and memberships — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Preserve the complete artist-owned commerce system; keep the application authoritative for offerings and access; use artist-owned Stripe accounts only after approval; never let a browser redirect grant access; keep live mode outside routine development and judging.
+- Material contribution: Service-neutral offerings and mappings; free, external, one-time, and recurring purchase paths; server-created Stripe Checkout and portal sessions; raw-body signed webhook verification; replay-safe atomic orders, subscriptions, refunds, cancellations, and entitlements; explicit expired and revoked decisions; protected downloads; redacted webhook-failure recovery; owner operations; deterministic local simulation; and artist setup guidance.
+- Commit: `058201c` (`Build commerce and membership authority`).
+- Verification: `npm run setup:check`, `npm run verify:commerce`, Supabase schema lint with no findings, type checking, application lint, production build, and desktop/mobile commerce, owner-mapping, account-isolation, viewport, and accessibility journeys passed. Stripe sandbox evidence remains pending Michael's explicit approval to connect the external test account.
+
 ## Submission reconciliation
 
 Before submission:
