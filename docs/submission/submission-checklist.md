@@ -32,7 +32,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 
 - [x] Local judge quickstart and ten-minute route documented.
 - [x] Hosted topology, staged operator runbook, authorization boundaries, redaction rules, test-account/reset contract, and evidence ledger documented.
-- [ ] Michael approves the dedicated hosted resources.
+- [x] Michael approved Stage 1 creation of dedicated Supabase, Vercel Services, and Stripe sandbox resources in this primary task on July 15, 2026.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
@@ -62,7 +62,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | ------------------------------------- | -------- | ------------------------------------------------------- |
 | Select project name                   | Approved | Michael approved Artist-Owned Platform on July 15, 2026 |
 | Select open-source license            | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026   |
-| Create/use hosted resources           | Pending  | Provider project references, kept private               |
+| Create dedicated hosted resources     | Approved | Stage 1 executed; provider references remain private    |
 | Promote final deployment              | Pending  | Approved URL and deployment commit                      |
 | Share repository or judge credentials | Pending  | Devpost access record                                   |
 | Publish YouTube video                 | Pending  | Public video URL                                        |

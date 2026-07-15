@@ -23,9 +23,9 @@ This record stays pending until an approved operator executes the corresponding 
 
 | External action                         | Status  | Michael approval reference            | Executed by / at |
 | --------------------------------------- | ------- | ------------------------------------- | ---------------- |
-| Create or select Supabase judge project | Pending |                                       |                  |
-| Create or select Stripe test resources  | Pending |                                       |                  |
-| Create or select Vercel judge project   | Pending |                                       |                  |
+| Create or select Supabase judge project | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T18:44:42Z |
+| Create or select Stripe test resources  | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:43:37Z |
+| Create or select Vercel judge project   | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:01:29Z |
 | Apply Supabase migrations               | Pending |                                       |                  |
 | Seed hosted fixtures                    | Pending |                                       |                  |
 | Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
@@ -40,9 +40,9 @@ This record stays pending until an approved operator executes the corresponding 
 
 | Resource         | Status  | Safe reference hash/suffix | Isolation check |
 | ---------------- | ------- | -------------------------- | --------------- |
-| Supabase project | Pending |                            |                 |
-| Stripe context   | Pending |                            |                 |
-| Vercel project   | Pending |                            |                 |
+| Supabase project | Ready   | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout unlinked |
+| Stripe context   | Ready   | `sha256:24efed888794`      | Blank named sandbox; dedicated CLI profile; live mode untouched |
+| Vercel project   | Ready   | `sha256:f108c4d15ee5`         | Exact-name project; Services preset; checkout unlinked |
 | Media worker     | Pending |                            |                 |
 | Document worker  | Pending |                            |                 |
 
@@ -67,7 +67,7 @@ This record stays pending until an approved operator executes the corresponding 
 
 | Journey                                 | Status  | Safe event suffix/hash / result |
 | --------------------------------------- | ------- | ------------------------------- |
-| Test or sandbox mode confirmed          | Pending |                                 |
+| Test or sandbox mode confirmed          | Pass    | 2026-07-15T19:43:37Z; authenticated read returned `livemode: false` |
 | One-time Checkout                       | Pending |                                 |
 | Signed webhook                          | Pending |                                 |
 | Same-event replay                       | Pending |                                 |

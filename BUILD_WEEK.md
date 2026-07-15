@@ -148,7 +148,7 @@ This section will develop as we discuss the idea.
 | Working implementation          | Milestones 0–12 complete locally; Milestone 13 package prepared; full application, recovery, browser, and judge aggregate passed |
 | Repository history and evidence | Planning through Milestone 13, capability evidence, model record, provenance, runbooks, clean-clone proof, and ExecPlan recorded |
 | README                          | Complete package and verified two-command local quickstart; Artist-Owned Platform and `AGPL-3.0-or-later` finalized              |
-| Demo and judging access         | Local route verified; hosted plan prepared; deployment and private test access pending Michael's approval                        |
+| Demo and judging access         | Local route verified; isolated Supabase, Stripe sandbox, and Vercel Services resources created; linking, migration, deployment, and private test access remain separately gated |
 | Demo video                      | 2:55 narrated script prepared; recording, final timecodes, approval, and upload pending                                          |
 | `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                          |
 | Devpost submission              | Not started                                                                                                                      |
