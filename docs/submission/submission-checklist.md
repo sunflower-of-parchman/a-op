@@ -47,7 +47,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Capability evidence and model/agent record tied to dated commits through the completion audit and OAuth/CI closure.
 - [ ] Milestones 12 and 13 reconciled with final commits, hosted proof, judge actions, and video timecodes.
 - [ ] Final `/feedback` Session ID captured from the primary implementation task.
-- [ ] Available task/model metadata confirms GPT-5.6 Sol and GPT-5.6 Pro contribution language.
+- [x] Exported task metadata confirms GPT-5.6 Sol as the primary-task runtime; the record separately attributes the supplied GPT-5.6 Pro plan review.
 - [ ] Final video recorded under three minutes with spoken Codex/GPT-5.6 explanation.
 - [ ] Every video frame checked for credentials, private messages, customer data, provider secrets, fixture passwords, and unapproved media.
 - [ ] Michael approves YouTube publication; video uploaded publicly.

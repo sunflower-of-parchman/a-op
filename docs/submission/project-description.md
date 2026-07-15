@@ -26,7 +26,7 @@ The fictional Daymark Assembly demonstration exercises every enabled module with
 
 ## How Codex and GPT-5.6 were used
 
-I directed the product, supplied the real operating knowledge, and made the decisions about audience, scope, identity, rights, prices, accounts, safety boundaries, and publication. Codex, using GPT-5.6 Sol and GPT-5.6 Pro in the primary implementation task, wrote the competition repository: architecture, Nuxt application, Supabase migrations and policies, Stripe adapters, workers, setup lifecycle, runbooks, tests, recovery tools, and submission evidence.
+I directed the product, supplied the real operating knowledge, and made the decisions about audience, scope, identity, rights, prices, accounts, safety boundaries, and publication. Codex running GPT-5.6 Sol in the primary implementation task wrote the competition repository: architecture, Nuxt application, Supabase migrations and policies, Stripe adapters, workers, setup lifecycle, runbooks, tests, recovery tools, and submission evidence. GPT-5.6 Pro independently reviewed the complete plan before implementation, and its adopted recommendations were integrated into that work.
 
 The implementation task kept the complete platform as the outcome. Codex generalized patterns from my private system into a new repository without copying private data, branding, credentials, or media. It repeatedly reset and rebuilt the local system, diagnosed failures across Nuxt, Supabase Auth, Kong, Playwright, Docker, Stripe-shaped events, media processing, and PDF generation, and kept dated evidence tied to local commits.
 

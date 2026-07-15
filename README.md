@@ -192,6 +192,6 @@ Provider-specific diagnosis and recovery begin in [`docs/agent/troubleshooting.m
 
 ## Build Week
 
-This project is being built with Codex using GPT-5.6 Sol and GPT-5.6 Pro. Michael Wall directs the product, supplies the operating knowledge, and makes the creative, rights, pricing, account, and publication decisions. Codex performs the implementation, generalization, migrations, testing, setup automation, debugging, verification, and technical documentation.
+This project is being built with Codex. GPT-5.6 Sol runs the primary implementation task; GPT-5.6 Pro independently reviewed the complete plan before implementation, and its adopted recommendations were integrated here. Michael Wall directs the product, supplies the operating knowledge, and makes the creative, rights, pricing, account, and publication decisions. Codex performs the implementation, generalization, migrations, testing, setup automation, debugging, verification, and technical documentation.
 
 The personalized artist site is the proof. The transferable, agent-operable system is the project.

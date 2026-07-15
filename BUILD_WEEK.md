@@ -110,12 +110,14 @@ Show creativity and a genuine understanding of the problem space.
 
 - Primary implementation task: This Codex task.
 - Primary Codex task/thread ID: `019f6291-c1c9-7cf3-9da7-be2a19b7154c`
-- Primary models: GPT-5.6 Sol and GPT-5.6 Pro, confirmed by Michael on July 14, 2026.
+- Primary implementation runtime: GPT-5.6 Sol, confirmed by exported Codex Desktop task metadata on July 15, 2026.
+- Plan review: GPT-5.6 Pro analyzed the complete plan separately; Michael supplied that review here and its adopted amendments were integrated in this task.
 - Purpose: Architecture integration, core implementation, milestone decisions, and full verification.
 - Supporting tasks: Bounded research and isolated investigations only; their results must return here for integration and verification.
 - Model and agent evidence: `docs/submission/model-and-agent-use.md`
 - Capability evidence: `docs/submission/capability-evidence.md`
-- Final `/feedback` Session ID: Pending completion and confirmation through `/feedback`; do not assume it is identical to the task/thread ID.
+- Codex Desktop session ID: `019f6291-c1c9-7cf3-9da7-be2a19b7154c`, matching the task/thread ID in the exported metadata.
+- Final `/feedback` Session ID: Pending completion-time confirmation through `/feedback`.
 
 ## Project brief
 
@@ -128,7 +130,8 @@ This section will develop as we discuss the idea.
 - Core idea: A complete open-source Nuxt platform that Codex can configure and maintain with a nontechnical artist. Each deployment belongs to one artist or artist-led organization and connects to the artist's own Supabase, Stripe, hosting, and domain.
 - Why this matters: Codex can make sophisticated, bespoke, artist-owned infrastructure transferable without requiring the artist to become a developer or surrender control to another hosted platform.
 - What the working demo must prove: From a fresh clone, Codex can guide an artist through identity and local setup, import an approved release, launch a personalized site, and support listening, direct commerce or licensing, account entitlements, education, video, and artist-facing operations.
-- Role of GPT-5.6 Sol and GPT-5.6 Pro: Reason across the private reference architecture and new product requirements, generalize the system, implement the application, write tests and migrations, create safe setup automation, and explain technical checkpoints in language an artist can use. Record the exact task-level contribution of each model from session metadata as implementation proceeds.
+- Role of GPT-5.6 Sol: Run the primary implementation task that generalized the system, implemented the application, wrote tests and migrations, created safe setup automation, and verified the complete local product.
+- Role of GPT-5.6 Pro: Independently review the complete plan before implementation; Michael brought the review into this task and Sol integrated the adopted architectural and evidence amendments.
 - Role of Codex: Serve as the artist's implementation and maintenance partner while preserving human control over creative identity, rights, business rules, service accounts, costs, and publication.
 - Technical shape: A web-only Nuxt 4 and TypeScript application using Supabase for database, authentication, authorization, and media storage; Stripe for transactions and subscriptions; Vercel as the first documented hosting path; and agent-readable setup, validation, and recovery documentation.
 - Scope for Build Week: The complete single-artist platform described in `plans/artistOwnedPlatform.md`, including identity and pages, catalog and audio, commerce, licensing, memberships and entitlements, learning paths, video, telemetry, Codex-guided setup, verification, and submission artifacts.

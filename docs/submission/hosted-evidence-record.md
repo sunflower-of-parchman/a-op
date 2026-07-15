@@ -131,18 +131,18 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Submission reconciliation
 
-| Item                            | Status  | Safe evidence                          |
-| ------------------------------- | ------- | -------------------------------------- |
-| Primary task ID                 | Ready   | `019f6291-c1c9-7cf3-9da7-be2a19b7154c` |
-| GPT-5.6 Sol/Pro task metadata   | Pending |                                        |
-| `/feedback` Session ID          | Pending |                                        |
-| Final video timecodes           | Pending |                                        |
-| Frame-by-frame privacy review   | Pending |                                        |
-| Approved public repository URL  | Pending |                                        |
-| Approved hosted URL             | Pending |                                        |
-| Approved public video URL       | Pending |                                        |
-| Devpost preview review          | Pending |                                        |
-| Devpost submission confirmation | Pending |                                        |
+| Item                                | Status  | Safe evidence                                           |
+| ----------------------------------- | ------- | ------------------------------------------------------- |
+| Primary task ID                     | Ready   | `019f6291-c1c9-7cf3-9da7-be2a19b7154c`                  |
+| GPT-5.6 Sol/Pro contribution record | Ready   | Exported Sol runtime metadata; supplied Pro plan review |
+| `/feedback` Session ID              | Pending |                                                         |
+| Final video timecodes               | Pending |                                                         |
+| Frame-by-frame privacy review       | Pending |                                                         |
+| Approved public repository URL      | Pending |                                                         |
+| Approved hosted URL                 | Pending |                                                         |
+| Approved public video URL           | Pending |                                                         |
+| Devpost preview review              | Pending |                                                         |
+| Devpost submission confirmation     | Pending |                                                         |
 
 ## Final result
 
