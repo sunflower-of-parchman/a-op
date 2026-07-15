@@ -26,6 +26,7 @@ This record stays pending until an approved operator executes the corresponding 
 | Create or select Supabase judge project | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T18:44:42Z |
 | Create or select Stripe test resources  | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:43:37Z |
 | Create or select Vercel judge project   | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:01:29Z |
+| Link and dry-run Supabase migrations    | Executed | Stage 2A approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:44:15Z |
 | Apply Supabase migrations               | Pending |                                       |                  |
 | Seed hosted fixtures                    | Pending |                                       |                  |
 | Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
@@ -40,7 +41,7 @@ This record stays pending until an approved operator executes the corresponding 
 
 | Resource         | Status  | Safe reference hash/suffix | Isolation check |
 | ---------------- | ------- | -------------------------- | --------------- |
-| Supabase project | Ready   | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout unlinked |
+| Supabase project | Ready   | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
 | Stripe context   | Ready   | `sha256:24efed888794`      | Blank named sandbox; dedicated CLI profile; live mode untouched |
 | Vercel project   | Ready   | `sha256:f108c4d15ee5`         | Exact-name project; Services preset; checkout unlinked |
 | Media worker     | Pending |                            |                 |
@@ -50,8 +51,8 @@ This record stays pending until an approved operator executes the corresponding 
 
 | Check                                        | Status  | Timestamp / safe result |
 | -------------------------------------------- | ------- | ----------------------- |
-| Link matches approved project                | Pending |                         |
-| Migration dry run reviewed                   | Pending |                         |
+| Link matches approved project                | Pass    | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched |
+| Migration dry run reviewed                   | Pass    | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after |
 | Forward migrations applied                   | Pending |                         |
 | Remote migration history exact               | Pending |                         |
 | Public generated types match                 | Pending |                         |
