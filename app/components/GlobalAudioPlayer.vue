@@ -3,6 +3,7 @@ const { currentTrack, shouldPlay, isPlaying, currentTime, duration, toggle, prev
   useAudioPlayer()
 const audio = useTemplateRef<HTMLAudioElement>('audio')
 const ready = ref(false)
+const lastHistorySignature = ref('')
 
 function formatTime(value: number) {
   if (!Number.isFinite(value) || value < 0) return '0:00'
@@ -44,6 +45,33 @@ async function synchronizePlayback() {
   } else {
     audio.value.pause()
   }
+}
+
+async function recordHistory(completed: boolean) {
+  if (!currentTrack.value) return
+  const progressMs = Math.max(0, Math.round(currentTime.value * 1000))
+  if (!completed && progressMs === 0) return
+  const signature = `${currentTrack.value.id}:${Math.floor(progressMs / 5000)}:${completed}`
+  if (signature === lastHistorySignature.value) return
+  try {
+    await $fetch('/api/library/history', {
+      method: 'POST',
+      body: { trackId: currentTrack.value.id, progressMs, completed },
+    })
+    lastHistorySignature.value = signature
+  } catch {
+    // Public listening remains available when there is no signed-in library.
+  }
+}
+
+function handlePause() {
+  isPlaying.value = false
+  void recordHistory(false)
+}
+
+function handleEnded() {
+  void recordHistory(true)
+  next()
 }
 
 watch(
@@ -89,8 +117,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
     @durationchange="updateMetadata"
     @timeupdate="updateMetadata"
     @play="isPlaying = true"
-    @pause="isPlaying = false"
-    @ended="next"
+    @pause="handlePause"
+    @ended="handleEnded"
   />
   <section v-if="currentTrack" class="global-player" aria-label="Persistent audio player">
     <div class="global-player__identity">

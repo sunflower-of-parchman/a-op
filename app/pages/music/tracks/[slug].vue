@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import type { LibraryResponse } from '#shared/types/library'
+
 const route = useRoute()
 const artist = useArtistConfig()
 const { data, error } = await useFetch(() => `/api/tracks/${String(route.params.slug)}`)
+const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
 const audioPlayer = useAudioPlayer()
+const libraryMessage = ref('')
+const selectedPlaylistId = ref('')
+const libraryReady = ref(false)
+onMounted(() => (libraryReady.value = true))
 
 const playerTrack = computed(() => {
   if (!data.value?.preview) return null
@@ -16,6 +23,45 @@ const playerTrack = computed(() => {
     src: data.value.preview.url,
   }
 })
+
+const isFavorite = computed(
+  () =>
+    Boolean(data.value?.track.id) &&
+    library.value?.authenticated === true &&
+    library.value.favoriteTrackIds.includes(data.value!.track.id),
+)
+
+async function toggleFavorite() {
+  if (!data.value || library.value?.authenticated !== true) return
+  await $fetch('/api/library/favorites', {
+    method: 'POST',
+    body: { trackId: data.value.track.id, favorite: !isFavorite.value },
+  })
+  await refreshLibrary()
+  libraryMessage.value = isFavorite.value
+    ? 'Track saved to favorites.'
+    : 'Track removed from favorites.'
+}
+
+async function addToPlaylist() {
+  if (!data.value || library.value?.authenticated !== true || !selectedPlaylistId.value) return
+  const playlist = library.value.playlists.find(({ id }) => id === selectedPlaylistId.value)
+  if (!playlist) return
+  if (playlist.tracks.some(({ id }) => id === data.value!.track.id)) {
+    libraryMessage.value = 'That track is already in this playlist.'
+    return
+  }
+  await $fetch(`/api/library/playlists/${playlist.id}`, {
+    method: 'PUT',
+    body: {
+      title: playlist.title,
+      description: playlist.description,
+      trackIds: [...playlist.tracks.map(({ id }) => id), data.value.track.id],
+    },
+  })
+  await refreshLibrary()
+  libraryMessage.value = `Track added to ${playlist.title}.`
+}
 
 useSeoMeta({
   title: () => data.value?.track.title ?? 'Track',
@@ -67,6 +113,41 @@ useSeoMeta({
         Return to {{ data.release.title }}
       </NuxtLink>
     </div>
+    <section class="track-library-actions" aria-labelledby="track-library-heading">
+      <div>
+        <p class="section-number">Your library</p>
+        <h2 id="track-library-heading">Keep a personal path through the catalog.</h2>
+      </div>
+      <div v-if="library?.authenticated" class="library-track-controls">
+        <button class="text-action" type="button" @click="toggleFavorite">
+          {{ isFavorite ? 'Remove from favorites' : 'Save to favorites' }}
+        </button>
+        <div v-if="library.playlists.length" class="playlist-add-control">
+          <label>
+            <span>Playlist</span>
+            <select v-model="selectedPlaylistId" :disabled="!libraryReady">
+              <option value="">Choose a playlist</option>
+              <option v-for="playlist in library.playlists" :key="playlist.id" :value="playlist.id">
+                {{ playlist.title }}
+              </option>
+            </select>
+          </label>
+          <button
+            class="text-action"
+            type="button"
+            :disabled="!libraryReady || !selectedPlaylistId"
+            @click="addToPlaylist"
+          >
+            Add to playlist
+          </button>
+        </div>
+        <NuxtLink v-else class="text-action" to="/account">Create a playlist</NuxtLink>
+      </div>
+      <NuxtLink v-else class="text-action" :to="`/sign-in?redirect=${route.fullPath}`">
+        Sign in to save this track
+      </NuxtLink>
+      <p v-if="libraryMessage" class="form-message" role="status">{{ libraryMessage }}</p>
+    </section>
   </article>
   <div v-else class="page-frame interior-page">
     <p class="eyebrow">Catalog</p>

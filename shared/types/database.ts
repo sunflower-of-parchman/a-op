@@ -1380,6 +1380,16 @@ export type Database = {
         Args: { p_actor_id: string; p_version_id: string }
         Returns: string
       }
+      replace_playlist: {
+        Args: {
+          p_description: string
+          p_owner_id: string
+          p_playlist_id: string
+          p_title: string
+          p_track_ids: string[]
+        }
+        Returns: string
+      }
       submit_contact_message: {
         Args: {
           p_consent: boolean

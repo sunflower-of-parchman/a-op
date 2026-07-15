@@ -108,12 +108,44 @@ try {
     position: 1,
   })
   requireNoError(playlistTrackError, 'Customer playlist ordering failed')
+  const { error: crossOwnerReplaceError } = await admin.rpc('replace_playlist', {
+    p_playlist_id: testIds.playlist,
+    p_owner_id: customerTwo.user.id,
+    p_title: 'Cross-owner replacement',
+    p_description: '',
+    p_track_ids: [demoFixtureIds.trackOne],
+  })
+  assert.ok(crossOwnerReplaceError, 'A different customer replaced the playlist through the RPC')
+  const { error: ownerReplaceError } = await admin.rpc('replace_playlist', {
+    p_playlist_id: testIds.playlist,
+    p_owner_id: customerOne.user.id,
+    p_title: 'Private movement queue',
+    p_description: 'An atomically ordered customer playlist.',
+    p_track_ids: [demoFixtureIds.trackTwo, demoFixtureIds.trackOne],
+  })
+  requireNoError(ownerReplaceError, 'Playlist atomic replacement failed')
+  const { data: replacedOrder, error: replacedOrderError } = await customerOne.client
+    .from('playlist_tracks')
+    .select('track_id')
+    .eq('playlist_id', testIds.playlist)
+    .order('position')
+  requireNoError(replacedOrderError, 'Playlist replacement order failed')
+  assert.deepEqual(
+    replacedOrder.map(({ track_id }) => track_id),
+    [demoFixtureIds.trackTwo, demoFixtureIds.trackOne],
+  )
+  await customerOne.client
+    .from('favorites')
+    .delete()
+    .eq('resource_type', 'track')
+    .eq('resource_id', demoFixtureIds.trackOne)
   const { error: favoriteError } = await customerOne.client.from('favorites').insert({
     owner_id: customerOne.user.id,
     resource_type: 'track',
     resource_id: demoFixtureIds.trackOne,
   })
   requireNoError(favoriteError, 'Customer favorite creation failed')
+  await admin.from('listening_history').delete().eq('id', testIds.history)
   const { error: historyError } = await customerOne.client.from('listening_history').insert({
     id: testIds.history,
     owner_id: customerOne.user.id,
@@ -133,8 +165,8 @@ try {
     .from('playlist_tracks')
     .insert({
       playlist_id: testIds.playlist,
-      track_id: demoFixtureIds.trackTwo,
-      position: 2,
+      track_id: demoFixtureIds.trackThree,
+      position: 3,
     })
   assert.ok(crossCustomerInsertError, 'A second customer changed the first customer playlist')
 
