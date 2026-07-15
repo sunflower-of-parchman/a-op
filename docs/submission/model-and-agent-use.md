@@ -61,6 +61,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `83c3b4f` (`Bootstrap reproducible artist platform`).
 - Verification: `npm ci`, `npm run setup:preflight`, `npm run setup:local`, `npm run setup:check`, `npm run test:db`, `npm run verify:foundation`, and the four-test desktop/mobile `npm run test:e2e` suite passed. Desktop and mobile screenshots were inspected locally after correcting transient animation contrast and heading-to-body spacing.
 
+### Milestone 2 and Integration Gate A — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Preserve a complete scope; make Codex the nontechnical artist's operating partner; build the authority spine before dependent modules; keep private reference material out of the repository; retain explicit approval over external accounts, credentials, deployment, payments, media, and publication.
+- Material contribution: Consolidated account, role, publication, media, product, price, payment-event, order, order-item, entitlement, and download schema; explicit grants, forced RLS, owner bootstrap, transactional replay-safe fulfillment, central access decision, seven storage buckets, server-owned Supabase sessions, owner administration boundary, public generated preview, protected signed download, local fixture identities, database-policy tests, browser-secret scan, and desktop/mobile browser journeys.
+- Commit: `12f5d66` (`Build authority and fulfillment spine`).
+- Verification: `npm run verify:foundation`, `npm run verify:spine`, Supabase `db lint` for `public,private`, the exact browser-secret scan, and the full 10-test desktop/mobile Playwright suite passed. Visual acceptance inspected the desktop administration and mobile release-preview surfaces. Four identical simulated event deliveries produced one event, one order, and one entitlement; the entitled customer received the signed file and the second customer received HTTP 403.
+
 ## Submission reconciliation
 
 Before submission:

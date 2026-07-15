@@ -47,13 +47,45 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run public journeys
-        run: npm run test:e2e -- --project=chromium
+        run: npm run test:e2e -- tests/e2e/foundation.spec.ts --project=chromium
 
       - name: Upload browser evidence on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-evidence
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+
+  authority-spine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.0
+          cache: npm
+
+      - name: Install pinned dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify local authority and fulfillment spine
+        run: npm run verify:spine
+
+      - name: Upload authority evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authority-spine-evidence
           path: |
             playwright-report
             test-results

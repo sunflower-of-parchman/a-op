@@ -136,16 +136,16 @@ This section will develop as we discuss the idea.
 
 ## Submission progress
 
-| Item                            | Status                                                                                                             |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Registration                    | Confirmed                                                                                                          |
-| Devpost plugin                  | Installed                                                                                                          |
-| Free-credit request             | Submitted; approval not yet confirmed                                                                              |
-| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                           |
-| Working implementation          | Milestones 0 and 1 complete; Nuxt, local Supabase, typed configuration, setup, CI, and browser foundation verified |
-| Repository history and evidence | Planning, product-contract, and runnable-foundation commits recorded                                               |
-| README                          | Product introduction and verified local quickstart complete                                                        |
-| Demo and judging access         | Not started                                                                                                        |
-| Demo video                      | Not started                                                                                                        |
-| `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                            |
-| Devpost submission              | Not started                                                                                                        |
+| Item                            | Status                                                                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Registration                    | Confirmed                                                                                                                                  |
+| Devpost plugin                  | Installed                                                                                                                                  |
+| Free-credit request             | Submitted; approval not yet confirmed                                                                                                      |
+| Project idea and track          | Product direction and Developer Tools track selected; final name pending                                                                   |
+| Working implementation          | Milestones 0–2 and Integration Gate A complete; authentication, roles, storage, fulfillment, entitlements, and protected delivery verified |
+| Repository history and evidence | Planning, product contract, runnable foundation, and authority-spine commits recorded                                                      |
+| README                          | Product introduction and verified local quickstart complete                                                                                |
+| Demo and judging access         | Not started                                                                                                                                |
+| Demo video                      | Not started                                                                                                                                |
+| `/feedback` session ID          | Primary task/thread ID recorded; final `/feedback` confirmation pending                                                                    |
+| Devpost submission              | Not started                                                                                                                                |

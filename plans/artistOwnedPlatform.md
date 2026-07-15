@@ -24,9 +24,9 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - [x] (2026-07-15 00:03Z) Established the configuration-authority and local/deployed media-processing contracts before application implementation.
 - [x] (2026-07-15 00:19Z) Established the product contract, repository instructions, public language, provenance boundary, visual direction, architecture decision records, and Developer Tools track.
 - [x] (2026-07-15 01:12Z) Completed Milestone 1: pinned and clean-installed the Nuxt 4 foundation; validated the fictional artist and semantic theme; started, migrated, seeded, and checked local Supabase; generated database types; passed unit, integration, database, production-build, desktop/mobile navigation, axe, and visual acceptance checks; and committed the implementation as `83c3b4f`.
+- [x] (2026-07-15 01:48Z) Completed Milestone 2: created the consolidated account, role, publication, media, product, payment, order, entitlement, download, and storage schema; added email signup/sign-in, explicit owner bootstrap, owner/editor/customer RLS, seven buckets, server sessions, protected administration, public preview, private delivery, generated types, and role-policy tests; and committed the implementation as `12f5d66`.
+- [x] (2026-07-15 01:48Z) Passed Integration Gate A from a clean reset: one generated public WAV played; four deliveries of one simulated event produced one payment event, order, and entitlement; the entitled customer received a 60-second signed file; the second customer received HTTP 403; the production browser-secret scan, schema lint, Chromium gate journeys, and full 10-test desktop/mobile regression passed.
 - [ ] Complete the open-source license gate (completed: MIT and AGPL-3.0 consequences recorded; remaining: Michael selects the license before public release).
-- [ ] Implement the consolidated database schema, migrations, storage buckets, authentication, OAuth configuration, roles, Row Level Security policies, and generated TypeScript database types.
-- [ ] Pass Integration Gate A by proving the complete authority and fulfillment spine from authentication through idempotent entitlement and protected delivery.
 - [ ] Implement artist onboarding, site configuration, design tokens, navigation, editable pages, contact surface, search-engine metadata, and the authenticated administration workspace.
 - [ ] Implement album, track, collection, artwork, audio-upload, audio-processing, preview-streaming, playlist, favorite, and catalog-management capabilities.
 - [ ] Implement Stripe products and prices, cart and checkout, signed webhook processing, orders, downloads, subscriptions, membership tiers, customer portal access, and the entitlement engine.
@@ -70,6 +70,15 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 - Observation: An opacity-based entrance animation can temporarily violate text contrast even when its final colors pass.
   Evidence: The mobile axe journey detected serious contrast violations while the hero was fading in. Removing opacity from the entrance keyframes preserved motion and produced zero serious axe violations on desktop and mobile.
+
+- Observation: A Row Level Security policy and its table privilege are separate controls; both must permit an operation.
+  Evidence: The first anonymous fixture read reached the correct published-row policy and still returned HTTP 401 because `anon` lacked `SELECT` on the new release and media tables. Adding the narrow grants made the same RLS-backed read pass.
+
+- Observation: PL/pgSQL parameters and output columns should use distinct names from table columns in fulfillment functions.
+  Evidence: The first policy fulfillment run found an ambiguous `provider_event_id` reference. Prefixing parameters, using local variables, and naming every replay constraint made the function unambiguous and all four event deliveries idempotent.
+
+- Observation: Browser tests that type before Nuxt hydration can have their values replaced by the component's initial reactive model.
+  Evidence: The first authority journey populated the server-rendered form before hydration and then observed empty fields. The form now exposes a disabled-until-mounted submit control, and Playwright waits for that control before filling; all desktop and mobile journeys pass.
 
 ## Decision Log
 
@@ -149,8 +158,8 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
   Rationale: These operations change external state, may create costs, or communicate publicly. Local development and test-mode verification can proceed without them.
   Date/Author: 2026-07-14 / Michael's repository guidance
 
-- Decision: Defer the project name, precise open-source license, final Build Week track, email provider, and public demonstration media choice until their dedicated decision gates, while allowing independent implementation to continue.
-  Rationale: These choices matter but do not block establishing the application architecture. Before publication, the license and media provenance must be resolved explicitly.
+- Decision: Defer the project name, precise open-source license, email provider, and final public demonstration media choice until their dedicated decision gates, while allowing independent implementation to continue.
+  Rationale: These choices matter but do not block establishing the application architecture. Developer Tools is selected as the Build Week track. Before publication, the license and media provenance must be resolved explicitly.
   Date/Author: 2026-07-14 / Codex
 
 ## Outcomes & Retrospective
@@ -158,6 +167,8 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 Milestone 0 is complete apart from the approval-gated license selection. The repository carries the product contract, public introduction, setup entrypoint, agent rules, provenance ledger, visual direction, primary-task and model evidence, capability matrix, and architecture decisions for deployment, stack, schema, entitlements, configuration, setup, media, portability, design, track, and license choice. The Developer Tools track is selected.
 
 Milestone 1 is complete. A new artist can now clean-install a pinned Node 24 and Nuxt 4 application, run a named preflight, start and reset the local Supabase stack, apply the first migration, insert and anonymously verify a fictional published artist, generate database types, launch a coherent responsive public site, and run deterministic foundation and browser verification. The evidence is commit `83c3b4f`, the passing setup and verification commands, generated `setup/project-state.json`, and inspected desktop/mobile output. Authentication, administrator roles, storage policies, and the full authority schema remain Milestone 2 work.
+
+Milestone 2 and Integration Gate A are complete. A visitor can create a customer account and sign in; an explicitly bootstrapped owner can enter protected administration; public roles can read and play only the published preview; owners and editors can maintain content through current role state; customer orders and entitlements are isolated; payment facts remain service-owned; and a protected route grants a short-lived download only after the central access decision. The clean-reset `npm run verify:spine` proof, commit `12f5d66`, schema lint, browser-secret scan, 10 desktop/mobile journeys, and inspected administration/release surfaces provide the evidence. OAuth remains optional and disabled until an artist supplies approved provider credentials. The complete artist-editable administration workspace is Milestone 3 work.
 
 At the end of each implementation milestone, append a dated paragraph here describing what a new artist can now do, what evidence proves it, and any capability that remains incomplete. At project completion, compare the working fresh-clone and judge journeys with the Purpose / Big Picture section, and distinguish finished features from documented future extensions.
 
@@ -604,3 +615,5 @@ Revision note, 2026-07-15: Incorporated the independent GPT-5.6 Pro review and M
 Revision note, 2026-07-15: Completed the Milestone 0 product, provenance, agent, design, and architecture contracts; selected Developer Tools; recorded the license as a Michael decision before publication; and incorporated current Supabase guidance on Data API grants, RLS, and signed TUS storage uploads.
 
 Revision note, 2026-07-15: Completed Milestone 1 with the pinned Nuxt 4 application, validated fictional artist configuration, semantic public design, local Supabase migration and RLS-backed seed, generated types, setup automation, CI, clean `npm ci`, production build, desktop/mobile Playwright and axe checks, visual acceptance, and implementation commit `83c3b4f`.
+
+Revision note, 2026-07-15: Completed Milestone 2 and Integration Gate A with explicit account roles, forced RLS and Data API grants, seven storage buckets, email authentication, service-owned transactional fulfillment, central entitlements, 60-second signed delivery, generated public media, all-role database tests, clean-reset replay verification, browser-secret scanning, schema linting, desktop/mobile browser regression, visual acceptance, and implementation commit `12f5d66`.

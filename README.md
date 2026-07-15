@@ -37,7 +37,7 @@ The setup lifecycle is:
 
 ## Current status
 
-Milestone 1 is complete. The repository now starts as a Nuxt 4 application with a typed fictional artist, semantic design tokens, a local Supabase migration and seed, generated database types, deterministic setup checks, browser journeys, and visible continuous integration. Milestone 2 expands this foundation into authentication, roles, storage, and the complete authorization schema.
+Milestones 0 through 2 and Integration Gate A are complete. The repository now includes the Nuxt 4 foundation, local Supabase, typed fictional artist, email authentication, explicit owner/editor/customer roles, seven policy-controlled storage buckets, server-owned payment facts, idempotent order and entitlement fulfillment, central access decisions, and short-lived protected download delivery. Milestone 3 expands this verified authority spine into artist onboarding, database-authoritative identity, structured pages, and the complete administration workspace.
 
 - Build record: `BUILD_WEEK.md`
 - Complete execution plan: `plans/artistOwnedPlatform.md`
@@ -63,9 +63,10 @@ Verify the current foundation with:
     npm run setup:check
     npm run test:db
     npm run verify:foundation
+    npm run verify:spine
     npm run test:e2e
 
-`npm run verify` currently aliases the verified foundation suite. It will expand as the database, authority spine, media, commerce, learning, portability, and judge journeys are integrated.
+`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, and runs the protected browser journey. `npm run verify` will expand as media, commerce, learning, portability, and judge journeys are integrated.
 
 ## Ownership and operating costs
 

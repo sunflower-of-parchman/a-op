@@ -31,6 +31,12 @@ The setup script operates only on the local Supabase stack. It applies the track
 
 The development site opens at `http://127.0.0.1:3000`. Supabase API and local mail URLs are reported after setup. Rerunning `setup:local` is supported.
 
+The local demonstration accounts are listed in `content/demo/accounts.json`. They are fictional, local-only verification identities and are recreated by a reset. Use the owner fixture to enter `/admin`; use the two customer fixtures to verify that the first owns the seeded protected download and the second is denied. Never reuse these fixture credentials in a hosted installation.
+
+Run the complete current authority check with:
+
+    npm run verify:spine
+
 ## Guided personalization
 
 The setup commands are implemented and verified during the build. Their stable contract is:
