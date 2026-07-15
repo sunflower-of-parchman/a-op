@@ -29,13 +29,14 @@ assert.deepEqual(config.services.web.bindings, [
 assert.deepEqual(config.rewrites, [{ source: '/(.*)', destination: { service: 'web' } }])
 
 for (const [service, entrypoint, module] of [
-  ['media_worker', 'workers/media/Dockerfile', 'media'],
-  ['document_worker', 'workers/documents/Dockerfile', 'documents'],
+  ['media_worker', 'Dockerfile.media', 'media'],
+  ['document_worker', 'Dockerfile.documents', 'documents'],
 ]) {
   assert.equal(config.services[service].root, '.')
   assert.equal(config.services[service].runtime, 'container')
   assert.equal(config.services[service].entrypoint, entrypoint)
   assert.ok(existsSync(resolve(projectRoot, entrypoint)), `${entrypoint} is missing`)
+  assert.equal(resolve(projectRoot, entrypoint, '..'), projectRoot)
   const dockerfile = read(entrypoint)
   assert.match(dockerfile, /COPY workers\/shared \.\/workers\/shared/)
   assert.match(dockerfile, new RegExp(`workers/${module}/service\\.ts`))

@@ -179,8 +179,8 @@ This stage creates no hosted state. Execute it at `FINAL_COMMIT` before requesti
 npm run test:unit
 npm run test:media
 npm run test:licensing
-docker build --pull=false -f workers/media/Dockerfile -t artist-owned-platform-media-worker:candidate .
-docker build --pull=false -f workers/documents/Dockerfile -t artist-owned-platform-document-worker:candidate .
+docker build --pull=false -f Dockerfile.media -t artist-owned-platform-media-worker:candidate .
+docker build --pull=false -f Dockerfile.documents -t artist-owned-platform-document-worker:candidate .
 ```
 
 Start each image with the disposable local environment, an overridden container-reachable local Supabase URL, and a temporary invocation secret. Prove:

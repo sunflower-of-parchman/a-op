@@ -61,7 +61,7 @@ If document generation fails, the owner sees the redacted failure state in `/adm
 
 ## Hosted worker contract
 
-The tracked [`workers/documents/Dockerfile`](../../workers/documents/Dockerfile) is the supported deployed path. The first hosted path runs it as a private, request-driven Vercel container service beside the Nuxt application. The Nuxt service receives its URL through the `DOCUMENT_WORKER_INTERNAL_URL` binding, then invokes one job after a license issue or explicit retry. Supply these runtime variables through the deployment secret manager:
+The tracked [`Dockerfile.documents`](../../Dockerfile.documents) is the supported deployed path. The first hosted path runs it as a private, request-driven Vercel container service beside the Nuxt application. The Nuxt service receives its URL through the `DOCUMENT_WORKER_INTERNAL_URL` binding, then invokes one job after a license issue or explicit retry. Supply these runtime variables through the deployment secret manager:
 
 - `NUXT_PUBLIC_SUPABASE_URL`
 - `NUXT_SUPABASE_SECRET_KEY`

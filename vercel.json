@@ -22,12 +22,12 @@
     "media_worker": {
       "root": ".",
       "runtime": "container",
-      "entrypoint": "workers/media/Dockerfile"
+      "entrypoint": "Dockerfile.media"
     },
     "document_worker": {
       "root": ".",
       "runtime": "container",
-      "entrypoint": "workers/documents/Dockerfile"
+      "entrypoint": "Dockerfile.documents"
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": { "service": "web" } }]
