@@ -20,6 +20,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Integration Gate A: signed simulated payment, replay idempotency, atomic order/entitlement creation, protected delivery, and cross-account denial.
 - [x] Prior candidate `build-week-hosted-candidate-20260715-121920` passed every module, recovery and clean restore, 12 isolated desktop/mobile browser specifications, the private three-service contract, documentation/assets, Chromium/WebKit judge journeys, and browser-secret scanning from exact commit `04f23fa4b8632b04609cd2689b3b575ec2b193b0`.
 - [x] Current deployment candidate `build-week-hosted-candidate-20260715-161907` at exact commit `048fe057a677c0c4e54e29e0825483b0c7ae41ba` passed focused worker, service, documentation, type, formatting, and shared-container route checks; Vercel CLI `54.21.1` built all three services for Preview.
+- [x] Guarded bootstrap preparation `b8cb378` generates and tests a disposable Build Output package with no application code or secrets and refuses repository-local or reused output paths.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
 - [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
 - [x] Linux workflow defines coverage for every module, the complete browser regression, dependency audit, and Chromium/Firefox/WebKit judge path.
@@ -40,6 +41,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael approved and the primary task completed Stage 4A creation of three test-only Stripe products and prices plus owner-authorized mappings for the album download, dance-film license, and monthly membership on July 15, 2026.
 - [x] Michael separately approved and the primary task completed Stage 4A-2 creation and owner-authorized mapping of the USD 125 live-performance license, bringing the published sandbox catalog to four products, four prices, and four mappings on July 15, 2026.
 - [x] Michael approved Stage 6 deployment of one immutable Preview. The three-service Preview build completed, but Vercel classified both the default and explicit `--target preview` deployment attempts as Production while Building. Both were removed immediately, a third attempt was not made, and the exact project returned to zero deployments.
+- [x] Read-only provider and official-document investigation established Vercel's automatic first-deployment Production promotion as the cause; the project remains Git-unlinked with zero deployments and aliases.
+- [ ] Michael separately approves one temporary Production-classified `--skip-domain` bootstrap deployment, its unique unshared URL, and exact removal after the immutable Preview is confirmed.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
@@ -76,6 +79,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                     |
 | Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                   |
 | Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed |
+| Execute temporary Vercel bootstrap      | Pending  | Separate approval required for Production classification and unique URL            |
 | Promote final deployment                | Pending  | Approved URL and deployment commit                                                 |
 | Share repository or judge credentials   | Pending  | Devpost access record                                                              |
 | Publish YouTube video                   | Pending  | Public video URL                                                                   |

@@ -4,21 +4,21 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                           | Status  | Safe evidence                                                                                                    |
-| ------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| Final public name               | Ready   | Artist-Owned Platform                                                                                            |
-| License                         | Ready   | `AGPL-3.0-or-later`                                                                                              |
-| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                       |
-| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-161907`                                                                    |
-| Current exact commit            | Ready   | `048fe057a677c0c4e54e29e0825483b0c7ae41ba`                                                                       |
-| Evidence branch relationship    | Ready   | The deployment candidate is a detached exact-commit worktree; later evidence commits remain outside it           |
-| Detached worktree rehearsal     | Pass    | Clean tracked worktree resolved the tag to exact commit `048fe05`                                                |
-| Prior local full aggregate      | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`           |
-| Current focused verification    | Pass    | Worker units, service contract, docs, typecheck, format, and shared-container route/authentication probes passed |
-| Current Vercel preview build    | Pass    | CLI `54.21.1` built `web`, `media_worker`, and `document_worker` from the exact candidate                        |
-| Dependency audit                | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                         |
-| Local schema lint               | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                      |
-| Linux CI all jobs               | Pending |                                                                                                                  |
+| Field                           | Status  | Safe evidence                                                                                                |
+| ------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| Final public name               | Ready   | Artist-Owned Platform                                                                                        |
+| License                         | Ready   | `AGPL-3.0-or-later`                                                                                          |
+| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                   |
+| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-161907`                                                                |
+| Current exact commit            | Ready   | `048fe057a677c0c4e54e29e0825483b0c7ae41ba`                                                                   |
+| Evidence branch relationship    | Ready   | The deployment candidate is a detached exact-commit worktree; later evidence commits remain outside it       |
+| Detached worktree rehearsal     | Pass    | Clean tracked worktree resolved the tag to exact commit `048fe05`                                            |
+| Prior local full aggregate      | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`       |
+| Current focused verification    | Pass    | Worker, service, bootstrap, docs, typecheck, format, and shared-container route/authentication probes passed |
+| Current Vercel preview build    | Pass    | CLI `54.21.1` built `web`, `media_worker`, and `document_worker` from the exact candidate                    |
+| Dependency audit                | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                     |
+| Local schema lint               | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                  |
+| Linux CI all jobs               | Pending |                                                                                                              |
 
 ## Authorization ledger
 
@@ -33,6 +33,7 @@ This record stays pending until an approved operator executes the corresponding 
 | Create Stripe sandbox catalog and mappings | Executed | Stage 4A approved in this task, 2026-07-15   | Primary task / 2026-07-15T21:24:04Z                                        |
 | Complete Stripe sandbox license catalog    | Executed | Stage 4A-2 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:37:07Z                                        |
 | Deploy immutable Services preview          | Blocked  | Stage 6 approved in this task, 2026-07-15    | Two provider-classified Production attempts removed / 2026-07-15T22:30:00Z |
+| Temporary first-deployment bootstrap       | Pending  | Separate explicit Production approval needed | Guarded local-only artifact prepared in `b8cb378`                          |
 | Execute hosted reset                       | Pending  |                                              |                                                                            |
 | Assign production alias or domain          | Pending  |                                              |                                                                            |
 | Share judge URL and credentials            | Pending  |                                              |                                                                            |
@@ -46,7 +47,7 @@ This record stays pending until an approved operator executes the corresponding 
 | ---------------- | ------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |
 | Supabase project | Ready  | `sha256:9890053715f8`         | New Free organization; one Nano project; `us-west-2`; checkout linked only to approved project |
 | Stripe context   | Ready  | `sha256:24efed888794`         | Blank named sandbox; dedicated CLI profile; live mode untouched                                |
-| Vercel project   | Ready  | `sha256:f108c4d15ee5`         | Exact-name project; Services preset; checkout unlinked                                         |
+| Vercel project   | Ready  | `sha256:f108c4d15ee5`         | Exact-name Services project; Git unlinked; `hasDeployments: false`; `live: false`              |
 | Media worker     | Built  | `sha256:83df3068df4e…a6fd45`  | Private image built in the dedicated project registry; no deployed runtime remains             |
 | Document worker  | Built  | `sha256:b30b286c24e9…18d6d0b` | Private image built in the dedicated project registry; no deployed runtime remains             |
 
@@ -117,31 +118,37 @@ Stage 4A created the first three approved sandbox offerings: the USD 12 one-time
 
 ## Vercel and browser evidence
 
-| Check                                    | Status  | Safe URL hash / result                                                                                       |
-| ---------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| Pinned Vercel CLI                        | Pass    | `54.21.1` detected and built `web`, `media_worker`, and `document_worker`                                    |
-| Services configuration schema            | Pass    | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs`                        |
-| Immutable preview build                  | Pass    | `vercel build --target preview` completed from tag `build-week-hosted-candidate-20260715-161907`             |
-| Preview deployment classification        | Blocked | Default preview and explicit `--target preview` attempts were both listed as Production while still Building |
-| Containment                              | Pass    | Both misclassified attempts were removed immediately; a third attempt was not made                           |
-| Current deployment inventory             | Pass    | Exact-project CLI read at 2026-07-15T22:30:00Z returned zero deployments                                     |
-| Environment scope boundary               | Pass    | Exactly seven encrypted variables exist; every one is Preview-only; Production and Development have zero     |
-| Project target boundary                  | Pass    | Standard Production, Preview, and Development targets exist; Preview covers all unassigned Git branches      |
-| Domain boundary                          | Pass    | One automatic `.vercel.app` project domain; zero custom, branch, custom-environment, or redirect domains     |
-| Immutable preview ready                  | Pending | Provider must create a Preview-classified deployment before hosted verification can begin                    |
-| Deployment identifies final commit       | Pending |                                                                                                              |
-| Free unauthenticated public reachability | Pending |                                                                                                              |
-| Public health check                      | Pending |                                                                                                              |
-| Chromium hosted route                    | Pending |                                                                                                              |
-| Firefox hosted route                     | Pending |                                                                                                              |
-| WebKit hosted route                      | Pending |                                                                                                              |
-| Browser-secret scan                      | Pending |                                                                                                              |
-| Production response boundaries           | Pending |                                                                                                              |
-| Accessibility and viewport checks        | Pending |                                                                                                              |
-| Performance budgets                      | Pending |                                                                                                              |
-| Error-log review                         | Pending |                                                                                                              |
+| Check                                    | Status  | Safe URL hash / result                                                                                    |
+| ---------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| Pinned Vercel CLI                        | Pass    | `54.21.1` detected and built `web`, `media_worker`, and `document_worker`                                 |
+| Services configuration schema            | Pass    | Current official schema accepts `services`, bindings, container runtime, and `nuxtjs`                     |
+| Immutable preview build                  | Pass    | `vercel build --target preview` completed from tag `build-week-hosted-candidate-20260715-161907`          |
+| First-deployment root cause              | Pass    | Vercel automatically promotes the first deployment of every new project to Production                     |
+| Preview deployment classification        | Blocked | Both attempts were first deployments because removing each restored `hasDeployments: false`               |
+| Containment                              | Pass    | Both misclassified attempts were removed immediately; a third attempt was not made                        |
+| Current deployment inventory             | Pass    | Exact-project API read at 2026-07-15T22:45:00Z returned zero deployments, `live: false`, and zero aliases |
+| Git automation excluded                  | Pass    | Project is not Git-linked; `main` production-branch automation did not cause either classification        |
+| Environment scope boundary               | Pass    | Exactly seven encrypted variables exist; every one is Preview-only; Production and Development have zero  |
+| Project target boundary                  | Pass    | Standard Production, Preview, and Development targets exist; Preview covers all unassigned Git branches   |
+| Domain boundary                          | Pass    | One automatic `.vercel.app` project domain; zero custom, branch, custom-environment, or redirect domains  |
+| Guarded bootstrap preparation            | Pass    | `b8cb378` creates and tests a disposable no-application, no-secret Build Output package                   |
+| Temporary bootstrap execution            | Pending | Requires separate approval for one Production-classified `--skip-domain` deployment                       |
+| Immutable preview ready                  | Pending | Preview deployment follows only while the approved temporary bootstrap remains present                    |
+| Deployment identifies final commit       | Pending |                                                                                                           |
+| Free unauthenticated public reachability | Pending |                                                                                                           |
+| Public health check                      | Pending |                                                                                                           |
+| Chromium hosted route                    | Pending |                                                                                                           |
+| Firefox hosted route                     | Pending |                                                                                                           |
+| WebKit hosted route                      | Pending |                                                                                                           |
+| Browser-secret scan                      | Pending |                                                                                                           |
+| Production response boundaries           | Pending |                                                                                                           |
+| Accessibility and viewport checks        | Pending |                                                                                                           |
+| Performance budgets                      | Pending |                                                                                                           |
+| Error-log review                         | Pending |                                                                                                           |
 
-Vercel's [CLI deployment guide](https://vercel.com/docs/projects/deploy-from-cli) and [deploy command reference](https://vercel.com/docs/cli/deploy) describe the default deployment as Preview and `--prod` as the Production switch. In this project, the provider listed the default attempt and a second attempt with explicit `--target preview` as Production while each was still Building. Both were removed immediately. The exact project now has zero deployments. No production alias, custom domain, webhook endpoint, or judge share was created; no deployment URL remains available or was shared; and no hosted runtime or browser claim is recorded from either attempt.
+Vercel's current [CLI deployment guide](https://vercel.com/docs/projects/deploy-from-cli) and [environment reference](https://vercel.com/docs/deployments/environments) describe ordinary CLI deployments without `--prod` as Preview. The separate [default production domain record](https://vercel.com/blog/default-production-domain) states the exception that explains this project: the first deployment in every newly created project is automatically promoted to Production. Removing each attempt restored the exact project to `hasDeployments: false`, so the first-deployment rule applied again, including to the explicit `--target preview` attempt. The project is not Git-linked, and its Services configuration and Preview-only environment scopes remain correct.
+
+Commit `b8cb378` prepares the narrow mitigation without creating provider state. It generates a disposable Build Output package containing one `noindex` page and no application, secret, database reference, media, or customer data. Remote execution still requires Michael's separate approval because `--prod --skip-domain` creates a Production-classified deployment and unique URL even though it requests no domain assignment. The bootstrap must remain only until the real immutable Preview is confirmed, then be removed exactly. No production alias, custom domain, webhook endpoint, or judge share exists; no deployment URL remains available or was shared; and no hosted runtime or browser claim is recorded from the two contained attempts.
 
 ## Reset and judge evidence
 
@@ -179,4 +186,4 @@ Vercel's [CLI deployment guide](https://vercel.com/docs/projects/deploy-from-cli
 
 Status: **Pending**
 
-The immutable three-service build is ready, while hosted verification is blocked on Vercel producing a Preview-classified deployment within the approved boundary. The hosted judging environment is complete only when every required row above is `Pass` or carries a written, approved, non-capability-reducing disposition. A failure or contradiction reopens the corresponding implementation requirement.
+The immutable three-service build and guarded first-deployment bootstrap package are ready. Hosted verification is blocked on separate approval for the temporary Production-classified, no-domain bootstrap that Vercel requires before this new project can retain a Preview. The hosted judging environment is complete only when every required row above is `Pass` or carries a written, approved, non-capability-reducing disposition. A failure or contradiction reopens the corresponding implementation requirement.
