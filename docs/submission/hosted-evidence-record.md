@@ -27,7 +27,7 @@ This record stays pending until an approved operator executes the corresponding 
 | Create or select Stripe test resources  | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:43:37Z |
 | Create or select Vercel judge project   | Executed | Stage 1 approved in this task, 2026-07-15 | Primary task / 2026-07-15T19:01:29Z |
 | Link and dry-run Supabase migrations    | Executed | Stage 2A approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:44:15Z |
-| Apply Supabase migrations               | Pending |                                       |                  |
+| Apply Supabase migrations               | Executed | Stage 2B approved in this task, 2026-07-15 | Primary task / 2026-07-15T20:50:39Z |
 | Seed hosted fixtures                    | Pending |                                       |                  |
 | Deploy immutable Services preview       | Pending | Includes web and both private workers |                  |
 | Execute hosted reset                    | Pending |                                       |                  |
@@ -53,16 +53,18 @@ This record stays pending until an approved operator executes the corresponding 
 | -------------------------------------------- | ------- | ----------------------- |
 | Link matches approved project                | Pass    | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched |
 | Migration dry run reviewed                   | Pass    | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after |
-| Forward migrations applied                   | Pending |                         |
-| Remote migration history exact               | Pending |                         |
-| Public generated types match                 | Pending |                         |
-| Public/private schema lint                   | Pending |                         |
+| Forward migrations applied                   | Pass    | 2026-07-15T20:50:39Z; exactly 11 reviewed files; no seed, roles, reset, or repair |
+| Remote migration history exact               | Pass    | 2026-07-15T20:50:39Z; 11 local and 11 remote versions in identical order |
+| Public generated types match                 | Pass    | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata |
+| Public/private schema lint                   | Pass    | 2026-07-15T20:50:39Z; no schema errors found |
 | Anonymous publication                        | Pending |                         |
 | Owner/editor/customer/service isolation      | Pending |                         |
 | Seven storage boundaries                     | Pending |                         |
 | Security Advisor                             | Pending |                         |
 | Performance Advisor                          | Pending |                         |
 | Hosted identity domain differs from `.local` | Pending |                         |
+
+The successful push ended with a non-fatal local pg-delta catalog-cache warning about a missing temporary certificate path. Direct migration-history, type-generation, and linked-lint verification all passed afterward. No migration repair, reset, or retry was performed.
 
 ## Stripe evidence
 
