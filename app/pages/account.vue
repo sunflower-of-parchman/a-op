@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { LibraryPlaylist, LibraryResponse } from '#shared/types/library'
+import type { AccountCommerceResponse } from '#shared/types/commerce'
 
 useSeoMeta({ title: 'Account' })
 
 const { data: session, refresh } = await useFetch('/api/auth/session')
 const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
+const { data: commerce, refresh: refreshCommerce } =
+  await useFetch<AccountCommerceResponse>('/api/commerce/account')
 const signingOut = ref(false)
 const playlistTitle = ref('')
 const message = ref('')
@@ -12,7 +15,7 @@ const message = ref('')
 async function signOut() {
   signingOut.value = true
   await $fetch('/api/auth/sign-out', { method: 'POST' })
-  await refresh()
+  await Promise.all([refresh(), refreshLibrary(), refreshCommerce()])
   signingOut.value = false
 }
 
@@ -64,6 +67,20 @@ function formatListeningDate(value: string) {
     new Date(value),
   )
 }
+
+function formatMoney(amountMinor: number, currency: string) {
+  return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(amountMinor / 100)
+}
+
+async function openPortal() {
+  const result = await $fetch('/api/commerce/portal', { method: 'POST' })
+  window.location.assign(result.url)
+}
+
+async function download(mediaId: string) {
+  const result = await $fetch(`/api/downloads/${mediaId}`)
+  window.location.assign(result.url)
+}
 </script>
 
 <template>
@@ -96,6 +113,86 @@ function formatListeningDate(value: string) {
     <div v-else class="account-actions">
       <NuxtLink class="text-action text-action--primary" to="/sign-in">Sign in</NuxtLink>
       <NuxtLink class="text-action" to="/sign-up">Create an account</NuxtLink>
+    </div>
+
+    <div v-if="commerce?.authenticated" class="commerce-account">
+      <section aria-labelledby="orders-heading">
+        <div class="library-section-heading">
+          <p class="section-number">Purchases</p>
+          <h2 id="orders-heading">Orders and protected delivery.</h2>
+        </div>
+        <div v-if="commerce.orders.length" class="order-history">
+          <article v-for="order in commerce.orders" :key="order.id">
+            <header>
+              <div>
+                <h3>{{ order.items[0]?.name ?? 'Artist offering' }}</h3>
+                <p>{{ formatListeningDate(order.createdAt) }}</p>
+              </div>
+              <p>{{ formatMoney(order.totalMinor, order.currency) }} · {{ order.status }}</p>
+            </header>
+            <p v-if="order.refundedMinor">
+              Refunded: {{ formatMoney(order.refundedMinor, order.currency) }}
+            </p>
+            <button
+              v-for="item in order.items.filter(({ downloadMediaId }) => downloadMediaId)"
+              :key="item.resourceId"
+              class="text-action"
+              type="button"
+              @click="download(item.downloadMediaId!)"
+            >
+              Request protected download
+            </button>
+          </article>
+        </div>
+        <p v-else>
+          Completed purchases will appear here after a verified event.
+          <NuxtLink to="/support">View artist offerings.</NuxtLink>
+        </p>
+      </section>
+
+      <section aria-labelledby="membership-heading">
+        <div class="library-section-heading">
+          <p class="section-number">Membership</p>
+          <h2 id="membership-heading">Time-bound access with a visible state.</h2>
+        </div>
+        <dl v-if="commerce.subscriptions.length" class="membership-history">
+          <div v-for="subscription in commerce.subscriptions" :key="subscription.id">
+            <dt>{{ subscription.productName }}</dt>
+            <dd>
+              {{ subscription.status }} · through
+              {{ formatListeningDate(subscription.currentPeriodEnd) }}
+              <span v-if="subscription.cancelAtPeriodEnd"> · ends at period close</span>
+            </dd>
+          </div>
+        </dl>
+        <p v-else>No membership is attached to this account.</p>
+        <button
+          v-if="commerce.portalAvailable"
+          class="text-action"
+          type="button"
+          @click="openPortal"
+        >
+          Manage billing in Stripe
+        </button>
+      </section>
+
+      <section aria-labelledby="access-heading">
+        <div class="library-section-heading">
+          <p class="section-number">Access ledger</p>
+          <h2 id="access-heading">Why this account can enter.</h2>
+        </div>
+        <ol v-if="commerce.entitlements.length" class="entitlement-history">
+          <li v-for="entry in commerce.entitlements" :key="entry.id">
+            <span>{{ entry.resourceType.replaceAll('_', ' ') }}</span>
+            <span>{{ entry.sourceType }} · {{ entry.status }}</span>
+            <time v-if="entry.expiresAt" :datetime="entry.expiresAt">
+              through {{ formatListeningDate(entry.expiresAt) }}
+            </time>
+            <span v-else>Permanent</span>
+          </li>
+        </ol>
+        <p v-else>No purchase or membership access has been granted yet.</p>
+      </section>
     </div>
 
     <div v-if="library?.authenticated" class="customer-library">

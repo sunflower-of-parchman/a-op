@@ -24,6 +24,12 @@ export const demoFixtureIds = {
   taxonomyTerm: '10000000-0000-4000-8000-00000000000d',
   previewTwo: '10000000-0000-4000-8000-00000000000e',
   previewThree: '10000000-0000-4000-8000-00000000000f',
+  membershipTier: '10000000-0000-4000-8000-000000000010',
+  membershipProduct: '10000000-0000-4000-8000-000000000011',
+  membershipPrice: '10000000-0000-4000-8000-000000000012',
+  freeProduct: '10000000-0000-4000-8000-000000000013',
+  freePrice: '10000000-0000-4000-8000-000000000014',
+  externalProduct: '10000000-0000-4000-8000-000000000015',
 }
 
 function createAdminClient(status) {
@@ -464,6 +470,82 @@ export async function seedAuthorizationDemonstration(status) {
     active: true,
   })
   if (priceError) throw new Error('Could not seed the demonstration price.')
+
+  const { error: membershipTierError } = await admin.from('membership_tiers').upsert({
+    id: demoFixtureIds.membershipTier,
+    slug: 'daymark-circle',
+    name: 'Daymark Circle',
+    description: 'A fictional monthly membership for teaching and process notes.',
+    benefits: ['Member learning path', 'Studio notes', 'Continuing access while active'],
+    state: 'published',
+    sort_order: 1,
+    created_by: users.get('owner'),
+  })
+  if (membershipTierError) throw new Error('Could not seed the demonstration membership tier.')
+
+  const { error: commerceProductsError } = await admin.from('products').upsert([
+    {
+      id: demoFixtureIds.membershipProduct,
+      slug: 'daymark-circle-membership',
+      product_type: 'membership',
+      name: 'Daymark Circle membership',
+      description: 'Monthly access to the fictional artist membership.',
+      resource_type: 'membership',
+      resource_id: demoFixtureIds.membershipTier,
+      purchase_mode: 'stripe',
+      state: 'published',
+      sort_order: 2,
+      created_by: users.get('owner'),
+    },
+    {
+      id: demoFixtureIds.freeProduct,
+      slug: 'turn-toward-home-listening-notes',
+      product_type: 'track_download',
+      name: 'Turn Toward Home listening notes',
+      description: 'A free local demonstration entitlement.',
+      resource_type: 'track',
+      resource_id: demoFixtureIds.trackThree,
+      purchase_mode: 'free',
+      state: 'published',
+      sort_order: 3,
+      created_by: users.get('owner'),
+    },
+    {
+      id: demoFixtureIds.externalProduct,
+      slug: 'commission-inquiry',
+      product_type: 'learning',
+      name: 'Commission inquiry',
+      description: 'An example of an artist-controlled external offering.',
+      resource_type: 'release',
+      resource_id: demoFixtureIds.release,
+      purchase_mode: 'external',
+      external_url: 'https://example.com/commissions',
+      state: 'published',
+      sort_order: 4,
+      created_by: users.get('owner'),
+    },
+  ])
+  if (commerceProductsError) throw new Error('Could not seed the demonstration commerce products.')
+
+  const { error: commercePricesError } = await admin.from('prices').upsert([
+    {
+      id: demoFixtureIds.membershipPrice,
+      product_id: demoFixtureIds.membershipProduct,
+      currency: 'USD',
+      amount_minor: 800,
+      billing_interval: 'month',
+      active: true,
+    },
+    {
+      id: demoFixtureIds.freePrice,
+      product_id: demoFixtureIds.freeProduct,
+      currency: 'USD',
+      amount_minor: 0,
+      billing_interval: 'one_time',
+      active: true,
+    },
+  ])
+  if (commercePricesError) throw new Error('Could not seed the demonstration commerce prices.')
 
   const { error: pageError } = await admin.from('pages').upsert([
     {

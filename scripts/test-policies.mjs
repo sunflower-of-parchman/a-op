@@ -2,12 +2,89 @@ import assert from 'node:assert/strict'
 import { demoFixtureIds, safeSupabaseError } from './lib/local-supabase.mjs'
 import { getAuthorityTestContext, requireNoError } from './lib/authority-test.mjs'
 
+const policyPaymentEventId = 'policy-customer-isolation'
+const testReleaseId = '20000000-0000-4000-8000-000000000001'
+const editorReleaseId = '20000000-0000-4000-8000-000000000002'
+const draftConfigId = '20000000-0000-4000-8000-000000000003'
+
+async function cleanupPolicyCommerce(admin) {
+  const { data: events, error: eventsError } = await admin
+    .from('payment_events')
+    .select('id')
+    .eq('provider', 'simulation')
+    .eq('provider_event_id', policyPaymentEventId)
+  requireNoError(eventsError, 'Policy-test payment-event cleanup lookup failed')
+
+  const eventIds = events.map(({ id }) => id)
+  if (!eventIds.length) return
+
+  const { data: orders, error: ordersError } = await admin
+    .from('orders')
+    .select('id')
+    .in('payment_event_id', eventIds)
+  requireNoError(ordersError, 'Policy-test order cleanup lookup failed')
+
+  const orderIds = orders.map(({ id }) => id)
+  if (orderIds.length) {
+    const { data: entitlements, error: entitlementsError } = await admin
+      .from('entitlement_grants')
+      .select('id')
+      .eq('source_type', 'order')
+      .in('source_id', orderIds)
+    requireNoError(entitlementsError, 'Policy-test entitlement cleanup lookup failed')
+
+    const entitlementIds = entitlements.map(({ id }) => id)
+    if (entitlementIds.length) {
+      requireNoError(
+        (await admin.from('download_records').delete().in('entitlement_id', entitlementIds)).error,
+        'Policy-test download-record cleanup failed',
+      )
+    }
+    requireNoError(
+      (
+        await admin
+          .from('entitlement_grants')
+          .delete()
+          .eq('source_type', 'order')
+          .in('source_id', orderIds)
+      ).error,
+      'Policy-test entitlement cleanup failed',
+    )
+    requireNoError(
+      (await admin.from('order_items').delete().in('order_id', orderIds)).error,
+      'Policy-test order-item cleanup failed',
+    )
+    requireNoError(
+      (await admin.from('orders').delete().in('id', orderIds)).error,
+      'Policy-test order cleanup failed',
+    )
+  }
+
+  requireNoError(
+    (await admin.from('payment_events').delete().in('id', eventIds)).error,
+    'Policy-test payment-event cleanup failed',
+  )
+}
+
+async function cleanupPolicyFixtures(admin) {
+  await cleanupPolicyCommerce(admin)
+  requireNoError(
+    (await admin.from('site_config_versions').delete().eq('id', draftConfigId)).error,
+    'Policy-test configuration cleanup failed',
+  )
+  requireNoError(
+    (await admin.from('releases').delete().in('id', [testReleaseId, editorReleaseId])).error,
+    'Policy-test release cleanup failed',
+  )
+}
+
 try {
   const { anonymous, admin, authenticated } = await getAuthorityTestContext()
   const owner = authenticated.owner
   const editor = authenticated.editor
   const customerOne = authenticated.customerOne
   const customerTwo = authenticated.customerTwo
+  await cleanupPolicyFixtures(admin)
 
   const { data: published, error: publishedError } = await anonymous
     .from('releases')
@@ -39,7 +116,6 @@ try {
     assert.deepEqual(data.map(({ role }) => role).sort(), expected.sort())
   }
 
-  const testReleaseId = '20000000-0000-4000-8000-000000000001'
   const { error: ownerCreateError } = await owner.client.from('releases').insert({
     id: testReleaseId,
     slug: 'policy-owner-draft',
@@ -49,7 +125,6 @@ try {
   })
   requireNoError(ownerCreateError, 'Owner could not create content')
 
-  const editorReleaseId = '20000000-0000-4000-8000-000000000002'
   const { error: editorCreateError } = await editor.client.from('releases').insert({
     id: editorReleaseId,
     slug: 'policy-editor-draft',
@@ -77,7 +152,6 @@ try {
   })
   assert.ok(editorPaymentError, 'Editor payment insertion unexpectedly succeeded')
 
-  const draftConfigId = '20000000-0000-4000-8000-000000000003'
   const { error: draftConfigError } = await admin.from('site_config_versions').insert({
     id: draftConfigId,
     installation_key: 'primary',
@@ -131,37 +205,42 @@ try {
   requireNoError(crossProfileError, 'Cross-profile denial query failed')
   assert.equal(crossProfile.length, 0)
 
-  const { error: fulfillmentError } = await admin.rpc('process_simulated_payment_event', {
-    p_provider_event_id: 'policy-customer-isolation',
-    p_target_customer_id: customerOne.user.id,
-    p_target_product_id: demoFixtureIds.product,
-    p_paid_amount_minor: 1200,
-    p_paid_currency: 'USD',
-    p_event_payload: { test: 'policy' },
-  })
+  const { data: fulfillment, error: fulfillmentError } = await admin.rpc(
+    'process_simulated_payment_event',
+    {
+      p_provider_event_id: policyPaymentEventId,
+      p_target_customer_id: customerOne.user.id,
+      p_target_product_id: demoFixtureIds.product,
+      p_paid_amount_minor: 1200,
+      p_paid_currency: 'USD',
+      p_event_payload: { test: 'policy' },
+    },
+  )
   requireNoError(fulfillmentError, 'Policy-test fulfillment failed')
+  const policyOrderId = fulfillment[0].order_id
 
   const { data: firstCustomerOrders, error: firstOrderError } = await customerOne.client
     .from('orders')
     .select('id')
+    .eq('id', policyOrderId)
   requireNoError(firstOrderError, 'First customer order query failed')
   assert.equal(firstCustomerOrders.length, 1)
 
   const { data: secondCustomerOrders, error: secondOrderError } = await customerTwo.client
     .from('orders')
     .select('id')
+    .eq('id', policyOrderId)
   requireNoError(secondOrderError, 'Second customer order query failed')
   assert.equal(secondCustomerOrders.length, 0)
 
   const { data: serviceEvents, error: serviceEventError } = await admin
     .from('payment_events')
     .select('id')
-    .eq('provider_event_id', 'policy-customer-isolation')
+    .eq('provider_event_id', policyPaymentEventId)
   requireNoError(serviceEventError, 'Service payment query failed')
   assert.equal(serviceEvents.length, 1)
 
-  await admin.from('site_config_versions').delete().eq('id', draftConfigId)
-  await admin.from('releases').delete().in('id', [testReleaseId, editorReleaseId])
+  await cleanupPolicyFixtures(admin)
 
   console.log('Database role policies: PASS (anonymous, customer, editor, owner, service role)')
 } catch (error) {

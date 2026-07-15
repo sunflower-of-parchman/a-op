@@ -55,6 +55,12 @@ if (error.value?.statusCode === 401) {
         <span>Music, media, and listening</span>
         <small>Build releases, upload sources, follow processing, and publish the catalog.</small>
       </NuxtLink>
+      <NuxtLink v-if="data.roles.includes('owner')" to="/admin/commerce">
+        <span>Commerce and memberships</span>
+        <small
+          >Own the offerings, price mappings, fulfillment state, and subscription record.</small
+        >
+      </NuxtLink>
     </nav>
 
     <p v-else-if="error" class="form-message" role="alert">

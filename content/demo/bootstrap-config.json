@@ -62,6 +62,7 @@
   },
   "navigation": [
     { "label": "Music", "to": "/music", "feature": "music" },
+    { "label": "Support", "to": "/support", "feature": "commerce" },
     { "label": "Licensing", "to": "/licensing", "feature": "licensing" },
     { "label": "Learn", "to": "/learn", "feature": "learning" },
     { "label": "About", "to": "/about" },

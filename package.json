@@ -29,6 +29,8 @@
     "test:catalog": "node scripts/test-catalog.mjs",
     "test:media": "node scripts/test-media-worker.mjs",
     "test:media-import": "node scripts/test-media-import.mjs",
+    "test:commerce": "node scripts/test-commerce.mjs",
+    "test:stripe-signature": "node --experimental-strip-types scripts/test-stripe-signature.mjs",
     "test:browser-secrets": "node scripts/check-browser-secrets.mjs",
     "test:e2e": "playwright test",
     "setup:preflight": "node scripts/setup-preflight.mjs",
@@ -44,6 +46,7 @@
     "verify:spine": "node scripts/verify-spine.mjs",
     "verify:administration": "node scripts/verify-administration.mjs",
     "verify:catalog": "npm run test:policies && npm run test:catalog && npm run test:media && npm run test:media-import && npm run test:browser-secrets",
+    "verify:commerce": "npm run test:policies && npm run test:commerce && npm run test:stripe-signature && npm run test:browser-secrets",
     "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run setup:local && npm run test:spine && npm run test:e2e"
   },
   "dependencies": {
@@ -56,6 +59,7 @@
     "nuxt": "4.4.8",
     "nuxt-security": "2.6.0",
     "pinia": "3.0.4",
+    "stripe": "^22.3.1",
     "vue": "3.5.39",
     "vue-router": "5.1.0",
     "zod": "4.4.3"

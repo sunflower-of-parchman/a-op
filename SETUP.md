@@ -37,6 +37,17 @@ Run the complete current authority check with:
 
     npm run verify:spine
 
+The local offerings page at `/support` uses a labeled commerce simulation. It creates real local
+Checkout intents, orders, subscriptions, refunds, and entitlements without contacting Stripe or
+charging a card. Run its complete gate with:
+
+    npm run verify:commerce
+
+Connecting the artist's Stripe sandbox remains optional and approval-gated. The exact mapping,
+webhook, customer-portal, verification, and recovery procedure is in
+[`docs/artist/commerce.md`](docs/artist/commerce.md). Live mode is never required for development or
+judging.
+
 ## Guided personalization
 
 The setup commands are implemented and verified during the build. Their stable contract is:

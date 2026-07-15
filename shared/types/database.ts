@@ -175,6 +175,66 @@ export type Database = {
           },
         ]
       }
+      checkout_intents: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          failure_code: string | null
+          id: string
+          price_id: string | null
+          product_id: string
+          provider: string
+          provider_session_id: string | null
+          return_path: string
+          status: string
+          subject_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          failure_code?: string | null
+          id?: string
+          price_id?: string | null
+          product_id: string
+          provider: string
+          provider_session_id?: string | null
+          return_path?: string
+          status?: string
+          subject_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          failure_code?: string | null
+          id?: string
+          price_id?: string | null
+          product_id?: string
+          provider?: string
+          provider_session_id?: string | null
+          return_path?: string
+          status?: string
+          subject_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_intents_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_intents_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collection_drafts: {
         Row: {
           collection_id: string
@@ -602,6 +662,45 @@ export type Database = {
           },
         ]
       }
+      membership_tiers: {
+        Row: {
+          benefits: Json
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          state: Database["public"]["Enums"]["publication_state"]
+          updated_at: string
+        }
+        Insert: {
+          benefits?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          updated_at?: string
+        }
+        Update: {
+          benefits?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          state?: Database["public"]["Enums"]["publication_state"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -652,36 +751,52 @@ export type Database = {
       }
       orders: {
         Row: {
+          checkout_intent_id: string | null
           completed_at: string | null
           created_at: string
           currency: string
           customer_id: string
           id: string
           payment_event_id: string
+          provider_payment_id: string | null
+          refunded_minor: number
           status: Database["public"]["Enums"]["fulfillment_status"]
           total_minor: number
         }
         Insert: {
+          checkout_intent_id?: string | null
           completed_at?: string | null
           created_at?: string
           currency: string
           customer_id: string
           id?: string
           payment_event_id: string
+          provider_payment_id?: string | null
+          refunded_minor?: number
           status?: Database["public"]["Enums"]["fulfillment_status"]
           total_minor: number
         }
         Update: {
+          checkout_intent_id?: string | null
           completed_at?: string | null
           created_at?: string
           currency?: string
           customer_id?: string
           id?: string
           payment_event_id?: string
+          provider_payment_id?: string | null
+          refunded_minor?: number
           status?: Database["public"]["Enums"]["fulfillment_status"]
           total_minor?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "orders_checkout_intent_id_fkey"
+            columns: ["checkout_intent_id"]
+            isOneToOne: false
+            referencedRelation: "checkout_intents"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "orders_payment_event_id_fkey"
             columns: ["payment_event_id"]
@@ -746,6 +861,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      payment_customers: {
+        Row: {
+          created_at: string
+          id: string
+          provider: string
+          provider_customer_id: string
+          subject_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          provider: string
+          provider_customer_id: string
+          subject_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          provider?: string
+          provider_customer_id?: string
+          subject_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       payment_events: {
         Row: {
@@ -864,29 +1006,38 @@ export type Database = {
         Row: {
           active: boolean
           amount_minor: number
+          billing_interval: string
           created_at: string
           currency: string
           external_price_id: string | null
+          external_product_id: string | null
           id: string
           product_id: string
+          updated_at: string
         }
         Insert: {
           active?: boolean
           amount_minor: number
+          billing_interval?: string
           created_at?: string
           currency: string
           external_price_id?: string | null
+          external_product_id?: string | null
           id?: string
           product_id: string
+          updated_at?: string
         }
         Update: {
           active?: boolean
           amount_minor?: number
+          billing_interval?: string
           created_at?: string
           currency?: string
           external_price_id?: string | null
+          external_product_id?: string | null
           id?: string
           product_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -903,12 +1054,16 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string
+          external_url: string | null
           id: string
           name: string
           product_type: string
+          published_at: string | null
+          purchase_mode: string
           resource_id: string
           resource_type: string
           slug: string
+          sort_order: number
           state: Database["public"]["Enums"]["publication_state"]
           updated_at: string
         }
@@ -916,12 +1071,16 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string
+          external_url?: string | null
           id?: string
           name: string
           product_type: string
+          published_at?: string | null
+          purchase_mode?: string
           resource_id: string
           resource_type: string
           slug: string
+          sort_order?: number
           state?: Database["public"]["Enums"]["publication_state"]
           updated_at?: string
         }
@@ -929,12 +1088,16 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string
+          external_url?: string | null
           id?: string
           name?: string
           product_type?: string
+          published_at?: string | null
+          purchase_mode?: string
           resource_id?: string
           resource_type?: string
           slug?: string
+          sort_order?: number
           state?: Database["public"]["Enums"]["publication_state"]
           updated_at?: string
         }
@@ -960,6 +1123,63 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      refunds: {
+        Row: {
+          amount_minor: number
+          created_at: string
+          currency: string
+          id: string
+          order_id: string
+          payment_event_id: string
+          provider: string
+          provider_refund_id: string
+          reason: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_minor: number
+          created_at?: string
+          currency: string
+          id?: string
+          order_id: string
+          payment_event_id: string
+          provider: string
+          provider_refund_id: string
+          reason?: string | null
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          amount_minor?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          order_id?: string
+          payment_event_id?: string
+          provider?: string
+          provider_refund_id?: string
+          reason?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refunds_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "refunds_payment_event_id_fkey"
+            columns: ["payment_event_id"]
+            isOneToOne: false
+            referencedRelation: "payment_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       release_drafts: {
         Row: {
@@ -1154,6 +1374,75 @@ export type Database = {
           },
         ]
       }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          ended_at: string | null
+          id: string
+          price_id: string
+          product_id: string
+          provider: string
+          provider_customer_id: string | null
+          provider_subscription_id: string
+          status: string
+          subject_id: string
+          updated_at: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start: string
+          ended_at?: string | null
+          id?: string
+          price_id: string
+          product_id: string
+          provider: string
+          provider_customer_id?: string | null
+          provider_subscription_id: string
+          status: string
+          subject_id: string
+          updated_at?: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id?: string
+          price_id?: string
+          product_id?: string
+          provider?: string
+          provider_customer_id?: string | null
+          provider_subscription_id?: string
+          status?: string
+          subject_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tracks: {
         Row: {
           created_at: string
@@ -1288,6 +1577,48 @@ export type Database = {
           },
         ]
       }
+      webhook_failures: {
+        Row: {
+          attempts: number
+          error_code: string
+          event_type: string
+          first_failed_at: string
+          id: string
+          last_failed_at: string
+          object_id: string
+          provider: string
+          provider_event_id: string
+          resolved_at: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          error_code: string
+          event_type: string
+          first_failed_at?: string
+          id?: string
+          last_failed_at?: string
+          object_id: string
+          provider: string
+          provider_event_id: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          error_code?: string
+          event_type?: string
+          first_failed_at?: string
+          id?: string
+          last_failed_at?: string
+          object_id?: string
+          provider?: string
+          provider_event_id?: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       published_site_config: {
@@ -1357,6 +1688,47 @@ export type Database = {
         Args: { p_job_id: string; p_result_metadata: Json; p_worker_id: string }
         Returns: undefined
       }
+      process_commerce_payment_event: {
+        Args: {
+          p_checkout_intent_id?: string
+          p_event_payload?: Json
+          p_paid_amount_minor: number
+          p_paid_currency: string
+          p_period_end?: string
+          p_provider: string
+          p_provider_customer_id?: string
+          p_provider_event_id: string
+          p_provider_payment_id?: string
+          p_provider_subscription_id?: string
+          p_target_customer_id: string
+          p_target_price_id: string
+          p_target_product_id: string
+        }
+        Returns: {
+          entitlement_id: string
+          order_id: string
+          replayed: boolean
+          subscription_id: string
+        }[]
+      }
+      process_refund_event: {
+        Args: {
+          p_event_payload?: Json
+          p_provider: string
+          p_provider_event_id: string
+          p_provider_payment_id: string
+          p_provider_refund_id: string
+          p_refund_amount_minor: number
+          p_refund_reason?: string
+          p_refund_status: string
+        }
+        Returns: {
+          entitlement_revoked: boolean
+          order_id: string
+          refund_id: string
+          replayed: boolean
+        }[]
+      }
       process_simulated_payment_event: {
         Args: {
           p_event_payload?: Json
@@ -1372,12 +1744,41 @@ export type Database = {
           replayed: boolean
         }[]
       }
+      process_subscription_state_event: {
+        Args: {
+          p_cancel_at_period_end?: boolean
+          p_canceled_at?: string
+          p_ended_at?: string
+          p_event_payload?: Json
+          p_period_end: string
+          p_provider: string
+          p_provider_event_id: string
+          p_provider_subscription_id: string
+          p_status: string
+          p_target_customer_id: string
+          p_target_product_id: string
+        }
+        Returns: {
+          entitlement_id: string
+          replayed: boolean
+          subscription_id: string
+        }[]
+      }
       publish_page: {
         Args: { p_actor_id: string; p_page_id: string }
         Returns: string
       }
       publish_site_config: {
         Args: { p_actor_id: string; p_version_id: string }
+        Returns: string
+      }
+      record_webhook_failure: {
+        Args: {
+          p_error_code: string
+          p_event_type: string
+          p_object_id: string
+          p_provider_event_id: string
+        }
         Returns: string
       }
       replace_playlist: {
@@ -1390,6 +1791,10 @@ export type Database = {
         }
         Returns: string
       }
+      resolve_webhook_failure: {
+        Args: { p_provider_event_id: string }
+        Returns: undefined
+      }
       submit_contact_message: {
         Args: {
           p_consent: boolean
@@ -1399,6 +1804,24 @@ export type Database = {
           p_request_fingerprint: string
         }
         Returns: string
+      }
+      update_commerce_offer: {
+        Args: {
+          p_actor_id: string
+          p_amount_minor: number
+          p_billing_interval: string
+          p_currency: string
+          p_description: string
+          p_external_price_id: string
+          p_external_product_id: string
+          p_external_url: string
+          p_name: string
+          p_price_id: string
+          p_product_id: string
+          p_purchase_mode: string
+          p_state: Database["public"]["Enums"]["publication_state"]
+        }
+        Returns: undefined
       }
     }
     Enums: {

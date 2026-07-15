@@ -13,6 +13,7 @@ declare module 'nuxt/schema' {
     demoMode: boolean
     supabaseUrl: string
     supabasePublishableKey: string
+    siteUrl: string
   }
 }
 

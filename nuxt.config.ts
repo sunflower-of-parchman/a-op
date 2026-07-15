@@ -22,6 +22,7 @@ export default defineNuxtConfig({
       demoMode: true,
       supabaseUrl: 'http://127.0.0.1:54321',
       supabasePublishableKey: '',
+      siteUrl: 'http://127.0.0.1:3000',
     },
   },
   typescript: {
