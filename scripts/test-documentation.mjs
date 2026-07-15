@@ -51,7 +51,13 @@ for (const heading of [
 }
 
 const packageJson = readJson(resolve(projectRoot, 'package.json'))
-for (const script of ['demo:local', 'demo:reset', 'test:docs', 'test:cross-browser']) {
+for (const script of [
+  'demo:local',
+  'demo:reset',
+  'test:docs',
+  'test:cross-browser',
+  'test:oauth',
+]) {
   assert.ok(packageJson.scripts[script], `package.json is missing ${script}.`)
 }
 
@@ -62,11 +68,32 @@ for (const submissionDocument of [
   'docs/submission/project-description.md',
   'docs/submission/demo-script.md',
   'docs/submission/submission-checklist.md',
+  'docs/submission/completion-audit.md',
 ]) {
   assert.ok(
     existsSync(resolve(projectRoot, submissionDocument)),
     `${submissionDocument} is missing.`,
   )
+}
+
+const workflow = readFileSync(resolve(projectRoot, '.github/workflows/verify.yml'), 'utf8')
+for (const required of [
+  'run: npm audit --audit-level=high',
+  'run: npm run verify:spine',
+  'run: npm run verify:administration',
+  'run: npm run verify:catalog',
+  'run: npm run verify:commerce',
+  'run: npm run verify:licensing',
+  'run: npm run verify:learning',
+  'run: npm run verify:telemetry',
+  'run: npm run verify:setup',
+  'run: npm run verify:portability',
+  'run: npm run verify:hardening',
+  'run: npm run verify:recovery',
+  'run: npm run test:e2e',
+  'npx playwright install --with-deps chromium firefox webkit',
+]) {
+  assert.ok(workflow.includes(required), `The Linux workflow is missing: ${required}`)
 }
 
 const manifest = readJson(resolve(projectRoot, 'content/demo/assets.json'))

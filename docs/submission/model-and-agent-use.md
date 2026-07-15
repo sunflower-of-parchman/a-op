@@ -169,6 +169,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `0ab2c9e` (`Prepare Build Week judging materials`).
 - Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries, both independently and inside the passing full repository aggregate. Final name, license, hosted results, Linux CI result, `/feedback` Session ID, model metadata, recorded timecodes, video, public access, and Devpost confirmation remain pending their named human or external actions.
 
+### Completion audit, optional OAuth, and CI closure — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Preserve optional OAuth as an artist-selected connection, retain email access, keep provider credentials and hosted configuration approval-gated, and require CI to represent the complete local product rather than a narrow smoke test.
+- Material contribution: Requirement-by-requirement completion audit; typed Google, Apple, GitHub, and Spotify allowlist; server-side Supabase PKCE initiation and one-use callback exchange; short-lived HTTP-only verifier and return cookies; same-origin return and Supabase-origin authorization boundaries; provider UI and cancellation state; closed-default and configured-provider browser tests; exact local callback configuration; dependency audit in CI; dedicated catalog/media and commerce jobs; complete isolated browser-regression job; and final Chromium/Firefox/WebKit package job.
+- Commit: `fdbd9fa` (`Complete optional OAuth and CI coverage`).
+- Verification: Formatting, lint, type checking, 22 unit tests, the default-disabled desktop/mobile OAuth specification, the configured Chromium OAuth gate, and complete `npm run verify:spine` passed. The configured test proved provider visibility, PKCE challenge construction, callback binding, HTTP-only transaction cookies, safe return fallback, cancellation cleanup, disabled-provider refusal, and accessibility without contacting an external provider. The 15-job workflow parsed successfully. One post-audit uninterrupted Node 24 `npm run verify` then passed every local module, Integration Gate A, security, accessibility, four production performance budgets, recovery and clean restore, final setup and authority checks, 12 isolated desktop/mobile browser specifications, documentation and fictional assets, Chromium/WebKit judge journeys, and browser-secret scanning. A fresh dependency audit found zero vulnerabilities and local Supabase lint found no schema errors. The final remote workflow run remains pending publication or push approval.
+
 ## Submission reconciliation
 
 Before submission:

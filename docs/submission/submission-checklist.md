@@ -10,6 +10,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Private Sound for Movement data, branding, customers, credentials, and media excluded.
 - [x] Clean-clone Node 24/npm 11 install, setup, reset, build, personalization, browser, and HTTP smoke rehearsal passed.
 - [x] `README.md`, `AGENTS.md`, `SETUP.md`, architecture, artist runbooks, agent runbooks, recovery, provenance, and evidence present.
+- [x] Requirement-by-requirement completion audit records every proven, prepared, decision-gated, and external-gated item.
 - [ ] Final public project name selected by Michael and applied consistently.
 - [ ] Open-source license selected by Michael; `LICENSE`, `package.json`, README, and asset ledger updated.
 - [ ] Final repository state clean or intentionally documented.
@@ -17,8 +18,10 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 ## Verification
 
 - [x] Integration Gate A: signed simulated payment, replay idempotency, atomic order/entitlement creation, protected delivery, and cross-account denial.
-- [x] Complete local aggregate verification passed after Milestone 11.
+- [x] Post-audit complete local aggregate passed every module, recovery and clean restore, 12 isolated desktop/mobile browser specifications, documentation/assets, Chromium/WebKit judge journeys, and browser-secret scanning.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
+- [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
+- [x] Linux workflow defines coverage for every module, the complete browser regression, dependency audit, and Chromium/Firefox/WebKit judge path.
 - [x] Local cross-browser public route passed in Chromium and WebKit.
 - [ ] Linux CI passes Chromium, Firefox, and WebKit on the final published commit.
 - [ ] Supabase hosted security and performance advisors run against the approved judging project; results recorded.
@@ -41,7 +44,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Working project description prepared.
 - [x] Judging guide prepared.
 - [x] Under-three-minute demo script prepared.
-- [x] Capability evidence and model/agent record tied to dated commits through Milestone 11.
+- [x] Capability evidence and model/agent record tied to dated commits through the completion audit and OAuth/CI closure.
 - [ ] Milestones 12 and 13 reconciled with final commits, hosted proof, judge actions, and video timecodes.
 - [ ] Final `/feedback` Session ID captured from the primary implementation task.
 - [ ] Available task/model metadata confirms GPT-5.6 Sol and GPT-5.6 Pro contribution language.
