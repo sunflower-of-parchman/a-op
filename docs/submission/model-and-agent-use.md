@@ -39,7 +39,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Models: GPT-5.6 Sol and GPT-5.6 Pro, user-confirmed for the Build Week work. Exact turn-level model attribution remains pending environment metadata.
 - Human decisions: Build the complete artist-owned platform; keep the visitor runtime free of required AI calls; make the repository Codex-native; preserve artist control over creative, business, rights, account, and publication decisions.
 - Material contribution: Full ExecPlan, planning convention, competition brief, configuration-authority contract, media-processing contract, and evidence contract.
-- Commit: Pending the planning-baseline commit.
+- Commit: `e71e1d9` (`Establish Build Week execution baseline`).
 - Verification: Documentation structure and public-release scans only; application implementation has not begun.
 
 ## Submission reconciliation

@@ -23,7 +23,7 @@ Status values are `planned`, `implemented`, `integrated`, `tested`, `demonstrate
 | Artist portability and verified export | Pending Milestone 10 | Pending | Export schema, manifest, and restore-check tests pending | Artist creates and verifies a portable export | Pending | planned |
 | Security, accessibility, performance, and recovery | Pending Milestone 11 | Pending | Full verification suite pending | Defined recovery drills and mobile/desktop review pass | Pending | planned |
 | Clean-clone and hosted judge path | Pending Milestone 12 | Pending | CI and deterministic demo reset pending | Judge completes the written journey without rebuilding | Pending | planned |
-| Codex, GPT-5.6 Sol, and GPT-5.6 Pro evidence | `docs/submission/model-and-agent-use.md` | Pending | Evidence reconciliation check pending | README, task metadata, `/feedback`, and video agree | Pending | planned |
+| Codex, GPT-5.6 Sol, and GPT-5.6 Pro evidence | `docs/submission/model-and-agent-use.md` | `e71e1d9` | Evidence reconciliation check pending | README, task metadata, `/feedback`, and video agree | Pending | documented |
 | Competition package | Pending Milestone 13 | Pending | Submission checklist pending | Sub-three-minute rehearsal and judge guide pass | Pending | planned |
 
 ## Evidence rules
