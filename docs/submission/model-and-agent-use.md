@@ -133,6 +133,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `ce976ff` (`Build Codex-guided artist setup`).
 - Verification: `npm run verify:setup`, formatting, lint, type checking, production build, and diff checks passed. The integration created generated fictional media, proved preview made no state change, rejected an unapproved proposal, applied and verified an approved artist configuration and two-track release, recorded five external approvals without acting on them, repeated idempotently, scanned output for secrets, and restored the original local demonstration and project state.
 
+### Milestone 10 verified artist portability — 2026-07-15
+
+- Task: Primary implementation task.
+- Models: GPT-5.6 Sol and GPT-5.6 Pro are confirmed for the Build Week work; exact turn-level attribution remains pending task metadata.
+- Human decisions: Make artist ownership technically real; include the artist's transferable public structure and media; keep customer history, provider accounts, secrets, and consequential hosted restore actions under separate human-controlled procedures.
+- Material contribution: Strict versioned content, media, redacted-service, operations, and manifest schemas; explicit portable column allowlists; stable JSON and content-derived export identity; published configuration and 25-table content projection; bundled storage objects and SHA-256 inventory; artifact, relationship, privacy, path, size, and hash verification; backup and customer-data procedures; provider reconnection checkpoints; local-target and explicit-confirmation guards; clean migration-only restore with disposable owner; exact database and public-access comparison; tamper denial; automatic demonstration recovery; CI; and human/agent instructions.
+- Commit: `e12d3be` (`Build verified artist portability`).
+- Verification: `npm run verify:portability`, formatting, lint, type checking, production build, browser-secret scanning, and a final `npm run setup:check` passed. Two unchanged exports were byte-identical; a missing confirmation was refused; all 25 portable tables and every bundled media object restored into a clean local schema; direct-public records and media remained accessible; six external reconnections stayed approval-gated; modified content failed verification; and the original fictional installation was recreated.
+
 ## Submission reconciliation
 
 Before submission:
