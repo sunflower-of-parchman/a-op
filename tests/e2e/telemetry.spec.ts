@@ -39,9 +39,18 @@ test('collects consented product moments as owner-only aggregates and honors dis
   await expect(page.getByText(/Search words stay in this browser/)).toBeVisible()
 
   await page.getByRole('link', { name: 'Lines We Carry', exact: true }).click()
+  const meaningfulListen = page.waitForResponse((response) => {
+    if (
+      !response.url().endsWith('/api/telemetry/event') ||
+      response.request().method() !== 'POST'
+    ) {
+      return false
+    }
+    return response.request().postDataJSON()?.eventName === 'meaningful_listen'
+  })
   await page.getByRole('button', { name: 'Play public preview' }).click()
   await expect(page.getByText('Public preview playback verified.')).toBeVisible()
-  await page.waitForTimeout(1_500)
+  expect((await meaningfulListen).ok()).toBe(true)
 
   await gotoHydrated(page, '/contact')
   await page.getByLabel('Name').fill('Telemetry Browser Proof')

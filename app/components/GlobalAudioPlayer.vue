@@ -88,6 +88,7 @@ function handlePause() {
 }
 
 function handleEnded() {
+  updateMetadata()
   void recordHistory(true)
   next()
 }
