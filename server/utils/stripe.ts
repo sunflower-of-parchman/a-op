@@ -41,6 +41,12 @@ export function subscriptionPeriod(subscription: Stripe.Subscription) {
   }
 }
 
+export function subscriptionCancellationScheduled(
+  subscription: Pick<Stripe.Subscription, 'cancel_at' | 'cancel_at_period_end'>,
+) {
+  return subscription.cancel_at_period_end || subscription.cancel_at !== null
+}
+
 export function safeStripeEventPayload(event: Stripe.Event, objectId: string) {
   return { eventType: event.type, objectId, livemode: event.livemode }
 }

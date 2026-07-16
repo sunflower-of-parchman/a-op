@@ -5,6 +5,7 @@ import {
   getStripeClient,
   safeStripeEventPayload,
   stripeObjectId,
+  subscriptionCancellationScheduled,
   subscriptionPeriod,
 } from './stripe'
 import { requestDocumentWorkerForOrder } from './workerServices'
@@ -129,7 +130,7 @@ async function reconcileSubscription(
     p_provider_subscription_id: subscription.id,
     p_status: subscription.status,
     p_period_end: period.endsAt,
-    p_cancel_at_period_end: subscription.cancel_at_period_end,
+    p_cancel_at_period_end: subscriptionCancellationScheduled(subscription),
     p_canceled_at: subscription.canceled_at
       ? new Date(subscription.canceled_at * 1000).toISOString()
       : undefined,

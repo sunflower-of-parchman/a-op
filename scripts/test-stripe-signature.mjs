@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict'
-import { createStripeClient, stripeApiVersion, verifyStripeEvent } from '../server/utils/stripe.ts'
+import {
+  createStripeClient,
+  stripeApiVersion,
+  subscriptionCancellationScheduled,
+  verifyStripeEvent,
+} from '../server/utils/stripe.ts'
 import { requiredStripeEventTypes } from '../shared/stripeEvents.ts'
 
 const secret = 'whsec_local_signature_test_only'
@@ -22,6 +27,18 @@ try {
   assert.equal(event.id, 'evt_signature_test')
   assert.throws(() => verifyStripeEvent(`${payload} `, signature, secret))
   assert.throws(() => verifyStripeEvent(payload, signature, `${secret}-wrong`))
+  assert.equal(
+    subscriptionCancellationScheduled({ cancel_at: null, cancel_at_period_end: false }),
+    false,
+  )
+  assert.equal(
+    subscriptionCancellationScheduled({ cancel_at: null, cancel_at_period_end: true }),
+    true,
+  )
+  assert.equal(
+    subscriptionCancellationScheduled({ cancel_at: 1_789_000_000, cancel_at_period_end: false }),
+    true,
+  )
   assert.deepEqual(requiredStripeEventTypes, [
     'checkout.session.completed',
     'checkout.session.expired',
