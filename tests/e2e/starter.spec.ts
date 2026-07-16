@@ -26,3 +26,21 @@ test('keeps the labeled layout accessible on desktop and mobile', async ({ page 
 
   expect(serious).toEqual([])
 })
+
+test('labels track-detail content instead of presenting the fictional demo as artist copy', async ({
+  page,
+}) => {
+  await gotoHydrated(page, '/music/tracks/a-measure-of-distance')
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Track Title')
+  await expect(page.getByText('Track Description', { exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2 }).first()).toHaveText('Track Metadata')
+  await expect(page.getByRole('heading', { level: 2 }).last()).toHaveText('Favorites and Playlists')
+  await expect(page.getByRole('link', { name: 'Return to Album', exact: true })).toBeVisible()
+  await expect(page.getByText('A Measure of Distance', { exact: true })).toHaveCount(0)
+  await expect(page.getByText('A fictional study in spacing', { exact: false })).toHaveCount(0)
+  await expect(page.getByText('Music, with its context intact.', { exact: true })).toHaveCount(0)
+  await expect(
+    page.getByText('Keep a personal path through the catalog.', { exact: true }),
+  ).toHaveCount(0)
+})

@@ -9,7 +9,9 @@ typographic and spatial roles that the artist's eventual material will use.
 Content plan: Label the artist name or logo, hero kicker, primary headline, introductory text,
 actions, featured release or artwork, supporting section, list items, closing section, and footer.
 The labels teach the artist which decisions are available without pretending to be finished copy.
-The complete Daymark Assembly identity remains a separate demonstration mode.
+Track detail pages apply the same contract to the track title, description, metadata, listener
+library, and return action. The complete Daymark Assembly identity remains a separate demonstration
+mode.
 
 Interaction thesis: Keep the existing restrained links, navigation, focus behavior, and responsive
 composition. The starter is keyboard-readable, carries no production indexing, and disappears when

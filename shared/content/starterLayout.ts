@@ -14,6 +14,15 @@ export const starterLayoutContent = {
     format: 'Release Format / Description',
     artist: 'Artist Name',
   },
+  trackDetail: {
+    title: 'Track Title',
+    description: 'Track Description',
+    detailsLabel: 'Track Details',
+    detailsHeading: 'Track Metadata',
+    libraryLabel: 'Listener Library',
+    libraryHeading: 'Favorites and Playlists',
+    returnAction: 'Return to Album',
+  },
   supportingSection: {
     label: 'Section Label / Number',
     headline: 'Supporting Section Headline',

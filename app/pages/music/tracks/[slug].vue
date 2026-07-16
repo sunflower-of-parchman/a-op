@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { LibraryResponse } from '#shared/types/library'
 
 const route = useRoute()
 const artist = useArtistConfig()
+const starterMode = useStarterMode()
 const { data, error } = await useFetch(() => `/api/tracks/${String(route.params.slug)}`)
 const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
 const audioPlayer = useAudioPlayer()
@@ -16,9 +18,11 @@ const playerTrack = computed(() => {
   return {
     id: data.value.track.id,
     slug: data.value.track.slug,
-    title: data.value.track.title,
-    artist: artist.identity.name,
-    releaseTitle: data.value.release?.title,
+    title: starterMode ? starterLayoutContent.trackDetail.title : data.value.track.title,
+    artist: starterMode ? starterLayoutContent.featuredRelease.artist : artist.identity.name,
+    releaseTitle: starterMode
+      ? starterLayoutContent.featuredRelease.title
+      : data.value.release?.title,
     href: `/music/tracks/${data.value.track.slug}`,
     src: data.value.preview.url,
   }
@@ -64,8 +68,10 @@ async function addToPlaylist() {
 }
 
 useSeoMeta({
-  title: () => data.value?.track.title ?? 'Track',
-  description: () => data.value?.track.description,
+  title: () =>
+    starterMode ? starterLayoutContent.trackDetail.title : (data.value?.track.title ?? 'Track'),
+  description: () =>
+    starterMode ? starterLayoutContent.trackDetail.description : data.value?.track.description,
 })
 </script>
 
@@ -73,13 +79,21 @@ useSeoMeta({
   <article v-if="data" class="page-frame release-page track-page">
     <header class="release-page__heading">
       <p class="eyebrow">Track</p>
-      <h1>{{ data.track.title }}</h1>
-      <p>{{ data.track.description }}</p>
+      <h1>
+        {{ starterMode ? starterLayoutContent.trackDetail.title : data.track.title }}
+      </h1>
+      <p>
+        {{ starterMode ? starterLayoutContent.trackDetail.description : data.track.description }}
+      </p>
     </header>
     <section class="track-details" aria-labelledby="details-heading">
       <div>
-        <p class="section-number">Listening details</p>
-        <h2 id="details-heading">Music, with its context intact.</h2>
+        <p class="section-number">
+          {{ starterMode ? starterLayoutContent.trackDetail.detailsLabel : 'Listening details' }}
+        </p>
+        <h2 id="details-heading">
+          {{ starterMode ? starterLayoutContent.trackDetail.detailsHeading : 'Track information' }}
+        </h2>
       </div>
       <dl>
         <div v-if="data.track.tempo_bpm">
@@ -110,7 +124,11 @@ useSeoMeta({
         Play public preview
       </button>
       <NuxtLink v-if="data.release" class="text-action" :to="`/music/${data.release.slug}`">
-        Return to {{ data.release.title }}
+        {{
+          starterMode
+            ? starterLayoutContent.trackDetail.returnAction
+            : `Return to ${data.release.title}`
+        }}
       </NuxtLink>
       <NuxtLink class="text-action" :to="`/licensing?track=${data.track.slug}`">
         License this track
@@ -118,8 +136,16 @@ useSeoMeta({
     </div>
     <section class="track-library-actions" aria-labelledby="track-library-heading">
       <div>
-        <p class="section-number">Your library</p>
-        <h2 id="track-library-heading">Keep a personal path through the catalog.</h2>
+        <p class="section-number">
+          {{ starterMode ? starterLayoutContent.trackDetail.libraryLabel : 'Your library' }}
+        </p>
+        <h2 id="track-library-heading">
+          {{
+            starterMode
+              ? starterLayoutContent.trackDetail.libraryHeading
+              : 'Favorites and playlists'
+          }}
+        </h2>
       </div>
       <div v-if="library?.authenticated" class="library-track-controls">
         <button class="text-action" type="button" @click="toggleFavorite">
