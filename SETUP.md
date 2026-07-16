@@ -19,7 +19,24 @@ Codex prepares a proposal before changing the project. You review the proposal a
 
 Your setup proposal is an ignored local working file. It may contain approved public identity and content decisions, but it must never contain passwords, API keys, customer information, private task metadata, or credentials.
 
-## Start the local demonstration
+## See the site you will personalize
+
+Install Node 24.14, npm 11, and Docker Desktop. Then run:
+
+    npm ci
+    npm run starter:local
+
+The command prepares the local services and opens a composed homepage whose text literally names
+each artist-editable element: artist name or logo, kicker, headline, introduction, actions, featured
+release, supporting sections, and footer. This is the first-clone teaching view. It lets you and
+Codex discuss the actual page structure without asking you to adopt a fictional artist's writing.
+
+Starter mode is local-development behavior. It does not rewrite the database, change the Daymark
+fixture, or appear in a production build. Once an approved personalization is applied,
+`setup/project-state.json` records it and ordinary local development presents the artist's published
+content.
+
+## Start the complete fictional demonstration
 
 Install Node 24.14, npm 11, and Docker Desktop. Then run:
 
@@ -29,6 +46,10 @@ Install Node 24.14, npm 11, and Docker Desktop. Then run:
     npm run setup:local
     npm run setup:check
     npm run dev
+
+To prepare and launch the finished Daymark Assembly example in one command, use:
+
+    npm run demo:local
 
 The setup script operates only on the local Supabase stack. It applies the tracked migration, inserts the fictional Daymark Assembly configuration, verifies anonymous access to the published configuration, generates database types, and writes local credentials to ignored `.env` without printing their values.
 

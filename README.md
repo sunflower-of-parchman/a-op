@@ -57,6 +57,20 @@ The setup lifecycle is:
     -> verification
     -> project-state update
 
+Before personalization, the local home page is a composed teaching scaffold. It labels the artist
+name or logo, headline, introduction, actions, featured release, supporting sections, and footer in
+place, so the artist can discuss the real page while keeping the final design visible. Start it with:
+
+```text
+npm ci
+npm run starter:local
+```
+
+The scaffold is local-development behavior and is automatically replaced by the artist's approved
+content after personalization. It never becomes the production presentation. The fictional Daymark
+Assembly site remains available through `npm run demo:local` as the complete working example and
+judge route.
+
 ## Judge in five minutes
 
 With Node 24.14, npm 11, Python 3.12 or newer, and Docker running:
@@ -109,6 +123,12 @@ Use Node 24.14, npm 11, and a running Docker Desktop installation. From a fresh 
     npm run dev
 
 `setup:documents` creates an ignored, isolated Python environment for the pinned private-license PDF renderer. `setup:local` starts the local Supabase stack, applies migrations, inserts the fictional demonstration artist, generates `shared/types/database.ts`, and writes local credentials only to ignored `.env`.
+
+While `setup/project-state.json` has no personalization record, `npm run dev` presents the labeled
+starter home page. `npm run starter:local` performs the complete local preparation and starts that
+view in one command. `npm run demo:local` explicitly presents the finished Daymark Assembly site.
+Both modes use the same working application and local fixtures; switching the presentation does not
+rewrite artist data.
 
 Verify the current foundation with:
 

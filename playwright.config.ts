@@ -17,7 +17,7 @@ export default defineConfig({
   webServer: process.env.BASE_URL
     ? undefined
     : {
-        command: `npm run dev -- --host 127.0.0.1 --port ${port}`,
+        command: `NUXT_PUBLIC_STARTER_MODE=false NUXT_IGNORE_LOCK=1 npm run dev -- --host 127.0.0.1 --port ${port}`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,

@@ -1,5 +1,20 @@
 # Visual direction
 
+## First-clone starter
+
+Visual thesis: Preserve the calm editorial composition of the public platform while presenting the
+unpersonalized page as site anatomy instead of a fictional voice. Literal labels occupy the same
+typographic and spatial roles that the artist's eventual material will use.
+
+Content plan: Label the artist name or logo, hero kicker, primary headline, introductory text,
+actions, featured release or artwork, supporting section, list items, closing section, and footer.
+The labels teach the artist which decisions are available without pretending to be finished copy.
+The complete Daymark Assembly identity remains a separate demonstration mode.
+
+Interaction thesis: Keep the existing restrained links, navigation, focus behavior, and responsive
+composition. The starter is keyboard-readable, carries no production indexing, and disappears when
+approved personalization becomes authoritative without changing the page's underlying structure.
+
 ## Public demonstration
 
 Visual thesis: An independent record sleeve opened into a living, contemporary music space: editorial, warm, physical, and quiet enough for the artist's work to remain central.

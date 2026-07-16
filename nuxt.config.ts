@@ -1,4 +1,7 @@
 import artistConfig from './artist.config'
+import projectState from './setup/project-state.json'
+
+const starterMode = process.env.NODE_ENV !== 'production' && projectState.personalization === null
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-07-14',
@@ -20,6 +23,7 @@ export default defineNuxtConfig({
     public: {
       artist: artistConfig,
       demoMode: true,
+      starterMode,
       oauthProviders: '',
       supabaseUrl: 'http://127.0.0.1:54321',
       supabasePublishableKey: '',
