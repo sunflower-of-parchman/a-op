@@ -308,6 +308,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `dbfc659` (`Add guided first-clone artist scaffold`).
 - Verification: Formatting, lint, Nuxt type checking, 28 unit tests, documentation validation, and production build passed. The starter suite passed four desktop/mobile Chromium journeys with zero serious or critical axe findings; the unchanged Daymark foundation passed four desktop/mobile journeys; live Chrome inspection confirmed the complete labeled composition; and a production server built with a forced starter environment value rendered Daymark content with no starter labels. No database, provider, deployment, publication, or Sound for Movement state changed.
 
+### Literal track-detail starter labels — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael rejected the fictional track title, fictional description, and poetic track-detail language in the first-clone experience and required literal labels that teach the artist what each element is.
+- Material contribution: Extended the shared starter-content contract to the track detail; replaced the starter title, description, metadata heading, library heading, and album-return language; kept playback, licensing, authentication, and the separate Daymark demonstration behavior intact; and added desktop/mobile regression coverage for the absence of the rejected copy.
+- Commit: `978c5d6` (`Replace starter track copy with literal labels`).
+- Verification: Six desktop/mobile Chromium starter journeys, Nuxt type checking, lint, 28 unit tests, documentation validation, formatting, and the production build passed. Live Chrome inspection showed the literal labels, no rejected copy, no framework overlay, and no horizontal overflow. No database, provider, deployment, publication, or Sound for Movement state changed.
+
 ### Public music browser iteration — 2026-07-16
 
 - Task: Primary implementation task.
