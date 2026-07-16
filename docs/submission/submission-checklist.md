@@ -19,7 +19,10 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 
 - [x] Integration Gate A: signed simulated payment, replay idempotency, atomic order/entitlement creation, protected delivery, and cross-account denial.
 - [x] Prior candidate `build-week-hosted-candidate-20260715-121920` passed every module, recovery and clean restore, 12 isolated desktop/mobile browser specifications, the private three-service contract, documentation/assets, Chromium/WebKit judge journeys, and browser-secret scanning from exact commit `04f23fa4b8632b04609cd2689b3b575ec2b193b0`.
-- [x] Current deployment candidate `build-week-hosted-candidate-20260715-161907` at exact commit `048fe057a677c0c4e54e29e0825483b0c7ae41ba` passed focused worker, service, documentation, type, formatting, and shared-container route checks; Vercel CLI `54.21.1` built all three services for Preview.
+- [x] Prior deployment candidate `build-week-hosted-candidate-20260715-161907` at exact commit `048fe057a677c0c4e54e29e0825483b0c7ae41ba` passed focused worker, service, documentation, type, formatting, and shared-container route checks; Vercel CLI `54.21.1` built all three services for Preview.
+- [x] Current deployment candidate `build-week-hosted-candidate-20260715-175142` at exact commit `f93af023daf41a59c86251b471219b9a6eed4afc` passed the complete isolated-port Node 24 aggregate: every local module, clean migration replay, recovery, 12 desktop/mobile specifications, Chromium/WebKit judge routes, documentation, service/bootstrap contracts, and browser-secret scanning.
+- [x] Read-only hosted Supabase advisors recorded 0 errors, 31 warnings, and 124 information items; forward migration `20260715231631_optimize_rls_advisor_policies.sql` resolves all 30 database-policy warnings locally, and the local rerun returned 0 errors and 0 warnings while preserving every affected authorization journey.
+- [x] Linked-project hash and migration history were rechecked; the non-mutating dry run proposed exactly `20260715231631_optimize_rls_advisor_policies.sql` and left the hosted project at 11 applied migrations.
 - [x] Guarded bootstrap preparation `b8cb378` generates and tests a disposable Build Output package with no application code or secrets and refuses repository-local or reused output paths.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
 - [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
@@ -44,6 +47,9 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Read-only provider and official-document investigation established Vercel's automatic first-deployment Production promotion as the cause; the project remains Git-unlinked with zero deployments and aliases.
 - [x] Michael separately approved one temporary Production-classified `--skip-domain` bootstrap. The no-application artifact reached Ready, but Vercel assigned two automatic Production aliases; the exact deployment was removed immediately and the project returned to zero deployments, `live: false`, and zero aliases.
 - [x] Official documentation and pinned CLI inspection established that `--skip-domain` disables custom Production-domain auto-assignment only; the hardened local revision adds no-store and restrictive security/privacy headers and expects only Vercel-managed platform URLs.
+- [ ] Michael separately approves application of the reviewed policy migration to the isolated hosted Supabase project.
+- [ ] Michael separately approves enabling Supabase leaked-password protection for the isolated hosted Auth project.
+- [ ] Hosted Supabase advisors rerun after both approved actions and return zero warnings or a documented disposition for every remaining result.
 - [ ] Michael explicitly approves the revised first-deployment contract: one immutable deployment URL and the two observed automatic `.vercel.app` aliases may exist only while the hardened static bootstrap enables and confirms the real Preview; no custom domain, sharing, visit, application data, or secret is allowed. The original no-domain contract must not be retried.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
@@ -80,6 +86,9 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | Initialize hosted fictional fixtures    | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`                                                              |
 | Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                                                   |
 | Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                                                 |
+| Run read-only hosted Supabase advisors  | Executed | Safe result hashes and counts recorded; no provider state changed                                                |
+| Apply advisor policy migration          | Pending  | Exact forward migration `20260715231631`; hosted project currently remains at 11 migrations                      |
+| Enable leaked-password protection       | Pending  | Separate hosted Auth configuration action                                                                        |
 | Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                               |
 | Execute temporary Vercel bootstrap      | Prepared | Hardened revised contract limits exposure to Vercel-managed platform URLs; new action-specific approval required |
 | Promote final deployment                | Pending  | Approved URL and deployment commit                                                                               |

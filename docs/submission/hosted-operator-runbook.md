@@ -291,6 +291,8 @@ After the deployment evidence is recorded and no further inspection needs the de
 
 Run Supabase's automatic Security and Performance Advisors and rerun them after every fix. The [official advisor guide](https://supabase.com/docs/guides/database/database-advisors) defines these as separate database checks.
 
+The read-only baseline was captured on 2026-07-15 as safe report hash `sha256:795729cdf9bd`: zero errors, 31 warnings, and 124 information items. Thirty warnings are addressed by forward migration `20260715231631_optimize_rls_advisor_policies.sql`; a clean local reset and advisor rerun returned zero errors and zero warnings at candidate `build-week-hosted-candidate-20260715-175142`. One hosted Auth warning remains for leaked-password protection. Applying the migration and changing that Auth setting require separate approvals. Before either mutation, repeat the exact-name/project-reference guard and migration dry run from Stage 2. After both approved actions, rerun the command below and append only safe counts, dispositions, and hashes to the evidence record.
+
 ```text
 npx supabase db advisors --linked --type all --level info --fail-on warn
 ```

@@ -4,21 +4,22 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Candidate
 
-| Field                           | Status  | Safe evidence                                                                                                |
-| ------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| Final public name               | Ready   | Artist-Owned Platform                                                                                        |
-| License                         | Ready   | `AGPL-3.0-or-later`                                                                                          |
-| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                   |
-| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-161907`                                                                |
-| Current exact commit            | Ready   | `048fe057a677c0c4e54e29e0825483b0c7ae41ba`                                                                   |
-| Evidence branch relationship    | Ready   | The deployment candidate is a detached exact-commit worktree; later evidence commits remain outside it       |
-| Detached worktree rehearsal     | Pass    | Clean tracked worktree resolved the tag to exact commit `048fe05`                                            |
-| Prior local full aggregate      | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`       |
-| Current focused verification    | Pass    | Worker, service, bootstrap, docs, typecheck, format, and shared-container route/authentication probes passed |
-| Current Vercel preview build    | Pass    | CLI `54.21.1` built `web`, `media_worker`, and `document_worker` from the exact candidate                    |
-| Dependency audit                | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                     |
-| Local schema lint               | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                  |
-| Linux CI all jobs               | Pending |                                                                                                              |
+| Field                           | Status  | Safe evidence                                                                                              |
+| ------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| Final public name               | Ready   | Artist-Owned Platform                                                                                      |
+| License                         | Ready   | `AGPL-3.0-or-later`                                                                                        |
+| Prior verified baseline         | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                 |
+| Current immutable candidate tag | Ready   | `build-week-hosted-candidate-20260715-175142`                                                              |
+| Current exact commit            | Ready   | `f93af023daf41a59c86251b471219b9a6eed4afc`                                                                 |
+| Evidence branch relationship    | Ready   | The deployment candidate is a detached exact-commit worktree; later evidence commits remain outside it     |
+| Detached worktree rehearsal     | Pass    | Clean tracked worktree resolved the current tag to exact commit `f93af02`; migration `sha256:b74ee9c016ca` |
+| Prior local full aggregate      | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`     |
+| Current full aggregate          | Pass    | Exact commit `f93af02` passed every local module, recovery, browser, package, and secret gate              |
+| Current focused verification    | Pass    | Local advisors returned zero warnings/errors; all affected authority suites passed                         |
+| Current Vercel preview build    | Pending | Prior candidate built all three services; exact current candidate requires a fresh Preview build           |
+| Dependency audit                | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                   |
+| Local schema lint               | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                |
+| Linux CI all jobs               | Pending |                                                                                                            |
 
 ## Authorization ledger
 
@@ -32,6 +33,10 @@ This record stays pending until an approved operator executes the corresponding 
 | Seed hosted fixtures                       | Executed  | Stage 3 approved in this task, 2026-07-15    | Primary task / 2026-07-15T21:01:49Z                                                                   |
 | Create Stripe sandbox catalog and mappings | Executed  | Stage 4A approved in this task, 2026-07-15   | Primary task / 2026-07-15T21:24:04Z                                                                   |
 | Complete Stripe sandbox license catalog    | Executed  | Stage 4A-2 approved in this task, 2026-07-15 | Primary task / 2026-07-15T21:37:07Z                                                                   |
+| Run read-only Supabase advisors            | Executed  | Proceed instruction in this task, 2026-07-15 | Primary task / 2026-07-15T23:15:03Z; no provider mutation                                             |
+| Dry-run advisor policy migration           | Executed  | Read-only preflight in this task, 2026-07-15 | Primary task / 2026-07-15T23:58:39Z; exactly one migration proposed; zero applied                     |
+| Apply advisor policy migration             | Pending   |                                              |                                                                                                       |
+| Enable leaked-password protection          | Pending   |                                              |                                                                                                       |
 | Deploy immutable Services preview          | Blocked   | Stage 6 approved in this task, 2026-07-15    | Preview build passed; application deployments remain zero                                             |
 | Temporary first-deployment bootstrap       | Contained | Separately approved in this task, 2026-07-15 | Vercel assigned two automatic aliases despite `--skip-domain`; removed exactly / 2026-07-15T23:02:46Z |
 | Execute hosted reset                       | Pending   |                                              |                                                                                                       |
@@ -53,22 +58,27 @@ This record stays pending until an approved operator executes the corresponding 
 
 ## Supabase evidence
 
-| Check                                        | Status  | Timestamp / safe result                                                                                                   |
-| -------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Link matches approved project                | Pass    | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched                                                        |
-| Migration dry run reviewed                   | Pass    | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after                                  |
-| Forward migrations applied                   | Pass    | 2026-07-15T20:50:39Z; exactly 11 reviewed files; no seed, roles, reset, or repair                                         |
-| Remote migration history exact               | Pass    | 2026-07-15T20:50:39Z; 11 local and 11 remote versions in identical order                                                  |
-| Public generated types match                 | Pass    | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata                            |
-| Public/private schema lint                   | Pass    | 2026-07-15T20:50:39Z; no schema errors found                                                                              |
-| Anonymous publication                        | Pass    | 2026-07-15T21:01:49Z; Daymark Assembly public configuration and published content verified; fixture `sha256:ba0da2991582` |
-| Owner/editor/customer/service isolation      | Pass    | 2026-07-15T21:01:49Z; exact four-account set verified as owner, editor, customer, and customer                            |
-| Seven storage boundaries                     | Pass    | 2026-07-15T21:01:49Z; all seven dedicated buckets verified with 6 fictional fixture objects                               |
-| Security Advisor                             | Pending |                                                                                                                           |
-| Performance Advisor                          | Pending |                                                                                                                           |
-| Hosted identity domain differs from `.local` | Pass    | 2026-07-15T21:01:49Z; four unique hosted identities use non-local domains                                                 |
+| Check                                        | Status   | Timestamp / safe result                                                                                                   |
+| -------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Link matches approved project                | Pass     | 2026-07-15T20:44:15Z; exact name and `sha256:9890053715f8` matched                                                        |
+| Migration dry run reviewed                   | Pass     | 2026-07-15T20:44:15Z; 11 tracked migrations proposed in order; 0 remote before and after                                  |
+| Forward migrations applied                   | Pass     | 2026-07-15T20:50:39Z; exactly 11 reviewed files; no seed, roles, reset, or repair                                         |
+| Remote migration history exact               | Action   | Hosted project has 11 applied versions; the reviewed local policy optimization is version 12 and awaits approval          |
+| Advisor migration dry run                    | Pass     | 2026-07-15T23:58:39Z; exact project hash matched; only `20260715231631_optimize_rls_advisor_policies.sql` proposed        |
+| Public generated types match                 | Pass     | 2026-07-15T20:50:39Z; byte-exact after removing environment-specific PostgREST `14.5` metadata                            |
+| Public/private schema lint                   | Pass     | 2026-07-15T20:50:39Z; no schema errors found                                                                              |
+| Anonymous publication                        | Pass     | 2026-07-15T21:01:49Z; Daymark Assembly public configuration and published content verified; fixture `sha256:ba0da2991582` |
+| Owner/editor/customer/service isolation      | Pass     | 2026-07-15T21:01:49Z; exact four-account set verified as owner, editor, customer, and customer                            |
+| Seven storage boundaries                     | Pass     | 2026-07-15T21:01:49Z; all seven dedicated buckets verified with 6 fictional fixture objects                               |
+| Hosted advisor baseline                      | Pass     | 2026-07-15T23:15:03Z; read-only report `sha256:795729cdf9bd`; 155 results, 0 errors, 31 warnings, 124 information         |
+| Security Advisor                             | Action   | 1 warning: leaked-password protection disabled; 15 information items are intentional forced-RLS service-only tables       |
+| Performance Advisor                          | Prepared | 30 warnings: 17 auth initialization plans and 13 overlapping read policies; all resolved locally in commit `f93af02`      |
+| Local advisor verification                   | Pass     | 2026-07-15T23:24:12Z; `sha256:bb8be34b228d`; 0 errors, 0 warnings, 127 information items after a fresh reset              |
+| Hosted identity domain differs from `.local` | Pass     | 2026-07-15T21:01:49Z; four unique hosted identities use non-local domains                                                 |
 
 The successful push ended with a non-fatal local pg-delta catalog-cache warning about a missing temporary certificate path. Direct migration-history, type-generation, and linked-lint verification all passed afterward. No migration repair, reset, or retry was performed.
+
+The later read-only hosted advisor run found no error-level result. The 30 database-policy warnings were reproduced, corrected in forward migration `20260715231631_optimize_rls_advisor_policies.sql`, and reduced to zero warnings and zero errors by a clean local reset plus a second advisor run. Public, customer, editor, owner, and service-role policy tests and the administration, catalog, commerce, licensing, and learning authority suites all passed. The 127 remaining local results are informational: 15 intentional service-only forced-RLS tables, 59 foreign-key index observations, and 53 unused-index observations from the freshly reset demonstration. Applying the migration, rerunning the hosted advisors, and enabling the separate leaked-password protection setting remain distinct approval-gated provider actions. The raw reports stayed in private temporary files and are represented here only by safe hashes and counts.
 
 The guarded Stage 3 initializer and a separate hosted check both passed at reset contract version `2026-07-15.1`. They verified fixture `sha256:ba0da2991582`, four fictional Auth accounts, six storage objects, and an initial Stripe provider-mapping count of zero. Stage 4A then verified three provider mappings. After Stage 4A-2, another independent check preserved the same fixture, account, and storage results while verifying four provider mappings. The private account and environment inputs remain ignored with file mode `0600`; this record contains no emails, passwords, API keys, or full project reference. No Sound for Movement codebase or provider resource was read or changed during initialization or mapping.
 
