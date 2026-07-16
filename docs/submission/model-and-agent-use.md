@@ -308,6 +308,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `dbfc659` (`Add guided first-clone artist scaffold`).
 - Verification: Formatting, lint, Nuxt type checking, 28 unit tests, documentation validation, and production build passed. The starter suite passed four desktop/mobile Chromium journeys with zero serious or critical axe findings; the unchanged Daymark foundation passed four desktop/mobile journeys; live Chrome inspection confirmed the complete labeled composition; and a production server built with a forced starter environment value rendered Daymark content with no starter labels. No database, provider, deployment, publication, or Sound for Movement state changed.
 
+### Public music browser iteration — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael asked for a substantially more capable public music page organized around Tracks, Albums, Collections, Playlists, filters, and sorting, informed by the existing Sound for Movement experience while preserving the open-source platform's independent identity.
+- Material contribution: Generalized the catalog information architecture; added typed public catalog metadata and preview responses; implemented view navigation, instant search, supported musical filters, deterministic per-view sorting, private listener playlists, responsive open-space layouts, and one persistent playback path; and extended catalog/library browser verification.
+- Commit: `7c912c1` (`Build complete public music browser`).
+- Verification: Production build, formatting, integration, documentation, and browser-secret checks passed. The focused catalog and library suite passed five desktop/mobile Chromium journeys with one intentional mobile shared-database mutation skip; it verified filtering, sorting, all four views, playback, private playlist order, accessibility, and horizontal viewport containment. Live Chrome inspection confirmed the Tracks and Albums layouts. No database, provider, deployment, publication, or Sound for Movement state changed.
+
 ## Submission reconciliation
 
 Before submission:
