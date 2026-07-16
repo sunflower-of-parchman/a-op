@@ -25,7 +25,7 @@ try {
   await verifyPublicDemonstration(status)
   await verifyAuthorizationDemonstration(status)
 
-  generateLocalDatabaseTypes()
+  await generateLocalDatabaseTypes()
   console.log('Local demonstration reset: PASS')
 } catch (error) {
   console.error(`Local demonstration reset: FAIL\n${safeSupabaseError(error)}`)

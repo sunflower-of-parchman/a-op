@@ -55,7 +55,7 @@ try {
   await verifyAuthorizationDemonstration(status)
   console.log('Demo seed and authorization fixtures: applied')
 
-  generateLocalDatabaseTypes()
+  await generateLocalDatabaseTypes()
 
   console.log(`Supabase API: ${status.apiUrl}`)
   if (status.studioUrl) console.log(`Supabase Studio: ${status.studioUrl}`)
