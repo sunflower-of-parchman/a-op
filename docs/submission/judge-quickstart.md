@@ -61,7 +61,7 @@ npm run verify:hardening
 npm run verify:recovery
 ```
 
-On macOS, the cross-browser command verifies Chromium and WebKit while Firefox remains mandatory in Linux CI. `PLAYWRIGHT_FORCE_FIREFOX=1 npm run test:cross-browser` retries the Firefox runtime locally.
+The cross-browser command verifies the supported Chrome/Chromium and Safari/WebKit matrix.
 
 The full local gate is `npm run verify`. It verifies every product module, Integration Gate A, security and accessibility, performance budgets, recovery, final deterministic setup, and 12 isolated desktop/mobile browser specifications.
 

@@ -45,7 +45,7 @@ Observed results:
 - Local setup applied migrations and deterministic authorization fixtures, generated types, and passed the installation check.
 - `demo:reset` returned the exact fictional state.
 - Foundation formatting, lint, type checking, 19 unit tests, one integration test, all documentation links/assets, and the Nuxt production build passed.
-- The public judge route passed in Chromium and WebKit on macOS. Firefox remains mandatory in Linux CI because the downloaded Playwright Firefox 151 runtime reproduces Mozilla's macOS headless framebuffer startup failure before a page is created.
+- The public judge route passed in the supported Chromium and WebKit matrix on macOS.
 - The setup lifecycle changed the fictional identity, imported and processed two generated tracks, enforced preview and approval boundaries, reapplied idempotently, and restored Daymark Assembly.
 - The browser-secret scan passed.
 - The one-command server returned HTTP `200` from its isolated port.

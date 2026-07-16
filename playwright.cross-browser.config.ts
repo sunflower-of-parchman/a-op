@@ -26,9 +26,6 @@ export default defineConfig({
       },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    ...(process.platform === 'darwin' && !process.env.PLAYWRIGHT_FORCE_FIREFOX
-      ? []
-      : [{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }]),
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 })

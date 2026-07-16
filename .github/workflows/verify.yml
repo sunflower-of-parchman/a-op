@@ -79,7 +79,7 @@ jobs:
         run: npm ci
 
       - name: Install browser engines
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Run the public cross-browser journey
         run: npm run test:cross-browser

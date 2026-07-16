@@ -71,6 +71,7 @@ for (const submissionDocument of [
   'docs/submission/completion-audit.md',
   'docs/submission/hosted-operator-runbook.md',
   'docs/submission/hosted-evidence-record.md',
+  'docs/submission/remaining-work.md',
 ]) {
   assert.ok(
     existsSync(resolve(projectRoot, submissionDocument)),
@@ -93,7 +94,7 @@ for (const required of [
   'run: npm run verify:hardening',
   'run: npm run verify:recovery',
   'run: npm run test:e2e',
-  'npx playwright install --with-deps chromium firefox webkit',
+  'npx playwright install --with-deps chromium webkit',
 ]) {
   assert.ok(workflow.includes(required), `The Linux workflow is missing: ${required}`)
 }

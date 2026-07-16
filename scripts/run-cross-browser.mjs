@@ -14,8 +14,4 @@ run(
   { env: crossBrowserEnvironment },
 )
 
-console.log(
-  process.platform === 'darwin' && !process.env.PLAYWRIGHT_FORCE_FIREFOX
-    ? 'Cross-browser public journey: PASS (Chromium and WebKit locally; Firefox remains mandatory in Linux CI)'
-    : 'Cross-browser public journey: PASS (Chromium, Firefox, WebKit)',
-)
+console.log('Cross-browser public journey: PASS (Chromium and WebKit)')

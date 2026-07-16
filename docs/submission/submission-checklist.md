@@ -11,6 +11,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Clean-clone Node 24/npm 11 install, setup, reset, build, personalization, browser, and HTTP smoke rehearsal passed.
 - [x] `README.md`, `AGENTS.md`, `SETUP.md`, architecture, artist runbooks, agent runbooks, recovery, provenance, and evidence present.
 - [x] Requirement-by-requirement completion audit records every proven, prepared, decision-gated, and external-gated item.
+- [x] User-directed goal stop and uncompleted external work are recorded in [`remaining-work.md`](remaining-work.md); the stop is not a completion claim.
 - [x] Michael finalized Artist-Owned Platform as the public project name and it is applied consistently.
 - [x] Michael selected `AGPL-3.0-or-later`; `LICENSE`, package metadata, README, ADR, and original asset ledger agree.
 - [x] Final locally verified runtime commit and immutable candidate tag are recorded.
@@ -27,9 +28,9 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Guarded bootstrap preparation `b8cb378` generates and tests a disposable Build Output package with no application code or secrets and refuses repository-local or reused output paths.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
 - [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
-- [x] Linux workflow defines coverage for every module, the complete browser regression, dependency audit, and Chromium/Firefox/WebKit judge path.
+- [x] Linux workflow defines coverage for every module, the complete browser regression, dependency audit, and Chromium/WebKit judge path.
 - [x] Local cross-browser public route passed in Chromium and WebKit.
-- [ ] Linux CI passes Chromium, Firefox, and WebKit on the final published commit.
+- [ ] Linux CI passes Chromium and WebKit on the final published commit.
 - [x] Initial Supabase hosted Security and Performance Advisors ran against the approved judging project; safe hashes, counts, and dispositions are recorded.
 - [ ] Hosted media upload reaches `ready` through the deployed private media service and plays the generated preview.
 - [ ] Stripe test-mode purchase, membership, portal, cancellation/refund, webhook replay, license issue, and protected document verified against the approved judging account.

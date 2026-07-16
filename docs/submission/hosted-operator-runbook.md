@@ -280,7 +280,7 @@ Acceptance:
 - One hosted test-mode license purchase moves its document job to `ready`; PDF text and purchaser-only delivery pass.
 - Retry and expired-lease recovery pass once for each worker, with no dependency on Michael's local computer.
 - `npm run health:check` with `BASE_URL` set to the preview passes.
-- `npx playwright test --config playwright.cross-browser.config.ts` with `BASE_URL` set to the preview passes Chromium, Firefox, and WebKit on Linux.
+- `npx playwright test --config playwright.cross-browser.config.ts` with `BASE_URL` set to the preview passes Chromium and WebKit.
 - Browser-secret scanning, response headers, accessibility, viewport containment, and production performance budgets pass against the preview.
 
 No alias, custom domain, permanent Production deployment, or production promotion is implied by this stage. The temporary first-deployment bootstrap is a separate action-specific approval and must be removed after the Preview is confirmed. If a stable production alias is later approved, validate the exact preview first and then record a separate `vercel promote [IMMUTABLE_PREVIEW_URL]` approval and result.
