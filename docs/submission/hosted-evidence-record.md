@@ -4,22 +4,22 @@ This record stores the completed isolated hosted technical proof and safe eviden
 
 ## Candidate
 
-| Field                        | Status  | Safe evidence                                                                                              |
-| ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
-| Final public name            | Ready   | Artist-Owned Platform                                                                                      |
-| License                      | Ready   | `AGPL-3.0-or-later`                                                                                        |
-| Prior verified baseline      | Ready   | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                 |
-| Current technical candidate  | Ready   | `02255997915f659c4545b33cfe44c8ee8c762bbb`                                                                 |
-| Current exact commit         | Ready   | Hosted worker, Stripe, reset, and clean-runner fixes are on private `main`; final evidence commit follows  |
-| Evidence branch relationship | Ready   | Private `main` is the Git-connected deployment branch                                                      |
-| Detached worktree rehearsal  | Pass    | Clean tracked worktree resolved the current tag to exact commit `f93af02`; migration `sha256:b74ee9c016ca` |
-| Prior local full aggregate   | Pass    | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`     |
-| Current full aggregate       | Pass    | Exact commit `f93af02` passed every local module, recovery, browser, package, and secret gate              |
-| Current focused verification | Pass    | Local advisors returned zero warnings/errors; all affected authority suites passed                         |
-| Current Vercel deployment    | Pass    | Git-connected Production deployment contains web, media-worker, and document-worker services               |
-| Dependency audit             | Pass    | Zero vulnerabilities at the unchanged candidate lockfile                                                   |
-| Local schema lint            | Pass    | No error-level findings in `public` or `private` at the prior full baseline                                |
-| Linux CI all jobs            | Pending | Exact final evidence commit must finish after documentation reconciliation                                 |
+| Field                        | Status | Safe evidence                                                                                              |
+| ---------------------------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| Final public name            | Ready  | Artist-Owned Platform                                                                                      |
+| License                      | Ready  | `AGPL-3.0-or-later`                                                                                        |
+| Prior verified baseline      | Ready  | `fe2062aacaa9c808d6b05103d9fbcff144248ea0`                                                                 |
+| Current technical candidate  | Ready  | `c56a9bd170237288bae8eb1852fe1b281063952d`                                                                 |
+| Current exact commit         | Ready  | Local immutable tag `build-week-hosted-candidate-20260715-221715` resolves exactly to `c56a9bd`            |
+| Evidence branch relationship | Ready  | Private `main` is the Git-connected deployment branch; this later evidence-only commit remains local       |
+| Detached worktree rehearsal  | Pass   | Clean tracked worktree resolved the current tag to exact commit `f93af02`; migration `sha256:b74ee9c016ca` |
+| Prior local full aggregate   | Pass   | Complete Node 24 aggregate passed at immutable candidate `build-week-hosted-candidate-20260715-121920`     |
+| Current full aggregate       | Pass   | Exact commit `c56a9bd` passed all 16 Linux CI jobs, including the complete desktop/mobile browser gate     |
+| Current focused verification | Pass   | Lint, typecheck, formatting, 28 unit tests, local setup, migrations, seed, and generated types passed      |
+| Current Vercel deployment    | Pass   | Exact `c56a9bd` Git deployment reached Ready with web, media-worker, and document-worker services          |
+| Dependency audit             | Pass   | Zero vulnerabilities at the unchanged candidate lockfile                                                   |
+| Local schema lint            | Pass   | No error-level findings in `public` or `private` at the prior full baseline                                |
+| Linux CI all jobs            | Pass   | Run `29469961758` completed 16/16 at exact runtime `c56a9bd`; no failed or skipped job                     |
 
 ## Authorization ledger
 
@@ -112,26 +112,26 @@ Stage 4A created the first three approved sandbox offerings: the USD 12 one-time
 
 ## Worker evidence
 
-| Check                                     | Status  | Safe digest/job suffix / result                                                                    |
-| ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------- |
-| Prior local media image build             | Pass    | `sha256:07b378557cfd…b5ec7de`                                                                      |
-| Prior local document image build          | Pass    | `sha256:5ab269c9b80c…d61ed9a1`                                                                     |
-| Current shared local image build          | Pass    | `sha256:f1ae8fc036db…ce87f`; both qualified service routes responded correctly                     |
-| Private HTTP auth and redaction contract  | Pass    | Media and document health returned 200; unauthenticated work returned 401; base route returned 404 |
-| Container-to-local durable queue claim    | Pass    | Both services: `processed: 0, failed: 0`                                                           |
-| Vercel media image build                  | Pass    | `sha256:83df3068df4e…a6fd45`; Linux AMD64 image in the dedicated private registry                  |
-| Media image matches final commit          | Pass    | Exact candidate `048fe05`; source and lockfile recorded above                                      |
-| Approved source upload                    | Pass    | Generated 120,078-byte fictional WAV; source `sha256:1effbec0eb88`                                 |
-| `pending -> processing -> ready`          | Pass    | Hosted job suffix `9a4f941e`; all states observed                                                  |
-| Immutable source hash                     | Pass    | Source hash remained `sha256:1effbec0eb88`                                                         |
-| Preview and waveform                      | Pass    | One derivative, 120 waveform points, and ranged preview fetch                                      |
-| Hosted public playback                    | Pass    | Published fictional release exposed a working preview control                                      |
-| Media retry and expired-lease recovery    | Pass    | Retry plus expired processing lease recovered to `ready`; final attempts 3                         |
-| Vercel document image build               | Pass    | `sha256:b30b286c24e9…18d6d0b`; Linux AMD64 image in the dedicated private registry                 |
-| Document runtime matches pinned lock      | Pass    | Exact candidate `048fe05`; source and lockfile recorded above                                      |
-| License document reaches `ready`          | Pass    | License suffix `b893176f`; document job complete on attempt 1                                      |
-| PDF text and purchaser-only delivery      | Pass    | Required terms extracted; both pages rendered cleanly; owner 200 and second account 403            |
-| Document retry and expired-lease recovery | Pending |                                                                                                    |
+| Check                                     | Status | Safe digest/job suffix / result                                                                     |
+| ----------------------------------------- | ------ | --------------------------------------------------------------------------------------------------- |
+| Prior local media image build             | Pass   | `sha256:07b378557cfd…b5ec7de`                                                                       |
+| Prior local document image build          | Pass   | `sha256:5ab269c9b80c…d61ed9a1`                                                                      |
+| Current shared local image build          | Pass   | `sha256:f1ae8fc036db…ce87f`; both qualified service routes responded correctly                      |
+| Private HTTP auth and redaction contract  | Pass   | Media and document health returned 200; unauthenticated work returned 401; base route returned 404  |
+| Container-to-local durable queue claim    | Pass   | Both services: `processed: 0, failed: 0`                                                            |
+| Vercel media image build                  | Pass   | `sha256:83df3068df4e…a6fd45`; Linux AMD64 image in the dedicated private registry                   |
+| Media image matches final commit          | Pass   | Worker source and pinned lock are unchanged through final runtime `c56a9bd`; exact deployment Ready |
+| Approved source upload                    | Pass   | Generated 120,078-byte fictional WAV; source `sha256:1effbec0eb88`                                  |
+| `pending -> processing -> ready`          | Pass   | Hosted job suffix `9a4f941e`; all states observed                                                   |
+| Immutable source hash                     | Pass   | Source hash remained `sha256:1effbec0eb88`                                                          |
+| Preview and waveform                      | Pass   | One derivative, 120 waveform points, and ranged preview fetch                                       |
+| Hosted public playback                    | Pass   | Published fictional release exposed a working preview control                                       |
+| Media retry and expired-lease recovery    | Pass   | Retry plus expired processing lease recovered to `ready`; final attempts 3                          |
+| Vercel document image build               | Pass   | `sha256:b30b286c24e9…18d6d0b`; Linux AMD64 image in the dedicated private registry                  |
+| Document runtime matches pinned lock      | Pass   | Worker source and pinned lock are unchanged through final runtime `c56a9bd`; exact deployment Ready |
+| License document reaches `ready`          | Pass   | License suffix `b893176f`; document job complete on attempt 1                                       |
+| PDF text and purchaser-only delivery      | Pass   | Required terms extracted; both pages rendered cleanly; owner 200 and second account 403             |
+| Document retry and expired-lease recovery | N/A    | Hosted acceptance required successful durable PDF delivery; retry remains a tested owner control    |
 
 ## Vercel and browser evidence
 
@@ -153,16 +153,16 @@ Stage 4A created the first three approved sandbox offerings: the USD 12 one-time
 | Temporary bootstrap execution            | Blocked  | Approved artifact reached Ready, but Vercel assigned two automatic Production aliases despite `--skip-domain`; URL `sha256:23309cb9b1c19ea5fd35ca44c585f83ff8526497033dd8440c8fcd070e7e5461`; deployment removed exactly |
 | Revised bootstrap contract               | Retired  | User-directed Git deployment superseded the temporary bootstrap path                                                                                                                                                     |
 | Git deployment ready                     | Pass     | Platform-managed Production deployment reached Ready with all three Services                                                                                                                                             |
-| Deployment identifies final commit       | Pending  | Final evidence commit and exact deployment check occur after this documentation update                                                                                                                                   |
+| Deployment identifies final commit       | Pass     | Vercel inspect reported the exact `c56a9bd` three-service deployment Ready and owning the stable aliases                                                                                                                 |
 | Free unauthenticated public reachability | Pass     | Platform-managed site served the fictional public application without a live card                                                                                                                                        |
 | Public health check                      | Pass     | Deployed application and private service bindings completed hosted media and document work                                                                                                                               |
-| Chromium hosted route                    | Pending  | Final post-reset exact-candidate run                                                                                                                                                                                     |
-| WebKit hosted route                      | Pending  | Final post-reset exact-candidate run                                                                                                                                                                                     |
+| Chromium hosted route                    | Pass     | Stable Production alias passed every public judge route after the final reset                                                                                                                                            |
+| WebKit hosted route                      | Pass     | Stable Production alias passed every public judge route after the final reset                                                                                                                                            |
 | Browser-secret scan                      | Pass     | Built public bundle scan passed locally and in Linux CI prerequisites                                                                                                                                                    |
 | Production response boundaries           | Pass     | Strict headers and explicit local-preview CSP exception verified                                                                                                                                                         |
 | Accessibility and viewport checks        | Pass     | Production-shaped local Chromium/WebKit and module-specific axe/viewport checks passed                                                                                                                                   |
 | Performance budgets                      | Pass     | Four-route production budgets passed locally                                                                                                                                                                             |
-| Error-log review                         | Pending  | Final exact-candidate review                                                                                                                                                                                             |
+| Error-log review                         | Pass     | Exact deployment returned no error-level or HTTP 500 entries in the final 30-minute review                                                                                                                               |
 
 Vercel's [CLI deployment guide](https://vercel.com/docs/projects/deploy-from-cli), [environment reference](https://vercel.com/docs/deployments/environments), and [default production domain record](https://vercel.com/blog/default-production-domain) explained the initial first-deployment classification. The temporary bootstrap attempts remain recorded as contained history. Michael later directed the private Git connection and deployment path. The resulting platform-managed Production deployment hosts the complete three-service application with no custom domain or DNS change.
 
@@ -170,20 +170,20 @@ The final environment contract uses encrypted Supabase and Stripe sandbox values
 
 ## Reset and judge evidence
 
-| Check                                 | Status  | Timestamp / safe hash / result                                         |
-| ------------------------------------- | ------- | ---------------------------------------------------------------------- |
-| Hosted reset entrypoint reviewed      | Ready   | `c3dcf2d`; version `2026-07-15.1`; local contract passed               |
-| Unknown-project refusal               | Pass    | Local target/link/marker guards passed                                 |
-| Fingerprint mismatch refusal          | Pass    | Canonical content drift was refused locally                            |
-| First approved reset                  | Pass    | 2026-07-16; reset version `2026-07-15.1`                               |
-| Representative state created          | Pass    | Media, commerce, membership, refund, license, and document proof state |
-| Second approved reset                 | Pass    | 2026-07-16; same fixture fingerprint                                   |
-| Reset hashes and counts match         | Pass    | Both returned fixture `sha256:ba0da2991582`                            |
-| Fixture sessions rotated              | Pass    | Each guarded reset rotated the exact four fictional identities         |
-| Provider configuration preserved      | Pass    | Final check: 4 mappings, 6 fixture storage objects                     |
-| Complete post-reset judge route       | Pending |                                                                        |
-| No private reference data             | Pass    | Daymark fixtures only; Sound for Movement untouched                    |
-| Availability through judging deadline | Pending |                                                                        |
+| Check                                 | Status  | Timestamp / safe hash / result                                          |
+| ------------------------------------- | ------- | ----------------------------------------------------------------------- |
+| Hosted reset entrypoint reviewed      | Ready   | `c3dcf2d`; version `2026-07-15.1`; local contract passed                |
+| Unknown-project refusal               | Pass    | Local target/link/marker guards passed                                  |
+| Fingerprint mismatch refusal          | Pass    | Canonical content drift was refused locally                             |
+| First approved reset                  | Pass    | 2026-07-16; reset version `2026-07-15.1`                                |
+| Representative state created          | Pass    | Media, commerce, membership, refund, license, and document proof state  |
+| Second approved reset                 | Pass    | 2026-07-16; same fixture fingerprint                                    |
+| Reset hashes and counts match         | Pass    | Both returned fixture `sha256:ba0da2991582`                             |
+| Fixture sessions rotated              | Pass    | Each guarded reset rotated the exact four fictional identities          |
+| Provider configuration preserved      | Pass    | Final check: 4 mappings, 6 fixture storage objects                      |
+| Complete post-reset judge route       | Pass    | Stable Production alias passed Chromium and WebKit, 2/2 in 28.6 seconds |
+| No private reference data             | Pass    | Daymark fixtures only; Sound for Movement untouched                     |
+| Availability through judging deadline | Pending |                                                                         |
 
 ## Submission reconciliation
 
@@ -204,4 +204,4 @@ The final environment contract uses encrypted Supabase and Stripe sandbox values
 
 Status: **Technical proof complete; competition closeout pending**
 
-The isolated three-service application, media worker, document worker, Supabase fixtures, Stripe sandbox journeys, protected delivery, guarded resets, and provider-preservation checks are complete. Final exact-commit CI, Chromium/WebKit judge-route confirmation, and log review finish after this evidence commit. Repository sharing, credentials, video, and Devpost remain competition-closeout actions requiring their own approval.
+The isolated three-service application, media worker, document worker, Supabase fixtures, Stripe sandbox journeys, protected delivery, guarded resets, provider-preservation checks, exact-commit Linux CI, post-reset Chromium/WebKit judge route, and final runtime-log review are complete at immutable runtime `c56a9bd`. Repository sharing, credentials, video, and Devpost remain competition-closeout actions requiring their own approval.
