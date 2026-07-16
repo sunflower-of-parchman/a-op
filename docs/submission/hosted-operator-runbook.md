@@ -2,6 +2,8 @@
 
 This runbook turns the prepared local platform into a dedicated, fictional judging installation. It is an execution contract, not authorization. Every stage that creates, links, writes, deploys, shares, publishes, or promotes external state begins only after Michael records approval for that specific stage in [`submission-checklist.md`](submission-checklist.md).
 
+Execution note, July 16, 2026: Michael later directed the private Git-connected deployment path, which superseded the temporary bootstrap stages below. The complete three-service technical proof and two guarded resets are recorded in [`hosted-evidence-record.md`](hosted-evidence-record.md). Keep the historical bootstrap instructions for auditability; do not rerun them.
+
 The operator deploys from a clean detached worktree at the immutable candidate tag and records safe results on the ordinary evidence branch in [`hosted-evidence-record.md`](hosted-evidence-record.md). Evidence-only commits may follow the tag, but they never enter the candidate worktree. Secrets stay in provider secret stores or ignored operator environment files. Command output copied into the repository must be redacted first.
 
 ## Fixed boundaries
@@ -9,7 +11,7 @@ The operator deploys from a clean detached worktree at the immutable candidate t
 - Use only dedicated Build Week resources containing Daymark Assembly and hosted fixture identities.
 - Do not connect Sound for Movement production services, media, accounts, customers, domains, or credentials.
 - Keep Stripe in a sandbox or test mode. No live card, live price, or live webhook is accepted.
-- Keep the first Vercel deployment on its immutable preview URL. Production aliasing, a custom domain, and `vercel promote` are separate approvals.
+- Use only the existing private Git-connected Vercel project and platform-managed aliases. A custom domain, DNS change, and `vercel promote` remain separate approvals.
 - Apply only tracked forward Supabase migrations. Never run `supabase db reset --linked` or `supabase db reset --db-url`.
 - Do not copy the local `.local` fixture credentials into a hosted installation.
 - Store only redacted resource references, result counts, timestamps, commit hashes, and test identifiers in the repository.

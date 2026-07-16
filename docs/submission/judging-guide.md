@@ -66,6 +66,6 @@ The complete evidence map is [`capability-evidence.md`](capability-evidence.md).
 
 ## Hosted route
 
-The local demonstration is complete. The public Vercel/Supabase/Stripe-test judging environment, hosted worker proof, Supabase advisor run, and private hosted fixture credentials remain approval-gated external actions. Their exact topology, redaction rules, reset contract, and verification sequence are prepared in [`hosted-test-plan.md`](hosted-test-plan.md).
+The local demonstration and isolated hosted technical proof are complete. Vercel, Supabase, Stripe sandbox, both private workers, protected delivery, account isolation, and two guarded resets are recorded in [`hosted-evidence-record.md`](hosted-evidence-record.md). Sharing the hosted URL or credentials remains a separate competition-closeout approval.
 
 No public URL or hosted proof should be claimed until those steps have actually passed and Michael has approved sharing access.

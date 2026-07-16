@@ -87,7 +87,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Support the complete musician-operated catalog; keep source media immutable; require rights approval before import; preserve authored release and collection order; use one worker implementation locally and in a deployed container; keep listener libraries private by account.
 - Material contribution: Catalog and media schema; release, track, credit, artwork, and collection administration; draft-safe atomic publication; direct signed TUS uploads; durable leased processing jobs; shared ffmpeg worker and Docker entrypoint; rights-gated idempotent Codex import; public catalog and persistent player; customer favorites, atomic playlists, and listening history.
 - Commits: `bc89195`, `021bc7a`, `ea7c0f9`, `fd17435`, `57587c1`, `db4e560`, and `21476f6`.
-- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:catalog`, production build, browser-secret scan, and desktop/mobile catalog, administration, upload, customer-isolation, viewport, and accessibility journeys passed. The same worker passed local direct and Docker image execution. Hosted deployment evidence remains pending Michael's explicit approval.
+- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:catalog`, production build, browser-secret scan, and desktop/mobile catalog, administration, upload, customer-isolation, viewport, and accessibility journeys passed. The same worker passed local direct and Docker image execution. At this milestone, hosted deployment evidence still awaited Michael's explicit approval; the later closeout entry records completion.
 
 ### Milestone 5 commerce and memberships — 2026-07-15
 
@@ -96,7 +96,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Preserve the complete artist-owned commerce system; keep the application authoritative for offerings and access; use artist-owned Stripe accounts only after approval; never let a browser redirect grant access; keep live mode outside routine development and judging.
 - Material contribution: Service-neutral offerings and mappings; free, external, one-time, and recurring purchase paths; server-created Stripe Checkout and portal sessions; raw-body signed webhook verification; replay-safe atomic orders, subscriptions, refunds, cancellations, and entitlements; explicit expired and revoked decisions; protected downloads; redacted webhook-failure recovery; owner operations; deterministic local simulation; and artist setup guidance.
 - Commit: `058201c` (`Build commerce and membership authority`).
-- Verification: `npm run setup:check`, `npm run verify:commerce`, Supabase schema lint with no findings, type checking, application lint, production build, and desktop/mobile commerce, owner-mapping, account-isolation, viewport, and accessibility journeys passed. Stage 4A later verified test-only download and membership products, prices, and owner mappings; hosted transactional journeys remain pending.
+- Verification: `npm run setup:check`, `npm run verify:commerce`, Supabase schema lint with no findings, type checking, application lint, production build, and desktop/mobile commerce, owner-mapping, account-isolation, viewport, and accessibility journeys passed. Stage 4A later verified test-only download and membership products, prices, and owner mappings; the hosted closeout entry records the subsequent transactional proof.
 
 ### Milestone 6 music licensing — 2026-07-15
 
@@ -105,7 +105,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Let artists publish complete supported uses; keep identity, rights, terms, prices, accounts, and external payment connections under human authority; automate only explicit non-exclusive options; route unusual or exclusive uses to inquiry; preserve private customer documents.
 - Material contribution: Versioned immutable templates and options; exact pre-checkout selection snapshots; license-specific local and Stripe test checkout paths; replay-safe atomic issue, document-job, and entitlement creation; refund revocation; private ReportLab PDF worker with leases and recovery; customer account history and protected signed delivery; owner publication and retry controls; public inquiry routing; CI and artist runbook.
 - Commit: `d6991d2` (`Build music licensing and private documents`).
-- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:licensing`, type checking, application lint, production build, browser-secret scan, PDF text extraction and two-page visual inspection, and four passing desktop/mobile licensing journeys with two intentional shared-database skips. Stage 4A later verified the test-only dance-film license mapping, and Stage 4A-2 verified the test-only live-performance license mapping; hosted license Checkout remains pending.
+- Verification: Clean migration reset and generated types, Supabase schema lint with no findings, `npm run verify:licensing`, type checking, application lint, production build, browser-secret scan, PDF text extraction and two-page visual inspection, and four passing desktop/mobile licensing journeys with two intentional shared-database skips. Stage 4A later verified both test-only license mappings; the hosted closeout entry records the subsequent Checkout and protected-document proof.
 
 ### Milestone 7 learning, video, and editorial publishing — 2026-07-15
 
@@ -168,7 +168,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Lead with the musician's reason for the project; describe the work as human-directed and agent-coded; state local and external proof honestly; keep every deployment, share, video, and submission action separate and approval-gated.
 - Material contribution: Project description, complete judging guide, redacted hosted-test plan, 2:55 spoken demo script, evidence timecode table, submission checklist, final authorization record, and clean-clone evidence.
 - Commit: `0ab2c9e` (`Prepare Build Week judging materials`).
-- Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries, both independently and inside the passing full repository aggregate. Hosted results, Linux CI result, `/feedback` confirmation, recorded timecodes, video, public access, and Devpost confirmation remain pending their named external actions.
+- Verification: `npm run test:docs` passed all tracked root, documentation, and plan links plus required submission artifacts, screenshots, asset provenance, and fictional-data boundaries, both independently and inside the passing full repository aggregate. Hosted technical results are recorded below; `/feedback`, timecodes, video, judge sharing, and Devpost remain deferred competition-closeout actions.
 
 ### Completion audit, optional OAuth, and CI closure — 2026-07-15
 
@@ -281,6 +281,14 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Michael directed the task to connect Git and then explicitly requested a commit and push. Public repository access, judge sharing, custom domains, and later submission actions remain separately controlled.
 - Material contribution: Verified the clean local repository had no remote; created the exact matching private GitHub repository; attached it as `origin`; pushed committed `main`; selected only that repository in Vercel; and confirmed the successful Git connection.
 - Verification: GitHub reports `sunflower-of-parchman/artist-owned-platform-build-week` as private with `main` as the default branch. Vercel displays that exact repository as connected and its Deployments page reported no results immediately afterward. No Sound for Movement repository, code, provider resource, domain, or public access changed.
+
+### Hosted technical closeout — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael approved the isolated technical fixes and hosted proof, deferred competition closeout, preserved Chrome/Chromium plus Safari/WebKit as the complete browser matrix, and required Sound for Movement to remain untouched.
+- Material contribution: Repaired clean-runner prerequisites and production-preview verification; completed the private Git-connected Vercel environment; configured the exact Stripe sandbox webhook and portal; added `refund.created` fulfillment; reconciled Stripe's dated `cancel_at` portal representation; proved the media and document workers; completed purchase, membership, cancellation, refunds, replay, license, PDF, and account-isolation journeys; consolidated Supabase type generation to one CI job; and taught the guarded reset to exclude transactional license documents while preserving artist catalog drift refusal.
+- Verification: Hosted media observed `pending`, `processing`, `ready`, retry, and expired-lease recovery with one derivative and 120 waveform points. Stripe sandbox produced one durable replay-safe event, full-refund revocation, terminal membership access removal, zero unresolved webhook failures, and a protected two-page license PDF that passed text extraction, both-page visual inspection, purchaser access, and second-account 403. The hosted reset then passed twice at fixture `sha256:ba0da2991582`; the final check restored four fictional accounts, four provider mappings, and six fixture storage objects. No custom domain, DNS, live Stripe, email, paid plan, public share, or Sound for Movement change occurred.
 
 ## Submission reconciliation
 

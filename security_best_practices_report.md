@@ -40,4 +40,4 @@ The application-level limiter uses an in-process LRU driver. Hosted installation
 - `npm run test:e2e`: all 11 isolated specifications passed across desktop and mobile projects after deterministic resets.
 - `npm run build`, unit tests, lint, and typecheck passed after hardening.
 
-Hosted Supabase advisors, deployed headers, Stripe sandbox behavior, and the deployed media worker remain approval-gated external verification. They are not represented as completed local evidence.
+Hosted Supabase advisors, deployed headers, Stripe sandbox behavior, and the deployed private workers have now been verified against the isolated Build Week resources. The accepted remaining advisor warning is plan-limited leaked-password protection on Supabase Free.

@@ -41,7 +41,7 @@ The judge package gate is:
 npm run verify:package
 ```
 
-On macOS, the local cross-browser gate runs Chromium and WebKit. Linux CI additionally requires Firefox because the current Playwright Firefox runtime fails before page creation on this macOS host.
+The supported browser matrix is Chrome/Chromium and Safari/WebKit on macOS and Linux CI. Firefox is outside this project's verification contract.
 
 ## Security reports
 
@@ -49,4 +49,4 @@ Do not open a public issue containing an exploitable vulnerability, credential, 
 
 ## License status
 
-The repository remains `UNLICENSED` until Michael selects the open-source license and explicitly approves publication. Contribution and redistribution terms become effective only after that license is committed.
+The repository is licensed under `AGPL-3.0-or-later`. Publication and judge access remain separate Michael-controlled actions.

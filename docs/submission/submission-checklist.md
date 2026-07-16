@@ -33,8 +33,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Local cross-browser public route passed in Chromium and WebKit.
 - [ ] Linux CI passes Chromium and WebKit on the final published commit.
 - [x] Initial Supabase hosted Security and Performance Advisors ran against the approved judging project; safe hashes, counts, and dispositions are recorded.
-- [ ] Hosted media upload reaches `ready` through the deployed private media service and plays the generated preview.
-- [ ] Stripe test-mode purchase, membership, portal, cancellation/refund, webhook replay, license issue, and protected document verified against the approved judging account.
+- [x] Hosted fictional media upload reached `ready` through the deployed private media service; waveform, preview, playback, retry, and expired-lease recovery passed.
+- [x] Stripe sandbox purchase, membership, portal scheduling, terminal cancellation, partial/full refunds, webhook replay, license issue, protected PDF, and cross-account denial passed.
 
 ## Judging access
 
@@ -47,7 +47,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael approved and the primary task completed Stage 4A creation of three test-only Stripe products and prices plus owner-authorized mappings for the album download, dance-film license, and monthly membership on July 15, 2026.
 - [x] Michael separately approved and the primary task completed Stage 4A-2 creation and owner-authorized mapping of the USD 125 live-performance license, bringing the published sandbox catalog to four products, four prices, and four mappings on July 15, 2026.
 - [x] Michael approved Stage 6 deployment of one immutable Preview. The three-service Preview build completed, but Vercel classified both the default and explicit `--target preview` deployment attempts as Production while Building. Both were removed immediately, a third attempt was not made, and the exact project returned to zero deployments.
-- [x] Read-only provider and official-document investigation established Vercel's automatic first-deployment Production promotion as the cause; the project remains Git-unlinked with zero deployments and aliases.
+- [x] Read-only provider and official-document investigation established Vercel's automatic first-deployment Production promotion as the cause; at that historical checkpoint the project was Git-unlinked with zero deployments and aliases.
 - [x] Michael separately approved one temporary Production-classified `--skip-domain` bootstrap. The no-application artifact reached Ready, but Vercel assigned two automatic Production aliases; the exact deployment was removed immediately and the project returned to zero deployments, `live: false`, and zero aliases.
 - [x] Official documentation and pinned CLI inspection established that `--skip-domain` disables custom Production-domain auto-assignment only; the hardened local revision adds no-store and restrictive security/privacy headers and expects only Vercel-managed platform URLs.
 - [x] Michael approved and the primary task applied exactly the reviewed policy migration to the isolated hosted Supabase project.
@@ -55,8 +55,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Existing Auth entitlement checked: the isolated Build Week organization is on Free, so the Pro-or-higher feature is unavailable. The limitation is documented and hosted advisors were rerun once more afterward without changing provider state.
 - [x] Michael directed creation of the matching private GitHub repository, push of committed `main`, and connection of that exact repository to Vercel. The connection succeeded with zero deployments; public access and judge sharing remain separate approvals.
 - [x] The revised temporary-bootstrap proposal is superseded by Michael's user-directed Git deployment path. The original no-domain bootstrap contract must not be retried.
-- [ ] Exact final commit deployed and verified.
-- [ ] Hosted reset passes twice and the judge route passes afterward.
+- [x] Private Git-connected three-service application deployed and completed the hosted worker and Stripe proof.
+- [x] Hosted reset passed twice with the same fixture fingerprint; final check restored 4 accounts, 4 mappings, and 6 storage objects.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
 - [ ] Site is free, requires no live payment method, and remains available through August 5, 2026 at 6:00 PM Mountain.
 - [ ] Repository is public under the selected license, or private access is shared with `testing@devpost.com` and `build-week-event@openai.com` after Michael's approval.
@@ -93,10 +93,10 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | Run read-only hosted Supabase advisors  | Executed | Safe result hashes and counts recorded; no provider state changed                                          |
 | Apply advisor policy migration          | Executed | Exact forward migration `20260715231631`; 12/12 history, clean lint, and hosted fixture integrity verified |
 | Enable leaked-password protection       | Disposed | Build Week organization is on Free; Pro-or-higher feature unavailable; no plan or billing change           |
-| Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                         |
+| Build/deploy Services application       | Executed | Michael directed private Git deployment; three bound services reached Ready                                |
 | Create and connect private Git remote   | Executed | Private GitHub repository created; committed `main` pushed; exact repository connected to Vercel           |
 | Execute temporary Vercel bootstrap      | Retired  | User-directed Git deployment path supersedes this prepared workaround                                      |
-| Promote final deployment                | Pending  | Approved URL and deployment commit                                                                         |
+| Custom domain or DNS                    | Not done | Not authorized or required; platform-managed project aliases only                                          |
 | Share repository or judge credentials   | Pending  | Devpost access record                                                                                      |
 | Publish YouTube video                   | Pending  | Public video URL                                                                                           |
 | Submit Devpost entry                    | Pending  | Submission confirmation                                                                                    |

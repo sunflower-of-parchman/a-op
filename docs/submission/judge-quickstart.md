@@ -67,7 +67,7 @@ The full local gate is `npm run verify`. It verifies every product module, Integ
 
 ## What remains external
 
-The repository contains real Stripe adapters and one local/container media worker. Hosted Stripe test-mode proof, deployed-worker proof, Supabase advisor evidence, public deployment, DNS, repository publication, video upload, and Devpost submission change external state. They remain pending Michael's explicit approval and are never silently replaced with decorative success states.
+The repository contains real Stripe adapters plus deployed private media and document workers. The isolated hosted proof covers Stripe sandbox fulfillment, worker processing, protected delivery, guarded reset, and account isolation. Custom DNS, live Stripe mode, repository or credential sharing, video upload, and Devpost submission remain separate Michael-controlled actions.
 
 ## Evidence map
 

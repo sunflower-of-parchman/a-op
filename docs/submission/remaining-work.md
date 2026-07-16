@@ -1,27 +1,31 @@
-# Remaining work after goal resume
+# Remaining work after technical closeout
 
-Michael stopped the active long-running Build Week goal on July 15, 2026. This checkpoint is an honest handoff, not a completion claim. Chrome/Chromium and Safari/WebKit are the supported browser matrix; Firefox is outside the project contract and must not be added to local or CI verification.
+Michael resumed the Build Week goal on July 15, 2026 and authorized the isolated hosted technical proof. Chrome/Chromium and Safari/WebKit are the supported browser matrix. Firefox is outside the project contract and must not be added to local or CI verification.
 
-The repository is locally implemented, the current immutable runtime candidate is `build-week-hosted-candidate-20260715-175142` at `f93af023daf41a59c86251b471219b9a6eed4afc`, and the isolated hosted Supabase project has exact 12/12 migration parity with zero database-policy warnings. The latest evidence commit before the stop was `7ef7906`. Michael resumed the work on July 15, 2026, with every external-action boundary preserved.
+## Completed technical work
 
-## Completed after the stop
+- [x] Private GitHub `main` is connected to the isolated Vercel Services project and deploys the Nuxt application, private media worker, and private document worker.
+- [x] Production and Preview use the complete encrypted Supabase, Stripe sandbox, worker, webhook, and canonical-site configuration. No custom domain, DNS, live Stripe mode, email, or paid resource was added.
+- [x] The hosted media worker processed one generated fictional WAV through `pending -> processing -> ready`, produced a 120-point waveform and one playable derivative, and passed retry plus expired-lease recovery.
+- [x] Stripe sandbox proved one-time purchase, signed fulfillment, same-event replay idempotency, membership activation, customer-portal scheduled cancellation, terminal access removal, partial-refund access preservation, full-refund revocation, license checkout, protected PDF delivery, and cross-account denial.
+- [x] The document worker produced a two-page protected license PDF. Text extraction found the frozen fictional artist, licensee, project, track, price, supported use, and terms; both rendered pages were visually inspected without clipping or overlap.
+- [x] Refund handling accepts Stripe's required `refund.created` event as well as later `refund.updated` changes. Scheduled portal cancellations reconcile either `cancel_at_period_end` or Stripe's dated `cancel_at` representation.
+- [x] The guarded hosted reset excludes transactional license documents from artist catalog drift, continues to refuse real catalog changes, passed its disposable local contract, then reset the isolated hosted project twice with the same fixture fingerprint.
+- [x] The final hosted check restored four rotated fictional accounts, four Stripe mappings, and six fixture storage objects at reset contract `2026-07-15.1`. Sound for Movement remained untouched.
+- [x] Clean-runner verification now installs FFmpeg where required, builds before browser-secret scanning, uses a local production preview for Chromium/WebKit, and generates tracked Supabase types in one dedicated CI job instead of parallel registry pulls.
 
-- [x] Confirmed through the isolated Supabase dashboard that the Build Week organization is on the Free Plan. Supabase documents leaked-password protection as a Pro-or-higher feature, so the existing bounded approval could not enable it. The setting, plan, and billing remained unchanged. A final hosted advisor run at `2026-07-16T00:35:35Z` returned 0 errors, 0 database-policy warnings, 1 plan-limited Auth warning, and 124 information items at safe report hash `sha256:eb42bced1055`.
-- [x] Created private GitHub repository `sunflower-of-parchman/artist-owned-platform-build-week`, pushed the clean committed `main` branch, and connected that exact repository to the isolated Vercel project under Michael's direction. Vercel confirmed the Git connection while still reporting zero deployments. Public repository access and judge sharing remain separate approvals.
+## Deferred competition closeout
 
-## Remaining approval and evidence items
+The following items are intentionally deferred until iteration and submission closeout:
 
-1. Push the Git-connection evidence checkpoint under Michael's explicit commit-and-push instruction, then inspect and verify the first Git-triggered Vercel deployment. The earlier no-domain bootstrap contract remains retired; do not create a custom domain or share access implicitly.
-2. Prove the hosted private media worker by taking one approved fictional upload through `pending -> processing -> ready`, then verify its preview, waveform, playback, retry, and expired-lease recovery.
-3. Complete Stripe test-mode purchase, membership, portal cancellation, refund, webhook replay, license issue, protected PDF delivery, and cross-account denial against the isolated judging resources. Do not use live mode.
-4. Run the hosted reset twice, verify fixture and provider preservation, and complete the judge route in Chromium and WebKit.
-5. Run the final remote Linux CI on the exact publication candidate in Chromium and WebKit after repository publication or private judge-access approval.
-6. Confirm the final `/feedback` Session ID, record and inspect the under-three-minute video, and add real timecodes to the capability evidence.
-7. Obtain separate approvals for repository or judge access, YouTube publication, Devpost preview, and Devpost submission. Preserve final confirmation before July 21, 2026 at 6:00 PM Mountain.
+1. Confirm the final `/feedback` Session ID and reconcile final Sol/Pro metadata language.
+2. Record and inspect the under-three-minute video, then add real capability-evidence timecodes.
+3. Obtain separate approvals for repository or judge access, YouTube publication, Devpost preview, and Devpost submission.
+4. Preserve final submission confirmation before July 21, 2026 at 6:00 PM Mountain.
 
-## Stop-state boundaries
+## Boundaries
 
 - No Firefox verification remains.
-- No Docker image download or isolated Firefox/Nuxt process remains running from this task.
-- No Vercel deployment, public URL, custom domain, DNS, live Stripe, email, repository publication, video upload, judge share, or Devpost submission is authorized by this checkpoint.
-- Sound for Movement remains untouched.
+- No custom domain, DNS change, live Stripe object, email, paid plan, social post, public video, judge credential share, or Devpost submission was performed.
+- The private repository and Vercel deployment are technical infrastructure, not publication approval.
+- Sound for Movement code, tables, resources, branding, customer data, and media remain untouched.
