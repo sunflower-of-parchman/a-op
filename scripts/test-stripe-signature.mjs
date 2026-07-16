@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { createStripeClient, stripeApiVersion, verifyStripeEvent } from '../server/utils/stripe.ts'
+import { requiredStripeEventTypes } from '../shared/stripeEvents.ts'
 
 const secret = 'whsec_local_signature_test_only'
 const payload = JSON.stringify({
@@ -21,8 +22,18 @@ try {
   assert.equal(event.id, 'evt_signature_test')
   assert.throws(() => verifyStripeEvent(`${payload} `, signature, secret))
   assert.throws(() => verifyStripeEvent(payload, signature, `${secret}-wrong`))
+  assert.deepEqual(requiredStripeEventTypes, [
+    'checkout.session.completed',
+    'checkout.session.expired',
+    'invoice.paid',
+    'customer.subscription.created',
+    'customer.subscription.updated',
+    'customer.subscription.deleted',
+    'refund.created',
+    'refund.updated',
+  ])
   console.log(
-    'Stripe signature boundary: PASS (raw body accepted, tampering and wrong secret denied)',
+    'Stripe signature boundary: PASS (raw body, required events, tampering and wrong secret)',
   )
 } catch (error) {
   console.error(

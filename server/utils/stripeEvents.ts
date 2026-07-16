@@ -170,6 +170,7 @@ export async function handleStripeEvent(event: H3Event, stripeEvent: Stripe.Even
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted':
       return reconcileSubscription(event, stripeEvent, stripeEvent.data.object)
+    case 'refund.created':
     case 'refund.updated':
       return reconcileRefund(event, stripeEvent, stripeEvent.data.object)
     case 'checkout.session.expired': {
