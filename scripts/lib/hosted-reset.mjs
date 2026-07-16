@@ -361,10 +361,12 @@ export async function buildFixtureFingerprint(admin) {
   ]
 
   const entries = await Promise.all(
-    selections.map(async ([table, columns]) => [
-      table,
-      stableRows(await selectRows(admin, table, columns)),
-    ]),
+    selections.map(async ([table, columns]) => {
+      const rows = await selectRows(admin, table, columns)
+      const fixtureRows =
+        table === 'media_objects' ? rows.filter(({ kind }) => kind !== 'license_document') : rows
+      return [table, stableRows(fixtureRows)]
+    }),
   )
   const products = await selectRows(admin, 'products', 'id,slug')
   const productSlugs = new Map(products.map((product) => [product.id, product.slug]))

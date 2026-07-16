@@ -203,6 +203,24 @@ async function runHostedResetContract() {
     .eq('slug', 'about')
   assert.ifError(driftRestoreError)
 
+  const { error: transactionalDocumentError } = await admin.from('media_objects').insert({
+    kind: 'license_document',
+    bucket_id: 'licenses',
+    object_path: 'hosted-reset-proof/transactional-license.pdf',
+    media_type: 'application/pdf',
+    byte_size: 128,
+    sha256: 'a'.repeat(64),
+    status: 'ready',
+    is_public: false,
+    metadata: { fixture: false, transactional: true },
+  })
+  assert.ifError(transactionalDocumentError)
+  assert.equal(
+    await buildFixtureFingerprint(admin),
+    expectedFingerprint,
+    'Transactional license documents must not look like artist catalog drift',
+  )
+
   async function createRepresentativeState() {
     const { error } = await admin.from('analytics_events').insert({
       id: randomUUID(),
