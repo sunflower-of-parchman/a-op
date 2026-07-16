@@ -4,14 +4,44 @@ import { gotoHydrated } from './helpers'
 
 test('preserves authored catalog order and one player across routes', async ({ page }) => {
   await gotoHydrated(page, '/music')
-  const releaseTracks = page.locator('.compact-tracklist li')
-  await expect(releaseTracks).toHaveText([
-    '01First Light, Repeated',
-    '02A Measure of Distance',
-    '03Turn Toward Home',
+  const trackTitles = page.locator('.music-track-row__title')
+  await expect(trackTitles).toHaveText([
+    'First Light, Repeated',
+    'A Measure of Distance',
+    'Turn Toward Home',
   ])
 
-  await page.getByRole('link', { name: 'Lines We Carry', exact: true }).click()
+  await page.getByLabel('Meter').selectOption('3/4')
+  await expect(trackTitles).toHaveText(['A Measure of Distance'])
+  await page.getByRole('button', { name: 'Clear filters' }).click()
+  await page.getByLabel('Sort tracks').selectOption('tempo_desc')
+  await expect(trackTitles).toHaveText([
+    'Turn Toward Home',
+    'First Light, Repeated',
+    'A Measure of Distance',
+  ])
+  await page.getByLabel('Sort tracks').selectOption('authored')
+
+  const musicViews = page.getByRole('navigation', { name: 'Music catalog views' })
+  await musicViews.getByRole('button', { name: /Collections/ }).click()
+  await expect(page.getByRole('heading', { level: 2, name: 'Collections' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Movement Studies' })).toBeVisible()
+  await musicViews.getByRole('button', { name: /Playlists/ }).click()
+  await expect(
+    page.getByRole('heading', { level: 3, name: 'Sign in to reach your playlists.' }),
+  ).toBeVisible()
+  await musicViews.getByRole('button', { name: /Albums/ }).click()
+  await expect(page.getByRole('heading', { level: 2, name: 'Albums' })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  )
+
+  const catalogResults = await new AxeBuilder({ page }).analyze()
+  expect(
+    catalogResults.violations.filter(({ impact }) => impact === 'critical' || impact === 'serious'),
+  ).toEqual([])
+
+  await page.locator('.music-album').filter({ hasText: 'Lines We Carry' }).click()
   await expect(page).toHaveURL(/\/music\/lines-we-carry$/)
   await expect(page.locator('audio')).toHaveCount(1)
   await page.getByRole('button', { name: 'Play public preview' }).click()

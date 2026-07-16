@@ -15,6 +15,22 @@ Interaction thesis: Keep the existing restrained links, navigation, focus behavi
 composition. The starter is keyboard-readable, carries no production indexing, and disappears when
 approved personalization becomes authoritative without changing the page's underlying structure.
 
+## Public music browser
+
+Visual thesis: A quiet, image-led music library with the density and orientation of a serious
+catalog, expressed through the neutral Artist-Owned typography, spacing, and single accent rather
+than Sound for Movement branding.
+
+Content plan: Begin with the music workspace itself. Separate tracks, albums, collections, and the
+signed-in listener's playlists; keep search and facet filters beside the current results; present
+playable track rows with useful musical facts; and let album artwork or its intentional typographic
+fallback carry the dominant visual weight.
+
+Interaction thesis: Views switch in place, search and filters respond immediately, and sorting
+preserves artist-authored order as the default. Track rows and album artwork use restrained hover
+movement, while playback remains in the route-persistent player and reduced-motion preferences
+remove decorative transitions.
+
 ## Public demonstration
 
 Visual thesis: An independent record sleeve opened into a living, contemporary music space: editorial, warm, physical, and quiet enough for the artist's work to remain central.

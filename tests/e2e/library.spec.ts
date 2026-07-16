@@ -70,6 +70,19 @@ test('keeps favorites, playlists, order, and history isolated to one listener', 
     await expect(page.getByText('Track added to Quiet Sequence.')).toBeVisible()
   }
 
+  await gotoHydrated(page, '/music')
+  await page
+    .getByRole('navigation', { name: 'Music catalog views' })
+    .getByRole('button', { name: /Playlists/ })
+    .click()
+  const musicPlaylist = page
+    .locator('.music-playlist-list > li')
+    .filter({ hasText: 'Quiet Sequence' })
+  await expect(musicPlaylist.getByRole('link')).toHaveText([
+    'First Light, Repeated',
+    'A Measure of Distance',
+  ])
+
   await gotoHydrated(page, '/music/tracks/first-light-repeated')
   await page.getByRole('button', { name: 'Play public preview' }).click()
   const playerPlay = page.getByRole('button', { name: 'Play current track' })

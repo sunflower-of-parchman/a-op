@@ -1,7 +1,12 @@
 import { setResponseHeader } from 'h3'
+import type {
+  PublicCatalogCollection,
+  PublicCatalogResponse,
+  PublicCatalogTrack,
+} from '#shared/types/catalog'
 import { getPublicSupabase } from '../utils/supabase'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<PublicCatalogResponse> => {
   setResponseHeader(event, 'cache-control', 'no-store')
   const supabase = getPublicSupabase(event)
   const [{ data: releases, error: releasesError }, { data: collections, error: collectionsError }] =
@@ -24,6 +29,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const releaseIds = releases.map(({ id }) => id)
+  const collectionIds = collections.map(({ id }) => id)
   const { data: releaseTracks, error: tracksError } = releaseIds.length
     ? await supabase
         .from('release_tracks')
@@ -35,27 +41,76 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 503, statusMessage: 'Catalog ordering could not be loaded.' })
   }
 
-  const trackIds = releaseTracks.map(({ track_id }) => track_id)
-  const { data: tracks, error: publicTracksError } = trackIds.length
-    ? await supabase
-        .from('tracks')
-        .select('id, slug, title, duration_ms')
-        .in('id', trackIds)
-        .eq('state', 'published')
-    : { data: [], error: null }
-  if (publicTracksError) {
+  const trackIds = [...new Set(releaseTracks.map(({ track_id }) => track_id))]
+  const [
+    { data: tracks, error: publicTracksError },
+    { data: previews, error: previewsError },
+    { data: collectionTracks, error: collectionTracksError },
+  ] = await Promise.all([
+    trackIds.length
+      ? supabase
+          .from('tracks')
+          .select(
+            'id, slug, title, description, duration_ms, musical_key, meter, tempo_bpm, mood, instruments, explicit',
+          )
+          .in('id', trackIds)
+          .eq('state', 'published')
+      : Promise.resolve({ data: [], error: null }),
+    trackIds.length
+      ? supabase
+          .from('media_objects')
+          .select('id, track_id, bucket_id, object_path, media_type')
+          .in('track_id', trackIds)
+          .eq('kind', 'preview_audio')
+          .eq('is_public', true)
+          .eq('status', 'ready')
+      : Promise.resolve({ data: [], error: null }),
+    collectionIds.length
+      ? supabase
+          .from('collection_tracks')
+          .select('collection_id, track_id')
+          .in('collection_id', collectionIds)
+      : Promise.resolve({ data: [], error: null }),
+  ])
+  if (publicTracksError || previewsError || collectionTracksError) {
     throw createError({ statusCode: 503, statusMessage: 'Catalog tracks could not be loaded.' })
   }
 
   const trackById = new Map(tracks.map((track) => [track.id, track]))
+  const previewByTrack = new Map(
+    previews.map((preview) => [
+      preview.track_id,
+      {
+        id: preview.id,
+        track_id: preview.track_id,
+        media_type: preview.media_type,
+        url: supabase.storage.from(preview.bucket_id).getPublicUrl(preview.object_path).data
+          .publicUrl,
+      },
+    ]),
+  )
   return {
     releases: releases.map((release) => ({
       ...release,
       tracks: releaseTracks
         .filter(({ release_id }) => release_id === release.id)
-        .map(({ track_id, position }) => ({ ...trackById.get(track_id), position }))
-        .filter(({ id }) => id),
+        .flatMap(({ track_id, position }): PublicCatalogTrack[] => {
+          const track = trackById.get(track_id)
+          return track
+            ? [
+                {
+                  ...track,
+                  position,
+                  preview: previewByTrack.get(track_id) ?? null,
+                },
+              ]
+            : []
+        }),
     })),
-    collections,
+    collections: collections.map((collection): PublicCatalogCollection => ({
+      ...collection,
+      trackCount: collectionTracks.filter(({ collection_id }) => collection_id === collection.id)
+        .length,
+    })),
   }
 })
