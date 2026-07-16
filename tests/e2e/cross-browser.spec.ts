@@ -18,7 +18,7 @@ test('keeps the public judge journey coherent across browser engines', async ({ 
   })
 
   for (const [route, heading] of routes) {
-    const response = await page.goto(route, { waitUntil: 'domcontentloaded' })
+    const response = await page.goto(route, { waitUntil: 'load' })
     expect(response?.ok(), `${route} should return a successful document`).toBe(true)
     await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible()
     await expect(page.locator('main')).toHaveCount(1)

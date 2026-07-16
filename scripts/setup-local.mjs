@@ -12,9 +12,30 @@ import {
   writeLocalEnvironment,
 } from './lib/local-supabase.mjs'
 
+function startLocalSupabase() {
+  const attempts = process.env.CI === 'true' ? 3 : 2
+  let lastError
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      runSupabase(['start', '--exclude', 'studio'], { capture: true })
+      return
+    } catch (error) {
+      lastError = error
+      if (attempt < attempts) {
+        console.warn(
+          `Local Supabase: startup attempt ${attempt} failed; retrying with retained image layers`,
+        )
+      }
+    }
+  }
+
+  throw lastError
+}
+
 try {
   console.log('Local setup: starting Supabase')
-  runSupabase(['start', '--exclude', 'studio'], { capture: true })
+  startLocalSupabase()
   console.log('Local Supabase: running')
 
   const resetTarget = getLocalStatus()
