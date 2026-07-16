@@ -25,6 +25,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Read-only hosted Supabase advisors recorded 0 errors, 31 warnings, and 124 information items; forward migration `20260715231631_optimize_rls_advisor_policies.sql` resolves all 30 database-policy warnings locally, and the local rerun returned 0 errors and 0 warnings while preserving every affected authorization journey.
 - [x] Linked-project hash and migration history were rechecked; the non-mutating dry run proposed exactly `20260715231631_optimize_rls_advisor_policies.sql`, the approved migration applied, and authoritative follow-up proved 12/12 parity plus clean linked lint.
 - [x] Post-migration hosted advisors report 0 errors, 0 database-policy warnings, 1 leaked-password-protection warning, and 124 information items; the guarded hosted check preserved the exact fixture, 4 accounts, 4 mappings, and 6 storage objects.
+- [x] The isolated Build Week organization was confirmed on Supabase Free. Leaked-password protection requires Pro or higher, so the setting, plan, and billing remained unchanged; the final advisor rerun preserved the same safe report hash and counts.
 - [x] Guarded bootstrap preparation `b8cb378` generates and tests a disposable Build Output package with no application code or secrets and refuses repository-local or reused output paths.
 - [x] Production build, database policy tests, unit/integration tests, accessibility, responsive behavior, performance budgets, recovery, and browser-secret scans passed.
 - [x] Optional OAuth is closed by default and its configured server-side PKCE initiation, callback binding, secure transaction cookies, safe return, and cancellation behavior pass locally.
@@ -50,8 +51,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael separately approved one temporary Production-classified `--skip-domain` bootstrap. The no-application artifact reached Ready, but Vercel assigned two automatic Production aliases; the exact deployment was removed immediately and the project returned to zero deployments, `live: false`, and zero aliases.
 - [x] Official documentation and pinned CLI inspection established that `--skip-domain` disables custom Production-domain auto-assignment only; the hardened local revision adds no-store and restrictive security/privacy headers and expects only Vercel-managed platform URLs.
 - [x] Michael approved and the primary task applied exactly the reviewed policy migration to the isolated hosted Supabase project.
-- [ ] Michael separately approves enabling Supabase leaked-password protection only if the isolated project already includes that Pro-or-higher entitlement; this approval does not authorize an upgrade, paid plan, or billing change.
-- [ ] Existing Auth entitlement confirmed; leaked-password protection enabled without a plan or billing change, or the unavailable entitlement documented; hosted advisors rerun once more afterward.
+- [x] Michael's bounded approval permitted leaked-password protection only if the isolated project already included the entitlement; it did not authorize an upgrade, paid plan, or billing change.
+- [x] Existing Auth entitlement checked: the isolated Build Week organization is on Free, so the Pro-or-higher feature is unavailable. The limitation is documented and hosted advisors were rerun once more afterward without changing provider state.
 - [ ] Michael explicitly approves the revised first-deployment contract: one immutable deployment URL and the two observed automatic `.vercel.app` aliases may exist only while the hardened static bootstrap enables and confirms the real Preview; no custom domain, sharing, visit, application data, or secret is allowed. The original no-domain contract must not be retried.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
@@ -90,7 +91,7 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 | Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                                                 |
 | Run read-only hosted Supabase advisors  | Executed | Safe result hashes and counts recorded; no provider state changed                                                |
 | Apply advisor policy migration          | Executed | Exact forward migration `20260715231631`; 12/12 history, clean lint, and hosted fixture integrity verified       |
-| Enable leaked-password protection       | Pending  | Separate hosted Auth configuration action                                                                        |
+| Enable leaked-password protection       | Disposed | Build Week organization is on Free; Pro-or-higher feature unavailable; no plan or billing change                 |
 | Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                               |
 | Execute temporary Vercel bootstrap      | Prepared | Hardened revised contract limits exposure to Vercel-managed platform URLs; new action-specific approval required |
 | Promote final deployment                | Pending  | Approved URL and deployment commit                                                                               |

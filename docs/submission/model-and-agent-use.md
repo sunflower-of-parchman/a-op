@@ -256,7 +256,7 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
 - Human decisions: Michael approved both isolated Supabase actions. The migration approval covered exactly the reviewed twelfth migration. The Auth approval is bounded to an already-included entitlement and does not authorize a plan upgrade, paid resource, or billing change.
 - Material contribution: Repeated the exact project-hash guard; proved a one-file dry run; applied the forward policy optimization; classified the recurring non-fatal CLI catalog-cache warning; verified history, lint, hosted advisors, and fixture integrity; identified the official Pro-or-higher entitlement boundary before any Auth setting change.
-- Verification: Pinned Supabase CLI `2.109.1` proved exact 12/12 local/remote migration parity and no linked `public` or `private` schema errors. The post-migration advisor report `sha256:eb42bced1055` contains zero errors, one Auth warning, and 124 information items, so all 30 database-policy warnings are resolved in the isolated hosted project. The guarded hosted check preserved project `sha256:9890053715f8`, fixture `sha256:ba0da2991582`, four fictional accounts, four Stripe provider mappings, and six storage objects without session rotation. Leaked-password protection remains unchanged until the existing entitlement can be confirmed. No deployment, billing, plan, account, storage, Stripe, Sound for Movement, or public state changed.
+- Verification: Pinned Supabase CLI `2.109.1` proved exact 12/12 local/remote migration parity and no linked `public` or `private` schema errors. The post-migration advisor report `sha256:eb42bced1055` contains zero errors, one Auth warning, and 124 information items, so all 30 database-policy warnings are resolved in the isolated hosted project. The guarded hosted check preserved project `sha256:9890053715f8`, fixture `sha256:ba0da2991582`, four fictional accounts, four Stripe provider mappings, and six storage objects without session rotation. At this checkpoint, leaked-password protection remained unchanged pending the later entitlement check recorded below. No deployment, billing, plan, account, storage, Stripe, Sound for Movement, or public state changed.
 
 ### Goal stop and browser-scope correction — 2026-07-15
 
@@ -265,6 +265,14 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Human decisions: Michael stopped the long-running goal and specified Chrome/Chromium plus Safari/WebKit as the browser scope. Firefox is not part of the project contract.
 - Material contribution: Terminated the task-owned Docker pull and isolated browser/server processes; removed Firefox from Playwright configuration, Linux CI, README, runbooks, checklists, and evidence; recorded the incomplete external work in `docs/submission/remaining-work.md`.
 - Verification: The Firefox failures occurred during browser startup before a page loaded and therefore provide no product evidence. No further Firefox workaround or container run was attempted after Michael's stop. The existing port-3000 repository server, provider resources, private inputs, and Sound for Movement remained untouched. This checkpoint is explicitly not a completion claim.
+
+### Supabase Auth entitlement disposition — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael authorized leaked-password protection only when already included without a plan, billing, or paid-resource change.
+- Material contribution: Read-only Chrome inspection of the isolated Supabase organization plan; comparison with Supabase's official Pro-or-higher feature boundary; final guarded advisor rerun; safe evidence, checklist, completion-audit, and ExecPlan reconciliation.
+- Verification: The dashboard identified `Artist-Owned Platform Build Week` as a Free Plan organization and separately identified Sound for Movement as Pro; the task did not open or change the Sound for Movement project. The Build Week Auth setting, plan, and billing remained unchanged. The final pinned-CLI advisor run at `2026-07-16T00:35:35Z` returned report `sha256:eb42bced1055` with 125 results, 0 errors, 1 accepted plan-limited Auth warning, and 124 information items, matching the post-migration report. No deployment, account, storage, Stripe, Sound for Movement, or public state changed.
 
 ## Submission reconciliation
 
