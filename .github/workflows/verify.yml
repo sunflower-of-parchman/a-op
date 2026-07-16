@@ -30,6 +30,30 @@ jobs:
       - name: Audit production dependencies
         run: npm audit --audit-level=high
 
+  database-types:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.0
+          cache: npm
+
+      - name: Install pinned dependencies
+        run: npm ci
+
+      - name: Regenerate the tracked database types once
+        env:
+          AOP_GENERATE_DATABASE_TYPES: '1'
+        run: npm run setup:local
+
+      - name: Verify generated database types are committed
+        run: git diff --exit-code -- shared/types/database.ts
+
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 20

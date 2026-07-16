@@ -1,6 +1,5 @@
-import { writeFileSync } from 'node:fs'
-import { resolve } from 'node:path'
-import { projectRoot, runSupabase } from './lib/command.mjs'
+import { runSupabase } from './lib/command.mjs'
+import { generateLocalDatabaseTypes } from './lib/database-types.mjs'
 import {
   getLocalStatus,
   isLocalSupabaseUrl,
@@ -35,12 +34,7 @@ try {
   await verifyAuthorizationDemonstration(status)
   console.log('Demo seed and authorization fixtures: applied')
 
-  const generated = runSupabase(['gen', 'types', '--local', '--schema', 'public'], {
-    capture: true,
-  })
-  const databaseTypesPath = resolve(projectRoot, 'shared/types/database.ts')
-  writeFileSync(databaseTypesPath, `${generated.stdout.trimEnd()}\n`, 'utf8')
-  console.log('Generated database types: current')
+  generateLocalDatabaseTypes()
 
   console.log(`Supabase API: ${status.apiUrl}`)
   if (status.studioUrl) console.log(`Supabase Studio: ${status.studioUrl}`)
