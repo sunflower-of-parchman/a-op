@@ -299,6 +299,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit and candidate: `4c9b228` (`Stabilize clean-runner verification`) and `c56a9bd` (`Harden CI database type generation`); local immutable tag `build-week-hosted-candidate-20260715-221715` resolves to exact runtime `c56a9bd170237288bae8eb1852fe1b281063952d`.
 - Verification: GitHub Actions run `29469961758` passed 16/16 jobs at exact `c56a9bd`, including generated-type parity, clean-runner portability, recovery, the complete 68-journey desktop/mobile Chromium regression, and the dedicated Chromium/WebKit package gate. Vercel reported the exact three-service deployment Ready; the stable platform alias passed the final post-reset route 2/2 in Chromium and WebKit; recent error-level and HTTP 500 log queries returned no entries. Focused local lint, type checking, formatting, 28 unit tests, Supabase setup, migration, seed, and generated-type checks also passed. This evidence-only reconciliation remains local and does not create another deployment.
 
+### Guided first-clone artist scaffold — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael specified that the first clone should teach the artist by literally naming each editable page element, while retaining the composed layout and keeping Daymark Assembly as a separate finished example.
+- Material contribution: Development-only project-state-aware starter mode; shared literal content contract; labeled header, homepage, release, supporting sections, and footer; starter and demo launch modes; isolated browser configuration; desktop/mobile accessibility regression; artist-facing setup guidance and visual contract.
+- Commit: `dbfc659` (`Add guided first-clone artist scaffold`).
+- Verification: Formatting, lint, Nuxt type checking, 28 unit tests, documentation validation, and production build passed. The starter suite passed four desktop/mobile Chromium journeys with zero serious or critical axe findings; the unchanged Daymark foundation passed four desktop/mobile journeys; live Chrome inspection confirmed the complete labeled composition; and a production server built with a forced starter environment value rendered Daymark content with no starter labels. No database, provider, deployment, publication, or Sound for Movement state changed.
+
 ## Submission reconciliation
 
 Before submission:
