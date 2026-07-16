@@ -53,7 +53,8 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 - [x] Michael approved and the primary task applied exactly the reviewed policy migration to the isolated hosted Supabase project.
 - [x] Michael's bounded approval permitted leaked-password protection only if the isolated project already included the entitlement; it did not authorize an upgrade, paid plan, or billing change.
 - [x] Existing Auth entitlement checked: the isolated Build Week organization is on Free, so the Pro-or-higher feature is unavailable. The limitation is documented and hosted advisors were rerun once more afterward without changing provider state.
-- [ ] Michael explicitly approves the revised first-deployment contract: one immutable deployment URL and the two observed automatic `.vercel.app` aliases may exist only while the hardened static bootstrap enables and confirms the real Preview; no custom domain, sharing, visit, application data, or secret is allowed. The original no-domain contract must not be retried.
+- [x] Michael directed creation of the matching private GitHub repository, push of committed `main`, and connection of that exact repository to Vercel. The connection succeeded with zero deployments; public access and judge sharing remain separate approvals.
+- [x] The revised temporary-bootstrap proposal is superseded by Michael's user-directed Git deployment path. The original no-domain bootstrap contract must not be retried.
 - [ ] Exact final commit deployed and verified.
 - [ ] Hosted reset passes twice and the judge route passes afterward.
 - [ ] Test identities created and shared privately through the approved Devpost mechanism.
@@ -79,22 +80,23 @@ Nothing in this checklist authorizes publication or external state changes. Mich
 
 ## Final authorization record
 
-| Action                                  | Approval | Evidence                                                                                                         |
-| --------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| Select project name                     | Approved | Michael approved Artist-Owned Platform on July 15, 2026                                                          |
-| Select open-source license              | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026                                                            |
-| Create dedicated hosted resources       | Approved | Stage 1 executed; provider references remain private                                                             |
-| Link and dry-run Supabase migrations    | Approved | Stage 2A executed; 0 remote migrations applied                                                                   |
-| Apply reviewed Supabase migrations      | Approved | Stage 2B executed; exact 11/11 parity and clean lint                                                             |
-| Initialize hosted fictional fixtures    | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`                                                              |
-| Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                                                   |
-| Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                                                 |
-| Run read-only hosted Supabase advisors  | Executed | Safe result hashes and counts recorded; no provider state changed                                                |
-| Apply advisor policy migration          | Executed | Exact forward migration `20260715231631`; 12/12 history, clean lint, and hosted fixture integrity verified       |
-| Enable leaked-password protection       | Disposed | Build Week organization is on Free; Pro-or-higher feature unavailable; no plan or billing change                 |
-| Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                               |
-| Execute temporary Vercel bootstrap      | Prepared | Hardened revised contract limits exposure to Vercel-managed platform URLs; new action-specific approval required |
-| Promote final deployment                | Pending  | Approved URL and deployment commit                                                                               |
-| Share repository or judge credentials   | Pending  | Devpost access record                                                                                            |
-| Publish YouTube video                   | Pending  | Public video URL                                                                                                 |
-| Submit Devpost entry                    | Pending  | Submission confirmation                                                                                          |
+| Action                                  | Approval | Evidence                                                                                                   |
+| --------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------- |
+| Select project name                     | Approved | Michael approved Artist-Owned Platform on July 15, 2026                                                    |
+| Select open-source license              | Approved | Michael approved `AGPL-3.0-or-later` on July 15, 2026                                                      |
+| Create dedicated hosted resources       | Approved | Stage 1 executed; provider references remain private                                                       |
+| Link and dry-run Supabase migrations    | Approved | Stage 2A executed; 0 remote migrations applied                                                             |
+| Apply reviewed Supabase migrations      | Approved | Stage 2B executed; exact 11/11 parity and clean lint                                                       |
+| Initialize hosted fictional fixtures    | Approved | Stage 3 executed; 4 accounts; `sha256:ba0da2991582`                                                        |
+| Create Stripe sandbox catalog/mappings  | Approved | Stage 4A executed; first 3 test products, prices, and mappings                                             |
+| Complete Stripe sandbox license catalog | Approved | Stage 4A-2 executed; 4 test products, prices, and mappings total                                           |
+| Run read-only hosted Supabase advisors  | Executed | Safe result hashes and counts recorded; no provider state changed                                          |
+| Apply advisor policy migration          | Executed | Exact forward migration `20260715231631`; 12/12 history, clean lint, and hosted fixture integrity verified |
+| Enable leaked-password protection       | Disposed | Build Week organization is on Free; Pro-or-higher feature unavailable; no plan or billing change           |
+| Build/deploy immutable Services preview | Blocked  | Stage 6 approved; Preview build passed; two Production-classified attempts removed                         |
+| Create and connect private Git remote   | Executed | Private GitHub repository created; committed `main` pushed; exact repository connected to Vercel           |
+| Execute temporary Vercel bootstrap      | Retired  | User-directed Git deployment path supersedes this prepared workaround                                      |
+| Promote final deployment                | Pending  | Approved URL and deployment commit                                                                         |
+| Share repository or judge credentials   | Pending  | Devpost access record                                                                                      |
+| Publish YouTube video                   | Pending  | Public video URL                                                                                           |
+| Submit Devpost entry                    | Pending  | Submission confirmation                                                                                    |

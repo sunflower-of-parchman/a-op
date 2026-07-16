@@ -7,10 +7,11 @@ The repository is locally implemented, the current immutable runtime candidate i
 ## Completed after the stop
 
 - [x] Confirmed through the isolated Supabase dashboard that the Build Week organization is on the Free Plan. Supabase documents leaked-password protection as a Pro-or-higher feature, so the existing bounded approval could not enable it. The setting, plan, and billing remained unchanged. A final hosted advisor run at `2026-07-16T00:35:35Z` returned 0 errors, 0 database-policy warnings, 1 plan-limited Auth warning, and 124 information items at safe report hash `sha256:eb42bced1055`.
+- [x] Created private GitHub repository `sunflower-of-parchman/artist-owned-platform-build-week`, pushed the clean committed `main` branch, and connected that exact repository to the isolated Vercel project under Michael's direction. Vercel confirmed the Git connection while still reporting zero deployments. Public repository access and judge sharing remain separate approvals.
 
 ## Remaining approval and evidence items
 
-1. Obtain a separate action-specific approval for the revised Vercel first-deployment bootstrap contract. Do not retry the earlier no-domain contract. Then deploy and verify the exact immutable candidate without a custom domain or public sharing.
+1. Push the Git-connection evidence checkpoint under Michael's explicit commit-and-push instruction, then inspect and verify the first Git-triggered Vercel deployment. The earlier no-domain bootstrap contract remains retired; do not create a custom domain or share access implicitly.
 2. Prove the hosted private media worker by taking one approved fictional upload through `pending -> processing -> ready`, then verify its preview, waveform, playback, retry, and expired-lease recovery.
 3. Complete Stripe test-mode purchase, membership, portal cancellation, refund, webhook replay, license issue, protected PDF delivery, and cross-account denial against the isolated judging resources. Do not use live mode.
 4. Run the hosted reset twice, verify fixture and provider preservation, and complete the judge route in Chromium and WebKit.

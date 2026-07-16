@@ -39,6 +39,8 @@ This record stays pending until an approved operator executes the corresponding 
 | Enable leaked-password protection          | Disposed  | Bounded approval checked, 2026-07-15         | Build Week organization is on Free; Pro-or-higher feature unavailable; no provider change             |
 | Deploy immutable Services preview          | Blocked   | Stage 6 approved in this task, 2026-07-15    | Preview build passed; application deployments remain zero                                             |
 | Temporary first-deployment bootstrap       | Contained | Separately approved in this task, 2026-07-15 | Vercel assigned two automatic aliases despite `--skip-domain`; removed exactly / 2026-07-15T23:02:46Z |
+| Create private GitHub repository           | Executed  | Michael directed Git connection, 2026-07-15  | `sunflower-of-parchman/artist-owned-platform-build-week`; private; clean `main` pushed                |
+| Connect exact Git repository to Vercel     | Executed  | Michael directed Git connection, 2026-07-15  | Vercel success confirmation / 2026-07-16T01:38Z; zero deployments immediately afterward               |
 | Execute hosted reset                       | Pending   |                                              |                                                                                                       |
 | Assign production alias or domain          | Pending   |                                              |                                                                                                       |
 | Share judge URL and credentials            | Pending   |                                              |                                                                                                       |
@@ -47,6 +49,8 @@ This record stays pending until an approved operator executes the corresponding 
 | Submit Devpost entry                       | Pending   |                                              |                                                                                                       |
 
 ## Resource boundaries
+
+The repository now has a private GitHub remote at `sunflower-of-parchman/artist-owned-platform-build-week`, with `main` as its default branch. Vercel is connected to that exact repository. This is private hosting for deployment automation; it does not grant public or judge access. Immediately after connection, the Vercel Deployments page still reported no results. Michael's subsequent commit-and-push instruction authorizes the Git push that will trigger the first connected build. The prior temporary bootstrap proposal is retired and must not be retried.
 
 | Resource         | Status | Safe reference hash/suffix    | Isolation check                                                                                |
 | ---------------- | ------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |

@@ -274,6 +274,14 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Material contribution: Read-only Chrome inspection of the isolated Supabase organization plan; comparison with Supabase's official Pro-or-higher feature boundary; final guarded advisor rerun; safe evidence, checklist, completion-audit, and ExecPlan reconciliation.
 - Verification: The dashboard identified `Artist-Owned Platform Build Week` as a Free Plan organization and separately identified Sound for Movement as Pro; the task did not open or change the Sound for Movement project. The Build Week Auth setting, plan, and billing remained unchanged. The final pinned-CLI advisor run at `2026-07-16T00:35:35Z` returned report `sha256:eb42bced1055` with 125 results, 0 errors, 1 accepted plan-limited Auth warning, and 124 information items, matching the post-migration report. No deployment, account, storage, Stripe, Sound for Movement, or public state changed.
 
+### Private Git hosting and Vercel connection — 2026-07-15
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task.
+- Human decisions: Michael directed the task to connect Git and then explicitly requested a commit and push. Public repository access, judge sharing, custom domains, and later submission actions remain separately controlled.
+- Material contribution: Verified the clean local repository had no remote; created the exact matching private GitHub repository; attached it as `origin`; pushed committed `main`; selected only that repository in Vercel; and confirmed the successful Git connection.
+- Verification: GitHub reports `sunflower-of-parchman/artist-owned-platform-build-week` as private with `main` as the default branch. Vercel displays that exact repository as connected and its Deployments page reported no results immediately afterward. No Sound for Movement repository, code, provider resource, domain, or public access changed.
+
 ## Submission reconciliation
 
 Before submission:
