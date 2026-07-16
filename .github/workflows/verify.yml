@@ -174,6 +174,11 @@ jobs:
       - name: Install pinned dependencies
         run: npm ci
 
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
       - name: Verify catalog, media intake, worker, and idempotent import
         run: npm run verify:catalog
 
@@ -348,6 +353,11 @@ jobs:
       - name: Install pinned dependencies
         run: npm ci
 
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
       - name: Verify guided personalization and approval boundaries
         run: npm run verify:setup
 
@@ -421,6 +431,11 @@ jobs:
       - name: Install pinned dependencies
         run: npm ci
 
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
       - name: Verify local recovery contracts
         run: npm run verify:recovery
 
@@ -451,6 +466,14 @@ jobs:
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
+      - name: Prepare the local installation
+        run: npm run setup:local
 
       - name: Run every isolated desktop and mobile browser specification
         env:

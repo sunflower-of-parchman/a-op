@@ -1,7 +1,7 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { getLocalStatus, safeSupabaseError } from './lib/local-supabase.mjs'
-import { projectRoot } from './lib/command.mjs'
+import { projectRoot, run } from './lib/command.mjs'
 
 function filesBelow(path) {
   const results = []
@@ -16,6 +16,10 @@ function filesBelow(path) {
 try {
   const status = getLocalStatus()
   const publicOutput = resolve(projectRoot, '.output/public')
+  if (!existsSync(publicOutput)) {
+    console.log('Browser output missing; generating the production build before scanning.')
+    run('npm', ['run', 'build'])
+  }
   const secretValues = [
     status.secretKey,
     process.env.NUXT_STRIPE_SECRET_KEY,

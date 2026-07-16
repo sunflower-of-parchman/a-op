@@ -68,7 +68,8 @@ export default defineNuxtConfig({
         'script-src-attr': ["'none'"],
         'style-src': ["'self'", "'unsafe-inline'"],
         'worker-src': ["'self'", 'blob:'],
-        'upgrade-insecure-requests': process.env.NODE_ENV === 'production',
+        'upgrade-insecure-requests':
+          process.env.NODE_ENV === 'production' && process.env.AOP_LOCAL_PREVIEW !== '1',
       },
       permissionsPolicy: {
         accelerometer: [],
