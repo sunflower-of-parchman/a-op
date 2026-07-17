@@ -344,6 +344,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `3d61f56` (`Label all starter public pages`).
 - Verification: Formatting, lint, Nuxt type checking, and the production build passed. Ten desktop/mobile Chromium starter journeys covered seventeen route archetypes and rejected residual demo language. Live About, Support, lesson, and mobile inspection confirmed the composed result and exposed the final lesson-image defect before it was corrected. No database, provider, deployment, publication, or Sound for Movement state changed.
 
+### Public hierarchy cleanup — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael removed the global starter notice, all public page-title eyebrow labels, and the redundant `Library` label above the music views after inspecting the live starter music page.
+- Material contribution: Removed the notice rendering and unused starter notice content; removed public `.eyebrow` headings from home, catalog, informational, learning, video, journal, account, authentication, and checkout routes; removed the redundant music-sidebar heading; preserved administration utility breadcrumbs and eyebrow editing; and added route-wide absence assertions.
+- Commit: `9ec421a` (`Remove public eyebrow labels`).
+- Verification: Formatting, lint, Nuxt type checking, and the production build passed. A serial rerun of the starter suite passed ten desktop/mobile Chromium journeys spanning eighteen route archetypes after macOS denied the first parallel browser launch before test execution. Live `/music` inspection found zero notice bars, zero public eyebrow elements, only `Filters` among sidebar section labels, and zero horizontal overflow. No database, provider, deployment, publication, or Sound for Movement state changed.
+
 ## Submission reconciliation
 
 Before submission:

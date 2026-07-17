@@ -8,9 +8,11 @@ typographic and spatial roles that the artist's eventual material will use. Lato
 first-clone typeface in light and dark modes; the artist can replace the typography and palette
 through the existing configuration authority.
 
-Content plan: Label the artist name or logo, hero kicker, primary headline, introductory text,
-actions, featured release or artwork, supporting section, list items, closing section, and footer.
-The labels teach the artist which decisions are available without pretending to be finished copy.
+Content plan: Label the artist name or logo, primary headline, introductory text, actions, featured
+release or artwork, supporting section, list items, closing section, and footer. The labels teach the
+artist which decisions are available without pretending to be finished copy. The public composition
+does not add a starter notice bar or eyebrow label above page titles; each route begins with its real
+title and moves directly into its content and actions.
 Every public route family applies the same contract to its actual job: releases and collections;
 biography, contact, support, licensing, and privacy; paths and lessons; videos and transcripts;
 journal entries; account and authentication; and local simulated checkout. Literal labels also
