@@ -17,6 +17,11 @@ The external video example remains poster-first. No third-party player receives 
 
 All demonstration material is original and licensed with the repository under `AGPL-3.0-or-later`. The tracked source, generating code, and deterministic generation descriptions are the preferred forms for modification. Michael must still explicitly approve repository publication before any public release.
 
+Lato is third-party font software used by the starter interface under the SIL Open Font License,
+Version 1.1. Its copyright and license record is in
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); it is not part of the original Daymark
+demonstration material.
+
 ## Replacement contract
 
 An adopting artist replaces Daymark Assembly through the interview, proposal, preview, approval, apply, and verification lifecycle in [`SETUP.md`](../SETUP.md). Rights approval is required for every imported audio, image, video, text, and downloadable file. Generated preview and artwork derivatives retain a hash-addressed relationship to the approved source; the source object is never overwritten.

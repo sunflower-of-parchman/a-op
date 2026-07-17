@@ -326,6 +326,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `7c912c1` (`Build complete public music browser`).
 - Verification: Production build, formatting, integration, documentation, and browser-secret checks passed. The focused catalog and library suite passed five desktop/mobile Chromium journeys with one intentional mobile shared-database mutation skip; it verified filtering, sorting, all four views, playback, private playlist order, accessibility, and horizontal viewport containment. Live Chrome inspection confirmed the Tracks and Albums layouts. No database, provider, deployment, publication, or Sound for Movement state changed.
 
+### Dense library, Lato, and color modes — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael chose Lato as the first-clone typeface, required light and dark modes, and asked for the public music page to carry the working density of Sound for Movement while remaining an independent open-source implementation.
+- Material contribution: Added a pinned OFL-licensed local font package and notice; persistent first-party color-mode selection; an independent dark palette; six catalog views; key and duration filters alongside meter, tempo, mood, and instruments; sanitized published waveform data; working purchase, license, favorite, and playlist row actions; compact desktop styling; and a hydrated mobile filter disclosure.
+- Commit: `eab8365` (`Refine starter themes and music library`).
+- Verification: Production build, type checking, lint, formatting, documentation validation, browser-secret scanning, eight desktop/mobile Chromium starter journeys, and two desktop/mobile Chromium catalog journeys passed. Live in-app browser inspection confirmed Lato loading, light/dark persistence, desktop density, mobile disclosure, accessibility, and zero horizontal overflow. No database, provider, deployment, publication, or Sound for Movement resource changed.
+
 ## Submission reconciliation
 
 Before submission:

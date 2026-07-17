@@ -4,7 +4,9 @@
 
 Visual thesis: Preserve the calm editorial composition of the public platform while presenting the
 unpersonalized page as site anatomy instead of a fictional voice. Literal labels occupy the same
-typographic and spatial roles that the artist's eventual material will use.
+typographic and spatial roles that the artist's eventual material will use. Lato is the neutral
+first-clone typeface in light and dark modes; the artist can replace the typography and palette
+through the existing configuration authority.
 
 Content plan: Label the artist name or logo, hero kicker, primary headline, introductory text,
 actions, featured release or artwork, supporting section, list items, closing section, and footer.
@@ -19,19 +21,22 @@ approved personalization becomes authoritative without changing the page's under
 
 ## Public music browser
 
-Visual thesis: A quiet, image-led music library with the density and orientation of a serious
-catalog, expressed through the neutral Artist-Owned typography, spacing, and single accent rather
-than Sound for Movement branding.
+Visual thesis: A compact working music library with the density and orientation of a serious
+catalog. Lato, rigorous rows, open space, and one accent establish the starter experience in equal
+light and dark modes without importing Sound for Movement branding.
 
-Content plan: Begin with the music workspace itself. Separate tracks, albums, collections, and the
-signed-in listener's playlists; keep search and facet filters beside the current results; present
-playable track rows with useful musical facts; and let album artwork or its intentional typographic
-fallback carry the dominant visual weight.
+Content plan: Begin with the music workspace itself. Separate Explore, Tracks, Albums, Collections,
+Favorites, and Playlists; keep search plus meter, tempo, mood, key, instrument, and duration filters
+beside the current results; present playable track rows with musical facts and sanitized published
+waveforms; and attach purchase, licensing, favorite, and playlist actions only to working routes.
+Album artwork or its intentional typographic fallback carries the dominant visual weight in album
+views.
 
 Interaction thesis: Views switch in place, search and filters respond immediately, and sorting
-preserves artist-authored order as the default. Track rows and album artwork use restrained hover
-movement, while playback remains in the route-persistent player and reduced-motion preferences
-remove decorative transitions.
+preserves artist-authored order as the default. Mobile begins with a collapsed filter disclosure so
+the current results remain close to the library navigation. Track rows and album artwork use
+restrained hover movement, playback remains in the route-persistent player, the selected color mode
+persists in a first-party cookie, and reduced-motion preferences remove decorative transitions.
 
 ## Public demonstration
 
