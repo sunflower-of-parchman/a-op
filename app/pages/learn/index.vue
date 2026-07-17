@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { LearningCatalogResponse } from '#shared/types/learning'
 
+const starterMode = useStarterMode()
 useSeoMeta({
   title: 'Learn',
   description: 'Artist-authored paths with public, account, purchase, and membership access.',
@@ -11,9 +13,18 @@ const { data, error, status, refresh } = await useFetch<LearningCatalogResponse>
 <template>
   <div class="page-frame learning-index">
     <header class="page-heading">
-      <p class="eyebrow">Learn</p>
-      <h1>Teaching that stays close to the music.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.learning.eyebrow : 'Learn' }}
+      </p>
+      <h1>
+        {{
+          starterMode
+            ? starterLayoutContent.learning.title
+            : 'Teaching that stays close to the music.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.learning.introduction }}</p>
+      <p v-else>
         Each path preserves the artist's order while public, account, purchase, and membership
         access resolve through one visible authority.
       </p>
@@ -46,25 +57,33 @@ const { data, error, status, refresh } = await useFetch<LearningCatalogResponse>
       class="learning-path-introduction"
       :aria-labelledby="`path-${path.id}`"
     >
-      <p class="section-number">{{ String(index + 1).padStart(2, '0') }} / {{ path.area.name }}</p>
+      <p class="section-number">
+        {{ String(index + 1).padStart(2, '0') }} /
+        {{ starterMode ? starterLayoutContent.learning.area : path.area.name }}
+      </p>
       <div>
-        <h2 :id="`path-${path.id}`">{{ path.title }}</h2>
-        <p>{{ path.summary }}</p>
+        <h2 :id="`path-${path.id}`">
+          {{ starterMode ? starterLayoutContent.learning.pathTitle : path.title }}
+        </h2>
+        <p>{{ starterMode ? starterLayoutContent.learning.pathSummary : path.summary }}</p>
         <p class="learning-progress-summary">
           {{ path.completedLessons }} of {{ path.totalLessons }} lessons completed
         </p>
       </div>
       <div class="learning-path-actions">
         <NuxtLink class="text-action text-action--primary" :to="`/learn/${path.slug}`">
-          Open the path
+          {{ starterMode ? starterLayoutContent.learning.pathAction : 'Open the path' }}
         </NuxtLink>
         <NuxtLink
           v-if="path.nextLesson"
           class="text-action"
           :to="`/learn/${path.slug}/${path.nextLesson.slug}`"
         >
-          {{ path.nextLesson.accessible ? 'Continue' : 'Review next access' }}:
-          {{ path.nextLesson.title }}
+          {{
+            starterMode
+              ? starterLayoutContent.learning.nextAction
+              : `${path.nextLesson.accessible ? 'Continue' : 'Review next access'}: ${path.nextLesson.title}`
+          }}
         </NuxtLink>
       </div>
     </section>

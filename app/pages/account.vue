@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { LibraryPlaylist, LibraryResponse } from '#shared/types/library'
 import type { AccountCommerceResponse } from '#shared/types/commerce'
 import type { LearningAccountResponse } from '#shared/types/learning'
 
 useSeoMeta({ title: 'Account' })
+const starterMode = useStarterMode()
 
 const { data: session, refresh } = await useFetch('/api/auth/session')
 const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
@@ -118,10 +120,14 @@ async function downloadLicense(licenseId: string) {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">Account</p>
-      <h1 v-if="session?.authenticated">Your relationship with the artist.</h1>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.account.eyebrow : 'Account' }}
+      </p>
+      <h1 v-if="starterMode">{{ starterLayoutContent.account.title }}</h1>
+      <h1 v-else-if="session?.authenticated">Your relationship with the artist.</h1>
       <h1 v-else>Keep what belongs to you.</h1>
-      <p v-if="session?.authenticated">
+      <p v-if="starterMode">{{ starterLayoutContent.account.introduction }}</p>
+      <p v-else-if="session?.authenticated">
         Signed in as {{ session.user.email }}. Your saved music and listening paths stay attached to
         this account.
       </p>
@@ -151,16 +157,34 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="orders-heading">
         <div class="library-section-heading">
           <p class="section-number">Purchases</p>
-          <h2 id="orders-heading">Orders and protected delivery.</h2>
+          <h2 id="orders-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.purchasesHeading
+                : 'Orders and protected delivery.'
+            }}
+          </h2>
         </div>
         <div v-if="commerce.orders.length" class="order-history">
-          <article v-for="order in commerce.orders" :key="order.id">
+          <article v-for="(order, orderIndex) in commerce.orders" :key="order.id">
             <header>
               <div>
-                <h3>{{ order.items[0]?.name ?? 'Artist offering' }}</h3>
-                <p>{{ formatListeningDate(order.createdAt) }}</p>
+                <h3>
+                  {{
+                    starterMode
+                      ? `Offering Title ${String(orderIndex + 1).padStart(2, '0')}`
+                      : (order.items[0]?.name ?? 'Artist offering')
+                  }}
+                </h3>
+                <p>{{ starterMode ? 'Order Date' : formatListeningDate(order.createdAt) }}</p>
               </div>
-              <p>{{ formatMoney(order.totalMinor, order.currency) }} · {{ order.status }}</p>
+              <p>
+                {{
+                  starterMode
+                    ? 'Order Total / Status'
+                    : `${formatMoney(order.totalMinor, order.currency)} · ${order.status}`
+                }}
+              </p>
             </header>
             <p v-if="order.refundedMinor">
               Refunded: {{ formatMoney(order.refundedMinor, order.currency) }}
@@ -185,11 +209,17 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="membership-heading">
         <div class="library-section-heading">
           <p class="section-number">Membership</p>
-          <h2 id="membership-heading">Time-bound access with a visible state.</h2>
+          <h2 id="membership-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.membershipHeading
+                : 'Time-bound access with a visible state.'
+            }}
+          </h2>
         </div>
         <dl v-if="commerce.subscriptions.length" class="membership-history">
           <div v-for="subscription in commerce.subscriptions" :key="subscription.id">
-            <dt>{{ subscription.productName }}</dt>
+            <dt>{{ starterMode ? 'Membership Title' : subscription.productName }}</dt>
             <dd>
               {{ subscription.status }} · through
               {{ formatListeningDate(subscription.currentPeriodEnd) }}
@@ -211,13 +241,31 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="licenses-heading">
         <div class="library-section-heading">
           <p class="section-number">Licenses</p>
-          <h2 id="licenses-heading">The exact terms issued for your project.</h2>
+          <h2 id="licenses-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.licensesHeading
+                : 'The exact terms issued for your project.'
+            }}
+          </h2>
         </div>
         <div v-if="commerce.licenses.length" class="license-history">
           <article v-for="license in commerce.licenses" :key="license.id">
             <div>
-              <h3>{{ license.trackTitle }} · {{ license.optionLabel }}</h3>
-              <p>{{ license.licenseeName }} · {{ license.projectTitle }}</p>
+              <h3>
+                {{
+                  starterMode
+                    ? 'Track Title / License Option Title'
+                    : `${license.trackTitle} · ${license.optionLabel}`
+                }}
+              </h3>
+              <p>
+                {{
+                  starterMode
+                    ? 'Licensee Name / Project Title'
+                    : `${license.licenseeName} · ${license.projectTitle}`
+                }}
+              </p>
               <p>
                 {{ formatMoney(license.amountMinor, license.currency) }} · {{ license.status }} ·
                 document {{ license.documentStatus }}
@@ -242,7 +290,13 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="access-heading">
         <div class="library-section-heading">
           <p class="section-number">Access ledger</p>
-          <h2 id="access-heading">Why this account can enter.</h2>
+          <h2 id="access-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.accessHeading
+                : 'Why this account can enter.'
+            }}
+          </h2>
         </div>
         <ol v-if="commerce.entitlements.length" class="entitlement-history">
           <li v-for="entry in commerce.entitlements" :key="entry.id">
@@ -265,12 +319,18 @@ async function downloadLicense(licenseId: string) {
     >
       <div class="library-section-heading">
         <p class="section-number">Learning</p>
-        <h2 id="account-learning-heading">Resume the next meaningful lesson.</h2>
+        <h2 id="account-learning-heading">
+          {{
+            starterMode
+              ? starterLayoutContent.account.learningHeading
+              : 'Resume the next meaningful lesson.'
+          }}
+        </h2>
       </div>
       <ol v-if="learning.paths?.length" class="learning-account-list">
         <li v-for="path in learning.paths" :key="path.id">
           <div>
-            <h3>{{ path.title }}</h3>
+            <h3>{{ starterMode ? starterLayoutContent.learning.pathTitle : path.title }}</h3>
             <p>{{ path.completedLessons }} of {{ path.totalLessons }} lessons completed</p>
           </div>
           <NuxtLink
@@ -278,8 +338,11 @@ async function downloadLicense(licenseId: string) {
             class="text-action"
             :to="`/learn/${path.slug}/${path.nextLesson.slug}`"
           >
-            {{ path.nextLesson.accessible ? 'Continue' : 'Review access for' }}
-            {{ path.nextLesson.title }}
+            {{
+              starterMode
+                ? starterLayoutContent.learning.nextAction
+                : `${path.nextLesson.accessible ? 'Continue' : 'Review access for'} ${path.nextLesson.title}`
+            }}
           </NuxtLink>
           <span v-else>Path complete</span>
         </li>
@@ -291,11 +354,19 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="favorites-heading">
         <div class="library-section-heading">
           <p class="section-number">Favorites</p>
-          <h2 id="favorites-heading">Music you chose to keep close.</h2>
+          <h2 id="favorites-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.favoritesHeading
+                : 'Music you chose to keep close.'
+            }}
+          </h2>
         </div>
         <ul v-if="library.favorites.length" class="library-link-list">
           <li v-for="track in library.favorites" :key="track.id">
-            <NuxtLink :to="`/music/tracks/${track.slug}`">{{ track.title }}</NuxtLink>
+            <NuxtLink :to="`/music/tracks/${track.slug}`">
+              {{ starterMode ? starterLayoutContent.trackDetail.title : track.title }}
+            </NuxtLink>
           </li>
         </ul>
         <p v-else>Tracks saved from their catalog pages will gather here.</p>
@@ -304,7 +375,13 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="playlists-heading">
         <div class="library-section-heading">
           <p class="section-number">Playlists</p>
-          <h2 id="playlists-heading">Your own authored order.</h2>
+          <h2 id="playlists-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.account.playlistsHeading
+                : 'Your own authored order.'
+            }}
+          </h2>
         </div>
         <form class="playlist-create" @submit.prevent="createPlaylist">
           <label><span>New playlist title</span><input v-model="playlistTitle" required /></label>
@@ -315,7 +392,7 @@ async function downloadLicense(licenseId: string) {
         <div v-if="library.playlists.length" class="playlist-library">
           <article v-for="playlist in library.playlists" :key="playlist.id">
             <header>
-              <h3>{{ playlist.title }}</h3>
+              <h3>{{ starterMode ? 'Playlist Title' : playlist.title }}</h3>
               <button class="quiet-action" type="button" @click="deletePlaylist(playlist)">
                 Delete
               </button>
@@ -323,7 +400,9 @@ async function downloadLicense(licenseId: string) {
             <ol v-if="playlist.tracks.length">
               <li v-for="(track, index) in playlist.tracks" :key="track.id">
                 <span>{{ String(index + 1).padStart(2, '0') }}</span>
-                <NuxtLink :to="`/music/tracks/${track.slug}`">{{ track.title }}</NuxtLink>
+                <NuxtLink :to="`/music/tracks/${track.slug}`">
+                  {{ starterMode ? starterLayoutContent.trackDetail.title : track.title }}
+                </NuxtLink>
                 <div>
                   <button
                     class="quiet-action"
@@ -359,11 +438,17 @@ async function downloadLicense(licenseId: string) {
       <section aria-labelledby="history-heading">
         <div class="library-section-heading">
           <p class="section-number">Listening history</p>
-          <h2 id="history-heading">Recent points of return.</h2>
+          <h2 id="history-heading">
+            {{
+              starterMode ? starterLayoutContent.account.historyHeading : 'Recent points of return.'
+            }}
+          </h2>
         </div>
         <ol v-if="library.history.length" class="listening-history">
           <li v-for="entry in library.history" :key="entry.id">
-            <NuxtLink :to="`/music/tracks/${entry.track.slug}`">{{ entry.track.title }}</NuxtLink>
+            <NuxtLink :to="`/music/tracks/${entry.track.slug}`">
+              {{ starterMode ? starterLayoutContent.trackDetail.title : entry.track.title }}
+            </NuxtLink>
             <span>{{
               entry.completed ? 'Completed' : `${Math.round(entry.progress_ms / 1000)}s`
             }}</span>

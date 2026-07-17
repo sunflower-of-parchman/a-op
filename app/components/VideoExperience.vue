@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { VideoRecord } from '#shared/types/learning'
 
-defineProps<{ video: VideoRecord }>()
+withDefaults(defineProps<{ video: VideoRecord; starter?: boolean }>(), { starter: false })
 const externalLoaded = ref(false)
 </script>
 
@@ -22,14 +23,20 @@ const externalLoaded = ref(false)
         v-if="externalLoaded"
         class="video-frame"
         :src="video.embedUrl"
-        :title="video.title"
+        :title="starter ? starterLayoutContent.video.itemTitle : video.title"
         allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
         allowfullscreen
         referrerpolicy="strict-origin-when-cross-origin"
       />
       <div v-else>
-        <img v-if="video.posterUrl" class="external-video-poster" :src="video.posterUrl" alt="" />
-        <p>
+        <img
+          v-if="video.posterUrl && !starter"
+          class="external-video-poster"
+          :src="video.posterUrl"
+          alt=""
+        />
+        <p v-if="starter">{{ starterLayoutContent.video.providerNotice }}</p>
+        <p v-else>
           This approved video is hosted by {{ video.provider }}. Loading it shares your request with
           that provider.
         </p>
@@ -40,12 +47,14 @@ const externalLoaded = ref(false)
     </div>
     <details class="video-transcript">
       <summary>Read transcript</summary>
-      <p class="preserve-lines">{{ video.transcript }}</p>
+      <p class="preserve-lines">
+        {{ starter ? starterLayoutContent.video.transcript : video.transcript }}
+      </p>
     </details>
     <dl class="video-credits">
       <div v-for="credit in video.credits" :key="`${credit.role}-${credit.name}`">
-        <dt>{{ credit.role }}</dt>
-        <dd>{{ credit.name }}</dd>
+        <dt>{{ starter ? starterLayoutContent.video.creditRole : credit.role }}</dt>
+        <dd>{{ starter ? starterLayoutContent.video.creditName : credit.name }}</dd>
       </div>
     </dl>
   </div>

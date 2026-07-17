@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { CheckoutIntentResponse } from '#shared/types/commerce'
 
 const route = useRoute()
+const starterMode = useStarterMode()
 const id = String(route.params.id)
 const { data, error, refresh } = await useFetch<CheckoutIntentResponse>(
   () => `/api/commerce/checkout/${id}`,
@@ -53,7 +55,13 @@ useSeoMeta({ title: 'Local checkout simulation' })
   <div class="page-frame simulated-checkout">
     <header class="page-heading">
       <p class="eyebrow">Local demonstration</p>
-      <h1>{{ data?.product.name ?? 'Checkout simulation' }}</h1>
+      <h1>
+        {{
+          starterMode
+            ? starterLayoutContent.checkout.simulationTitle
+            : (data?.product.name ?? 'Checkout simulation')
+        }}
+      </h1>
       <p>
         This screen never charges a card. It exercises the same durable event, order, subscription,
         and entitlement path that verified Stripe webhooks use.

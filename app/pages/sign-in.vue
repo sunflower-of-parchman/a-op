@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { SignInInput } from '#shared/schemas/auth'
 
 useSeoMeta({ title: 'Sign in' })
 
 const route = useRoute()
+const starterMode = useStarterMode()
 const credentials = reactive<SignInInput>({ email: '', password: '' })
 const pending = ref(false)
 const message = ref(route.query.oauth === 'failed' ? 'Provider sign-in was not completed.' : '')
@@ -32,9 +34,19 @@ async function signIn() {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">Artist-owned account</p>
-      <h1>Sign in to your place here.</h1>
-      <p>Purchases, licenses, memberships, learning, and artist administration use one account.</p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.auth.signInEyebrow : 'Artist-owned account' }}
+      </p>
+      <h1>
+        {{ starterMode ? starterLayoutContent.auth.signInTitle : 'Sign in to your place here.' }}
+      </h1>
+      <p>
+        {{
+          starterMode
+            ? starterLayoutContent.auth.signInIntroduction
+            : 'Purchases, licenses, memberships, learning, and artist administration use one account.'
+        }}
+      </p>
     </header>
 
     <form class="account-form" @submit.prevent="signIn">

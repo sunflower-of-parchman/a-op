@@ -2364,6 +2364,20 @@ button.text-action:disabled {
   object-fit: cover;
 }
 
+.lesson-image-placeholder {
+  display: grid;
+  width: 100%;
+  min-height: clamp(14rem, 38vw, 30rem);
+  place-items: center;
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .lesson-section figcaption {
   display: grid;
   gap: 0.25rem;

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { LearningLessonResponse } from '#shared/types/learning'
 
 const route = useRoute()
+const starterMode = useStarterMode()
 const endpoint = computed(
   () => `/api/learning/${String(route.params.pathSlug)}/${String(route.params.lessonSlug)}`,
 )
@@ -12,8 +14,12 @@ const progressMessage = ref('')
 const { track } = useTelemetry()
 
 useSeoMeta({
-  title: () => data.value?.lesson.title ?? 'Lesson',
-  description: () => data.value?.lesson.summary,
+  title: () =>
+    starterMode
+      ? starterLayoutContent.learning.lessonTitle
+      : (data.value?.lesson.title ?? 'Lesson'),
+  description: () =>
+    starterMode ? starterLayoutContent.learning.lessonSummary : data.value?.lesson.summary,
 })
 
 async function recordProgress(sectionPosition: number, completed: boolean) {
@@ -45,11 +51,21 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
 <template>
   <div v-if="data" class="page-frame lesson-page">
     <header class="page-heading lesson-heading">
-      <p class="eyebrow">{{ data.path.title }} / {{ data.course.title }}</p>
-      <h1>{{ data.lesson.title }}</h1>
-      <p>{{ data.lesson.summary }}</p>
+      <p class="eyebrow">
+        {{
+          starterMode
+            ? `${starterLayoutContent.learning.pathTitle} / ${starterLayoutContent.learning.courseTitle}`
+            : `${data.path.title} / ${data.course.title}`
+        }}
+      </p>
+      <h1>{{ starterMode ? starterLayoutContent.learning.lessonTitle : data.lesson.title }}</h1>
+      <p>{{ starterMode ? starterLayoutContent.learning.lessonSummary : data.lesson.summary }}</p>
       <p class="lesson-access-state">
-        {{ data.lesson.estimatedMinutes }} minutes · {{ data.lesson.accessMode.replace('_', ' ') }}
+        {{
+          starterMode
+            ? `${starterLayoutContent.learning.lessonDuration} · ${starterLayoutContent.learning.lessonAccess}`
+            : `${data.lesson.estimatedMinutes} minutes · ${data.lesson.accessMode.replace('_', ' ')}`
+        }}
       </p>
     </header>
 
@@ -58,10 +74,24 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
       class="lesson-access-boundary"
       aria-labelledby="access-heading"
     >
-      <p class="section-number">Access</p>
+      <p class="section-number">
+        {{ starterMode ? starterLayoutContent.learning.lessonAccess : 'Access' }}
+      </p>
       <div>
-        <h2 id="access-heading">This lesson keeps its promise to the artist and learner.</h2>
-        <p>{{ data.lesson.accessExplanation }}</p>
+        <h2 id="access-heading">
+          {{
+            starterMode
+              ? starterLayoutContent.learning.lessonAccessExplanation
+              : 'This lesson keeps its promise to the artist and learner.'
+          }}
+        </h2>
+        <p>
+          {{
+            starterMode
+              ? starterLayoutContent.learning.lessonAccessExplanation
+              : data.lesson.accessExplanation
+          }}
+        </p>
         <NuxtLink
           v-if="data.access.reason === 'sign_in'"
           class="text-action text-action--primary"
@@ -83,48 +113,87 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
         :class="`lesson-section--${section.type}`"
       >
         <template v-if="section.type === 'prose'">
-          <p v-if="section.eyebrow" class="section-number">{{ section.eyebrow }}</p>
+          <p v-if="starterMode || section.eyebrow" class="section-number">
+            {{ starterMode ? starterLayoutContent.learning.sectionLabel : section.eyebrow }}
+          </p>
           <div>
-            <h2>{{ section.heading }}</h2>
-            <SafeRichText :body="section.body" />
+            <h2>
+              {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+            </h2>
+            <SafeRichText
+              :body="starterMode ? starterLayoutContent.learning.sectionBody : section.body"
+            />
           </div>
         </template>
         <figure v-else-if="section.type === 'image'">
-          <img :src="section.mediaUrl" :alt="section.alt" loading="lazy" />
+          <div
+            v-if="starterMode"
+            class="lesson-image-placeholder"
+            role="img"
+            :aria-label="starterLayoutContent.learning.imageAlt"
+          >
+            <span>{{ starterLayoutContent.learning.imageAlt }}</span>
+          </div>
+          <img v-else :src="section.mediaUrl" :alt="section.alt" loading="lazy" />
           <figcaption>
-            <strong>{{ section.heading }}</strong
-            ><span v-if="section.caption">{{ section.caption }}</span>
+            <strong>
+              {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+            </strong>
+            <span v-if="starterMode || section.caption">
+              {{ starterMode ? starterLayoutContent.learning.imageCaption : section.caption }}
+            </span>
           </figcaption>
         </figure>
         <template v-else-if="section.type === 'audio'">
           <div>
-            <h2>{{ section.heading }}</h2>
-            <p>{{ section.prompt }}</p>
+            <h2>
+              {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+            </h2>
+            <p>{{ starterMode ? starterLayoutContent.learning.audioPrompt : section.prompt }}</p>
           </div>
           <audio :src="section.mediaUrl" controls preload="metadata">
-            Audio playback is unavailable. {{ section.transcript }}
+            Audio playback is unavailable.
+            {{ starterMode ? starterLayoutContent.learning.audioTranscript : section.transcript }}
           </audio>
-          <details v-if="section.transcript">
+          <details v-if="starterMode || section.transcript">
             <summary>Audio transcript</summary>
-            <p>{{ section.transcript }}</p>
+            <p>
+              {{ starterMode ? starterLayoutContent.learning.audioTranscript : section.transcript }}
+            </p>
           </details>
         </template>
         <template v-else-if="section.type === 'video' && section.video">
-          <h2>{{ section.heading }}</h2>
-          <VideoExperience :video="section.video" />
+          <h2>
+            {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+          </h2>
+          <VideoExperience :video="section.video" :starter="starterMode" />
         </template>
         <template v-else-if="section.type === 'download'">
           <div>
-            <h2>{{ section.heading }}</h2>
-            <p>{{ section.description }}</p>
+            <h2>
+              {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+            </h2>
+            <p>
+              {{
+                starterMode
+                  ? starterLayoutContent.learning.downloadDescription
+                  : section.description
+              }}
+            </p>
           </div>
-          <a class="text-action" :href="section.mediaUrl">{{ section.label }}</a>
+          <a class="text-action" :href="section.mediaUrl">
+            {{ starterMode ? starterLayoutContent.learning.downloadAction : section.label }}
+          </a>
         </template>
         <template v-else-if="section.type === 'prompt'">
-          <p class="section-number">Practice</p>
+          <p class="section-number">
+            {{ starterMode ? starterLayoutContent.learning.practiceLabel : 'Practice' }}
+          </p>
           <div>
-            <h2>{{ section.heading }}</h2>
-            <p>{{ section.body }}</p>
+            <h2>
+              {{ starterMode ? starterLayoutContent.learning.sectionHeading : section.heading }}
+            </h2>
+            <p>{{ starterMode ? starterLayoutContent.learning.practiceText : section.body }}</p>
           </div>
         </template>
 
@@ -147,9 +216,18 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
 
       <section class="lesson-completion" aria-labelledby="completion-heading">
         <div>
-          <p class="section-number">Return point</p>
-          <h2 id="completion-heading">Carry this lesson forward.</h2>
-          <p v-if="!session?.authenticated">
+          <p class="section-number">
+            {{ starterMode ? starterLayoutContent.learning.completionLabel : 'Return point' }}
+          </p>
+          <h2 id="completion-heading">
+            {{
+              starterMode
+                ? starterLayoutContent.learning.completionHeading
+                : 'Carry this lesson forward.'
+            }}
+          </h2>
+          <p v-if="starterMode">{{ starterLayoutContent.learning.completionText }}</p>
+          <p v-else-if="!session?.authenticated">
             Sign in to save completion and resume the next lesson.
           </p>
           <p v-else-if="data.progress?.completed">This lesson is complete in your account.</p>
@@ -178,12 +256,21 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
       <NuxtLink
         v-if="data.previousLesson"
         :to="`/learn/${data.path.slug}/${data.previousLesson.slug}`"
-        >Previous: {{ data.previousLesson.title }}</NuxtLink
       >
+        {{
+          starterMode
+            ? starterLayoutContent.learning.previousAction
+            : `Previous: ${data.previousLesson.title}`
+        }}
+      </NuxtLink>
       <NuxtLink :to="`/learn/${data.path.slug}`">Path overview</NuxtLink>
-      <NuxtLink v-if="data.nextLesson" :to="`/learn/${data.path.slug}/${data.nextLesson.slug}`"
-        >Next: {{ data.nextLesson.title }}</NuxtLink
-      >
+      <NuxtLink v-if="data.nextLesson" :to="`/learn/${data.path.slug}/${data.nextLesson.slug}`">
+        {{
+          starterMode
+            ? starterLayoutContent.learning.nextLessonAction
+            : `Next: ${data.nextLesson.title}`
+        }}
+      </NuxtLink>
     </nav>
   </div>
   <div v-else class="page-frame interior-page">

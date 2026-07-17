@@ -45,6 +45,39 @@ test('labels track-detail content instead of presenting the fictional demo as ar
   ).toHaveCount(0)
 })
 
+test('labels every public content archetype without leaking demonstration copy', async ({
+  page,
+}) => {
+  const routes = [
+    ['/about', 'Artist Name'],
+    ['/contact', 'Contact Page Heading'],
+    ['/support', 'Support Page Heading'],
+    ['/licensing', 'Licensing Page Heading'],
+    ['/privacy', 'Privacy Page Heading'],
+    ['/music/lines-we-carry', 'Album Title'],
+    ['/music/collections/movement-studies', 'Collection Title'],
+    ['/learn', 'Learning Page Heading'],
+    ['/learn/listening-with-the-whole-phrase', 'Learning Path Title'],
+    ['/learn/listening-with-the-whole-phrase/hear-the-first-arc', 'Lesson Title'],
+    ['/video', 'Video Page Heading'],
+    ['/video/external-video-with-context', 'Video Title'],
+    ['/journal', 'Journal Page Heading'],
+    ['/journal/what-a-phrase-carries', 'Journal Entry Title'],
+    ['/account', 'Account Page Heading'],
+    ['/sign-in', 'Sign-In Page Heading'],
+    ['/sign-up', 'Sign-Up Page Heading'],
+  ] as const
+
+  const demonstrationCopy =
+    /Daymark|fictional|attentive rooms|suspended arrival|whole phrase|phrase carries|context still attached|relationship makes possible|small signals, held/i
+
+  for (const [route, heading] of routes) {
+    await gotoHydrated(page, route)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading)
+    await expect(page.locator('body')).not.toContainText(demonstrationCopy)
+  }
+})
+
 test('starts in Lato and preserves the artist-selected color mode', async ({ page }) => {
   await gotoHydrated(page, '/music')
 
@@ -52,6 +85,9 @@ test('starts in Lato and preserves the artist-selected color mode', async ({ pag
   await expect(shell).toHaveAttribute('data-color-mode', 'light')
   expect(await shell.evaluate((element) => getComputedStyle(element).fontFamily)).toContain('Lato')
   expect(await page.evaluate(() => document.fonts.check('16px Lato'))).toBe(true)
+
+  const declineAnalytics = page.getByRole('button', { name: 'No thanks' })
+  if (await declineAnalytics.isVisible()) await declineAnalytics.click()
 
   await page.getByRole('button', { name: 'Switch to dark mode' }).click()
   await expect(page.locator('html')).toHaveAttribute('data-color-mode', 'dark')

@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { LicensingResponse, PublishedLicenseOption } from '#shared/types/licensing'
 
+const starterMode = useStarterMode()
 useSeoMeta({
   title: 'Music licensing',
   description: 'Artist-approved music uses with visible terms, prices, and protected documents.',
@@ -71,9 +73,18 @@ async function beginCheckout(option: PublishedLicenseOption) {
 <template>
   <div class="page-frame licensing-page">
     <header class="page-heading licensing-heading">
-      <p class="eyebrow">Music licensing</p>
-      <h1>Choose a use whose boundaries are already clear.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.licensing.eyebrow : 'Music licensing' }}
+      </p>
+      <h1>
+        {{
+          starterMode
+            ? starterLayoutContent.licensing.title
+            : 'Choose a use whose boundaries are already clear.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.licensing.introduction }}</p>
+      <p v-else>
         Every option below was written and priced by the artist. The selected language is frozen
         before checkout and becomes the issued document after verified payment.
       </p>
@@ -101,50 +112,102 @@ async function beginCheckout(option: PublishedLicenseOption) {
       :aria-labelledby="`license-${template.id}`"
     >
       <header>
-        <p class="section-number">{{ template.track.title }}</p>
-        <h2 :id="`license-${template.id}`">{{ template.name }}</h2>
-        <p>{{ template.summary }}</p>
-        <p>{{ template.version.introduction }}</p>
+        <p class="section-number">
+          {{ starterMode ? starterLayoutContent.licensing.trackTitle : template.track.title }}
+        </p>
+        <h2 :id="`license-${template.id}`">
+          {{ starterMode ? starterLayoutContent.licensing.templateTitle : template.name }}
+        </h2>
+        <p>
+          {{ starterMode ? starterLayoutContent.licensing.templateSummary : template.summary }}
+        </p>
+        <p>
+          {{
+            starterMode
+              ? starterLayoutContent.licensing.templateIntroduction
+              : template.version.introduction
+          }}
+        </p>
       </header>
 
       <article v-for="option in template.options" :key="option.offerId" class="license-option">
         <div class="license-option__terms">
           <header>
             <div>
-              <p class="section-number">{{ option.usageCategory }}</p>
-              <h3>{{ option.label }}</h3>
+              <p class="section-number">
+                {{ starterMode ? starterLayoutContent.licensing.category : option.usageCategory }}
+              </p>
+              <h3>
+                {{ starterMode ? starterLayoutContent.licensing.optionTitle : option.label }}
+              </h3>
             </div>
-            <p class="license-price">{{ price(option) }}</p>
+            <p class="license-price">
+              {{ starterMode ? starterLayoutContent.licensing.price : price(option) }}
+            </p>
           </header>
-          <p>{{ option.description }}</p>
+          <p>
+            {{
+              starterMode ? starterLayoutContent.licensing.optionDescription : option.description
+            }}
+          </p>
           <dl>
             <div>
               <dt>Allowed media</dt>
-              <dd>{{ option.allowedMedia.join(', ') }}</dd>
+              <dd>
+                {{
+                  starterMode
+                    ? starterLayoutContent.licensing.termValue
+                    : option.allowedMedia.join(', ')
+                }}
+              </dd>
             </div>
             <div>
               <dt>Audience</dt>
-              <dd>{{ option.audienceLabel }}</dd>
+              <dd>
+                {{ starterMode ? starterLayoutContent.licensing.termValue : option.audienceLabel }}
+              </dd>
             </div>
             <div>
               <dt>Distribution</dt>
-              <dd>{{ option.distributionLabel }}</dd>
+              <dd>
+                {{
+                  starterMode ? starterLayoutContent.licensing.termValue : option.distributionLabel
+                }}
+              </dd>
             </div>
             <div>
               <dt>Term</dt>
-              <dd>{{ option.termMonths }} months</dd>
+              <dd>
+                {{
+                  starterMode
+                    ? starterLayoutContent.licensing.termValue
+                    : `${option.termMonths} months`
+                }}
+              </dd>
             </div>
             <div>
               <dt>Territory</dt>
-              <dd>{{ option.territory }}</dd>
+              <dd>
+                {{ starterMode ? starterLayoutContent.licensing.termValue : option.territory }}
+              </dd>
             </div>
             <div>
               <dt>Exclusivity</dt>
-              <dd>Non-exclusive</dd>
+              <dd>
+                {{ starterMode ? starterLayoutContent.licensing.termValue : 'Non-exclusive' }}
+              </dd>
             </div>
             <div>
               <dt>Attribution</dt>
-              <dd>{{ option.attributionRequired ? option.attributionText : 'Not required' }}</dd>
+              <dd>
+                {{
+                  starterMode
+                    ? starterLayoutContent.licensing.termValue
+                    : option.attributionRequired
+                      ? option.attributionText
+                      : 'Not required'
+                }}
+              </dd>
             </div>
           </dl>
         </div>
@@ -168,36 +231,78 @@ async function beginCheckout(option: PublishedLicenseOption) {
             />
           </label>
           <button class="text-action" type="submit" :disabled="busyId === option.offerId">
-            {{ busyId === option.offerId ? 'Freezing terms…' : `License for ${price(option)}` }}
+            {{
+              busyId === option.offerId
+                ? 'Freezing terms…'
+                : starterMode
+                  ? starterLayoutContent.licensing.checkoutAction
+                  : `License for ${price(option)}`
+            }}
           </button>
         </form>
       </article>
 
       <details class="license-general-terms">
-        <summary>Read the general terms and document notice</summary>
+        <summary>
+          {{
+            starterMode
+              ? starterLayoutContent.licensing.generalTerms
+              : 'Read the general terms and document notice'
+          }}
+        </summary>
         <section v-for="term in template.version.generalTerms" :key="term.heading">
-          <h3>{{ term.heading }}</h3>
-          <p>{{ term.body }}</p>
+          <h3>{{ starterMode ? starterLayoutContent.licensing.termHeading : term.heading }}</h3>
+          <p>{{ starterMode ? starterLayoutContent.licensing.termBody : term.body }}</p>
         </section>
-        <p>{{ template.version.disclaimer }}</p>
+        <p>
+          {{
+            starterMode ? starterLayoutContent.licensing.disclaimer : template.version.disclaimer
+          }}
+        </p>
       </details>
     </section>
 
     <section v-if="!visibleTemplates.length" class="plain-section" aria-labelledby="custom-use">
-      <p class="section-number">Artist authority</p>
-      <h2 id="custom-use">This track does not have a self-service license yet.</h2>
-      <p>The artist can still review the intended project directly.</p>
+      <p class="section-number">
+        {{ starterMode ? starterLayoutContent.licensing.inquiryLabel : 'Artist authority' }}
+      </p>
+      <h2 id="custom-use">
+        {{
+          starterMode
+            ? starterLayoutContent.licensing.inquiryTitle
+            : 'This track does not have a self-service license yet.'
+        }}
+      </h2>
+      <p>
+        {{
+          starterMode
+            ? starterLayoutContent.licensing.inquiryText
+            : 'The artist can still review the intended project directly.'
+        }}
+      </p>
     </section>
 
     <section class="licensing-inquiry" aria-labelledby="licensing-inquiry-heading">
-      <p class="section-number">Outside these boundaries</p>
+      <p class="section-number">
+        {{ starterMode ? starterLayoutContent.licensing.inquiryLabel : 'Outside these boundaries' }}
+      </p>
       <h2 id="licensing-inquiry-heading">
-        Unusual, broadcast, commercial, or exclusive uses begin with an inquiry.
+        {{
+          starterMode
+            ? starterLayoutContent.licensing.inquiryTitle
+            : 'Unusual, broadcast, commercial, or exclusive uses begin with an inquiry.'
+        }}
       </h2>
-      <p>No price or legal term is invented for a use the artist has not published.</p>
-      <NuxtLink class="text-action" :to="data?.inquiryPath ?? '/contact'"
-        >Describe the project</NuxtLink
-      >
+      <p>
+        {{
+          starterMode
+            ? starterLayoutContent.licensing.inquiryText
+            : 'No price or legal term is invented for a use the artist has not published.'
+        }}
+      </p>
+      <NuxtLink class="text-action" :to="data?.inquiryPath ?? '/contact'">
+        {{ starterMode ? starterLayoutContent.licensing.inquiryAction : 'Describe the project' }}
+      </NuxtLink>
     </section>
 
     <p v-if="message" class="form-message" role="alert">{{ message }}</p>

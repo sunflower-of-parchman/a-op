@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { EditorialRecord } from '#shared/types/learning'
 
+const starterMode = useStarterMode()
 useSeoMeta({
   title: 'Journal',
   description: 'Essays, announcements, and learning notes from the artist.',
@@ -14,9 +16,16 @@ onMounted(refresh)
 <template>
   <div class="page-frame journal-index">
     <header class="page-heading">
-      <p class="eyebrow">Journal</p>
-      <h1>Notes that remain part of the work.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.journal.eyebrow : 'Journal' }}
+      </p>
+      <h1>
+        {{
+          starterMode ? starterLayoutContent.journal.title : 'Notes that remain part of the work.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.journal.introduction }}</p>
+      <p v-else>
         Essays, announcements, learning notes, and practical information use the same safe
         structured publishing system.
       </p>
@@ -44,13 +53,19 @@ onMounted(refresh)
     <ol v-else class="journal-list">
       <li v-for="post in data?.posts ?? []" :key="post.id">
         <div>
-          <p class="section-number">{{ post.kind.replace('_', ' ') }} · {{ post.publishedOn }}</p>
-          <h2>{{ post.title }}</h2>
-          <p>{{ post.summary }}</p>
+          <p class="section-number">
+            {{
+              starterMode
+                ? starterLayoutContent.journal.metadata
+                : `${post.kind.replace('_', ' ')} · ${post.publishedOn}`
+            }}
+          </p>
+          <h2>{{ starterMode ? starterLayoutContent.journal.itemTitle : post.title }}</h2>
+          <p>{{ starterMode ? starterLayoutContent.journal.itemSummary : post.summary }}</p>
         </div>
-        <NuxtLink class="text-action" :to="`/journal/${post.slug}`"
-          >Read the complete note</NuxtLink
-        >
+        <NuxtLink class="text-action" :to="`/journal/${post.slug}`">
+          {{ starterMode ? starterLayoutContent.journal.openAction : 'Read the complete note' }}
+        </NuxtLink>
       </li>
     </ol>
   </div>

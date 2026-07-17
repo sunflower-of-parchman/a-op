@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { CommerceCatalogResponse, CommerceProduct } from '#shared/types/commerce'
 
+const starterMode = useStarterMode()
 useSeoMeta({
   title: 'Support the work',
   description: 'Downloads, memberships, free resources, and artist-directed ways to participate.',
@@ -31,6 +33,11 @@ function priceLabel(product: CommerceProduct) {
 }
 
 function actionLabel(product: CommerceProduct) {
+  if (starterMode) {
+    return product.purchaseMode === 'external'
+      ? starterLayoutContent.support.externalAction
+      : starterLayoutContent.support.offeringAction
+  }
   if (product.purchaseMode === 'free') return 'Claim free access'
   if (product.productType === 'membership') return 'Join the membership'
   return 'Purchase securely'
@@ -69,9 +76,18 @@ function recordExternalInterest(product: CommerceProduct) {
 <template>
   <div class="page-frame support-page">
     <header class="page-heading support-heading">
-      <p class="eyebrow">Direct support</p>
-      <h1>Choose what the relationship makes possible.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.support.eyebrow : 'Direct support' }}
+      </p>
+      <h1>
+        {{
+          starterMode
+            ? starterLayoutContent.support.title
+            : 'Choose what the relationship makes possible.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.support.introduction }}</p>
+      <p v-else>
         The artist defines every offering here. Purchases, free access, and membership all resolve
         through the same account-owned access record.
       </p>
@@ -102,10 +118,22 @@ function recordExternalInterest(product: CommerceProduct) {
       <article v-for="(product, index) in catalog.products" :id="product.slug" :key="product.id">
         <p class="section-number">{{ String(index + 1).padStart(2, '0') }}</p>
         <div class="offering-copy">
-          <h2>{{ product.name }}</h2>
-          <p>{{ product.description }}</p>
+          <h2>
+            {{
+              starterMode
+                ? `${starterLayoutContent.support.offeringTitle} ${String(index + 1).padStart(2, '0')}`
+                : product.name
+            }}
+          </h2>
+          <p>
+            {{
+              starterMode ? starterLayoutContent.support.offeringDescription : product.description
+            }}
+          </p>
         </div>
-        <p class="offering-price">{{ priceLabel(product) }}</p>
+        <p class="offering-price">
+          {{ starterMode ? starterLayoutContent.support.offeringPrice : priceLabel(product) }}
+        </p>
         <a
           v-if="product.purchaseMode === 'external' && product.externalUrl"
           class="text-action"
@@ -113,7 +141,7 @@ function recordExternalInterest(product: CommerceProduct) {
           rel="noopener noreferrer"
           @click="recordExternalInterest(product)"
         >
-          Visit artist offering
+          {{ starterMode ? starterLayoutContent.support.externalAction : 'Visit artist offering' }}
         </a>
         <button
           v-else
@@ -128,8 +156,11 @@ function recordExternalInterest(product: CommerceProduct) {
     </div>
 
     <p v-if="catalog?.simulationAvailable && !catalog.stripeConfigured" class="support-note">
-      This local demonstration uses a clearly labeled payment simulation. A connected installation
-      redirects mapped products to Stripe Checkout in the artist's own account.
+      {{
+        starterMode
+          ? starterLayoutContent.support.localNote
+          : "This local demonstration uses a clearly labeled payment simulation. A connected installation redirects mapped products to Stripe Checkout in the artist's own account."
+      }}
     </p>
     <p v-if="message" class="form-message" role="alert">{{ message }}</p>
   </div>

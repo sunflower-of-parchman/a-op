@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
+
+const starterMode = useStarterMode()
 useSeoMeta({
   title: 'Privacy',
   description: 'How this independent artist site handles optional audience analytics.',
@@ -11,9 +14,16 @@ onMounted(loadPolicy)
 <template>
   <div class="page-frame interior-page privacy-page">
     <header class="page-heading">
-      <p class="eyebrow">Privacy</p>
-      <h1>Small signals, held by the artist.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.privacy.eyebrow : 'Privacy' }}
+      </p>
+      <h1>
+        {{
+          starterMode ? starterLayoutContent.privacy.title : 'Small signals, held by the artist.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.privacy.introduction }}</p>
+      <p v-else>
         Optional analytics help the artist improve this independent site. Operational health records
         are kept separately so declining audience analytics never prevents the site from working.
       </p>
@@ -22,7 +32,9 @@ onMounted(loadPolicy)
     <section class="privacy-section" aria-labelledby="privacy-collection-heading">
       <div>
         <p class="section-number">01 / Optional audience events</p>
-        <h2 id="privacy-collection-heading">What can be counted</h2>
+        <h2 id="privacy-collection-heading">
+          {{ starterMode ? starterLayoutContent.privacy.collectionHeading : 'What can be counted' }}
+        </h2>
       </div>
       <div>
         <p v-for="purpose in policy?.purposes" :key="purpose">{{ purpose }}</p>
@@ -37,7 +49,13 @@ onMounted(loadPolicy)
     <section class="privacy-section" aria-labelledby="privacy-control-heading">
       <div>
         <p class="section-number">02 / Your control</p>
-        <h2 id="privacy-control-heading">A choice that remains available</h2>
+        <h2 id="privacy-control-heading">
+          {{
+            starterMode
+              ? starterLayoutContent.privacy.controlHeading
+              : 'A choice that remains available'
+          }}
+        </h2>
       </div>
       <div>
         <p v-if="privacySignal" class="form-message">
@@ -68,7 +86,11 @@ onMounted(loadPolicy)
     <section class="privacy-section" aria-labelledby="privacy-retention-heading">
       <div>
         <p class="section-number">03 / Boundaries</p>
-        <h2 id="privacy-retention-heading">Retention and operations</h2>
+        <h2 id="privacy-retention-heading">
+          {{
+            starterMode ? starterLayoutContent.privacy.retentionHeading : 'Retention and operations'
+          }}
+        </h2>
       </div>
       <div>
         <p>

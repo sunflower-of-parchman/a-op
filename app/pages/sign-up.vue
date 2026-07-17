@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { SignUpInput } from '#shared/schemas/auth'
 
 useSeoMeta({ title: 'Create an account' })
 
 const credentials = reactive<SignUpInput>({ displayName: '', email: '', password: '' })
+const starterMode = useStarterMode()
 const pending = ref(false)
 const message = ref('')
 const ready = ref(false)
@@ -34,9 +36,19 @@ async function signUp() {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">A direct relationship</p>
-      <h1>Create your listener account.</h1>
-      <p>Your account begins as a customer. Artist roles are granted separately by an owner.</p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.auth.signUpEyebrow : 'A direct relationship' }}
+      </p>
+      <h1>
+        {{ starterMode ? starterLayoutContent.auth.signUpTitle : 'Create your listener account.' }}
+      </h1>
+      <p>
+        {{
+          starterMode
+            ? starterLayoutContent.auth.signUpIntroduction
+            : 'Your account begins as a customer. Artist roles are granted separately by an owner.'
+        }}
+      </p>
     </header>
 
     <form class="account-form" @submit.prevent="signUp">

@@ -1,14 +1,16 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { ContactMessageInput } from '#shared/schemas/contact'
 
 const artist = useArtistConfig()
+const starterMode = useStarterMode()
 const { data: page } = await useFetch('/api/pages/contact')
 if (!page.value) throw createError({ statusCode: 404, statusMessage: 'Contact page not found' })
 
 const section = computed(() => page.value?.sections.find((item) => item.type === 'contact'))
 useSeoMeta({
-  title: page.value.seo.title,
-  description: page.value.seo.description,
+  title: starterMode ? 'Contact' : page.value.seo.title,
+  description: starterMode ? starterLayoutContent.seo.description : page.value.seo.description,
 })
 
 const form = reactive<ContactMessageInput>({
@@ -49,9 +51,15 @@ async function submit() {
 <template>
   <article class="page-frame interior-page contact-page">
     <header class="page-heading">
-      <p class="eyebrow">Contact</p>
-      <h1>{{ section?.heading ?? page?.title }}</h1>
-      <p>{{ section?.introduction }}</p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.contact.eyebrow : 'Contact' }}
+      </p>
+      <h1>
+        {{ starterMode ? starterLayoutContent.contact.title : (section?.heading ?? page?.title) }}
+      </h1>
+      <p>
+        {{ starterMode ? starterLayoutContent.contact.introduction : section?.introduction }}
+      </p>
     </header>
 
     <form class="account-form contact-form" @submit.prevent="submit">
@@ -69,7 +77,9 @@ async function submit() {
       </label>
       <label class="consent-control">
         <input v-model="form.consent" name="consent" type="checkbox" required />
-        <span>{{ section?.consentLabel }}</span>
+        <span>{{
+          starterMode ? starterLayoutContent.contact.consent : section?.consentLabel
+        }}</span>
       </label>
       <label class="honeypot" aria-hidden="true">
         <span>Company</span>
@@ -82,18 +92,32 @@ async function submit() {
     </form>
 
     <div class="contact-details">
-      <p>{{ artist.identity.contact.bookingNote }}</p>
+      <p>
+        {{
+          starterMode
+            ? starterLayoutContent.contact.bookingNote
+            : artist.identity.contact.bookingNote
+        }}
+      </p>
+      <span v-if="starterMode">{{ starterLayoutContent.contact.email }}</span>
       <a
-        v-if="artist.identity.contact.publicEmail"
+        v-else-if="artist.identity.contact.publicEmail"
         :href="`mailto:${artist.identity.contact.publicEmail}`"
       >
         {{ artist.identity.contact.publicEmail }}
       </a>
-      <p v-if="artist.identity.contact.mailingAddress" class="preserve-lines">
+      <p v-if="starterMode" class="preserve-lines">
+        {{ starterLayoutContent.contact.address }}
+      </p>
+      <p v-else-if="artist.identity.contact.mailingAddress" class="preserve-lines">
         {{ artist.identity.contact.mailingAddress }}
       </p>
       <p class="release-note">
-        The local demonstration stores this message and sends no external email.
+        {{
+          starterMode
+            ? starterLayoutContent.contact.localNote
+            : 'The local demonstration stores this message and sends no external email.'
+        }}
       </p>
     </div>
   </article>

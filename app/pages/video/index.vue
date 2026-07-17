@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { starterLayoutContent } from '#shared/content/starterLayout'
 import type { VideoRecord } from '#shared/types/learning'
 
+const starterMode = useStarterMode()
 useSeoMeta({ title: 'Video', description: 'Artist-published video with context and transcripts.' })
 const { data, error, status, refresh } = await useFetch<{ videos: VideoRecord[] }>('/api/videos')
 </script>
@@ -8,9 +10,16 @@ const { data, error, status, refresh } = await useFetch<{ videos: VideoRecord[] 
 <template>
   <div class="page-frame video-index">
     <header class="page-heading">
-      <p class="eyebrow">Video</p>
-      <h1>Watch with the context still attached.</h1>
-      <p>
+      <p class="eyebrow">
+        {{ starterMode ? starterLayoutContent.video.eyebrow : 'Video' }}
+      </p>
+      <h1>
+        {{
+          starterMode ? starterLayoutContent.video.title : 'Watch with the context still attached.'
+        }}
+      </h1>
+      <p v-if="starterMode">{{ starterLayoutContent.video.introduction }}</p>
+      <p v-else>
         Every entry carries a description, source credit, and transcript before an external player
         loads.
       </p>
@@ -38,13 +47,15 @@ const { data, error, status, refresh } = await useFetch<{ videos: VideoRecord[] 
     <ol v-else class="video-list">
       <li v-for="video in data?.videos ?? []" :key="video.id">
         <div>
-          <p class="section-number">{{ video.provider }}</p>
-          <h2>{{ video.title }}</h2>
-          <p>{{ video.summary }}</p>
+          <p class="section-number">
+            {{ starterMode ? starterLayoutContent.video.provider : video.provider }}
+          </p>
+          <h2>{{ starterMode ? starterLayoutContent.video.itemTitle : video.title }}</h2>
+          <p>{{ starterMode ? starterLayoutContent.video.itemSummary : video.summary }}</p>
         </div>
-        <NuxtLink class="text-action" :to="`/video/${video.slug}`"
-          >Open video and transcript</NuxtLink
-        >
+        <NuxtLink class="text-action" :to="`/video/${video.slug}`">
+          {{ starterMode ? starterLayoutContent.video.openAction : 'Open video and transcript' }}
+        </NuxtLink>
       </li>
     </ol>
   </div>
