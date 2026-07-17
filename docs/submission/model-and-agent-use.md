@@ -335,6 +335,15 @@ Do not infer a task's model from writing style or memory. Use environment-provid
 - Commit: `eab8365` (`Refine starter themes and music library`).
 - Verification: Production build, type checking, lint, formatting, documentation validation, browser-secret scanning, eight desktop/mobile Chromium starter journeys, and two desktop/mobile Chromium catalog journeys passed. Live in-app browser inspection confirmed Lato loading, light/dark persistence, desktop density, mobile disclosure, accessibility, and zero horizontal overflow. No database, provider, deployment, publication, or Sound for Movement resource changed.
 
+### Complete public starter-language pass — 2026-07-16
+
+- Task: Primary implementation task.
+- Model: GPT-5.6 Sol in the primary implementation task, following the adopted GPT-5.6 Pro plan review.
+- Human decisions: Michael required every public first-clone page to stop presenting old fictional content and to name each element plainly so the platform teaches the artist what they can replace.
+- Material contribution: Extended the shared starter content model across all public route families; applied literal substitutions to database-backed structured sections, video metadata, releases, collections, informational pages, learning, journal, account, authentication, and local simulated checkout; preserved working navigation, access, playback, and commerce behavior; added a designed lesson-media placeholder; and expanded the isolated starter regression matrix.
+- Commit: `3d61f56` (`Label all starter public pages`).
+- Verification: Formatting, lint, Nuxt type checking, and the production build passed. Ten desktop/mobile Chromium starter journeys covered seventeen route archetypes and rejected residual demo language. Live About, Support, lesson, and mobile inspection confirmed the composed result and exposed the final lesson-image defect before it was corrected. No database, provider, deployment, publication, or Sound for Movement state changed.
+
 ## Submission reconciliation
 
 Before submission:

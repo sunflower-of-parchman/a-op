@@ -11,9 +11,12 @@ through the existing configuration authority.
 Content plan: Label the artist name or logo, hero kicker, primary headline, introductory text,
 actions, featured release or artwork, supporting section, list items, closing section, and footer.
 The labels teach the artist which decisions are available without pretending to be finished copy.
-Track detail pages apply the same contract to the track title, description, metadata, listener
-library, and return action. The complete Daymark Assembly identity remains a separate demonstration
-mode.
+Every public route family applies the same contract to its actual job: releases and collections;
+biography, contact, support, licensing, and privacy; paths and lessons; videos and transcripts;
+journal entries; account and authentication; and local simulated checkout. Literal labels also
+cover database-backed structured sections, accessible media descriptions, credits, and protected
+lesson-media placeholders. Working links, actions, access rules, playback, and commerce behavior
+remain authoritative. The complete Daymark Assembly identity remains a separate demonstration mode.
 
 Interaction thesis: Keep the existing restrained links, navigation, focus behavior, and responsive
 composition. The starter is keyboard-readable, carries no production indexing, and disappears when
