@@ -94,6 +94,7 @@
     "verify": "npm run verify:foundation && npm run verify:spine && npm run verify:administration && npm run verify:catalog && npm run verify:commerce && npm run verify:licensing && npm run verify:learning && npm run verify:telemetry && npm run verify:setup && npm run verify:portability && npm run verify:hardening && npm run verify:recovery && npm run setup:local && npm run test:spine && npm run test:e2e && npm run verify:package"
   },
   "dependencies": {
+    "@fontsource/lato": "5.2.7",
     "@nuxt/image": "2.0.0",
     "@nuxtjs/tailwindcss": "6.14.0",
     "@pinia/nuxt": "0.11.3",

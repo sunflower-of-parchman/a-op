@@ -3,6 +3,7 @@ export type PublicCatalogPreview = {
   track_id: string | null
   media_type: string
   url: string
+  waveform: number[]
 }
 
 export type PublicCatalogTrack = {

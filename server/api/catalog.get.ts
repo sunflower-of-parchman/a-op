@@ -6,6 +6,16 @@ import type {
 } from '#shared/types/catalog'
 import { getPublicSupabase } from '../utils/supabase'
 
+function publicWaveform(metadata: unknown): number[] {
+  if (!metadata || typeof metadata !== 'object' || !('waveform' in metadata)) return []
+  const waveform = (metadata as { waveform?: unknown }).waveform
+  if (!Array.isArray(waveform)) return []
+  return waveform
+    .filter((point): point is number => typeof point === 'number' && Number.isFinite(point))
+    .slice(0, 120)
+    .map((point) => Math.min(1, Math.max(0, point)))
+}
+
 export default defineEventHandler(async (event): Promise<PublicCatalogResponse> => {
   setResponseHeader(event, 'cache-control', 'no-store')
   const supabase = getPublicSupabase(event)
@@ -59,7 +69,7 @@ export default defineEventHandler(async (event): Promise<PublicCatalogResponse> 
     trackIds.length
       ? supabase
           .from('media_objects')
-          .select('id, track_id, bucket_id, object_path, media_type')
+          .select('id, track_id, bucket_id, object_path, media_type, metadata')
           .in('track_id', trackIds)
           .eq('kind', 'preview_audio')
           .eq('is_public', true)
@@ -84,6 +94,7 @@ export default defineEventHandler(async (event): Promise<PublicCatalogResponse> 
         id: preview.id,
         track_id: preview.track_id,
         media_type: preview.media_type,
+        waveform: publicWaveform(preview.metadata),
         url: supabase.storage.from(preview.bucket_id).getPublicUrl(preview.object_path).data
           .publicUrl,
       },

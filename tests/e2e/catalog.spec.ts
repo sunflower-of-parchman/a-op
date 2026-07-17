@@ -11,8 +11,17 @@ test('preserves authored catalog order and one player across routes', async ({ p
     'Turn Toward Home',
   ])
 
+  const mobileFilterToggle = page.getByRole('button', { name: 'Show filters' })
+  if (await mobileFilterToggle.isVisible()) await mobileFilterToggle.click()
+
   await page.getByLabel('Meter').selectOption('3/4')
   await expect(trackTitles).toHaveText(['A Measure of Distance'])
+  await page.getByRole('button', { name: 'Clear filters' }).click()
+  await page.getByLabel('Key').selectOption('A major')
+  await expect(trackTitles).toHaveText(['A Measure of Distance'])
+  await page.getByRole('button', { name: 'Clear filters' }).click()
+  await page.getByLabel('Duration').selectOption('long')
+  await expect(trackTitles).toHaveCount(0)
   await page.getByRole('button', { name: 'Clear filters' }).click()
   await page.getByLabel('Sort tracks').selectOption('tempo_desc')
   await expect(trackTitles).toHaveText([
@@ -23,6 +32,16 @@ test('preserves authored catalog order and one player across routes', async ({ p
   await page.getByLabel('Sort tracks').selectOption('authored')
 
   const musicViews = page.getByRole('navigation', { name: 'Music catalog views' })
+  await expect(musicViews.getByRole('button')).toHaveCount(6)
+  await expect(page.locator('.music-track-waveform')).toHaveCount(3)
+  await expect(page.getByRole('link', { name: /^Buy/ })).toHaveCount(3)
+  await expect(page.getByRole('link', { name: 'Buy Track' })).toHaveCount(1)
+  await expect(page.getByRole('link', { name: 'License' })).toHaveCount(3)
+  await expect(page.getByRole('button', { name: /Add .* to favorites/ })).toHaveCount(3)
+
+  await musicViews.getByRole('button', { name: /Explore/ }).click()
+  await expect(page.getByRole('heading', { level: 3, name: 'Albums' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 3, name: 'Collections' })).toBeVisible()
   await musicViews.getByRole('button', { name: /Collections/ }).click()
   await expect(page.getByRole('heading', { level: 2, name: 'Collections' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Movement Studies' })).toBeVisible()

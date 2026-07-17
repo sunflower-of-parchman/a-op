@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import type { LibraryResponse } from '#shared/types/library'
+import type { CommerceCatalogResponse, CommerceProduct } from '#shared/types/commerce'
+import type { LibraryPlaylist, LibraryResponse } from '#shared/types/library'
 import type {
   PublicCatalogRelease,
   PublicCatalogResponse,
   PublicCatalogTrack,
 } from '#shared/types/catalog'
 
-type MusicView = 'tracks' | 'albums' | 'collections' | 'playlists'
+type MusicView = 'explore' | 'tracks' | 'collections' | 'albums' | 'favorites' | 'playlists'
 type TrackSort = 'authored' | 'newest' | 'oldest' | 'a_z' | 'z_a' | 'tempo_asc' | 'tempo_desc'
 type AlbumSort = 'authored' | 'newest' | 'oldest' | 'a_z' | 'z_a'
 type CollectionSort = 'authored' | 'a_z' | 'z_a'
 type PlaylistSort = 'updated' | 'a_z' | 'z_a' | 'most_tracks'
 type TempoFilter = '' | 'slow' | 'moderate' | 'fast'
+type DurationFilter = '' | 'short' | 'medium' | 'long'
 
 type BrowserTrack = PublicCatalogTrack & {
   album: Pick<PublicCatalogRelease, 'id' | 'slug' | 'title' | 'release_date' | 'release_type'>
@@ -21,27 +23,38 @@ type BrowserTrack = PublicCatalogTrack & {
 const artist = useArtistConfig()
 const starterMode = useStarterMode()
 const { data, error, status, refresh } = await useFetch<PublicCatalogResponse>('/api/catalog')
-const { data: library } = await useFetch<LibraryResponse>('/api/library')
+const { data: library, refresh: refreshLibrary } = await useFetch<LibraryResponse>('/api/library')
+const { data: commerce } = await useFetch<CommerceCatalogResponse>('/api/commerce/products')
 const { track: recordTelemetry } = useTelemetry()
 const audioPlayer = useAudioPlayer()
+const libraryMessage = ref('')
+const mobileFiltersOpen = ref(false)
+const mobileLibrary = useMediaQuery('(max-width: 48rem)')
+const filterPanelVisible = computed(() => !mobileLibrary.value || mobileFiltersOpen.value)
 
 const activeView = ref<MusicView>('tracks')
 const query = ref('')
 const meter = ref('')
 const mood = ref('')
+const musicalKey = ref('')
 const instrument = ref('')
 const tempo = ref<TempoFilter>('')
+const duration = ref<DurationFilter>('')
 const trackSort = ref<TrackSort>('authored')
 const albumSort = ref<AlbumSort>('authored')
 const collectionSort = ref<CollectionSort>('authored')
 const playlistSort = ref<PlaylistSort>('updated')
 
 const viewLabels: Record<MusicView, string> = {
+  explore: 'Explore',
   tracks: 'Tracks',
-  albums: 'Albums',
   collections: 'Collections',
+  albums: 'Albums',
+  favorites: 'Favorites',
   playlists: 'Playlists',
 }
+
+const views: MusicView[] = ['explore', 'tracks', 'collections', 'albums', 'favorites', 'playlists']
 
 const catalogTracks = computed<BrowserTrack[]>(() => {
   let catalogOrder = 0
@@ -74,6 +87,7 @@ function unique(values: string[]) {
 
 const meters = computed(() => unique(catalogTracks.value.map((track) => track.meter)))
 const moods = computed(() => unique(catalogTracks.value.map((track) => track.mood)))
+const musicalKeys = computed(() => unique(catalogTracks.value.map((track) => track.musical_key)))
 const instruments = computed(() =>
   unique(catalogTracks.value.flatMap((track) => track.instruments)),
 )
@@ -97,6 +111,15 @@ function matchesTempo(track: BrowserTrack) {
   return track.tempo_bpm >= 90
 }
 
+function matchesDuration(track: BrowserTrack) {
+  if (!duration.value) return true
+  if (track.duration_ms === null) return false
+  const minutes = track.duration_ms / 60_000
+  if (duration.value === 'short') return minutes < 3
+  if (duration.value === 'medium') return minutes >= 3 && minutes < 6
+  return minutes >= 6
+}
+
 const filteredTracks = computed(() => {
   const tracks = catalogTracks.value.filter(
     (track) =>
@@ -111,8 +134,10 @@ const filteredTracks = computed(() => {
       ]) &&
       (!meter.value || track.meter === meter.value) &&
       (!mood.value || track.mood === mood.value) &&
+      (!musicalKey.value || track.musical_key === musicalKey.value) &&
       (!instrument.value || track.instruments.includes(instrument.value)) &&
-      matchesTempo(track),
+      matchesTempo(track) &&
+      matchesDuration(track),
   )
 
   return [...tracks].sort((left, right) => {
@@ -137,6 +162,16 @@ const filteredTracks = computed(() => {
     return left.catalogOrder - right.catalogOrder
   })
 })
+
+const favoriteTracks = computed(() => {
+  if (!library.value?.authenticated) return []
+  const favoriteIds = new Set(library.value.favoriteTrackIds)
+  return filteredTracks.value.filter((track) => favoriteIds.has(track.id))
+})
+
+const visibleTracks = computed(() =>
+  activeView.value === 'favorites' ? favoriteTracks.value : filteredTracks.value,
+)
 
 const filteredAlbums = computed(() => {
   const releases = (data.value?.releases ?? []).filter((release) =>
@@ -191,22 +226,24 @@ const sortedPlaylists = computed(() => {
 })
 
 const currentResultCount = computed(() => {
-  if (activeView.value === 'tracks') return filteredTracks.value.length
+  if (activeView.value === 'explore') return catalogTracks.value.length
+  if (activeView.value === 'tracks') return visibleTracks.value.length
+  if (activeView.value === 'favorites') return favoriteTracks.value.length
   if (activeView.value === 'albums') return filteredAlbums.value.length
   if (activeView.value === 'collections') return filteredCollections.value.length
   return sortedPlaylists.value.length
 })
 
 const playableTracks = computed(() =>
-  filteredTracks.value.flatMap((track) =>
+  visibleTracks.value.flatMap((track) =>
     track.preview
       ? [
           {
             id: track.id,
             slug: track.slug,
-            title: track.title,
-            artist: artist.identity.name,
-            releaseTitle: track.album.title,
+            title: starterMode ? 'Track Title' : track.title,
+            artist: starterMode ? 'Artist Name' : artist.identity.name,
+            releaseTitle: starterMode ? 'Album Title' : track.album.title,
             href: `/music/tracks/${track.slug}`,
             src: track.preview.url,
           },
@@ -225,8 +262,104 @@ function playTrack(trackId: string) {
 function clearTrackFilters() {
   meter.value = ''
   mood.value = ''
+  musicalKey.value = ''
   instrument.value = ''
   tempo.value = ''
+  duration.value = ''
+}
+
+function isFavorite(trackId: string) {
+  return library.value?.authenticated === true && library.value.favoriteTrackIds.includes(trackId)
+}
+
+async function toggleFavorite(track: BrowserTrack) {
+  if (library.value?.authenticated !== true) {
+    await navigateTo(`/sign-in?redirect=${encodeURIComponent('/music')}`)
+    return
+  }
+  await $fetch('/api/library/favorites', {
+    method: 'POST',
+    body: { trackId: track.id, favorite: !isFavorite(track.id) },
+  })
+  await refreshLibrary()
+  libraryMessage.value = isFavorite(track.id)
+    ? `${starterMode ? 'Track Title' : track.title} saved to favorites.`
+    : `${starterMode ? 'Track Title' : track.title} removed from favorites.`
+}
+
+async function addToPlaylist(track: BrowserTrack, playlist: LibraryPlaylist) {
+  if (playlist.tracks.some(({ id }) => id === track.id)) {
+    libraryMessage.value = 'That track is already in this playlist.'
+    return
+  }
+  await $fetch(`/api/library/playlists/${playlist.id}`, {
+    method: 'PUT',
+    body: {
+      title: playlist.title,
+      description: playlist.description,
+      trackIds: [...playlist.tracks.map(({ id }) => id), track.id],
+    },
+  })
+  await refreshLibrary()
+  libraryMessage.value = `Track added to ${playlist.title}.`
+}
+
+function commerceProduct(track: BrowserTrack): CommerceProduct | null {
+  const products = commerce.value?.products ?? []
+  return (
+    products.find(
+      (product) => product.resourceType === 'track' && product.resourceId === track.id,
+    ) ??
+    products.find(
+      (product) => product.resourceType === 'release' && product.resourceId === track.album.id,
+    ) ??
+    null
+  )
+}
+
+function buyLabel(track: BrowserTrack) {
+  return commerceProduct(track)?.productType === 'track_download' ? 'Buy Track' : 'Buy Album'
+}
+
+function commerceHref(track: BrowserTrack) {
+  const product = commerceProduct(track)
+  return product ? `/support#${product.slug}` : '/support'
+}
+
+function displayTrackTitle(track: BrowserTrack) {
+  return starterMode ? `Track Title ${String(track.catalogOrder).padStart(2, '0')}` : track.title
+}
+
+function displayAlbumTitle(track: BrowserTrack) {
+  return starterMode ? 'Album Title' : track.album.title
+}
+
+function artworkLabel(track: BrowserTrack) {
+  if (starterMode) return 'Art'
+  return track.album.title
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase()
+}
+
+function waveformPoints(track: BrowserTrack) {
+  const points = track.preview?.waveform ?? []
+  if (points.length <= 36) return points
+  const step = points.length / 36
+  return Array.from({ length: 36 }, (_, index) => points[Math.floor(index * step)] ?? 0)
+}
+
+function viewCount(view: MusicView): number | string {
+  if (view === 'explore') return catalogTracks.value.length
+  if (view === 'tracks') return catalogTracks.value.length
+  if (view === 'collections') return data.value?.collections.length ?? 0
+  if (view === 'albums') return data.value?.releases.length ?? 0
+  if (view === 'favorites') {
+    return library.value?.authenticated ? library.value.favoriteTrackIds.length : '—'
+  }
+  return library.value?.authenticated ? library.value.playlists.length : '—'
 }
 
 function submitSearch() {
@@ -249,9 +382,11 @@ useSeoMeta({ title: 'Music' })
 <template>
   <div class="page-frame interior-page music-page">
     <header class="music-page-heading">
-      <p class="eyebrow">Catalog</p>
-      <h1>Music</h1>
-      <p>Browse tracks, albums, collections, and your saved playlists.</p>
+      <div>
+        <p class="eyebrow">Library</p>
+        <h1>Music</h1>
+      </div>
+      <p>{{ catalogTracks.length }} tracks</p>
     </header>
 
     <ServiceState
@@ -277,76 +412,129 @@ useSeoMeta({ title: 'Music' })
 
     <div v-else-if="data" class="music-browser">
       <aside class="music-browser__sidebar" aria-label="Browse music">
+        <p class="music-sidebar-heading">Library</p>
         <nav class="music-view-navigation" aria-label="Music catalog views">
           <button
-            v-for="view in ['tracks', 'albums', 'collections', 'playlists'] as MusicView[]"
+            v-for="view in views"
             :key="view"
             type="button"
             :aria-pressed="activeView === view"
             @click="activeView = view"
           >
             <span>{{ viewLabels[view] }}</span>
-            <span aria-hidden="true">
-              {{
-                view === 'tracks'
-                  ? catalogTracks.length
-                  : view === 'albums'
-                    ? data.releases.length
-                    : view === 'collections'
-                      ? data.collections.length
-                      : library?.authenticated
-                        ? library.playlists.length
-                        : '—'
-              }}
-            </span>
+            <span aria-hidden="true">{{ viewCount(view) }}</span>
           </button>
         </nav>
 
-        <form class="music-catalog-controls" role="search" @submit.prevent="submitSearch">
-          <label class="music-search-field">
-            <span>Search {{ viewLabels[activeView].toLowerCase() }}</span>
-            <input v-model="query" type="search" autocomplete="off" placeholder="Title or detail" />
-          </label>
-          <button class="text-action" type="submit">Search</button>
+        <form
+          v-if="activeView !== 'playlists'"
+          class="music-catalog-controls"
+          role="search"
+          @submit.prevent="submitSearch"
+        >
+          <p class="music-sidebar-heading">Filters</p>
+          <button
+            class="music-mobile-filter-toggle"
+            type="button"
+            aria-controls="music-filter-panel"
+            :aria-expanded="filterPanelVisible"
+            @click="mobileFiltersOpen = !mobileFiltersOpen"
+          >
+            {{ filterPanelVisible ? 'Hide filters' : 'Show filters' }}
+          </button>
+          <div v-show="filterPanelVisible" id="music-filter-panel" class="music-filter-panel">
+            <label class="music-search-field">
+              <span>Search {{ viewLabels[activeView].toLowerCase() }}</span>
+              <input
+                v-model="query"
+                type="search"
+                autocomplete="off"
+                placeholder="Title or detail"
+              />
+            </label>
 
-          <fieldset v-if="activeView === 'tracks'" class="music-filter-fields">
-            <legend>Filter tracks</legend>
-            <label>
-              <span>Meter</span>
-              <select v-model="meter">
-                <option value="">All meters</option>
-                <option v-for="value in meters" :key="value" :value="value">{{ value }}</option>
-              </select>
-            </label>
-            <label>
-              <span>Tempo</span>
-              <select v-model="tempo">
-                <option value="">All tempos</option>
-                <option value="slow">Under 75 BPM</option>
-                <option value="moderate">75–89 BPM</option>
-                <option value="fast">90 BPM and above</option>
-              </select>
-            </label>
-            <label>
-              <span>Mood</span>
-              <select v-model="mood">
-                <option value="">All moods</option>
-                <option v-for="value in moods" :key="value" :value="value">{{ value }}</option>
-              </select>
-            </label>
-            <label>
-              <span>Instrument</span>
-              <select v-model="instrument">
-                <option value="">All instruments</option>
-                <option v-for="value in instruments" :key="value" :value="value">
-                  {{ value }}
-                </option>
-              </select>
-            </label>
-            <button class="music-clear-filters" type="button" @click="clearTrackFilters">
-              Clear filters
-            </button>
-          </fieldset>
+            <fieldset
+              v-if="activeView === 'tracks' || activeView === 'favorites'"
+              class="music-filter-fields"
+            >
+              <legend class="sr-only">Filter tracks</legend>
+              <details>
+                <summary>Meter</summary>
+                <label>
+                  <span class="sr-only">Meter</span>
+                  <select v-model="meter">
+                    <option value="">All meters</option>
+                    <option v-for="value in meters" :key="value" :value="value">
+                      {{ value }}
+                    </option>
+                  </select>
+                </label>
+              </details>
+              <details>
+                <summary>Tempo</summary>
+                <label>
+                  <span class="sr-only">Tempo</span>
+                  <select v-model="tempo">
+                    <option value="">All tempos</option>
+                    <option value="slow">Under 75 BPM</option>
+                    <option value="moderate">75–89 BPM</option>
+                    <option value="fast">90 BPM and above</option>
+                  </select>
+                </label>
+              </details>
+              <details>
+                <summary>Mood</summary>
+                <label>
+                  <span class="sr-only">Mood</span>
+                  <select v-model="mood">
+                    <option value="">All moods</option>
+                    <option v-for="value in moods" :key="value" :value="value">
+                      {{ value }}
+                    </option>
+                  </select>
+                </label>
+              </details>
+              <details>
+                <summary>Key</summary>
+                <label>
+                  <span class="sr-only">Key</span>
+                  <select v-model="musicalKey">
+                    <option value="">All keys</option>
+                    <option v-for="value in musicalKeys" :key="value" :value="value">
+                      {{ value }}
+                    </option>
+                  </select>
+                </label>
+              </details>
+              <details>
+                <summary>Instruments</summary>
+                <label>
+                  <span class="sr-only">Instruments</span>
+                  <select v-model="instrument">
+                    <option value="">All instruments</option>
+                    <option v-for="value in instruments" :key="value" :value="value">
+                      {{ value }}
+                    </option>
+                  </select>
+                </label>
+              </details>
+              <details>
+                <summary>Duration</summary>
+                <label>
+                  <span class="sr-only">Duration</span>
+                  <select v-model="duration">
+                    <option value="">Any duration</option>
+                    <option value="short">Under 3 minutes</option>
+                    <option value="medium">3–6 minutes</option>
+                    <option value="long">6 minutes and above</option>
+                  </select>
+                </label>
+              </details>
+              <button class="music-clear-filters" type="button" @click="clearTrackFilters">
+                Clear filters
+              </button>
+            </fieldset>
+          </div>
         </form>
       </aside>
 
@@ -354,9 +542,11 @@ useSeoMeta({ title: 'Music' })
         <header class="music-results-heading">
           <div>
             <p class="section-number">{{ currentResultCount }} results</p>
-            <h2 :id="`music-${activeView}-heading`">{{ viewLabels[activeView] }}</h2>
+            <h2 :id="`music-${activeView}-heading`">
+              {{ activeView === 'tracks' ? 'All Tracks' : viewLabels[activeView] }}
+            </h2>
           </div>
-          <label v-if="activeView === 'tracks'">
+          <label v-if="activeView === 'tracks' || activeView === 'favorites'">
             <span>Sort tracks</span>
             <select v-model="trackSort">
               <option value="authored">Artist order</option>
@@ -401,23 +591,26 @@ useSeoMeta({ title: 'Music' })
           Showing {{ currentResultCount }} matching {{ viewLabels[activeView].toLowerCase() }}.
           Search words remain in this browser.
         </p>
+        <p v-if="libraryMessage" class="music-library-message" role="status">
+          {{ libraryMessage }}
+        </p>
 
-        <template v-if="activeView === 'tracks'">
+        <template v-if="activeView === 'tracks' || activeView === 'favorites'">
           <div class="music-track-columns" aria-hidden="true">
             <span>Track</span>
-            <span>Tempo</span>
-            <span>Meter</span>
-            <span>Mood</span>
-            <span>Time</span>
+            <span>Waveform</span>
+            <span>Actions</span>
           </div>
-          <ol v-if="filteredTracks.length" class="music-track-list">
-            <li v-for="track in filteredTracks" :key="track.id" class="music-track-row">
+          <ol v-if="visibleTracks.length" class="music-track-list">
+            <li v-for="track in visibleTracks" :key="track.id" class="music-track-row">
               <button
                 class="music-track-row__play"
                 type="button"
                 :disabled="!track.preview"
                 :aria-label="
-                  track.preview ? `Play ${track.title}` : `Preview unavailable for ${track.title}`
+                  track.preview
+                    ? `Play ${displayTrackTitle(track)}`
+                    : `Preview unavailable for ${displayTrackTitle(track)}`
                 "
                 @click="playTrack(track.id)"
               >
@@ -429,35 +622,156 @@ useSeoMeta({ title: 'Music' })
                       : 'Soon'
                 }}
               </button>
+              <span class="music-track-row__art" aria-hidden="true">{{ artworkLabel(track) }}</span>
               <div class="music-track-row__identity">
                 <NuxtLink class="music-track-row__title" :to="`/music/tracks/${track.slug}`">
-                  {{ track.title }}
+                  {{ displayTrackTitle(track) }}
                 </NuxtLink>
-                <NuxtLink :to="`/music/${track.album.slug}`">{{ track.album.title }}</NuxtLink>
-                <span>{{ track.musical_key || 'Key not listed' }}</span>
+                <span
+                  >{{ formatDuration(track.duration_ms) }} · {{ displayAlbumTitle(track) }}</span
+                >
+                <span class="music-track-row__metadata">
+                  {{ starterMode ? 'Tempo' : track.tempo_bpm ? `${track.tempo_bpm} BPM` : '—' }}
+                  · {{ starterMode ? 'Meter' : track.meter || '—' }} ·
+                  {{ starterMode ? 'Key' : track.musical_key || '—' }} ·
+                  {{ starterMode ? 'Mood' : track.mood || '—' }}
+                </span>
               </div>
-              <span>{{ track.tempo_bpm ? `${track.tempo_bpm} BPM` : '—' }}</span>
-              <span>{{ track.meter || '—' }}</span>
-              <span>{{ track.mood || '—' }}</span>
-              <span>{{ formatDuration(track.duration_ms) }}</span>
+              <span
+                class="music-track-waveform"
+                :class="{ 'music-track-waveform--empty': !waveformPoints(track).length }"
+                aria-label="Track waveform"
+              >
+                <i
+                  v-for="(point, index) in waveformPoints(track)"
+                  :key="index"
+                  :style="{ height: `${Math.max(8, point * 100)}%` }"
+                />
+                <span v-if="!waveformPoints(track).length">{{
+                  starterMode ? 'Waveform' : '—'
+                }}</span>
+              </span>
+              <div class="music-track-row__actions">
+                <NuxtLink
+                  v-if="commerceProduct(track)"
+                  class="music-row-action"
+                  :to="commerceHref(track)"
+                >
+                  {{ buyLabel(track) }}
+                </NuxtLink>
+                <NuxtLink class="music-row-action" :to="`/licensing?track=${track.slug}`">
+                  License
+                </NuxtLink>
+                <button
+                  class="music-icon-action"
+                  type="button"
+                  :aria-label="
+                    isFavorite(track.id)
+                      ? `Remove ${displayTrackTitle(track)} from favorites`
+                      : `Add ${displayTrackTitle(track)} to favorites`
+                  "
+                  :title="isFavorite(track.id) ? 'Remove from favorites' : 'Add to favorites'"
+                  @click="toggleFavorite(track)"
+                >
+                  {{ isFavorite(track.id) ? '♥' : '♡' }}
+                </button>
+                <details
+                  v-if="library?.authenticated && library.playlists.length"
+                  class="music-playlist-menu"
+                >
+                  <summary
+                    :aria-label="`Add ${displayTrackTitle(track)} to playlist`"
+                    title="Add to playlist"
+                  >
+                    +
+                  </summary>
+                  <div>
+                    <button
+                      v-for="playlist in library.playlists"
+                      :key="playlist.id"
+                      type="button"
+                      @click="addToPlaylist(track, playlist)"
+                    >
+                      {{ playlist.title }}
+                    </button>
+                  </div>
+                </details>
+                <NuxtLink
+                  v-else
+                  class="music-icon-action"
+                  :to="library?.authenticated ? '/account' : '/sign-in?redirect=/music'"
+                  :aria-label="`Add ${displayTrackTitle(track)} to playlist`"
+                  title="Add to playlist"
+                >
+                  +
+                </NuxtLink>
+              </div>
             </li>
           </ol>
+          <div
+            v-else-if="activeView === 'favorites' && !library?.authenticated"
+            class="music-library-gate"
+          >
+            <h3>Sign in to reach your favorites.</h3>
+            <NuxtLink class="text-action" to="/sign-in?redirect=/music">Sign in</NuxtLink>
+          </div>
           <p v-else class="music-empty-result">No tracks match the current search and filters.</p>
         </template>
+
+        <div v-else-if="activeView === 'explore'" class="music-explore">
+          <section aria-labelledby="explore-albums-heading">
+            <header>
+              <h3 id="explore-albums-heading">Albums</h3>
+              <button type="button" @click="activeView = 'albums'">View all</button>
+            </header>
+            <ol class="music-album-grid">
+              <li v-for="release in filteredAlbums.slice(0, 4)" :key="release.id">
+                <NuxtLink class="music-album" :to="`/music/${release.slug}`">
+                  <span class="music-album__art" aria-hidden="true">
+                    <span>Album Artwork</span>
+                    <strong>{{ starterMode ? 'Album Title' : release.title }}</strong>
+                    <span>{{ starterMode ? 'Artist Name' : artist.identity.name }}</span>
+                  </span>
+                </NuxtLink>
+              </li>
+            </ol>
+          </section>
+          <section aria-labelledby="explore-collections-heading">
+            <header>
+              <h3 id="explore-collections-heading">Collections</h3>
+              <button type="button" @click="activeView = 'collections'">View all</button>
+            </header>
+            <ol class="music-collection-list">
+              <li
+                v-for="(collection, index) in filteredCollections.slice(0, 4)"
+                :key="collection.id"
+              >
+                <span>{{ String(index + 1).padStart(2, '0') }}</span>
+                <div>
+                  <NuxtLink :to="`/music/collections/${collection.slug}`">
+                    {{ starterMode ? 'Collection Title' : collection.title }}
+                  </NuxtLink>
+                </div>
+                <span>{{ collection.trackCount }} tracks</span>
+              </li>
+            </ol>
+          </section>
+        </div>
 
         <ol v-else-if="activeView === 'albums' && filteredAlbums.length" class="music-album-grid">
           <li v-for="release in filteredAlbums" :key="release.id">
             <NuxtLink class="music-album" :to="`/music/${release.slug}`">
               <span class="music-album__art" aria-hidden="true">
                 <span>
-                  {{ formatReleaseType(release.release_type) }} ·
-                  {{ release.release_date?.slice(0, 4) ?? 'Unscheduled' }}
+                  {{
+                    starterMode ? 'Release Type · Year' : formatReleaseType(release.release_type)
+                  }}
                 </span>
-                <strong>{{ release.title }}</strong>
+                <strong>{{ starterMode ? 'Album Title' : release.title }}</strong>
                 <span>{{ starterMode ? 'Artist Name' : artist.identity.name }}</span>
               </span>
               <span class="music-album__details">
-                <strong>{{ release.title }}</strong>
+                <strong>{{ starterMode ? 'Album Title' : release.title }}</strong>
                 <span>
                   {{ formatReleaseType(release.release_type) }} · {{ release.tracks.length }}
                   {{ release.tracks.length === 1 ? 'track' : 'tracks' }}
@@ -475,9 +789,9 @@ useSeoMeta({ title: 'Music' })
             <span>{{ String(index + 1).padStart(2, '0') }}</span>
             <div>
               <NuxtLink :to="`/music/collections/${collection.slug}`">
-                {{ collection.title }}
+                {{ starterMode ? 'Collection Title' : collection.title }}
               </NuxtLink>
-              <p>{{ collection.description }}</p>
+              <p>{{ starterMode ? 'Collection Description' : collection.description }}</p>
             </div>
             <span>{{ collection.trackCount }} tracks</span>
           </li>

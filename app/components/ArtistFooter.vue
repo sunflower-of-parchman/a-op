@@ -3,6 +3,7 @@ import { starterLayoutContent } from '#shared/content/starterLayout'
 
 const artist = useArtistConfig()
 const starterMode = useStarterMode()
+const { colorMode, toggleColorMode } = useSiteColorMode()
 </script>
 
 <template>
@@ -36,5 +37,8 @@ const starterMode = useStarterMode()
     >
       {{ starterMode ? starterLayoutContent.footer.metadata : artist.footer.copyright }}
     </p>
+    <button class="theme-toggle" type="button" @click="toggleColorMode">
+      Switch to {{ colorMode === 'dark' ? 'light' : 'dark' }} mode
+    </button>
   </footer>
 </template>

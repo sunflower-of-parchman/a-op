@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { gotoHydrated } from './helpers'
+import { gotoHydrated, reloadHydrated } from './helpers'
 
 test('labels the artist-editable elements in the first-clone layout', async ({ page }) => {
   await gotoHydrated(page, '/')
@@ -43,4 +43,26 @@ test('labels track-detail content instead of presenting the fictional demo as ar
   await expect(
     page.getByText('Keep a personal path through the catalog.', { exact: true }),
   ).toHaveCount(0)
+})
+
+test('starts in Lato and preserves the artist-selected color mode', async ({ page }) => {
+  await gotoHydrated(page, '/music')
+
+  const shell = page.locator('.site-shell')
+  await expect(shell).toHaveAttribute('data-color-mode', 'light')
+  expect(await shell.evaluate((element) => getComputedStyle(element).fontFamily)).toContain('Lato')
+  expect(await page.evaluate(() => document.fonts.check('16px Lato'))).toBe(true)
+
+  await page.getByRole('button', { name: 'Switch to dark mode' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-color-mode', 'dark')
+  await expect(shell).toHaveAttribute('data-color-mode', 'dark')
+
+  await reloadHydrated(page)
+  await expect(page.locator('html')).toHaveAttribute('data-color-mode', 'dark')
+  await expect(page.getByRole('button', { name: 'Switch to light mode' })).toBeVisible()
+
+  const results = await new AxeBuilder({ page }).analyze()
+  expect(
+    results.violations.filter(({ impact }) => impact === 'critical' || impact === 'serious'),
+  ).toEqual([])
 })

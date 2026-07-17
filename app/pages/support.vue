@@ -99,7 +99,7 @@ function recordExternalInterest(product: CommerceProduct) {
     />
 
     <div v-if="catalog?.products.length" class="offering-list">
-      <article v-for="(product, index) in catalog.products" :key="product.id">
+      <article v-for="(product, index) in catalog.products" :id="product.slug" :key="product.id">
         <p class="section-number">{{ String(index + 1).padStart(2, '0') }}</p>
         <div class="offering-copy">
           <h2>{{ product.name }}</h2>

@@ -144,10 +144,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      meta: [
-        { name: 'theme-color', content: artistConfig.design.colors.background },
-        { name: 'color-scheme', content: 'light' },
-      ],
+      meta: [{ name: 'color-scheme', content: 'light dark' }],
     },
   },
 })

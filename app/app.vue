@@ -6,7 +6,30 @@ if (publishedConfig.value?.config) setArtistConfig(publishedConfig.value.config)
 
 const artist = useArtistConfig()
 const starterMode = useStarterMode()
-const theme = useArtistTheme()
+const artistTheme = useArtistTheme()
+const { colorMode } = useSiteColorMode()
+const theme = computed(() => ({
+  ...artistTheme,
+  ...(starterMode
+    ? {
+        '--font-display': 'Lato, sans-serif',
+        '--font-body': 'Lato, sans-serif',
+        '--font-display-weight': '300',
+        '--font-body-weight': '300',
+      }
+    : {}),
+  ...(colorMode.value === 'dark'
+    ? {
+        '--color-background': '#0b0d0e',
+        '--color-text': '#f4f1ea',
+        '--color-muted-text': '#a7a39b',
+        '--color-accent': '#df6b35',
+        '--color-surface': '#15181a',
+        '--color-border': '#363a3d',
+        '--color-focus': '#76cbc8',
+      }
+    : {}),
+}))
 const route = useRoute()
 const { loadPolicy, trackPage } = useTelemetry()
 const hydrated = ref(false)
@@ -38,6 +61,18 @@ useSeoMeta({
 })
 
 if (starterMode) useSeoMeta({ robots: 'noindex, nofollow' })
+
+useHead(() => ({
+  htmlAttrs: { 'data-color-mode': colorMode.value },
+  meta: [
+    {
+      key: 'theme-color',
+      name: 'theme-color',
+      content: colorMode.value === 'dark' ? '#0b0d0e' : artist.design.colors.background,
+    },
+    { key: 'color-scheme', name: 'color-scheme', content: 'light dark' },
+  ],
+}))
 </script>
 
 <template>
@@ -46,6 +81,7 @@ if (starterMode) useSeoMeta({ robots: 'noindex, nofollow' })
     :style="theme"
     :data-hydrated="hydrated ? 'true' : 'false'"
     :data-starter-layout="starterMode ? 'true' : 'false'"
+    :data-color-mode="colorMode"
   >
     <NuxtRouteAnnouncer />
     <ArtistHeader />
