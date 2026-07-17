@@ -383,7 +383,6 @@ useSeoMeta({ title: 'Music' })
   <div class="page-frame interior-page music-page">
     <header class="music-page-heading">
       <div>
-        <p class="eyebrow">Library</p>
         <h1>Music</h1>
       </div>
       <p>{{ catalogTracks.length }} tracks</p>
@@ -412,7 +411,6 @@ useSeoMeta({ title: 'Music' })
 
     <div v-else-if="data" class="music-browser">
       <aside class="music-browser__sidebar" aria-label="Browse music">
-        <p class="music-sidebar-heading">Library</p>
         <nav class="music-view-navigation" aria-label="Music catalog views">
           <button
             v-for="view in views"

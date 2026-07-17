@@ -13,9 +13,6 @@ useSeoMeta({
 <template>
   <article class="page-frame interior-page about-page">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.about.eyebrow : artist.identity.eyebrow }}
-      </p>
       <h1>{{ starterMode ? starterLayoutContent.about.title : artist.identity.name }}</h1>
       <p>
         {{ starterMode ? starterLayoutContent.about.introduction : artist.identity.biography }}

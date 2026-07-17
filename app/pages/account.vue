@@ -120,9 +120,6 @@ async function downloadLicense(licenseId: string) {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.account.eyebrow : 'Account' }}
-      </p>
       <h1 v-if="starterMode">{{ starterLayoutContent.account.title }}</h1>
       <h1 v-else-if="session?.authenticated">Your relationship with the artist.</h1>
       <h1 v-else>Keep what belongs to you.</h1>

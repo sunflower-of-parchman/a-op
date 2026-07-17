@@ -78,7 +78,6 @@ useSeoMeta({
 <template>
   <article v-if="data" class="page-frame release-page track-page">
     <header class="release-page__heading">
-      <p class="eyebrow">Track</p>
       <h1>
         {{ starterMode ? starterLayoutContent.trackDetail.title : data.track.title }}
       </h1>
@@ -179,7 +178,6 @@ useSeoMeta({
     </section>
   </article>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Catalog</p>
     <h1>{{ error ? 'Track not found.' : 'Loading track…' }}</h1>
   </div>
 </template>

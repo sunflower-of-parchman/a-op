@@ -34,9 +34,6 @@ async function signIn() {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.auth.signInEyebrow : 'Artist-owned account' }}
-      </p>
       <h1>
         {{ starterMode ? starterLayoutContent.auth.signInTitle : 'Sign in to your place here.' }}
       </h1>

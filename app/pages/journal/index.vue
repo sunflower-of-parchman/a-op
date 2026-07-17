@@ -16,9 +16,6 @@ onMounted(refresh)
 <template>
   <div class="page-frame journal-index">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.journal.eyebrow : 'Journal' }}
-      </p>
       <h1>
         {{
           starterMode ? starterLayoutContent.journal.title : 'Notes that remain part of the work.'

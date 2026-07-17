@@ -13,9 +13,6 @@ const principles = computed(() =>
   <div>
     <section class="hero page-frame" aria-labelledby="home-title">
       <div class="hero__copy">
-        <p class="eyebrow" :data-starter-placeholder="starterMode ? 'homepage-kicker' : undefined">
-          {{ starterMode ? starterLayoutContent.hero.kicker : artist.homepage.kicker }}
-        </p>
         <h1
           id="home-title"
           :data-starter-placeholder="starterMode ? 'homepage-headline' : undefined"

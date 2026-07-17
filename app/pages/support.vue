@@ -76,9 +76,6 @@ function recordExternalInterest(product: CommerceProduct) {
 <template>
   <div class="page-frame support-page">
     <header class="page-heading support-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.support.eyebrow : 'Direct support' }}
-      </p>
       <h1>
         {{
           starterMode

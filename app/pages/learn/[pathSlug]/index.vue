@@ -20,9 +20,6 @@ useSeoMeta({
 <template>
   <div v-if="data" class="page-frame learning-path-page">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.learning.area : data.path.area.name }}
-      </p>
       <h1>{{ starterMode ? starterLayoutContent.learning.pathTitle : data.path.title }}</h1>
       <p>
         {{ starterMode ? starterLayoutContent.learning.pathIntroduction : data.path.introduction }}
@@ -85,7 +82,6 @@ useSeoMeta({
     </section>
   </div>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Learn</p>
     <h1>{{ error ? 'Learning path not found.' : 'Loading path…' }}</h1>
   </div>
 </template>

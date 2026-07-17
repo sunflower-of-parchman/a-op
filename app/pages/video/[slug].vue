@@ -18,16 +18,12 @@ useSeoMeta({
 <template>
   <div v-if="data" class="page-frame video-page">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.video.eyebrow : 'Video' }}
-      </p>
       <h1>{{ starterMode ? starterLayoutContent.video.itemTitle : data.video.title }}</h1>
       <p>{{ starterMode ? starterLayoutContent.video.itemSummary : data.video.summary }}</p>
     </header>
     <VideoExperience :video="data.video" :starter="starterMode" />
   </div>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Video</p>
     <h1>{{ error ? 'Video not found.' : 'Loading video…' }}</h1>
   </div>
 </template>

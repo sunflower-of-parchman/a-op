@@ -46,13 +46,6 @@ useSeoMeta({
 <template>
   <article v-if="data" class="page-frame release-page">
     <header class="release-page__heading">
-      <p class="eyebrow">
-        {{
-          starterMode
-            ? starterLayoutContent.releaseDetail.metadata
-            : `${data.release.release_type} · ${data.release.release_date?.slice(0, 4) ?? 'Unscheduled'}`
-        }}
-      </p>
       <h1>
         {{ starterMode ? starterLayoutContent.releaseDetail.title : data.release.title }}
       </h1>
@@ -132,7 +125,6 @@ useSeoMeta({
     </p>
   </article>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Catalog</p>
     <h1>{{ error ? 'Release not found.' : 'Loading release…' }}</h1>
   </div>
 </template>

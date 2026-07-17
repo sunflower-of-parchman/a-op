@@ -37,9 +37,6 @@ useSeoMeta({
 <template>
   <article v-if="data" class="page-frame release-page">
     <header class="release-page__heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.collectionDetail.label : 'Collection' }}
-      </p>
       <h1>
         {{ starterMode ? starterLayoutContent.collectionDetail.title : data.collection.title }}
       </h1>
@@ -78,7 +75,6 @@ useSeoMeta({
     </ol>
   </article>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Catalog</p>
     <h1>{{ error ? 'Collection not found.' : 'Loading collection…' }}</h1>
   </div>
 </template>

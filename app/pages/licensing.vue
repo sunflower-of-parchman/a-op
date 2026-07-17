@@ -73,9 +73,6 @@ async function beginCheckout(option: PublishedLicenseOption) {
 <template>
   <div class="page-frame licensing-page">
     <header class="page-heading licensing-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.licensing.eyebrow : 'Music licensing' }}
-      </p>
       <h1>
         {{
           starterMode

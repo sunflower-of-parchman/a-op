@@ -54,7 +54,6 @@ useSeoMeta({ title: 'Local checkout simulation' })
 <template>
   <div class="page-frame simulated-checkout">
     <header class="page-heading">
-      <p class="eyebrow">Local demonstration</p>
       <h1>
         {{
           starterMode

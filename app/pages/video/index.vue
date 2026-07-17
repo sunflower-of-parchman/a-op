@@ -10,9 +10,6 @@ const { data, error, status, refresh } = await useFetch<{ videos: VideoRecord[] 
 <template>
   <div class="page-frame video-index">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.video.eyebrow : 'Video' }}
-      </p>
       <h1>
         {{
           starterMode ? starterLayoutContent.video.title : 'Watch with the context still attached.'

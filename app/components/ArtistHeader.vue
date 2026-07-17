@@ -11,9 +11,6 @@ const navigation = computed(() =>
 
 <template>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <p class="demo-notice">
-    {{ starterMode ? starterLayoutContent.notice : artist.demo.notice }}
-  </p>
   <header class="site-header">
     <NuxtLink
       class="wordmark"

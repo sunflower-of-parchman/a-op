@@ -13,9 +13,6 @@ const { data, error, status, refresh } = await useFetch<LearningCatalogResponse>
 <template>
   <div class="page-frame learning-index">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.learning.eyebrow : 'Learn' }}
-      </p>
       <h1>
         {{
           starterMode

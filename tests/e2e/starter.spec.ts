@@ -6,6 +6,8 @@ test('labels the artist-editable elements in the first-clone layout', async ({ p
   await gotoHydrated(page, '/')
 
   await expect(page.locator('.site-shell')).toHaveAttribute('data-starter-layout', 'true')
+  await expect(page.locator('.demo-notice')).toHaveCount(0)
+  await expect(page.locator('p.eyebrow')).toHaveCount(0)
   await expect(page.getByText('Artist Name / Logo', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Primary Homepage Headline')
   await expect(page.getByText('Introductory Text', { exact: true })).toBeVisible()
@@ -54,6 +56,7 @@ test('labels every public content archetype without leaking demonstration copy',
     ['/support', 'Support Page Heading'],
     ['/licensing', 'Licensing Page Heading'],
     ['/privacy', 'Privacy Page Heading'],
+    ['/music', 'Music'],
     ['/music/lines-we-carry', 'Album Title'],
     ['/music/collections/movement-studies', 'Collection Title'],
     ['/learn', 'Learning Page Heading'],
@@ -74,6 +77,8 @@ test('labels every public content archetype without leaking demonstration copy',
   for (const [route, heading] of routes) {
     await gotoHydrated(page, route)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading)
+    await expect(page.locator('.demo-notice')).toHaveCount(0)
+    await expect(page.locator('p.eyebrow')).toHaveCount(0)
     await expect(page.locator('body')).not.toContainText(demonstrationCopy)
   }
 })
@@ -82,6 +87,11 @@ test('starts in Lato and preserves the artist-selected color mode', async ({ pag
   await gotoHydrated(page, '/music')
 
   const shell = page.locator('.site-shell')
+  await expect(page.locator('.demo-notice')).toHaveCount(0)
+  await expect(page.locator('p.eyebrow')).toHaveCount(0)
+  await expect(page.locator('.music-sidebar-heading').filter({ hasText: /^Library$/ })).toHaveCount(
+    0,
+  )
   await expect(shell).toHaveAttribute('data-color-mode', 'light')
   expect(await shell.evaluate((element) => getComputedStyle(element).fontFamily)).toContain('Lato')
   expect(await page.evaluate(() => document.fonts.check('16px Lato'))).toBe(true)

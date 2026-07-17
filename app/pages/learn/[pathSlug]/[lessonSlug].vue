@@ -51,13 +51,6 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
 <template>
   <div v-if="data" class="page-frame lesson-page">
     <header class="page-heading lesson-heading">
-      <p class="eyebrow">
-        {{
-          starterMode
-            ? `${starterLayoutContent.learning.pathTitle} / ${starterLayoutContent.learning.courseTitle}`
-            : `${data.path.title} / ${data.course.title}`
-        }}
-      </p>
       <h1>{{ starterMode ? starterLayoutContent.learning.lessonTitle : data.lesson.title }}</h1>
       <p>{{ starterMode ? starterLayoutContent.learning.lessonSummary : data.lesson.summary }}</p>
       <p class="lesson-access-state">
@@ -274,7 +267,6 @@ async function recordProgress(sectionPosition: number, completed: boolean) {
     </nav>
   </div>
   <div v-else class="page-frame interior-page">
-    <p class="eyebrow">Learn</p>
     <h1>{{ error ? 'Lesson not found.' : 'Loading lesson…' }}</h1>
   </div>
 </template>

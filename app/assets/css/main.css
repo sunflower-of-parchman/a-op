@@ -96,17 +96,6 @@ a {
   outline-offset: 4px;
 }
 
-.demo-notice {
-  margin: 0;
-  padding: 0.55rem clamp(1.25rem, 4vw, 4rem);
-  color: var(--color-background);
-  background: var(--color-text);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
 .connectivity-notice {
   margin: 0;
   padding: 0.8rem clamp(1.25rem, 4vw, 4rem);

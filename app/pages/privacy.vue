@@ -14,9 +14,6 @@ onMounted(loadPolicy)
 <template>
   <div class="page-frame interior-page privacy-page">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.privacy.eyebrow : 'Privacy' }}
-      </p>
       <h1>
         {{
           starterMode ? starterLayoutContent.privacy.title : 'Small signals, held by the artist.'

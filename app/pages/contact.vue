@@ -51,9 +51,6 @@ async function submit() {
 <template>
   <article class="page-frame interior-page contact-page">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.contact.eyebrow : 'Contact' }}
-      </p>
       <h1>
         {{ starterMode ? starterLayoutContent.contact.title : (section?.heading ?? page?.title) }}
       </h1>

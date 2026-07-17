@@ -1,8 +1,6 @@
 export const starterLayoutContent = {
-  notice: 'Starter layout · each label names an editable site element.',
   brand: 'Artist Name / Logo',
   hero: {
-    kicker: 'Homepage Kicker / Eyebrow',
     headline: 'Primary Homepage Headline',
     introduction: 'Introductory Text',
     primaryAction: 'Primary Action',
@@ -24,7 +22,6 @@ export const starterLayoutContent = {
     returnAction: 'Return to Album',
   },
   releaseDetail: {
-    metadata: 'Release Type / Year',
     title: 'Album Title',
     description: 'Album Description',
     trackTitle: 'Track Title',
@@ -38,12 +35,10 @@ export const starterLayoutContent = {
     note: 'Release Note',
   },
   collectionDetail: {
-    label: 'Collection Label',
     title: 'Collection Title',
     description: 'Collection Description',
   },
   about: {
-    eyebrow: 'About Page Eyebrow',
     title: 'Artist Name',
     introduction: 'Artist Biography',
     locationLabel: 'Artist Location Label',
@@ -52,7 +47,6 @@ export const starterLayoutContent = {
     fact: 'Artist Fact',
   },
   contact: {
-    eyebrow: 'Contact Page Eyebrow',
     title: 'Contact Page Heading',
     introduction: 'Contact Page Introduction',
     consent: 'Contact Form Consent Text',
@@ -62,7 +56,6 @@ export const starterLayoutContent = {
     localNote: 'Local Contact Form Delivery Note',
   },
   support: {
-    eyebrow: 'Support Page Eyebrow',
     title: 'Support Page Heading',
     introduction: 'Support Page Introduction',
     offeringTitle: 'Offering Title',
@@ -73,7 +66,6 @@ export const starterLayoutContent = {
     localNote: 'Local Payment Provider Note',
   },
   licensing: {
-    eyebrow: 'Licensing Page Eyebrow',
     title: 'Licensing Page Heading',
     introduction: 'Licensing Page Introduction',
     trackTitle: 'Track Title',
@@ -96,7 +88,6 @@ export const starterLayoutContent = {
     inquiryAction: 'Custom License Inquiry Action',
   },
   learning: {
-    eyebrow: 'Learning Page Eyebrow',
     title: 'Learning Page Heading',
     introduction: 'Learning Page Introduction',
     area: 'Learning Area',
@@ -132,7 +123,6 @@ export const starterLayoutContent = {
     nextLessonAction: 'Next Lesson',
   },
   video: {
-    eyebrow: 'Video Page Eyebrow',
     title: 'Video Page Heading',
     introduction: 'Video Page Introduction',
     provider: 'Video Provider',
@@ -145,7 +135,6 @@ export const starterLayoutContent = {
     creditName: 'Video Credit Name',
   },
   journal: {
-    eyebrow: 'Journal Page Eyebrow',
     title: 'Journal Page Heading',
     introduction: 'Journal Page Introduction',
     metadata: 'Entry Type / Publication Date',
@@ -154,7 +143,6 @@ export const starterLayoutContent = {
     openAction: 'Open Journal Entry',
   },
   account: {
-    eyebrow: 'Account Page Eyebrow',
     title: 'Account Page Heading',
     introduction: 'Account Page Introduction',
     purchasesHeading: 'Order History',
@@ -167,15 +155,12 @@ export const starterLayoutContent = {
     historyHeading: 'Listening History',
   },
   auth: {
-    signInEyebrow: 'Sign-In Page Eyebrow',
     signInTitle: 'Sign-In Page Heading',
     signInIntroduction: 'Sign-In Page Introduction',
-    signUpEyebrow: 'Sign-Up Page Eyebrow',
     signUpTitle: 'Sign-Up Page Heading',
     signUpIntroduction: 'Sign-Up Page Introduction',
   },
   privacy: {
-    eyebrow: 'Privacy Page Eyebrow',
     title: 'Privacy Page Heading',
     introduction: 'Privacy Page Introduction',
     collectionHeading: 'Optional Analytics Details',

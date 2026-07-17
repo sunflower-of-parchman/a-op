@@ -45,7 +45,6 @@ useSeoMeta({ title: 'Checkout status' })
 
 <template>
   <div class="page-frame interior-page">
-    <p class="eyebrow">Checkout status</p>
     <h1 v-if="route.query.canceled">Checkout stopped before completion.</h1>
     <h1 v-else-if="data?.intent.status === 'complete'">Your access is ready.</h1>
     <h1 v-else>Waiting for verified payment confirmation.</h1>

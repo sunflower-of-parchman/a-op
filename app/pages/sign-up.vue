@@ -36,9 +36,6 @@ async function signUp() {
 <template>
   <div class="page-frame account-frame">
     <header class="page-heading">
-      <p class="eyebrow">
-        {{ starterMode ? starterLayoutContent.auth.signUpEyebrow : 'A direct relationship' }}
-      </p>
       <h1>
         {{ starterMode ? starterLayoutContent.auth.signUpTitle : 'Create your listener account.' }}
       </h1>
