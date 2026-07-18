@@ -1,78 +1,121 @@
 # Repository instructions
 
-This repository builds the complete Artist-Owned Platform described in `plans/artistOwnedPlatform.md`. Read `PLANS.md`, the complete ExecPlan, `BUILD_WEEK.md`, and the relevant architecture contracts before changing code.
+This repository builds `a-op: artist-owned platform`, the complete product described in `PRODUCT.md` and controlled by `plans/migrateAopToSites.md`. Read `PRODUCT.md`, `PLANS.md`, the complete ExecPlan, the relevant contracts in `docs/architecture/`, and the current official OpenAI Sites guidance before changing product code.
 
 ## Product outcome
 
-Deliver the complete open-source, web-only, single-artist platform. One deployment represents one artist or artist-led organization with owner and editor accounts plus customer accounts. The public visitor experience does not require AI. Codex is the artist's setup, implementation, maintenance, and verification partner.
+`a-op` is an open-source web application for musicians. It gives artists their own music publishing, streaming, distribution, customer access, memberships and subscriptions, licensing, Courses, video, contact, telemetry, legal-document starters, and administration.
 
-Do not reduce the product to a catalog demonstration or substitute decorative controls for working behavior. Every completed capability must be integrated, tested, demonstrated, documented, and recorded in `docs/submission/capability-evidence.md`.
+Music leads the product. The first complete product path is release publication, audio streaming, customer sign-in, durable access, and direct delivery. Every active capability joins the same artist, catalog, account, access, and administration system.
 
-## Primary task and evidence
+Working behavior leads every milestone. A capability is complete when its public or administrative workflow runs end to end, stores the intended durable state, enforces access on the server, works in both themes and responsive layouts, survives a production build, and passes a focused human-observable journey.
 
-This repository's primary implementation task is recorded in `BUILD_WEEK.md`. Keep core architecture, implementation, integration, milestone decisions, and full verification in that task. Supporting tasks may perform bounded research or isolated investigation; integrate their results in the primary task.
+## Starting visual framework
 
-At every stopping point:
+Every fresh installation starts from the complete Sound for Movement-derived visual foundation defined in `docs/architecture/visual-direction.md`. Port it faithfully into React before introducing module-specific visual patterns.
 
-1. Update `plans/artistOwnedPlatform.md` Progress, Surprises & Discoveries, Decision Log, and Outcomes & Retrospective.
-2. Update `docs/submission/capability-evidence.md` with real files, commits, tests, manual proof, judge actions, and status.
-3. Update `docs/submission/model-and-agent-use.md` using available task metadata; never infer model use.
-4. Keep the application runnable and commit one coherent milestone at a time.
+The foundation includes Lato, the exact semantic color values, complete dark and light themes, open composition, established controls and surfaces, responsive spacing, the living image mosaic, motion, and accessibility behavior. `a-op` presents it with plain labels, placeholders, and general product names. Use `Courses` for teaching content and `What's New` for in-app updates.
 
-## Private reference boundary
+After the complete baseline runs, ChatGPT Work and Codex can help the artist change the visual system, page structure, navigation, language, imagery, active capabilities, and new functionality in their own fork.
 
-Sound for Movement is a private, user-owned, read-only architectural reference. Its optional local path belongs only in ignored `setup/local-paths.json`. Never modify the reference repository. Never copy its secrets, customer data, private media, production endpoints, branding, or machine paths. Record each generalized concept and its new implementation in `docs/provenance.md`.
+## Capability activation
 
-## Architecture invariants
+The repository contains the complete supported capability set. D1 records the active modules for each installation.
 
-- Follow `docs/architecture/configuration-authority.md`. Shared schemas define contracts, repository configuration supplies bootstrap defaults, Supabase owns artist-editable runtime state, environment variables own secrets, and project state records only non-secret setup progress.
-- Follow `docs/architecture/media-processing-contract.md`. Upload source audio directly to private storage, create durable jobs, and process through the shared local and deployed worker. Original media is immutable.
-- Authentication identifies the user. RLS and explicit database grants authorize data access. A browser redirect never proves payment or grants access.
-- Verified server-side payment events create orders and entitlements atomically. All protected delivery uses the central `decideAccess` contract.
-- Enable RLS on every exposed table. Use explicit `TO` roles, ownership predicates, and both `USING` and `WITH CHECK` for updates. Never authorize with user-editable metadata.
-- Keep service-role and secret credentials server-only. Diagnostics, logs, setup proposals, exports, Git, screenshots, and browser bundles must redact them.
-- Treat the Supabase `storage` schema as read-only except for supported policies and indexes. Use the Storage API for file operations.
+Music publishing, catalog, streaming, identity, access, and administration form the core. An installation can begin with streaming alone. Artists activate direct downloads, customer libraries, licensing, memberships, subscriptions, Courses, video, What's New, contact, telemetry, and related tools as their work grows.
+
+Public navigation, routes, administration, setup, jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history.
+
+## Active plan
+
+`plans/migrateAopToSites.md` is the controlling implementation plan. Keep its `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` sections current as implementation proceeds.
+
+At each stopping point:
+
+1. Leave the integrated application runnable.
+2. Update the controlling ExecPlan with completed behavior, discoveries, decisions, and remaining work.
+3. Record the exact focused verification that ran.
+4. Commit one coherent functional milestone when Michael asks to save the work.
+
+Functional code receives first priority. Documentation preserves the contracts needed to implement and operate it.
+
+## Name and license
+
+- Product name: `a-op`
+- Full title: `a-op: artist-owned platform`
+- GitHub repository: `sunflower-of-parchman/a-op`
+- License: `AGPL-3.0-or-later`
+
+Use the lowercase product styling in copy, metadata, repository documentation, and interface labels. Each artist controls their fork, deployment, content, data, customer relationship, and artist-specific changes under the repository license.
+
+Artists retain ownership of their music, images, writing, video, course material, code, and business data. Describe storage and model use precisely: approved Site files live in Sites-provided R2, structured Site state lives in Sites-provided D1, ordinary Site operation makes no model request, and material enters ChatGPT Work only when the artist deliberately shares it there.
+
+## Sound for Movement reference
+
+Michael explicitly authorizes the complete live Sound for Movement visual framework to become the starting visual framework for `a-op`. Rebuild the design system, tokens, primitives, layout, light and dark themes, living image mosaic, motion, and accessibility behavior in React and record the implementation in `docs/provenance.md`.
+
+The live Sound for Movement company repository remains Michael's private, read-only reference for functionality and the visual source. Sound for Movement retains its name, logos, music, teaching material, writing, imagery, customer records, analytics, prices, terms, secrets, endpoints, and production state. Each `a-op` installation uses its artist's own approved material. Store the optional local reference path only in ignored local configuration.
+
+## Official Sites architecture
+
+- Use the current official Sites initializer and preserve its React, TypeScript, vinext, Vite, and Cloudflare Worker structure.
+- Treat the installed `sites:sites-building` and `sites:sites-hosting` skills plus current official OpenAI documentation as the source for Sites commands and supported capabilities.
+- Declare logical D1 and R2 bindings in `.openai/hosting.json`. Sites provisions and connects the hosted resources.
+- Store structured product state in D1. Keep schema definitions in `db/schema.ts`, generate and inspect Drizzle migrations, and route application queries through typed server-side repositories.
+- Store original audio, derivatives, artwork, images, video, documents, and exports in R2. Store searchable metadata, ownership, access, and processing state in D1.
+- Treat D1 and R2 as Sites-provided storage inside the Sites service boundary. Current Sites guidance includes deployed Site code, D1 and R2 data, generated artifacts, and logs in that boundary.
+- Follow `docs/architecture/data-and-ai-boundary.md` for storage language, local media intake, model boundaries, and workspace data controls.
+- Use the current official Sign in with ChatGPT helpers for identity-aware customer and administration routes. Resolve owner, editor, and customer authority from server-owned D1 records.
+- Route every protected stream, download, course asset, license file, and customer resource through the central `decideAccess` contract.
+- Keep secrets and private runtime values server-managed. Logs, errors, exports, browser output, and diagnostics use redacted fields.
+- Keep the Sites application within the current official non-financial web-experience scope. Build artist-controlled access, membership and subscription records, credits, licensing records, entitlements, and protected delivery as application capabilities. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
+
+## Functional build order
+
+1. Official Sites foundation, exact visual foundation, D1, R2, identity, range responses, and production build.
+2. Module registry, artist state, public shell, administration shell, roles, and central access.
+3. Music catalog, releases, tracks, streaming, persistent player, and artist publishing.
+4. Customer accounts, favorites, playlists, listening history, libraries, and protected delivery.
+5. Memberships, subscriptions, download credits, license credits, licensing, access grants, and entitlement history.
+6. Courses, video, structured pages, What's New, and contact.
+7. Telemetry, consent, privacy, terms, operations, and customer administration.
+8. ChatGPT Work setup, media preparation, personalization, diagnosis, export, and recovery.
+9. Complete integration, accessibility, responsive behavior, performance, security, and approved Sites hosting.
 
 ## Human authority and external actions
 
-Michael remains the authority for identity, writing, music and media rights, prices, licensing terms, accounts, costs, open-source license, and publication.
+Michael remains the authority for writing, music and media rights, access plans, licensing terms, legal language, connected accounts, open-source licensing, and publication.
 
-Do not publish or expose the repository, deploy or promote publicly, create paid resources, change DNS, enable live Stripe, send email, upload a public video, share judging access, or submit to Devpost without Michael's explicit approval for that specific action. Local development, deterministic simulations, and test-mode preparation may proceed.
+Public Sites deployment, custom domains, DNS, repository visibility, email delivery, public media uploads, and other external publication actions require Michael's specific approval for that exact action. Local development, fictional data, and deterministic simulations may proceed inside the approved project scope.
 
-## Codex-guided setup
+## ChatGPT Work
 
-When the artist asks to set up or personalize the platform:
+ChatGPT Work is the artist's natural-language development and operating environment. Codex helps initialize the project, activate the selected capabilities, preserve the artist's wording, run local media preparation against artist-approved paths, apply validated configuration, change source code, diagnose problems, perform maintenance, and verify the result.
 
-1. Read `SETUP.md`, `docs/architecture/configuration-authority.md`, `docs/architecture/media-processing-contract.md`, and `setup/project-state.json`.
-2. Run `npm run setup:preflight`, bring up the local demonstration with `npm run setup:local` when needed, and run `npm run setup:check`. Explain any missing external service as a checkpoint, not as a reason to weaken local verification.
-3. Run `npm run setup:interview -- --json` and discuss all 14 topics conversationally. Preserve the artist's wording. The artist remains the authority for identity, rights, pricing, accounts, costs, and publication.
-4. Write the complete validated proposal only under ignored `setup/proposals/`. Never put a secret, customer record, private task detail, or unapproved personal data in it. Inspect media only at a path the artist identifies; never infer rights or approval.
-5. Run `npm run setup:preview -- <proposal>`. Present the stale-state result, configuration diff, media approvals, and every external action. Preview must remain non-mutating.
-6. Apply only after the human explicitly approves the displayed proposal and the approval record is complete. Use `npm run setup:apply -- <proposal> --confirm-approved-proposal`. This command supports local Supabase only.
-7. Run `npm run setup:check`, inspect the personalized public result, and retain the non-secret `setup/project-state.json` update. Reapply is supported and must not duplicate configuration, media, or jobs.
-8. Use the runbook named by each `remainingExternalSteps` entry. Connected plugins and CLIs accelerate the documented contract; they do not grant authority. Stop before any external mutation or cost until the artist approves that exact action.
+Describe media actions as adding music to the artist's Site. Approved bytes enter R2 and structured records enter D1. Material enters a ChatGPT Work conversation only when the artist deliberately shares it. OpenAI workspace handling follows the active plan, configuration, feature, region, and agreement.
 
-For ongoing maintenance, begin with `npm run diagnose`, use the smallest relevant runbook in `docs/agent/`, keep migrations forward-only, and leave completed setup history and recovery instructions available to the next Codex task. Before a release or external-service change, run `npm run verify:hardening` and `npm run verify:recovery`; do not weaken their local-target, security, accessibility, performance, or artifact checks to obtain a pass.
-
-For portability, create exports only at an artist-approved local path with `npm run export:artist -- --out <directory>`, then run `npm run export:verify -- <directory>`. Explain the exclusions and storage destination before copying an export elsewhere. `npm run restore:check -- <directory> --confirm-disposable-local` is a destructive-local rehearsal: confirm the target is the repository's local Supabase stack and never adapt its confirmation to a hosted target. Hosted backups, customer-data export, restore, or external storage always stop at the approval gate in `docs/agent/backup-restore.md`.
+The public Site and administration area remain complete web experiences. Application code carries identity, authorization, data integrity, media access, memberships, subscriptions, licensing, and entitlement state.
 
 ## Interface direction
 
-Public artist sites must feel composed rather than templated. Start with the artist identity, a dominant visual or release, rigorous typography, generous open space, and one clear action. Default to cardless layouts. Use cards only for meaningful selectable items or functional boundaries. Keep to two typefaces and one accent color unless the artist explicitly chooses otherwise.
+Follow `docs/architecture/visual-direction.md` as the exact first implementation. Use open layouts. Add cards only for meaningful selectable items or functional boundaries. Keep the living image mosaic, functional page layouts, and administration working surface distinct.
 
-Administration is a calm working surface with clear navigation, status, and action. Use utility language. Avoid marketing heroes, dashboard card mosaics, ornamental gradients, and decorative UI that does not help the artist operate the system.
+Administration uses direct navigation, status, and action. Every control performs a real operation and reports its result.
 
-Before building a new public surface, record its visual thesis, content plan, and interaction thesis. Test keyboard behavior, reduced motion, mobile layouts, and contrast as part of implementation.
+Verify keyboard behavior, reduced motion, mobile layout, touch targets, focus, contrast, and both themes during implementation.
 
 ## Working practices
 
+- Use affirmative-first framing. Describe the capability, action, and intended result directly.
 - Read relevant files before editing.
 - Use `rg` for repository searches.
-- Use `apply_patch` for file edits.
-- Preserve unrelated changes in a dirty worktree.
+- Use `apply_patch` for scoped file edits.
+- Preserve unrelated user changes in a dirty worktree.
+- Keep the application runnable after each integrated milestone.
+- Run focused verification for the behavior changed and a production build at milestone gates.
+- Give tests a clear product, authorization, media, or data-integrity purpose.
 - Pin dependencies and commit the lockfile.
-- Discover Supabase CLI commands through `npx supabase --help`; do not guess current syntax.
-- Create migration files through the Supabase CLI once it is installed.
-- Run focused tests after each change and the complete verification suite at milestone gates.
-- Keep local resets local-only and make them refuse a hosted database target.
-- Never place real prices or legal terms into demonstration data unless Michael has approved them for this project.
+- Generate D1 migrations from the current Drizzle schema and inspect the SQL.
+- Use exact, validated local targets for resets, restore rehearsals, and destructive development operations.
+- Use fictional development records and artist-approved media paths.
+- Keep credentials, private customer data, private media, and machine-specific paths in their designated ignored or hosted secret stores.

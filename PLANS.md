@@ -1,16 +1,20 @@
 # Codex Execution Plans
 
-An execution plan, or ExecPlan, is a living design document that a coding agent can follow to deliver a working feature or system. Treat its reader as new to this repository. The reader has only the current working tree and the ExecPlan, so the plan must carry the purpose, architecture, sequence, commands, validation, safety rules, and current state needed to continue.
+An execution plan, or ExecPlan, is a living design document that a coding agent can follow to deliver a working feature or system. Treat its reader as new to this repository. The reader has the current working tree and the ExecPlan, so the plan carries the purpose, architecture, sequence, commands, validation, safety rules, and current state needed to continue.
 
 ## Using an ExecPlan
 
-When writing or implementing an ExecPlan, read this entire file and keep the plan synchronized with the repository. Continue through the milestones without waiting for generic permission, while respecting any explicit approval boundary in the plan. Record important decisions, discoveries, partial progress, and verification evidence as they occur. Commit coherent milestones frequently so the repository history shows what was built during OpenAI Build Week.
+Read this entire file before writing or implementing an ExecPlan. Keep the active plan synchronized with the repository and continue through functional milestones while respecting its explicit approval boundaries.
 
-Every ExecPlan must be self-contained, understandable in plain language, and capable of producing observable behavior. It must explain why the work matters to a user, what files are involved, what commands to run, what success looks like, and how to recover from incomplete or failed operations. Define unfamiliar technical terms when first used.
+Working product behavior leads the plan. Each milestone should create a capability a person can use, integrate it with the existing application, and prove the result through the smallest useful automated checks and a human-observable journey. Documentation records the decisions and operating knowledge needed to keep that behavior healthy.
+
+Commit coherent functional milestones when Michael asks to save the work. Keep the application runnable at each integration point.
+
+Every ExecPlan must be self-contained, understandable in plain language, and capable of producing observable behavior. It explains why the work matters to a user, which files are involved, which commands to run, what success looks like, and how to recover from incomplete operations. Define unfamiliar technical terms when first used.
 
 ## Required sections
 
-Every ExecPlan must contain and maintain these sections:
+Every ExecPlan contains and maintains these sections:
 
 - `Purpose / Big Picture`
 - `Progress`
@@ -25,23 +29,36 @@ Every ExecPlan must contain and maintain these sections:
 - `Artifacts and Notes`
 - `Interfaces and Dependencies`
 
-The `Progress` section is the only section that should primarily use checkboxes. Give completed entries a UTC timestamp. Split partially completed work into explicit completed and remaining parts. At every stopping point, update the section so another agent can resume without conversation history.
+The `Progress` section is the primary checkbox section. Give completed entries a UTC timestamp. Split partially completed work into explicit completed and remaining parts. At each stopping point, update the section so another agent can resume from the repository alone.
 
-Use the `Surprises & Discoveries` section for unexpected behavior, constraints, bugs, performance findings, and other evidence that changes implementation. Use the `Decision Log` for product and engineering choices, including their rationale and date. Update `Outcomes & Retrospective` after each major milestone and at completion.
+Use `Surprises & Discoveries` for behavior, constraints, bugs, performance findings, and new facts that change implementation. Use `Decision Log` for product and engineering choices with their rationale and date. Update `Outcomes & Retrospective` after each major milestone and at completion.
 
 ## Writing requirements
 
-Begin with the user-visible outcome. Milestones should tell a readable story: what capability is added, where it is implemented, how to exercise it, and what observation proves it works. Name repository files with repository-relative paths. Include exact commands and their working directory. When output matters, provide a short expected transcript.
+Begin with the user-visible outcome. Milestones tell a readable story: which capability appears, where it is implemented, how to exercise it, and what observation proves it works.
 
-Plans must resolve implementation ambiguity whenever the available evidence supports a decision. If a decision genuinely requires Michael's judgment, describe the decision point, explain why it matters, and sequence independent work so progress can continue safely.
+Name repository files with repository-relative paths. Include exact commands and their working directory. When output matters, provide a short expected transcript.
 
-Avoid relying on external documentation for essential knowledge. Links may supplement a plan, but the plan itself must explain the required behavior. Prefer additive changes that keep the project runnable. Any database migration, payment flow, deployment, or destructive operation must include a safe retry or recovery path.
+Resolve implementation ambiguity when current product decisions and official documentation support a clear answer. When Michael's authority is required, state the decision point, explain why it matters, and sequence independent functional work so progress continues safely.
+
+Carry essential behavior and architecture in the plan itself. Official links and skills supplement the plan and govern time-sensitive platform details.
+
+Prefer implementation steps that keep the integrated product runnable. Database migrations, access-state changes, hosted operations, and destructive local operations include a safe retry and recovery path.
 
 ## Validation requirements
 
-Validation is part of implementation. Each milestone must be independently verifiable through automated tests and a human-observable behavior. Include focused unit or integration tests, browser journeys for user-facing behavior, accessibility checks for key pages, and production-build validation where relevant.
+Validation serves working behavior.
 
-External services must have local or test-mode validation. Never use live payment credentials, publish a deployment, buy a domain, create paid resources, change DNS, expose a repository, or submit competition materials without Michael's explicit approval for that specific action.
+Each milestone includes:
+
+- A production build or the narrowest equivalent compilation check.
+- Focused unit or integration checks for the product contract changed.
+- A browser journey for user-facing behavior.
+- A direct human-observable result.
+
+Authorization, entitlements, protected media, migrations, and recovery receive strong automated coverage because failures can affect rights, privacy, or durable data.
+
+External integrations use local fixtures or deterministic simulation first. Public deployment, DNS, repository visibility, email delivery, and public uploads require Michael's action-specific approval.
 
 ## ExecPlan skeleton
 
@@ -73,7 +90,7 @@ External services must have local or test-mode validation. Never use live paymen
 
     ## Outcomes & Retrospective
 
-    Summarize completed outcomes, gaps, and lessons.
+    Summarize completed outcomes, remaining work, and lessons.
 
     ## Context and Orientation
 
@@ -89,7 +106,7 @@ External services must have local or test-mode validation. Never use live paymen
 
     ## Validation and Acceptance
 
-    State behavioral acceptance criteria and the tests that prove them.
+    State behavioral acceptance criteria and the focused checks that prove them.
 
     ## Idempotence and Recovery
 
@@ -97,10 +114,10 @@ External services must have local or test-mode validation. Never use live paymen
 
     ## Artifacts and Notes
 
-    Preserve concise evidence and important implementation notes.
+    Preserve concise implementation facts and operating notes.
 
     ## Interfaces and Dependencies
 
     Define the required services, modules, data contracts, and stable interfaces.
 
-When an ExecPlan changes, add a short revision note at its end explaining what changed and why. The plan should always remain sufficient for a stateless agent or human contributor to continue the work.
+When an ExecPlan changes, add a short revision note at its end explaining what changed and why. The plan remains sufficient for a stateless agent or human contributor to continue the work.

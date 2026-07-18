@@ -1,220 +1,80 @@
-# Artist-Owned Platform
+# a-op
 
-An open-source web platform for musicians who want a permanent home for their work and a direct relationship with the people who listen, learn, buy, and license it.
+**a-op: artist-owned platform** is an open-source web application for musicians.
 
-Each installation belongs to one artist or artist-led organization. The artist supplies the music, identity, writing, artwork, prices, licensing terms, and business decisions. The platform supplies the working foundation: catalog and listening, direct sales, licensing, memberships, learning paths, video, customer access, first-party telemetry, and the tools needed to operate it.
+It gives artists their own music publishing, streaming, distribution, customer access, memberships and subscriptions, licensing, Courses, video, contact, telemetry, and administration in one application.
 
-Codex helps the artist set up and maintain the system. The public website does not require an OpenAI API key or place an AI experience between the artist and their audience.
+Music comes first. An artist publishes releases and tracks, listeners stream through the artist's Site, customers sign in and build a library, and memberships, subscriptions, licenses, credits, and artist-issued grants create durable access.
 
-![Daymark Assembly fictional artist home page](docs/images/daymark-home.png)
+The complete product description is in [PRODUCT.md](PRODUCT.md). The end-to-end implementation path is in [plans/migrateAopToSites.md](plans/migrateAopToSites.md).
 
-![Daymark Assembly music catalog on a mobile viewport](docs/images/daymark-music-mobile.png)
+## Complete from the first launch
 
-## What the complete platform includes
+Every installation starts from the complete visual framework Michael Wall developed for Sound for Movement, rebuilt in React for Sites with plain `a-op` labels and placeholders. It includes Lato, exact dark and light themes, open layouts, established interface primitives, responsive behavior, and the living image mosaic.
 
-- A Nuxt 4 website with an artist-controlled design system and structured page publishing.
-- Supabase database, authentication, optional OAuth, storage, Row Level Security, and customer accounts.
-- Albums, tracks, collections, credits, artwork, audio previews, playlists, favorites, and listening history.
-- Stripe test and live-mode integration for downloads, memberships, subscriptions, and customer billing tools.
-- Configurable music licensing with issued terms, protected documents, and account history.
-- Learning paths, courses, lessons, progress, video, and editorial publishing.
-- First-party audience telemetry, operational status, protected media delivery, and artist portability.
-- Human-readable instructions and agent-readable contracts for setup, verification, recovery, and ongoing change.
+Artists add their own music, writing, images, video, collaborators, Courses, access plans, and terms. ChatGPT Work and Codex can then reshape the visual system, page structure, navigation, names, active capabilities, and source code through natural-language collaboration.
 
-## Architecture
+The exact starting system is recorded in [docs/architecture/visual-direction.md](docs/architecture/visual-direction.md).
 
-```mermaid
-flowchart LR
-  Artist["Artist + Codex"] --> Setup["Interview, proposal, approval, apply"]
-  Setup --> Nuxt["Public Nuxt 4 service"]
-  Audience["Listeners, learners, buyers, licensees"] --> Nuxt
-  Nuxt --> Supabase["Supabase auth, Postgres, RLS, storage"]
-  Nuxt --> Stripe["Artist-owned Stripe account"]
-  Nuxt -->|"private binding"| Media["FFmpeg media container"]
-  Nuxt -->|"private binding"| Documents["PDF document container"]
-  Media --> Supabase
-  Documents --> Supabase
-  Supabase --> Export["Verified artist export + restore"]
-```
+## Choose the capabilities
 
-Supabase is authoritative for artist-editable runtime content, durable worker queues, and access state. Shared schemas define valid configuration and payloads. Environment variables remain authoritative for secrets. Stripe supplies verified payment facts while the application owns products, descriptions, prices, license terms, and entitlement decisions. Media and PDF work runs outside the Nuxt process through leased jobs. The first hosted path places all three services in one Vercel Services deployment; the workers receive no public routes and process one job per authenticated internal request.
+Music publishing, catalog, streaming, identity, access, and administration form the core. An artist can begin with streaming alone and add capabilities as their work grows:
 
-## How an artist begins
+- Downloads, customer libraries, protected delivery, and access history.
+- Licensing options, license credits, issued licenses, documents, and history.
+- Memberships and subscriptions with recurring access, renewal dates, cancellations, and included benefits.
+- Courses, mixed-media lessons, access rules, progress, and resume.
+- Video pages, transcripts, artist context, and privacy-aware playback.
+- What's New updates with unread state.
+- Contact forms and inquiry management.
+- First-party telemetry, consent, retention, privacy, and terms.
 
-The intended starting point is simple:
+Navigation, administration, setup, jobs, and telemetry follow the capabilities active in that installation.
 
-> Help me set up my artist-owned site.
+## Own the fork and the work
 
-Codex reads `AGENTS.md` and `SETUP.md`, checks the local environment, and walks through the artist's identity, catalog, visual direction, pages, commerce, licensing, membership, teaching, video, privacy, and deployment choices. It prepares a structured proposal and preview. The artist approves the proposal before deterministic scripts change the project.
+An artist operates a fork of `a-op` as their own site. They control their deployment, content, catalog, data, customer relationship, and artist-specific changes. The shared source is licensed under `AGPL-3.0-or-later`.
 
-The setup lifecycle is:
+Artists retain ownership of their music, images, writing, video, course material, code, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
 
-    interview
-    -> structured proposal
-    -> validated preview and diff
-    -> explicit human approval
-    -> deterministic application
-    -> verification
-    -> project-state update
+## ChatGPT Work and Sites
 
-Before personalization, the local home page is a composed teaching scaffold. It labels the artist
-name or logo, headline, introduction, actions, featured release, supporting sections, and footer in
-place, so the artist can discuss the real page while keeping the final design visible. Start it with:
+Artists use ChatGPT Work and Codex to create, configure, personalize, maintain, diagnose, and verify their installation.
 
-```text
-npm ci
-npm run starter:local
-```
+Sites hosts the React application. Sites-provided D1 stores structured product state. Sites-provided R2 stores music, images, video, documents, and exports. Sign in with ChatGPT establishes identity. Server-owned roles and the central access contract protect administration, streams, downloads, course material, licenses, and customer records.
 
-The scaffold is local-development behavior and is automatically replaced by the artist's approved
-content after personalization. It never becomes the production presentation. The fictional Daymark
-Assembly site remains available through `npm run demo:local` as the complete working example and
-judge route.
+Artists add music to their Site from an approved local path or through administration. Local tools prepare the approved files, R2 stores the bytes, and D1 stores metadata and access rules. Ordinary Site operation makes no model request. Material enters ChatGPT Work only when the artist deliberately shares it there. [The data and AI boundary](docs/architecture/data-and-ai-boundary.md) records the complete contract.
 
-## Judge in five minutes
+## Build order
 
-With Node 24.14, npm 11, Python 3.12 or newer, and Docker running:
+1. Official Sites foundation, exact visual foundation, and runtime proof.
+2. Module registry, artist state, roles, authorization, and shared application shells.
+3. Music catalog, publishing, streaming, and player.
+4. Customer accounts, saved music, libraries, and delivery.
+5. Memberships, subscriptions, credits, licensing, access grants, and entitlements.
+6. Courses, video, pages, What's New, and contact.
+7. Telemetry, consent, privacy, terms, and operations.
+8. ChatGPT Work setup, local media preparation, personalization, export, diagnosis, and recovery.
+9. Complete integration and approved Sites hosting.
 
-```text
-npm ci
-npm run demo:local
-```
+Every milestone ends in integrated behavior that can be exercised in the running application. Focused automated checks protect authorization, media access, migrations, and durable data.
 
-The second command prepares the pinned PDF environment, runs preflight, installs and verifies the complete fictional Daymark Assembly state, and starts Nuxt at `http://127.0.0.1:3000`. Reset at any time with `npm run demo:reset`.
+## Current transition
 
-The complete role credentials, ten-minute product route, technical proof commands, and explicit external limitations are in [`docs/submission/judge-quickstart.md`](docs/submission/judge-quickstart.md). The final judging route and hosted plan are in [`docs/submission/judging-guide.md`](docs/submission/judging-guide.md) and [`docs/submission/hosted-test-plan.md`](docs/submission/hosted-test-plan.md).
+The private GitHub repository is [sunflower-of-parchman/a-op](https://github.com/sunflower-of-parchman/a-op).
 
-## Current status
+The next implementation milestone replaces the current Nuxt application tree with the current official Sites starter, ports the complete visual foundation, and builds the functional sequence above. Git history carries the earlier implementation.
 
-Milestones 0 through 12 and Integration Gate A are implemented, and the Milestone 13 submission package is prepared. The repository includes the Nuxt 4 and local Supabase foundation, email and optional server-side PKCE authentication, explicit account roles and protected fulfillment, database-authoritative artist identity and design, validated private drafts, explicit publication, structured pages, consent-based contact storage, catalog and collection authorship, signed resumable media intake, a deployed private processing worker, a persistent public player, private listener libraries, Stripe sandbox commerce, memberships, refunds, cancellation, customer billing tools, protected downloads, auditable entitlements, explicit non-exclusive music licensing, immutable issued terms, deployed private PDF delivery, ordered mixed-media learning paths, four learning access modes, progress and account resume, consent-gated video, safe rich text, editorial publishing, privacy-conscious first-party telemetry, redacted operations, a complete Codex-guided setup lifecycle, verified artist portability, production-shaped security and accessibility checks, explicit performance budgets, executable recovery drills, clean-clone and hosted judge paths, and Linux CI covering the complete product. Competition publication, video, judge sharing, and Devpost submission remain separate closeout actions.
+## Sound for Movement reference
 
-- Build record: `BUILD_WEEK.md`
-- Complete execution plan: `plans/artistOwnedPlatform.md`
-- Product contract: `docs/architecture/product-contract.md`
-- Configuration authority: `docs/architecture/configuration-authority.md`
-- Media processing: `docs/architecture/media-processing-contract.md`
-- Capability evidence: `docs/submission/capability-evidence.md`
-- Completion audit: `docs/submission/completion-audit.md`
-- Hosted operator runbook: `docs/submission/hosted-operator-runbook.md`
-- Hosted evidence record: `docs/submission/hosted-evidence-record.md`
-- Model and agent use: `docs/submission/model-and-agent-use.md`
-- Remaining work at goal stop: `docs/submission/remaining-work.md`
+Michael explicitly authorized the Sound for Movement visual framework as the starting framework for `a-op`. The live company repository remains private and read-only. Its visual system and generalized functional lessons inform fresh React code. Each `a-op` installation supplies its own name, music, media, writing, Courses, customer records, access plans, terms, accounts, and production state.
 
-## Requirements and supported environments
+## Authority
 
-| Requirement        | Supported contract                                                            |
-| ------------------ | ----------------------------------------------------------------------------- |
-| Node and npm       | Node 24.14; npm 11; exact package graph in `package-lock.json`                |
-| Local services     | Docker Desktop on macOS or a compatible Docker daemon on Linux                |
-| Document rendering | Python 3.12 or newer; exact packages installed into ignored `.venv-documents` |
-| Browsers           | Chrome/Chromium and Safari/WebKit                                             |
-| Deployment runtime | Ordinary Node-compatible host; Vercel is the documented initial path          |
+Michael directs writing, media rights, access plans, licensing terms, legal language, connected accounts, and publication.
 
-Windows through WSL2 may work with Docker integration but is not yet a verified host contract. The public site is responsive; administration is designed for current desktop and mobile browsers.
+Public deployment, domains, DNS, repository visibility, email delivery, and public media uploads each use action-specific approval. Local development, fictional data, and deterministic simulation support the complete build before those activation points.
 
-## Development
+## License
 
-Use Node 24.14, npm 11, and a running Docker Desktop installation. From a fresh clone:
-
-    npm ci
-    npm run setup:documents
-    npm run setup:preflight
-    npm run setup:local
-    npm run dev
-
-`setup:documents` creates an ignored, isolated Python environment for the pinned private-license PDF renderer. `setup:local` starts the local Supabase stack, applies migrations, inserts the fictional demonstration artist, generates `shared/types/database.ts`, and writes local credentials only to ignored `.env`.
-
-While `setup/project-state.json` has no personalization record, `npm run dev` presents the labeled
-starter home page. `npm run starter:local` performs the complete local preparation and starts that
-view in one command. `npm run demo:local` explicitly presents the finished Daymark Assembly site.
-Both modes use the same working application and local fixtures; switching the presentation does not
-rewrite artist data.
-
-Verify the current foundation with:
-
-    npm run setup:check
-    npm run test:db
-    npm run verify:foundation
-    npm run verify:spine
-    npm run test:oauth
-    npm run verify:administration
-    npm run verify:catalog
-    npm run verify:commerce
-    npm run verify:licensing
-    npm run verify:learning
-    npm run verify:telemetry
-    npm run verify:setup
-    npm run verify:portability
-    npm run verify:hardening
-    npm run verify:recovery
-    npm run verify:package
-    npm run test:cross-browser
-    npm run diagnose
-    npm run verify
-    npm run test:e2e
-
-`verify:spine` performs a clean local reset, verifies setup state and all five database identities, replays one payment event four times, checks the single order and entitlement, builds the application, scans the browser bundle for server secrets, runs the protected browser journey, and invokes the optional OAuth gate. `test:oauth` enables a bounded Google/GitHub allowlist on an isolated local server and proves provider visibility, PKCE challenge construction, exact callback binding, HTTP-only transaction cookies, safe return handling, cancellation cleanup, and disabled-provider refusal without contacting or mutating a provider account. `verify:administration` proves configuration and page draft/publication plus consent-based local contact storage. `verify:catalog` proves catalog authority, idempotent media intake, local and container media processing, and browser-secret boundaries. `verify:commerce` proves replay-safe fulfillment, changed-fact denial, subscription expiry, partial and full refunds, redacted webhook recovery records, raw-body Stripe signature verification, and customer isolation. `verify:licensing` proves immutable terms, replay-safe issue, private PDF rendering, account isolation, and refund revocation. `verify:learning` proves authored ordering, four access modes, private lesson media, progress, account isolation, safe content, and publication. `verify:telemetry` proves consent enforcement, global disablement, retention, raw-event isolation, operational separation, and diagnostic redaction. `verify:setup` proves the 14-topic interview, read-only preview, explicit approval guard, identity and two-track application, verification, external checkpoints, state update, idempotency, and output redaction. `verify:portability` proves deterministic versioned exports, structured and relationship validation, bundled-media hashes, private-data exclusion, explicit destructive-local confirmation, clean database restore, exact content-table comparison, anonymous public access, service reconnection checkpoints, tamper denial, and demonstration recovery. `verify:hardening` builds and starts the production server, checks the strict browser/request boundaries, keyboard and reduced-motion behavior, offline state, landmarks, viewports, axe results, four public-route performance budgets, database policies, and browser-secret boundary. `verify:recovery` proves safe setup reruns, payment reconciliation, media lease recovery, portable database/storage restore, and a final redacted installation check. `npm run diagnose` prints shareable aggregate and operational status without credentials, URLs, account identities, or raw sessions. `npm run test:e2e` resets the fictional demonstration before each specification so stateful desktop and mobile journeys remain deterministic. `npm run verify` runs the aggregate local gate.
-
-`verify:package` validates the README, internal evidence links, fictional asset ledger, screenshots, browser-secret boundary, and the read-only public journey in Chromium and WebKit. Chrome/Chromium and Safari/WebKit are the supported browser matrix for this project. The original demonstration inventory is in [`docs/demo-assets.md`](docs/demo-assets.md).
-
-The guided personalization command sequence and nontechnical explanation are in [`SETUP.md`](SETUP.md). Provider-neutral operations and recovery runbooks begin at [`docs/agent/README.md`](docs/agent/README.md). The local lifecycle records hosted Supabase, OAuth, Stripe, email, Vercel, DNS, and deployed media processing as approval checkpoints; it performs none of those external actions.
-
-The security review is recorded in [`security_best_practices_report.md`](security_best_practices_report.md), recovery authority in [`docs/operations/recovery.md`](docs/operations/recovery.md), and the measured production budgets in [`docs/submission/performance-evidence.md`](docs/submission/performance-evidence.md).
-
-## Security and recovery model
-
-- Server-owned sessions use secure cookie behavior and explicit owner, editor, customer, anonymous, and service-role boundaries.
-- Every exposed table combines narrow Data API grants with forced Row Level Security; consequential writes use server-only functions.
-- Mutating requests refuse cross-site origins. Public links and redirect destinations pass centralized same-origin, HTTPS, loopback-development, or exact Stripe policies.
-- Production responses carry a nonce content security policy and strict browser headers. Requests and sensitive routes have explicit size and rate boundaries.
-- Source media is immutable; uploads, derivatives, documents, payment events, entitlements, and exports have durable identities and replay behavior.
-- Local destructive commands refuse non-loopback Supabase targets. Recovery drills cover payment reconciliation, expired media leases, deterministic export, clean restore, and repeated setup.
-
-This is a working security boundary, not a substitute for an artist's legal, tax, privacy, accessibility, or infrastructure review before public operation.
-
-## Export and restore ownership
-
-Create and verify a portable snapshot with:
-
-    npm run export:artist -- --out exports/my-artist
-    npm run export:verify -- exports/my-artist
-
-The export contains deterministic structured artifacts and bundled media covered by SHA-256 hashes. It carries published artist configuration, pages, catalog and credits, product and licensing definitions, learning, video, editorial, privacy settings, application/schema versions, redacted service state, backup procedures, and storage-addressable media paths. It excludes secrets, provider identifiers, customers, messages, libraries, progress, analytics events, payments, subscriptions, issued licenses, drafts, signed URLs, and private task metadata.
-
-Prove restoration only against disposable local Supabase:
-
-    npm run restore:check -- exports/my-artist --confirm-disposable-local
-
-The command refuses a hosted target and refuses to run without the explicit confirmation flag. It starts from migrations, creates a disposable local owner, restores and compares every portable content table and media hash, checks direct-public data and media, reports external-account reconnection runbooks, and then recreates the fictional demonstration. Hosted backups, customer-data exports, and real restoration follow [`docs/agent/backup-restore.md`](docs/agent/backup-restore.md) and require action-specific approval.
-
-## Deployment and operating costs
-
-The software is licensed under the GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`); see [`LICENSE`](LICENSE). Lato remains under the SIL Open Font License, Version 1.1, as recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Repository publication remains a separate Michael-controlled action. The initial documented path is one Vercel Services deployment containing the public Nuxt application and two private container workers, connected to an artist-owned Supabase project and Stripe account. Ordinary Node-compatible and HTTP-capable container hosting remains possible because the core application, queue, and workers do not depend on a proprietary Vercel runtime.
-
-Running a site may still involve domain registration, hosting, database, storage and egress, email, worker compute, and payment-processing costs. Free tiers can support evaluation but are provider-controlled and may change. Each artist owns their repository, connected accounts, domain, content, customer relationship, and a verified path for exporting and restoring the installation. No deployment, paid resource, DNS change, live payment, email send, or publication occurs without explicit approval.
-
-## Contributing
-
-Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), the product contract, and the relevant architecture decision before changing behavior. Keep the single-artist authority model, human approval gates, fictional fixture boundary, and central entitlement decision intact. Add focused tests, run the relevant milestone gate, and update provenance and capability evidence for a new public claim. Never commit credentials, real customer data, private artist media, generated local exports, or machine-specific paths.
-
-Contribution and redistribution follow `AGPL-3.0-or-later`. Operators who modify the platform and make it available over a network must offer the corresponding source under the same license. Read [`LICENSE`](LICENSE) and [`docs/architecture/decisions/011-open-source-license.md`](docs/architecture/decisions/011-open-source-license.md).
-
-## Troubleshooting
-
-| Symptom                              | First check                                                  | Safe response                                                                  |
-| ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Preflight reports the wrong Node     | `node --version`                                             | Activate Node 24.14, then rerun `npm ci` and `npm run setup:preflight`         |
-| Docker or Supabase is unavailable    | `docker info` and `npm run setup:check`                      | Start Docker; rerun `npm run setup:local`                                      |
-| Fictional data was changed           | `npm run demo:reset`                                         | Reset only the loopback Supabase installation                                  |
-| License PDF dependencies are missing | `npm run setup:documents`                                    | Rebuild the ignored pinned Python environment                                  |
-| A provider is not connected          | `npm run diagnose`                                           | Read the named runbook; seek approval before any external action               |
-| A browser journey fails              | `playwright-report/` and `test-results/`                     | Preserve the evidence, reset the demo, and rerun the narrow specification      |
-| A restore or payment fact disagrees  | [`docs/operations/recovery.md`](docs/operations/recovery.md) | Preserve hashes and provider facts; never hand-edit an entitlement or artifact |
-
-Provider-specific diagnosis and recovery begin in [`docs/agent/troubleshooting.md`](docs/agent/troubleshooting.md).
-
-## Build Week
-
-This project is being built with Codex. GPT-5.6 Sol runs the primary implementation task; GPT-5.6 Pro independently reviewed the complete plan before implementation, and its adopted recommendations were integrated here. Michael Wall directs the product, supplies the operating knowledge, and makes the creative, rights, pricing, account, and publication decisions. Codex performs the implementation, generalization, migrations, testing, setup automation, debugging, verification, and technical documentation.
-
-The personalized artist site is the proof. The transferable, agent-operable system is the project.
+`a-op` is licensed under the GNU Affero General Public License v3.0 or later. See [LICENSE](LICENSE).

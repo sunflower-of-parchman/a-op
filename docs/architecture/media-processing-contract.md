@@ -1,45 +1,53 @@
 # Media processing contract
 
-Hosted administration includes real audio upload and processing. Original audio must not pass through ordinary Nuxt request bodies, and long-running ffmpeg work must not occupy ordinary page or API requests.
+## Artist-controlled intake
 
-## Upload and job lifecycle
+The artist identifies a local media path and confirms the rights, destination, and intended public or protected use. Codex invokes the repository's local media command against that approved path. The command inspects source facts, prepares versioned derivatives, displays a manifest for approval, and publishes only the approved outputs to the artist's Site.
 
-An authenticated owner or editor requests an authorized resumable upload target from the Nuxt server. The browser uploads the original directly to a private Supabase Storage location. The server records the media object and creates a durable `media_jobs` row in the same logical workflow.
+The command performs byte-level inspection and conversion locally. Sites-provided R2 receives original and derivative bytes. Sites-provided D1 receives metadata, hashes, ownership, approval, processing version, publication state, and access rules. See `docs/architecture/data-and-ai-boundary.md`.
 
-The source object is immutable. The job moves through `pending`, `processing`, `ready`, or `failed`. A worker claims pending jobs atomically, reads the source from private storage, inspects it with ffprobe, processes it with ffmpeg, and writes new derivative objects for the public preview, waveform data, and normalized metadata. It then marks the job `ready` and records derivative hashes, paths, versions, and processing evidence. Failed jobs retain a safe error category and may be retried without replacing the source.
+The administration upload flow streams artist-approved bytes to the same R2 destination and records the same D1 contract. Implementation selects the current Sites-supported upload shape and verifies file-size and request limits before accepting large audio or video.
 
-The administration workspace shows upload and processing state, explains failures without exposing secrets, and provides a retry action. Published playback uses only a `ready` derivative or an artist-supplied approved preview.
+## Original and derivative lifecycle
 
-## One worker, two supported operating modes
+Each approved original receives an immutable object key derived from a stable media identifier and source version. A replacement creates a new source version.
 
-The repository provides one worker entrypoint at `workers/media/index.ts` and one processing library under `workers/media/`. Both operating modes use the same code and database claim function.
+Each derivative records:
 
-Local Codex-operated mode runs:
+- source identifier and source hash;
+- processing profile and version;
+- derivative kind, format, bitrate, duration, channels, and sample rate where applicable;
+- R2 object key, byte size, and content hash;
+- approval and publication state; and
+- safe processing evidence.
 
-    npm run media:work
+Streaming, download, waveform, poster, thumbnail, transcript, and document outputs use separate derivative identifiers. Published playback uses an approved ready derivative.
 
-This command may process pending jobs until the queue is empty and exit. `npm run media:watch` remains active for local administration sessions. Codex can operate either command during setup and maintenance.
+## Local processing
 
-Hosted mode packages the shared worker runtime as an Open Container Initiative image through the root-context `Dockerfile`. The image routes `/media/health` and `/media/jobs/process-one` to the media queue and the corresponding `/documents/*` paths to the document queue. Vercel runs the same immutable runtime behind two separately bound private services. The supported first deployment uses request-driven Vercel container services. The Nuxt service receives each deployment-aware internal URL through a service binding and sends an authenticated request only after the durable job exists. One request claims at most one job. Neither service receives a public rewrite.
+The shared local processor uses ffprobe and ffmpeg for audio and video inspection and conversion. Repository commands provide one-shot preparation, queue processing, retry, and manifest verification. ChatGPT Work and Codex can operate those commands while the artist reviews the proposed output.
 
-The binding is private reachability, and `NUXT_MEDIA_WORKER_SECRET` adds application-level authorization. The Nuxt service registers hosted dispatch with Vercel `waitUntil`, allowing the upload-complete response to return while the private service request finishes. If a bound service is absent, busy, or unavailable, the accepted upload and queue row remain intact. A later owner retry or worker invocation can claim the pending or explicitly retried job. The database lease and derivative key remain authoritative across container shutdown, retry, and concurrent instances.
+A durable D1 job moves through `pending`, `processing`, `ready`, or `failed`. A claim lease prevents two workers from processing the same active job. Retry preserves the source object and processing history. A stale worker cannot replace the result of a later successful attempt.
 
-Before Milestone 4 is accepted, the Build Week demonstration environment must run this container on one selected and documented container-capable service after Michael explicitly approves the deployment. The hosted end-to-end test must upload approved demonstration audio, observe the job reach `ready`, load the generated waveform, and play the generated preview. A merely documented future worker does not satisfy the hosted administration claim.
+The first complete implementation supports local processing and upload. A future hosted worker uses the same job and derivative contract through an approved worker adapter.
 
-The container remains portable to another HTTP-capable host. A long-running host can also continue to run `npm run media:watch`; Vercel is the documented first path, not a requirement for future installations.
+## Delivery
 
-## Idempotency and concurrency
-
-Each source is identified by a content hash and stable media identifier. Each derivative is identified by source hash, processing-profile version, and derivative kind. Reprocessing the same source with the same profile produces a no-op or replaces the same temporary derivative before an atomic finalization; it never creates uncontrolled duplicates.
-
-The database claim operation prevents two workers from processing one active job. A timed-out claim becomes retryable after a documented lease period. Workers update progress with compare-and-set semantics so a stale worker cannot overwrite the result of a later successful attempt.
+Public and protected media routes resolve D1 metadata before reading R2. Audio and video routes support validated byte ranges. Protected resources call `decideAccess` for every request. Responses expose the intended media bytes and safe headers while preserving private R2 object identifiers.
 
 ## Security and limits
 
-Upload authorization checks owner or editor role, allowed media type, maximum size, and destination before issuing the resumable target. The worker receives server-only Supabase credentials from its environment and never returns them to the application or diagnostics. Temporary files use a bounded workspace and are deleted after success or failure. Logs contain job and media identifiers, not signed URLs, secrets, customer data, or full local paths.
-
-Artist-configured limits cover maximum source size, supported input formats, preview duration and bitrate, and worker concurrency. The demo uses conservative limits that fit the verified worker host. The original remains private unless the artist explicitly creates a downloadable product entitlement for it.
+- Owner or editor authority controls media writes.
+- Allowed formats, maximum source size, derivative profiles, and concurrency are explicit configuration.
+- Temporary files use a bounded local workspace and leave the workspace after success or failure.
+- Logs contain stable media and job identifiers while redacting full local paths, credentials, signed URLs, customer data, and private object keys.
+- Image provenance and permissions enter D1 before publication.
+- A person's photograph stays outside generative image tools.
 
 ## Required verification
 
-Automated tests must prove job claiming, lease recovery, idempotent retry, derivative naming, failure state, and redacted logs. Local integration tests run ffmpeg on a small redistribution-safe fixture. Hosted verification proves direct upload, durable job creation, deployed worker processing, ready-state publication, waveform retrieval, and preview playback.
+- Process one redistribution-safe audio fixture locally and verify hashes, metadata, waveform, streaming derivative, and download derivative.
+- Publish the approved outputs to R2 and verify the matching D1 records.
+- Seek through the generated audio with valid `200`, `206`, `403`, `404`, and `416` behavior.
+- Retry one failed job and prove idempotent derivative identifiers and preserved history.
+- Verify that logs, proposals, browser output, and exports preserve the redaction contract.

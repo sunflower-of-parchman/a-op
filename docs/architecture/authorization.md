@@ -1,29 +1,52 @@
-# Authentication, authorization, and fulfillment
+# Authentication, authorization, and access
 
 ## Identity and roles
 
-Supabase Auth establishes identity. Every new account receives only the `customer` role through the database trigger in `20260715010000_authority_foundation.sql`. A service-only bootstrap function grants the first explicit owner; owner and editor roles are never inferred from email, signup order, or user-editable metadata.
+Sites supplies identity through its current official Sign in with ChatGPT helpers and forwarded authenticated-user headers. `getChatGPTUser()` supports optional identity-aware pages. `requireChatGPTUser(returnTo)` protects server-rendered account and administration pages. Dispatch owns the sign-in, sign-out, and callback paths.
 
-The `app_roles` table is the current role authority. `owner` can maintain installation configuration and content, `editor` can maintain content and media, and `customer` can read only the account records belonging to that identity. Server routes verify the current Supabase user before loading server-controlled roles.
+D1 records the application's durable identity and role facts:
 
-## Database boundaries
+- `owner` manages installation-wide settings, trusted operators, access plans, legal documents, exports, and publication.
+- `editor` manages assigned catalog, media, Courses, video, pages, and updates.
+- `customer` manages their own profile, library, playlists, favorites, memberships, subscriptions, licenses, downloads, and course progress.
 
-Every exposed table has Row Level Security enabled and forced, explicit Data API privileges, and named policies. Publication tables expose only published rows to anonymous users. Account and commerce tables scope customer reads to `auth.uid()`. Browser roles receive no write privilege on payment events, orders, order items, entitlements, or download records.
+The owner bootstrap is an explicit setup action. Role assignments are server-owned D1 records. Every server write resolves the current identity and role again.
 
-The `private` schema contains small policy helpers and is absent from the exposed Data API schemas. The public `bootstrap_owner`, `decide_access`, and `process_simulated_payment_event` functions are revoked from anonymous and authenticated roles and executable only by the service role.
+## Server boundary
 
-## Storage boundaries
+D1 and R2 bindings remain inside server code. Browser components receive validated public data and purpose-built action results. API routes and server actions apply ownership predicates, role checks, state-transition rules, and input validation before every read or write involving private state.
 
-`artwork` and `preview-media` are public buckets. `source-audio`, `downloads`, `license-documents`, `lesson-media`, and `administrative` are private. Owners and editors may maintain managed storage through policies; customers receive no permanent private object path.
+Authentication identifies a person. The application's role and access contracts authorize the requested action.
 
-The protected download route verifies the user, resolves the private media object, calls the central access decision, creates a 60-second signed URL, and records successful entitled delivery. The browser receives neither the service key nor a permanent storage URL.
+## Protected delivery
 
-## Fulfillment contract
+Every protected stream, download, course asset, license document, customer record, and administrative resource calls the central `decideAccess` contract.
 
-`process_simulated_payment_event` is the production-shaped local fulfillment entrypoint. It validates the event against a published product and active price, stores the signed payment fact, creates one order and order item, grants one entitlement, and marks the event complete in one database transaction. Named unique constraints make exact replays idempotent. A replay whose customer, product, amount, or currency differs from the original is rejected.
+The decision can derive access from:
 
-`decide_access` returns an allow or denial reason and the matching entitlement identifier. Integration Gate A proves one public preview, four deliveries of one event, one resulting order, one entitlement, one allowed signed delivery, and one denied customer.
+- intentional public availability;
+- owner or editor authority;
+- resource ownership;
+- an active membership or subscription;
+- an issued license;
+- a credit reservation or redemption;
+- a course grant; or
+- an explicit access grant.
 
-## Local verification identities
+The delivery route returns only the authorized byte range or document response. Stable D1 records preserve the decision source, expiry, revocation, remaining uses, and delivery history.
 
-`content/demo/accounts.json` contains explicitly fictional local-only accounts. `npm run setup:local` creates them after every local reset. They exist to exercise anonymous, customer, editor, owner, and service-role policies without connecting an external account. Hosted credentials are a separate approval-gated setup action and must never reuse these fixture passwords.
+## Access-state contract
+
+Artist actions create and update memberships, subscription state, entitlements, credits, licenses, and explicit grants through validated server operations. Each operation writes the resulting access state and audit event together. Repeating an operation with the same idempotency key returns the existing result.
+
+Renewals, cancellations, expirations, credit reservations, credit releases, reversals, and revocations remain auditable state transitions. A browser navigation or client-side state change never grants access.
+
+Current official [Sites guidance](https://learn.chatgpt.com/docs/sites#understand-limits-and-unsupported-uses) defines Sites as a non-financial web experience. Access-state operations accept artist-controlled application facts. Server-owned D1 state remains the authority for every protected action.
+
+## Required verification
+
+- Anonymous, customer, editor, and owner journeys receive their intended data and actions.
+- Cross-customer reads and writes are denied at the server boundary.
+- Protected R2 delivery always follows `decideAccess`.
+- Replayed access operations create one durable result.
+- Browser output contains no D1 binding, R2 credential, secret, or private object key.

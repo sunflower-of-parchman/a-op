@@ -1,45 +1,62 @@
 # Configuration authority
 
-This contract assigns one authoritative location to each kind of configuration. It prevents an artist's administration changes, repository defaults, setup state, and service secrets from drifting into conflicting copies.
+This contract gives each kind of configuration one durable home.
 
-## Contract and bootstrap defaults
+## Repository contracts and starting defaults
 
-`shared/schemas/artistConfig.ts` defines the validated public configuration contract. All setup proposals, database records, exports, and administrative requests must conform to this schema or a narrower schema derived from it.
+Shared TypeScript schemas define the validated contracts for artist settings, modules, navigation, catalog data, memberships, subscriptions, licensing, Courses, video, contact, telemetry, legal documents, setup proposals, and exports.
 
-`artist.config.ts` contains bootstrap defaults and the redistribution-safe fictional demonstration identity. It initializes a new database and allows static tooling to understand available features. After initialization, it is not authoritative for artist-editable runtime values.
+Repository defaults supply:
 
-## Runtime artist settings
+- the complete Sound for Movement-derived visual foundation in both dark and light themes;
+- neutral `a-op` content and standard product names;
+- every supported module definition and its dependencies;
+- bootstrap navigation and administration structure; and
+- local fictional records used for safe development journeys.
 
-Supabase database tables are authoritative for artist-editable runtime identity, design tokens, navigation, pages, feature settings, contact details, product presentation, licensing presentation, learning presentation, and telemetry preferences. The authenticated administration workspace writes these values through validated server routes. Published pages read the active database version so approved changes appear without a source-code edit or rebuild.
+These defaults make a fresh installation visually complete and operationally understandable before the artist adds their material.
 
-Draft and published states must be explicit. Preview reads the selected draft. Public pages read only the published version. Export commands serialize the current working database state through the shared schema.
+## Runtime artist state
 
-## Secrets and private service configuration
+D1 owns artist-editable runtime state: identity, published pages, navigation, enabled modules, catalog, access grants, memberships, subscriptions, licensing options, Courses, video, contact settings, telemetry preferences, legal-document versions, and operational status.
 
-Environment variables and connected service secret stores are authoritative for Supabase server credentials, Stripe secret and webhook values, OAuth client secrets, mail-provider credentials, worker credentials, and other private deployment settings. Secrets never enter `artist.config.ts`, database content tables, setup proposals, `setup/project-state.json`, logs, diagnostics, screenshots, or Git.
+Draft and published states are explicit. Preview reads a selected draft. Public routes read published state. Administration writes validated changes through server actions and records revisions and audit events.
 
-`.env.example` documents required names and expected non-secret formats. A server-only `ServiceConfig` schema validates presence and shape while redacting values from all output.
+## Capability activation
+
+Every installation contains the complete supported codebase. A module registry records whether each capability is active and which shared contracts it requires.
+
+Music publishing, catalog, streaming, identity, access, and administration form the core. An artist can begin with streaming alone. They can activate direct downloads, customer libraries, licensing, memberships, subscriptions, Courses, video, What's New, contact, telemetry, and other modules as their work grows.
+
+Public navigation, routes, administration navigation, setup questions, background jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history. Reactivation restores the existing configuration after validation.
+
+## Artist-specific code and visual changes
+
+Git owns changes to the artist's fork: visual rules, layout, component composition, page structure, nomenclature, module code, and new capabilities. ChatGPT Work and Codex translate the artist's natural-language direction into reviewed source changes and verify the result in both themes and responsive layouts.
+
+The D1 configuration remains compatible with repository schemas. A source change that alters a schema includes a forward migration and updates setup, export, and recovery behavior.
+
+## Secrets and private runtime configuration
+
+Server-managed runtime values own private delivery credentials, external worker credentials, and other deployment secrets. `.env.example` documents names and non-secret formats. Runtime validation reports presence and safe shape through redacted output.
 
 ## Installation state
 
-`setup/project-state.json` records non-secret setup facts: schema version, enabled modules, completed checks, selected deployment modes, and remaining approval-gated actions. It is a status ledger, not an authority for public content or secrets. `npm run setup:check` must be able to regenerate or reconcile it from safe checks.
+`setup/project-state.json` records non-secret setup facts: schema version, enabled modules, completed checks, Sites binding names, and remaining approval-gated actions. D1 remains authoritative for product state. Git remains authoritative for source. The project-state file remains a resumable status ledger.
 
-## Portable snapshot
+## Setup lifecycle
 
-`npm run export:artist` produces a versioned portable snapshot of runtime artist settings and content. `npm run export:verify` validates the snapshot against the shared schemas. The snapshot excludes secrets and replaces external service identifiers with redacted connection descriptors or artist-approved portable mappings.
+The ChatGPT Work setup lifecycle is:
 
-## Write lifecycle
-
-The Codex-guided setup lifecycle is:
-
-    interview
+    preflight
+    -> module and catalog conversation
     -> structured proposal
-    -> validated preview and diff
-    -> explicit human approval
+    -> validated preview
+    -> explicit artist approval
     -> deterministic application
-    -> verification
+    -> public and administrative verification
     -> project-state update
 
-`npm run setup:interview` emits the interview contract. Codex asks the questions conversationally and writes `setup/proposals/<proposal-id>.json`. `npm run setup:preview -- <proposal>` validates the file and shows intended changes without mutating state. After explicit approval is recorded, `npm run setup:apply -- <proposal> --confirm-approved-proposal` applies deterministic changes only to the local installation. It runs `npm run setup:check` before recording personalization and remaining external checkpoints in `setup/project-state.json`. Applying the same approved proposal again is idempotent.
+Installation begins from the complete visual foundation. The setup conversation focuses on the artist's material, active capabilities, rights, access, memberships, subscriptions, licensing, and publication. Later natural-language work can reshape the visual system and structure as deeply as the artist chooses.
 
-Application code must never choose between two conflicting sources at runtime. If a field becomes artist-editable, migrate its authority into the database and leave only a bootstrap default in `artist.config.ts`. If a field becomes secret, migrate it to environment configuration and remove it from public schemas and exports.
+Applying the same approved proposal is idempotent. It updates intended records, reuses approved media objects and jobs, and preserves audit history.

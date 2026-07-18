@@ -4,6 +4,8 @@ This ExecPlan is a living document. The sections `Progress`, `Surprises & Discov
 
 This plan must be maintained in accordance with `PLANS.md` at the repository root.
 
+Current transition: this document preserves the completed Nuxt implementation history. The functional `a-op` Sites build is controlled by `plans/migrateAopToSites.md`.
+
 ## Purpose / Big Picture
 
 Build a complete, open-source, web-only platform that lets an independent musician operate a distinctive digital home on infrastructure they control. After implementation, an artist can use Codex to configure the project, connect a Supabase database and Stripe account, apply their identity, import and maintain albums and tracks, publish audio and video, sell downloads, offer music licenses and memberships, create educational paths, manage customer entitlements, view privacy-conscious telemetry, and deploy the site to a host such as Vercel under their own domain.
@@ -16,6 +18,7 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 
 ## Progress
 
+- [x] (2026-07-18 19:34Z) Established the complete functional `a-op` Sites plan in `plans/migrateAopToSites.md`, including the official React foundation, D1 and R2 architecture, ten bounded worker assignments, every product module, integrated verification, and approved hosting path.
 - [x] (2026-07-14 23:19Z) Confirmed Build Week registration, submission requirements, deadlines, evidence requirements, and external-publication approval boundaries in `BUILD_WEEK.md`.
 - [x] (2026-07-14 23:19Z) Chose the product direction: a web-only, artist-owned platform built and configured with Codex, without a required AI runtime feature.
 - [x] (2026-07-14 23:19Z) Inspected the private Sound for Movement web stack read-only and confirmed that it contains proven patterns for Nuxt, Supabase, Stripe, music cataloging, audio, memberships, licensing, learning, video, administration, and telemetry.
@@ -69,6 +72,9 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
 - [ ] Complete the remaining human and external gates listed in `docs/submission/remaining-work.md`. Michael resumed the work on 2026-07-15 with the repository safe and the remaining external actions still subject to their recorded approval boundaries.
 
 ## Surprises & Discoveries
+
+- Observation: The finished Nuxt implementation supplies a precise behavioral specification for a clean Sites-native rebuild.
+  Evidence: The current repository records complete catalog, audio, account, commerce, membership, licensing, learning, video, telemetry, setup, portability, recovery, and hosted behavior, while the official Sites starter supplies the new React, D1, R2, authentication, build, version, and hosting structure.
 
 - Observation: Instructional language becomes its own template chrome when it sits outside the artist's actual content hierarchy.
   Evidence: Michael's live music-page review identified the global starter notice, page-title `Library` eyebrow, and sidebar `Library` label as commentary rather than useful anatomy. Removing them made the working title, views, filters, results, and actions self-explanatory without weakening the starter placeholders inside real artist content.
@@ -198,6 +204,10 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
   Evidence: The hardening command starts the built Node server, fails on response, request, console, media-loading, and byte-budget regressions, and records four critical routes. The final aggregate measured 60–70 ms load events, 7–8 requests, 374–377 KB total transfer, and zero initial media bytes.
 
 ## Decision Log
+
+- Decision: Preserve this plan as the completed Nuxt implementation record and use `plans/migrateAopToSites.md` as the controlling functional Sites plan.
+  Rationale: Git history carries the first implementation, while the active ExecPlan gives the Sites architecture and complete product behavior one end-to-end execution contract.
+  Date/Author: 2026-07-18 / Michael and Codex
 
 - Decision: Build the complete described platform rather than presenting only a catalog prototype.
   Rationale: The reference system supplies proven concepts and the Build Week thesis depends on showing that Codex can transfer a sophisticated artist-owned operating model, not merely generate a themed site.
@@ -356,6 +366,8 @@ This ExecPlan delivers the full product during OpenAI Build Week. The milestones
   Date/Author: 2026-07-14 / Codex
 
 ## Outcomes & Retrospective
+
+The Sites rebuild is fully planned. The new plan carries every product capability into the official Sites React stack through a music-first functional sequence and bounded parallel work.
 
 Milestone 0 is complete. The repository carries the product contract, public introduction, setup entrypoint, agent rules, provenance ledger, visual direction, primary-task and model evidence, capability matrix, and architecture decisions for deployment, stack, schema, entitlements, configuration, setup, media, portability, design, track, and license choice. The Developer Tools track and `AGPL-3.0-or-later` are selected.
 
@@ -932,3 +944,5 @@ Revision note, 2026-07-16: Michael selected Lato as the starter typeface, reques
 Revision note, 2026-07-16: Michael required the old fictional language to be removed from every public first-clone page. Commit `3d61f56` extends the shared starter contract across all public route families, including database-backed structured sections and media surfaces, while preserving working navigation, access, playback, commerce, and the explicit Daymark demonstration. Ten desktop/mobile Chromium journeys span seventeen route archetypes; live inspection caught and resolved the remaining protected lesson-image placeholder. No Supabase, provider, deployment, publication, or Sound for Movement state changed.
 
 Revision note, 2026-07-16: Michael removed the global starter notice, every public page-title eyebrow, and the redundant music-sidebar `Library` label after live review showed that the instructional layer had become visible chrome. Commit `9ec421a` preserves literal placeholders inside real artist content, every public interaction, and the administration's utility/editing language. Formatting, lint, type checking, production build, ten desktop/mobile Chromium journeys spanning eighteen route archetypes, and live music inspection passed. No database, provider, deployment, publication, or Sound for Movement state changed.
+
+Revision note, 2026-07-18: Preserved this document as the complete Nuxt implementation record and linked the controlling functional Sites plan at `plans/migrateAopToSites.md`. The active plan uses the lowercase `a-op` name and moves every product capability into the official Sites React, D1, R2, Sign in with ChatGPT, versioning, and hosting structure.
