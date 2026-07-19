@@ -1,7 +1,9 @@
-.nuxt
-.output
-coverage
-node_modules
-playwright-report
-test-results
-shared/types/database.ts
+.next/
+.wrangler/
+dist/
+node_modules/
+
+# Generated or upstream reference material
+drizzle/meta/
+examples/
+plans/sites-replacement-manifest.txt

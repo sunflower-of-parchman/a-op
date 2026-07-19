@@ -1,8 +1,26 @@
-import withNuxt from './.nuxt/eslint.config.mjs'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-export default withNuxt(eslintConfigPrettier, {
-  rules: {
-    'vue/multi-word-component-names': 'off',
-  },
-})
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    ".nuxt/**",
+    ".output/**",
+    ".vinext/**",
+    ".wrangler/**",
+    ".vercel/**",
+    "coverage/**",
+    "dist/**",
+    "node_modules/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;

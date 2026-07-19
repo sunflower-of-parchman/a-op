@@ -1,0 +1,383 @@
+.musicContent,
+.detailContent {
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns:
+    minmax(14rem, 1.5fr) repeat(3, minmax(9rem, 0.75fr))
+    auto;
+  align-items: end;
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--slate);
+  gap: 1rem;
+}
+
+.filters label,
+.filterActions {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.filters label > span {
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+}
+
+.filters input,
+.filters select {
+  min-height: 2.75rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+}
+
+.filterActions {
+  grid-template-columns: repeat(2, auto);
+}
+
+.applyButton,
+.clearButton {
+  min-height: 2.75rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--slate);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.applyButton {
+  border-color: var(--action);
+  background: var(--action);
+  color: #fffdfc;
+}
+
+.clearButton {
+  background: transparent;
+  color: var(--ink);
+}
+
+.applyButton:hover {
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+}
+
+.clearButton:hover {
+  border-color: var(--accent);
+  background: var(--field);
+}
+
+.applyButton:disabled,
+.clearButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.resultCount {
+  margin-top: 1rem;
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.catalogList {
+  margin: 2.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--slate);
+  list-style: none;
+}
+
+.catalogRow {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 0.8fr) minmax(16rem, 1.2fr) auto;
+  align-items: center;
+  min-height: 8.5rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+  gap: clamp(1rem, 3vw, 3rem);
+}
+
+.catalogRowWithoutArtwork {
+  grid-template-columns: minmax(12rem, 0.8fr) minmax(16rem, 1.2fr) auto;
+}
+
+.indexArtwork {
+  position: relative;
+  width: clamp(4.5rem, 8vw, 6.5rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.indexArtwork img,
+.detailArtwork img {
+  object-fit: cover;
+}
+
+.catalogIdentity {
+  min-width: 0;
+}
+
+.kindLabel {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.catalogIdentity h2 {
+  margin-top: 0.3rem;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+}
+
+.catalogIdentity h2 a,
+.textLink {
+  color: var(--ink);
+  text-decoration-color: transparent;
+  text-underline-offset: 0.35rem;
+}
+
+.catalogIdentity h2 a:hover,
+.textLink:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+.catalogIdentity > p,
+.catalogSummary,
+.catalogMetadata {
+  color: var(--ink-muted);
+}
+
+.catalogIdentity > p {
+  margin-top: 0.35rem;
+}
+
+.catalogSummary {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.catalogSummary > p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.catalogMetadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  font-size: 0.78rem;
+}
+
+.emptyState {
+  display: grid;
+  min-height: 18rem;
+  align-content: center;
+  max-width: 48rem;
+  gap: 1rem;
+}
+
+.emptyState h2 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  width: fit-content;
+}
+
+.detailHeader {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.68fr) minmax(0, 1.32fr);
+  align-items: end;
+  min-height: clamp(22rem, 48vw, 38rem);
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-bottom: 1px solid var(--slate);
+  gap: clamp(2rem, 7vw, 7rem);
+}
+
+.detailHeader:has(.detailHeading:only-child) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.detailArtwork {
+  position: relative;
+  width: min(100%, 31rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.detailHeading {
+  display: grid;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.detailHeading h1 {
+  overflow-wrap: anywhere;
+}
+
+.detailSubtitle {
+  color: var(--ink-muted);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.detailMetadata {
+  display: grid;
+  gap: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.detailActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 0.75rem;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.tagList li {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--slate);
+  border-radius: 999px;
+  font-size: 0.76rem;
+}
+
+.detailContent {
+  display: grid;
+  gap: clamp(3.5rem, 8vw, 7rem);
+}
+
+.description {
+  max-width: 48rem;
+  color: var(--ink-muted);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.detailSection {
+  display: grid;
+  gap: 2rem;
+}
+
+.detailSection h2 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.creditList {
+  margin: 0;
+  border-top: 1px solid var(--slate);
+}
+
+.creditList > div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.3fr);
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+  gap: 1.5rem;
+}
+
+.creditList dt {
+  font-weight: 400;
+}
+
+.creditList dd {
+  display: grid;
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.creditList dd span:last-child:not(:first-child) {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1040px) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .searchField {
+    grid-column: 1 / -1;
+  }
+
+  .filterActions {
+    align-self: end;
+  }
+
+  .catalogRow {
+    grid-template-columns: auto minmax(10rem, 0.8fr) minmax(12rem, 1.2fr);
+  }
+
+  .catalogRowWithoutArtwork {
+    grid-template-columns: minmax(10rem, 0.8fr) minmax(12rem, 1.2fr);
+  }
+
+  .catalogRow > button:last-child {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+
+  .catalogRowWithoutArtwork > button:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .filters,
+  .catalogRow,
+  .detailHeader,
+  .creditList > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .searchField {
+    grid-column: auto;
+  }
+
+  .filterActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .catalogRow {
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .indexArtwork {
+    width: 4.5rem;
+  }
+
+  .catalogRow > button:last-child {
+    grid-column: auto;
+  }
+
+  .detailHeader {
+    min-height: 0;
+  }
+
+  .detailArtwork {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .applyButton,
+  .clearButton {
+    transition-duration: 0.01ms;
+  }
+}

@@ -1,0 +1,239 @@
+.workspace {
+  display: grid;
+  max-width: 76rem;
+  gap: clamp(4rem, 8vw, 7rem);
+}
+
+.message {
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--accent);
+}
+
+.section,
+.heading,
+.form,
+.rowPrimary {
+  display: grid;
+}
+
+.section {
+  padding-top: clamp(2rem, 5vw, 4rem);
+  border-top: 1px solid var(--slate);
+  gap: 1.75rem;
+}
+
+.heading {
+  max-width: 56rem;
+  gap: 0.75rem;
+}
+
+.heading p,
+.meta,
+.empty,
+.deliveryList span,
+.resourceChoice small {
+  color: var(--ink-muted);
+}
+
+.planList,
+.inlineList,
+.deliveryList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planList,
+.deliveryList {
+  border-top: 1px solid var(--slate);
+}
+
+.planRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-block: 1.35rem;
+  border-bottom: 1px solid var(--slate);
+  gap: 1rem 2rem;
+}
+
+.rowPrimary {
+  gap: 0.45rem;
+}
+
+.titleLine,
+.rowActions,
+.actions,
+.actionChoices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.titleLine {
+  gap: 0.75rem;
+}
+
+.titleLine strong,
+.inlineList a,
+.deliveryList strong {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.state {
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  text-transform: capitalize;
+}
+
+.state[data-state="active"] {
+  color: var(--status-green);
+}
+
+.state[data-state="pending"] {
+  color: var(--status-amber);
+}
+
+.state[data-state="revoked"],
+.state[data-state="expired"],
+.state[data-state="archived"] {
+  color: var(--status-red);
+}
+
+.meta,
+.resourceChoice small,
+.deliveryList span {
+  font-size: 0.84rem;
+}
+
+.inlineList {
+  display: grid;
+  margin-top: 0.35rem;
+  gap: 0.25rem;
+}
+
+.rowActions,
+.actions,
+.actionChoices {
+  gap: 0.75rem;
+}
+
+.rowActions {
+  align-content: start;
+  justify-content: end;
+}
+
+.rowActions :is(button, a),
+.actions :is(button, a) {
+  min-height: 2.75rem;
+}
+
+.form {
+  max-width: 64rem;
+  gap: 1.25rem;
+}
+
+.form label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.form label > span,
+.resources legend {
+  color: var(--ink);
+  font-size: 0.86rem;
+}
+
+.form :is(input, select, textarea) {
+  width: 100%;
+  min-height: 2.75rem;
+}
+
+.form textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem clamp(1rem, 4vw, 3rem);
+}
+
+.resources {
+  display: grid;
+  margin: 0;
+  padding: 1.25rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--slate);
+  gap: 0;
+}
+
+.resources legend {
+  padding: 0 0 0.75rem;
+}
+
+.resourceRow {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.8fr) minmax(0, 1.2fr);
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+  gap: 1rem 2rem;
+}
+
+.resourceChoice {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.resourceChoice input,
+.actionChoices input {
+  width: 1rem;
+  min-height: 1rem;
+  margin-top: 0.2rem;
+}
+
+.resourceChoice span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.resourceChoice strong {
+  font-weight: 400;
+}
+
+.actionChoices {
+  align-items: start;
+}
+
+.actionChoices label {
+  grid-template-columns: auto auto;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+.actionChoices label:has(select) {
+  grid-template-columns: auto minmax(8rem, 1fr);
+}
+
+.deliveryList li {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 0.8fr) auto;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+  gap: 0.5rem 2rem;
+}
+
+@media (max-width: 760px) {
+  .planRow,
+  .fieldGrid,
+  .resourceRow,
+  .deliveryList li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rowActions {
+    justify-content: start;
+  }
+}

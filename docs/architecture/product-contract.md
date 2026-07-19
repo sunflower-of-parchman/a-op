@@ -10,13 +10,13 @@ Artists can activate memberships, subscriptions, Courses, video, downloads, lice
 
 One deployment is an artist's public site and working administration area. It supports owner and editor accounts, customer accounts, and public visitors.
 
-An artist takes a fork of `a-op`, controls its deployment, and retains ownership of their music, images, writing, video, course material, code, business data, catalog, configuration, customer relationship, and artist-specific changes. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI. The shared source remains available under `AGPL-3.0-or-later`, including its obligations when a modified version is offered over a network.
+An artist takes a fork of `a-op`, controls its deployment, and retains ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data. They control their catalog, configuration, customer relationship, and artist-specific operation. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI. The shared source remains available under `AGPL-3.0-or-later`, including its obligations when a modified version is offered over a network.
 
 ChatGPT Work and Codex help the artist build and operate their fork through natural language. The deployed public, customer, and administration experiences run as complete web software.
 
 ## Starting visual framework
 
-Every installation begins with the complete visual foundation in `docs/architecture/visual-direction.md`: Lato, exact light and dark themes, open composition, established primitives, functional layouts, and the living image mosaic. Plain `a-op` labels, placeholders, and general names leave clear places for the artist's own material.
+Every installation begins with the visual foundation in `docs/architecture/visual-direction.md`: Lato, exact light and dark themes, open composition, established primitives, and functional layouts. Plain `a-op` labels, placeholders, and general names leave clear places for the artist's own material without temporary imagery.
 
 The artist can later change any part of the visual system, structure, navigation, nomenclature, or module composition in their fork with ChatGPT Work and Codex.
 
@@ -60,7 +60,9 @@ Artist-controlled grants, active memberships and subscriptions, issued licenses,
 
 ## Current Sites runtime scope
 
-The current Sites implementation is a non-financial web experience carrying catalog, delivery, membership, subscription, credit, licensing, entitlement, and customer-history state. Current official [Sites guidance](https://learn.chatgpt.com/docs/sites#understand-limits-and-unsupported-uses) defines this runtime scope. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
+Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The Build Week Sites installation therefore runs the complete commerce domain as a Stripe Test Mode simulation. Stripe test objects represent checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery without accepting a real payment or moving money. Stripe hosts the test payment interface; card fields never enter `a-op`.
+
+The Sites runtime accepts only `pk_test_` and `sk_test_` credentials, verifies Stripe webhook signatures, rejects `livemode` events before writes, stores the environment on related records, and shows persistent Test Mode status. The public demonstration cannot enable live commerce through administration or ordinary configuration. A future compatible deployment begins live-commerce work only after a fresh rules and technical-support check, explicit deployment capability, validated live configuration, and artist approval.
 
 ## Portability
 

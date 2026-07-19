@@ -2,7 +2,7 @@
 
 ## Starting point
 
-Every fresh `a-op` installation begins with the complete visual framework Michael Wall developed for Sound for Movement, rebuilt in React for Sites and presented with plain `a-op` labels and placeholders. The authorization covers the design system, layout, responsive behavior, light and dark themes, interface primitives, living image mosaic, motion, and accessibility patterns.
+Every fresh `a-op` installation begins with the visual framework Michael Wall developed for Sound for Movement, rebuilt in React for Sites and presented with plain `a-op` labels and placeholders. The authorization covers the design system, layout, responsive behavior, light and dark themes, interface primitives, motion, and accessibility patterns.
 
 The public product uses general names. `Courses` is the teaching area. `What's New` is the in-app update area. Each artist supplies their own identity, writing, music, artwork, photography, video, course material, collaborators, customer records, prices, and terms.
 
@@ -32,18 +32,18 @@ This foundation is the first working version of the site. After installation, th
 
 Use semantic tokens for every visual value. The implementation uses neutral token names while preserving these exact values.
 
-| Role | Dark theme | Light theme | Use |
-| --- | ---: | ---: | --- |
-| Canvas | `#08090B` | `#F4F6F9` | Page background |
-| Card | `#111215` | `#FFFFFF` | Meaningful grouped surfaces |
-| Field | `#0F1012` | `#F8FAFC` | Inputs and compact controls |
-| Primary ink | `#FFFDFC` | `#14171C` | Primary text |
-| Muted ink | `#D2DAE3` | `#575E68` | Secondary information |
-| Slate | `#393D3F` | `#393D3F` | Borders and subdued structure |
-| Action gray | `#4C5257` | `#4C5257` | Standard filled actions |
-| Accent orange | `#C8753D` | `#9A3F05` | Links, icons, active states, and underlines |
-| Orange action | `#9A3F05` | `#9A3F05` | Approved high-priority conversion actions |
-| Editorial blue | `#102B4B` | `#102B4B` | Approved editorial chapters |
+| Role           | Dark theme | Light theme | Use                                         |
+| -------------- | ---------: | ----------: | ------------------------------------------- |
+| Canvas         |  `#08090B` |   `#F4F6F9` | Page background                             |
+| Card           |  `#111215` |   `#FFFFFF` | Meaningful grouped surfaces                 |
+| Field          |  `#0F1012` |   `#F8FAFC` | Inputs and compact controls                 |
+| Primary ink    |  `#FFFDFC` |   `#14171C` | Primary text                                |
+| Muted ink      |  `#D2DAE3` |   `#575E68` | Secondary information                       |
+| Slate          |  `#393D3F` |   `#393D3F` | Borders and subdued structure               |
+| Action gray    |  `#4C5257` |   `#4C5257` | Standard filled actions                     |
+| Accent orange  |  `#C8753D` |   `#9A3F05` | Links, icons, active states, and underlines |
+| Orange action  |  `#9A3F05` |   `#9A3F05` | Approved high-priority conversion actions   |
+| Editorial blue |  `#102B4B` |   `#102B4B` | Approved editorial chapters                 |
 
 Use fixed off-white `#FFFDFC` over orange actions and editorial blue. The neutral pair `#434351` and `#E6EEF6` swaps roles between themes. Status reds, ambers, and greens remain functional colors. Never use gradients.
 
@@ -69,7 +69,7 @@ Use four shadow levels: whisper, gentle, elevated, and floating. Elevation commu
 - Keep pages mobile-first and avoid nested containers that narrow content unintentionally.
 - Let imagery, text, controls, and display surfaces live in open space.
 
-Public landing and support pages use the living image mosaic with one centered title. Home uses four rows. About, Courses, Videos, Membership, Licensing, Contact, FAQ, and What's New use two rows. These headers carry the title alone. Music, detail pages, course entries, account, authentication, cart, administration, and legal pages use their own functional layouts.
+Public landing and support pages use open, left-aligned typographic headers. Music, detail pages, course entries, account, authentication, cart, administration, and legal pages use their own functional layouts. The neutral installation contains no temporary image library.
 
 ## Controls
 
@@ -81,21 +81,6 @@ Public landing and support pages use the living image mosaic with one centered t
 - Inputs use the field surface, 8px corners, subtle border, and a visible two-pixel focus ring.
 - Use pills when their shape carries functional meaning.
 - Keep icons simple and functional. Reuse the established icon and control patterns.
-
-## Living image mosaic
-
-The mosaic is a reusable, continuously changing image system. It draws from the artist's approved image library and creates fresh combinations for every page header. It records recent compositions and repeats a composition only after the available combination space has been exhausted.
-
-An artist's library can include:
-
-- owned album and release artwork;
-- approved course, post, and video imagery;
-- the artist's photography and films;
-- approved photographs of collaborators;
-- images donated by the artist's community with recorded permission; and
-- approved original generated imagery.
-
-The mosaic pauses outside the viewport, honors reduced motion, preserves meaningful alt text, and remains stable across mobile layouts. ChatGPT Work and Codex can help the artist catalog, sequence, crop, grade, and place approved materials through the repository's local media tools.
 
 ## Imagery
 
@@ -129,7 +114,6 @@ A person's photograph stays within conventional image work: cropping, grading, t
 
 - Use 200ms transitions for color and compact controls; use 300ms for buttons and interactive surfaces.
 - Keep hover movement small: approximately 2–4px.
-- Pause mosaic motion outside the viewport.
 - Honor reduced-motion preferences.
 - Maintain visible focus states, keyboard access, readable contrast, stable mobile controls, meaningful alt text, and approximately 44px touch targets.
 - Verify desktop and mobile in dark and light themes.

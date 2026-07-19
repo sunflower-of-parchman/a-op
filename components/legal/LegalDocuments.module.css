@@ -1,0 +1,296 @@
+.library,
+.workspace,
+.headingGroup,
+.boundary,
+.rowIdentity,
+.form,
+.formSection,
+.sectionHeading,
+.field,
+.fixedFacts,
+.history,
+.historyRows,
+.publicDocument,
+.publicBoundary {
+  display: grid;
+}
+
+.library,
+.workspace {
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.headingGroup {
+  max-width: 60rem;
+  gap: 0.75rem;
+}
+
+.headingGroup p,
+.caution,
+.operation,
+.rowFacts dt,
+.workspaceFacts dt,
+.sectionHeading p,
+.historyRow small,
+.publicVersion {
+  color: var(--ink-muted);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.caution {
+  font-size: 0.92rem;
+}
+
+.boundary,
+.fixedFacts,
+.publicBoundary {
+  max-width: 68rem;
+  padding-block: clamp(1.25rem, 3vw, 2rem);
+  border-block: 1px solid var(--slate);
+  gap: 0.75rem;
+}
+
+.boundary p,
+.publicBoundary p {
+  max-width: 60rem;
+}
+
+.rows,
+.historyRows {
+  border-top: 1px solid var(--slate);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(24rem, 1.4fr) auto;
+  align-items: center;
+  min-height: 8rem;
+  padding-block: 1.4rem;
+  border-bottom: 1px solid var(--slate);
+  gap: clamp(1rem, 4vw, 4rem);
+}
+
+.rowIdentity {
+  gap: 0.35rem;
+}
+
+.rowIdentity h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+}
+
+.rowFacts,
+.workspaceFacts,
+.fixedFacts dl {
+  display: grid;
+  margin: 0;
+  gap: 0.75rem;
+}
+
+.rowFacts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.rowFacts > div,
+.workspaceFacts > div,
+.fixedFacts dl > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.rowFacts dt,
+.workspaceFacts dt,
+.fixedFacts dt {
+  font-size: 0.8rem;
+}
+
+.rowFacts dd,
+.workspaceFacts dd,
+.fixedFacts dd {
+  margin: 0;
+}
+
+.workspaceFacts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--slate);
+}
+
+.workspaceFacts > div {
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--slate);
+}
+
+.operation {
+  min-height: 1.5rem;
+}
+
+.form {
+  max-width: 72rem;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.formSection,
+.fixedFacts {
+  gap: 1rem;
+}
+
+.sectionHeading {
+  max-width: 58rem;
+  gap: 0.4rem;
+}
+
+.fieldGrid,
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.checkboxGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-block: 0.5rem;
+}
+
+.field {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  gap: 0.45rem;
+}
+
+.field > span,
+.checkbox span,
+.reviewConfirmation span {
+  color: var(--ink);
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--slate);
+  border-radius: 4px;
+  background: var(--field);
+  color: var(--ink);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.checkbox,
+.reviewConfirmation {
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: start;
+  min-height: 2.75rem;
+  gap: 0.6rem;
+}
+
+.checkbox input,
+.reviewConfirmation input {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.1rem;
+  accent-color: var(--accent);
+}
+
+.fixedFacts dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--slate);
+}
+
+.fixedFacts dl > div {
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--slate);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+}
+
+.reviewConfirmation {
+  width: min(100%, 30rem);
+  min-height: auto;
+}
+
+.history {
+  max-width: 68rem;
+  gap: 1.25rem;
+}
+
+.historyRow {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+}
+
+.historyRow summary {
+  min-height: 2.75rem;
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.historyRow p,
+.historyRow small {
+  display: block;
+  max-width: 58rem;
+  margin-top: 0.8rem;
+}
+
+.historyBody,
+.publicBody {
+  white-space: pre-wrap;
+}
+
+.publicDocument {
+  padding-block: clamp(1rem, 3vw, 2.5rem) clamp(4rem, 9vw, 8rem);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.publicBoundary {
+  border-inline-start: 2px solid var(--accent);
+  border-block: 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+}
+
+.publicBody {
+  max-width: 64rem;
+  line-height: 1.7;
+}
+
+.publicVersion {
+  padding-top: 1rem;
+  border-top: 1px solid var(--slate);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .row,
+  .rowFacts,
+  .workspaceFacts,
+  .fieldGrid,
+  .checkboxGrid,
+  .fixedFacts dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .row {
+    align-items: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library,
+  .workspace {
+    scroll-behavior: auto;
+  }
+}

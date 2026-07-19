@@ -30,29 +30,44 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] (2026-07-18 19:34Z) Renamed the private GitHub repository to `sunflower-of-parchman/a-op` and updated the local `origin` URL.
 - [x] (2026-07-18 19:34Z) Set the product name to `a-op` and the full title to `a-op: artist-owned platform`.
 - [x] (2026-07-18 19:34Z) Refocused the repository instructions, product description, README, planning convention, and controlling ExecPlan on working product functionality.
-- [x] (2026-07-18 20:32Z) Recorded the exact Sound for Movement-derived visual foundation for the first React implementation, including Lato, semantic color values, both themes, layout, primitives, the living image mosaic, motion, imagery, language, and accessibility.
+- [x] (2026-07-18 20:32Z) Recorded the Sound for Movement-derived visual foundation for the first React implementation, including Lato, semantic color values, both themes, layout, primitives, motion, imagery, language, and accessibility.
 - [x] (2026-07-18 20:32Z) Defined the modular installation contract: music and access form the core, each artist activates the capabilities they need, and `Courses` is the public teaching-area name.
 - [x] (2026-07-18 20:32Z) Verified the current official Sites storage guidance and Work mode data guidance, then recorded the D1, R2, local media, application runtime, and workspace data-control boundaries.
 - [x] (2026-07-18 20:44Z) Verified the updated governing documents with `git diff --check`, a trailing-whitespace scan, required ExecPlan-section checks, all exact visual token values, current product naming, and required-file checks.
 - [x] (2026-07-18 21:35Z) Refocused the governing product and implementation contracts on the application artists use and the durable state it owns.
 - [x] (2026-07-18 21:35Z) Recorded artist ownership, the Sites-provided D1 and R2 service boundary, deliberate ChatGPT Work sharing, workspace-specific training controls, and the current Sites non-financial runtime scope.
 - [x] (2026-07-18 21:40Z) Verified the reconciled documents with `git diff --check`, a trailing-whitespace scan, all twelve required ExecPlan sections, drift-phrase scans, and exact ownership, storage, model-request, and runtime-scope assertions.
-- [ ] Recheck the current official OpenAI Sites documentation and installed Sites skills at the start of implementation, then record the generated starter versions and commands.
-- [ ] Create the Sites rebuild branch and prepare an exact reviewed manifest for replacement of the current application tree.
-- [ ] Initialize the current official Sites starter in a clean temporary workspace and move its complete structure into this repository.
-- [ ] Produce a healthy local development server and production build from the new Sites foundation.
-- [ ] Prove local D1, R2, Sign in with ChatGPT identity, server-only authorization, and byte-range media delivery.
-- [ ] Implement artist configuration, roles, public navigation, and the administration shell.
-- [ ] Implement releases, tracks, collections, publishing, audio streaming, and the persistent player.
-- [ ] Implement customer profiles, favorites, playlists, listening history, libraries, and protected delivery.
-- [ ] Implement access grants, entitlements, downloads, delivery history, and customer access history.
-- [ ] Implement memberships, subscriptions, renewal dates, cancellations, download credits, and license credits.
-- [ ] Implement music licensing, terms versions, issued license records, documents, and customer access.
-- [ ] Implement Courses, lessons, mixed media, access, progress, and resume.
-- [ ] Implement video, structured pages, What's New, contact, and inquiry administration.
-- [ ] Implement telemetry, consent, retention, privacy, terms, diagnostics, and operations.
-- [ ] Implement ChatGPT Work setup, personalization, media preparation, export, restore rehearsal, diagnosis, and maintenance.
-- [ ] Complete responsive, keyboard, accessibility, performance, security, and recovery verification across the integrated application.
+- [x] (2026-07-18 23:13Z) Rechecked the current official OpenAI Sites documentation and installed Sites skills; recorded the generated React 19.2.6, Next 16.2.6, vinext 0.0.50, Vite 8.0.13, Wrangler 4.92.0, Drizzle 0.45.2, D1, R2, identity, version, and deployment contracts.
+- [x] (2026-07-18 23:13Z) Created `codex/sites-rebuild` from clean authority commit `4c96148` and applied an exact reviewed 362-path replacement manifest while preserving the governing product, plan, architecture, provenance, license, notice, and ignore files.
+- [x] (2026-07-18 23:13Z) Initialized the current official Sites starter exactly once in a clean temporary workspace and moved its complete React, TypeScript, vinext, Vite, Worker, Drizzle, D1, and R2 foundation into the repository.
+- [x] (2026-07-18 23:13Z) Completed Milestone 0 with the exact visual tokens, pinned Lato, dark and light themes, open public shell, functional layouts, healthy local development server, production build, and desktop/mobile browser journey.
+- [x] (2026-07-18 23:24Z) Removed the living mosaic direction and every generated temporary image and social-card asset at Michael's direction; the neutral installation now uses open left-aligned typographic headers and adds imagery only when an artist supplies approved material.
+- [x] (2026-07-19 00:02Z) Completed Milestone 1: applied the inspected seven-table Drizzle migration to local D1; proved D1 and R2 state across a server restart; exercised optional and required Sign in with ChatGPT helpers; resolved fictional customer, editor, and owner roles from D1; enforced central server access; and returned exact `200`, `206`, `403`, `404`, and `416` media responses through bound R2.
+- [x] (2026-07-19 00:02Z) Added the repeatable runtime gate and verified strict types, lint, formatting, the five-stage production build, production simulation-off configuration, ten client bundles with no server-only values, two foundation checks, 45 runtime checks, an empty migration queue, and a complete restart journey that retained zero R2 verification objects.
+- [x] (2026-07-19 01:42Z) Completed Milestone 2 with versioned artist and page publication, dependency-safe module activation, paired navigation publication, explicit owner bootstrap, scoped editor drafting, owner-only structural publication, customer profiles, and working public, account, setup, and administration shells.
+- [x] (2026-07-19 01:42Z) Verified the repaired six-migration chain, 18-table schema, transaction-bound role checks and operation receipts, 79 focused runtime checks, 21 static schema checks, the five-stage production build, exact local D1 repair, the complete stream-only HTTP journey, and desktop/mobile DOM behavior in both themes with zero retained D1 test rows, zero R2 objects, zero temporary files, zero imagery, zero overflow, and no browser errors.
+- [x] (2026-07-19 03:09Z) Completed Milestone 3 implementation with immutable catalog revisions for tracks, releases, collections, credits, and media metadata; scoped administration and owner publication; public music routes; authorized range delivery; one root-persistent accessible player; and the meaningful-listen boundary.
+- [x] (2026-07-19 03:09Z) Verified the 30-table, ten-migration D1 schema; 25 catalog, delivery, and player checks; 16 schema and interface checks; seven structured-page boundary checks; strict types, lint, formatting, the five-stage production build, and packaged runtime integrity. Desktop and mobile DOM checks passed in both themes with no overflow or browser errors. The repository contains no image, audio, or video files, and real audible playback remains pending until artist-approved audio is supplied.
+- [x] (2026-07-19 04:12Z) Completed Milestone 4 with explicit customer activation, customer profiles, track and release favorites, ordered playlists, frozen listening history, server-backed resume, live access explanations, retained grant and entitlement history, protected streaming and downloads, and successful-delivery history.
+- [x] (2026-07-19 04:12Z) Verified the 37-table, fourteen-migration schema and empty local migration queue; 30 customer, access, delivery, schema, and player checks; 13 API and interface checks; strict types, lint, repository formatting, the five-stage production build, and packaged runtime integrity. A no-screenshot local HTTP journey returned the public Site, signed-in activation UI, and server-denied inactive customer library exactly as expected. No image tool, screenshot, asset file, or R2 write was used.
+- [x] (2026-07-19 04:36Z) Rechecked current official Sites limits and Stripe test-environment guidance, then incorporated Michael's Build Week commerce direction: one complete commerce domain, a permanently test-locked Sites adapter, Stripe-hosted Test Checkout, signed test webhooks, hard live-credential and `livemode` rejection, visible Test Mode state, no card fields in `a-op`, and corrected Sites residency language.
+- [x] (2026-07-19 05:12Z) Completed Milestone 5 with immutable access-plan definitions, exact atomic issuance, idempotent grant replay, owner revocation and expiry, live entitlement and delivery administration, core customer Access history, identity-aware protected catalog views, and server-projected stream and download controls.
+- [x] (2026-07-19 05:12Z) Verified the 40-table, fifteen-migration schema and empty local migration queue; 27 access, entitlement, catalog, and delivery checks; 18 API, interface, and laboratory checks; strict types, lint, repository formatting, the five-stage production build, and packaged runtime integrity. The HTTP journey proved `401` anonymous and `403` non-owner administration, exact plan, issuance, and revocation replay, protected track `404 -> 200 -> 404`, retained customer history, a production-off laboratory, exact D1 baseline restoration, zero retained rows, zero R2 writes, and zero temporary files.
+- [x] (2026-07-19 08:44Z) Completed Milestone 6 with one permanently test-locked commerce domain: hosted Stripe Test Checkout, raw-byte signed webhooks, one-time and recurring orders, memberships, subscriptions, renewal and cancellation history, download and license credit ledgers, exact-revision download redemption, exclusive license acquisition, issued licenses, deterministic protected license documents, customer results, administration evidence, and central protected delivery.
+- [x] (2026-07-19 08:44Z) Verified Milestone 6 with 129 domain and integration checks, 70 static contracts, 22 final integrity and delivery checks, 17 focused schema-chain checks, strict types, lint, the five-stage production build, packaged 83-table and 23-migration integrity, and a real signed-webhook HTTP journey. Independent re-audit found no remaining critical or high-severity issue. The journey proved awaited recurring invoices, exactly-once fulfillment, replay idempotency, pre-write live-event and invalid-signature rejection, post-entitlement protected access, visible customer and operator evidence, exact D1 and module restoration, zero R2 objects, zero media rows, and zero temporary files.
+- [x] (2026-07-19 09:34Z) Completed Milestone 7 across the schema-version 13, 86-table, 26-migration D1 foundation: Courses and resume, access-protected lesson delivery, video and transcripts, consent-gated external embeds, editorial publishing, reusable structured sections, composed pages, What's New and customer-private commerce links, contact consent, public booking and contact details, stored inquiries, status, and notes.
+- [x] (2026-07-19 08:44Z) Closed the final Milestone 6 audit findings: every download-credit consumption and activation statement now repeats the exact published, protected, delivery-ready pinned-revision guard, and every license-credit balance, reservation, lot, allocation, ledger, and audit statement repeats the exclusive acquisition guard. Injected withdrawal and competing-checkout races leave access and losing credit state unchanged.
+- [x] (2026-07-19 09:34Z) Verified Milestone 7 with 39 functional and integration checks, 26 static and schema checks, strict type checking, full lint, repository formatting, the five-stage production build, packaged 86-table and 26-migration integrity, local migration application, schema version 13, preserved contact consent and inquiry records, and a clean `PRAGMA foreign_key_check`. No media, image, screenshot, generated asset, temporary asset, or R2 write was used.
+- [x] (2026-07-19 10:45Z) Completed Milestone 8 across the schema-version 15, 93-table, 29-migration D1 foundation: exact consent-aware browser and server telemetry, preserved day-level distinct totals, retention, legal drafting and immutable approval/publication history, exact-version legal pointers, count-only health, real operational-failure capture, customer administration, access explanation, job retry, and provider/card-safe diagnostic redaction.
+- [x] (2026-07-19 10:45Z) Verified Milestone 8 with 27 focused unit and integration checks, 25 static/schema/laboratory checks, strict type checking, full lint, repository formatting, the five-stage production build, packaged 93-table and 29-migration integrity, both corrective migrations applied through local Wrangler, schema version 15, zero foreign-key violations, and the asset-free HTTP journey. The journey proved immediate consent behavior, one source event, owner aggregates, legal replay and publication, visible redacted failure evidence, production-off isolation, exact baseline restoration, zero retained rows, zero R2 objects, zero media bytes, and zero temporary files.
+- [x] (2026-07-19 12:45Z) Completed Milestone 9 with the fourteen-topic ChatGPT Work setup contract, exact preview and approval, pre-write media resolution, deterministic local media profiles, approval-gated R2 publication, provider-neutral export, checksum verification, real-schema in-memory restore rehearsal, diagnosis, and maintenance surfaces.
+- [x] (2026-07-19 12:48Z) Completed the local Milestone 10 integration and hardening gate across all ten story families, production build, 99-table and 33-migration schema version 19, security headers, performance budgets, recovery, Stripe Test Mode fulfillment, replay, rejection, protected access, visible evidence, and exact cleanup.
+- [x] (2026-07-19 12:52Z) Re-audited every Stripe Test Mode recommendation. Eighty-two focused checks passed with no missing implementation requirement. A real Stripe-hosted Test Checkout and actual provider webhook rehearsal remains an approval-gated external acceptance exercise, alongside approved Sites hosting.
+- [x] Implement Courses, lessons, mixed media, access, progress, and resume.
+- [x] Implement video, structured pages, What's New, contact, and inquiry administration.
+- [x] Implement telemetry, consent, retention, privacy, terms, diagnostics, and operations.
+- [x] Implement ChatGPT Work setup, personalization, media preparation, export, restore rehearsal, diagnosis, and maintenance.
+- [x] Complete responsive, keyboard, accessibility, performance, security, and recovery verification across the integrated application.
 - [ ] Save a Sites version from the exact validated source.
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
@@ -88,8 +103,113 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - Observation: Sites-provided D1 and R2 are inside the Sites service boundary.
   Evidence: Current Sites guidance includes deployed Sites, Site code, D1 and R2 data and file storage, generated artifacts, and logs in the Sites service boundary and states that Sites does not support data residency or inference residency at launch.
 
-- Observation: The current Sites runtime is a non-financial web experience.
-  Evidence: Current official Sites guidance defines that scope. The implementation carries artist-controlled access, membership, subscription, credit, licensing, entitlement, and delivery state. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
+- Observation: The current Sites runtime cannot process payment-card data or enable financial transactions.
+  Evidence: Current official Sites guidance defines that boundary. The Build Week installation carries the complete commerce domain through a Stripe Test Mode simulation that accepts no real payment and moves no money; `docs/architecture/commerce-environment.md` locks the Sites adapter against live operation.
+
+- Observation: Stripe Test Mode exercises commerce state without creating a financial transaction.
+  Evidence: Current Stripe documentation states that test keys create simulated objects, accept no real payment methods, make no real charges, and move no money. Current Sites guidance still prohibits payment-card processing and financial transactions and does not state a Test Mode exception. The Build Week boundary therefore keeps all payment entry on Stripe's hosted test surface, describes the journey as a simulation, and hard-locks the Sites application against live credentials and live events.
+
+- Observation: The Sites service boundary is not a geographic residency guarantee.
+  Evidence: Current official Sites guidance states that Sites does not support data residency or inference residency at launch and applies that statement to deployed Sites, Site code, D1 and R2 data and file storage, generated artifacts, and logs.
+
+- Observation: The 2026-07-18 initializer pins a newer Sites toolchain than the planning snapshot named generically.
+  Evidence: The generated application uses React 19.2.6, Next 16.2.6, vinext 0.0.50, Vite 8.0.13, Wrangler 4.92.0, Drizzle ORM 0.45.2, and the Cloudflare Vite plugin 1.37.1. The copied starter lockfile was regenerated after adding only Lato, Prettier, and Wrangler-compatible Worker declarations required by the foundation.
+
+- Observation: The official starter compiles without a checked-in Worker declaration environment, while repository-wide strict type checking needs one.
+  Evidence: The first `tsc --noEmit` could not resolve `cloudflare:workers`, `D1Database`, `R2Bucket`, or `Fetcher`. Pinning `@cloudflare/workers-types` 4.20260702.1, the version compatible with Wrangler 4.92.0, and declaring the logical bindings in `worker-configuration.d.ts` made the complete typecheck pass.
+
+- Observation: Ignored Nuxt build artifacts correctly survived the tracked-tree replacement and initially entered the new ESLint traversal.
+  Evidence: The first lint run reported only files under ignored `.nuxt` and `.output` plus one new component issue. Explicit generated-directory ignores and a `useSyncExternalStore` theme implementation made the final lint run pass without findings.
+
+- Observation: Vite's inline Cloudflare binding configuration and the Wrangler migration CLI otherwise create separate local views of D1 and R2.
+  Evidence: The installed Cloudflare Vite plugin accepts a checked-in `configPath` and an explicit persistence path. `wrangler.local.jsonc`, Vite development, and local migration commands now share `.wrangler/state/v3`, the same logical binding names, D1 identifier, and R2 bucket name while `.openai/hosting.json` remains unchanged.
+
+- Observation: D1 `batch()` is the transaction primitive for the Worker runtime.
+  Evidence: The installed D1 driver executes manual `BEGIN`, application queries, and `COMMIT` as separate calls, while `D1Database.batch()` commits the prepared statements atomically. The M1 helper rejects empty work and keeps exactly one SQL statement in each prepared item.
+
+- Observation: Once application routes import `cloudflare:workers`, the built Worker should be exercised in the Cloudflare-compatible local runtime rather than imported through Node's default ESM loader.
+  Evidence: Node rejects the `cloudflare:` module scheme. The runtime verifier now starts the actual vinext and Cloudflare development Worker on one strict port, owns and stops only that child process, and exercises the observable HTTP journey there.
+
+- Observation: Generated SQLite parent-table rebuilds can erase child records when foreign-key enforcement resumes between related rebuilds.
+  Evidence: The first M2 migration chain rebuilt `navigation_sets` and `pages` after foreign keys had been restored, which cascaded away twelve neutral navigation items and eleven page revisions. The corrected migration keeps foreign keys off through all related parent copies, and the guarded forward repair restores only unchanged neutral parents that have no replacement children. Fresh-chain, damaged-chain, repeated-repair, changed-parent, custom-child, and `PRAGMA foreign_key_check` cases now pass.
+
+- Observation: Route-level authorization and revision checks alone do not close a D1 mutation race.
+  Evidence: An owner or editor can lose authority after the route read and before the batch runs, while two requests can begin from the same aggregate revision. Every M2 mutation now repeats live authority inside its D1 statements and binds its audit receipt to a request-specific operation marker. Page metadata lives on immutable revisions, module changes compare the complete registry vector, and losing mutations cannot create durable false-success receipts.
+
+- Observation: Catalog publication needs exact revision references at every aggregate boundary.
+  Evidence: Release and collection revisions now map to immutable track revisions through composite foreign keys. Later track edits create new revisions while already-published sequencing and metadata remain stable.
+
+- Observation: Media provenance and protected delivery authority are distinct facts.
+  Evidence: A security regression showed that treating the registering editor as a track owner preserved stream access after role revocation. Delivery now derives authority only from current server-owned roles and access facts, and the regression proves denial before any R2 read.
+
+- Observation: Source-level media state changes must protect every published derivative dependency.
+  Evidence: Rejecting an approved artwork source could otherwise invalidate a published release or collection using one of its derivatives. The media repository now blocks that transition atomically and preserves both the approved source revision and audit history.
+
+- Observation: Protected readiness and public availability are separate catalog facts.
+  Evidence: A protected track can have a ready approved stream derivative while its public stream mode remains unavailable. The current-revision read now keeps readiness server-side and projects a stream URL only after the current identity passes the exact public, account, or entitlement decision; public index reads still expose public streams only.
+
+- Observation: True route-persistent playback requires one player boundary above every application shell.
+  Evidence: Mounting the player provider and audio element in the root layout preserves queue and playback state across public, account, administration, and setup navigation while keeping the controls hidden until a server-approved stream exists.
+
+- Observation: A public structured-page catch-all receives browser-generated one-segment requests as well as authored page slugs.
+  Evidence: The browser journey reached a non-normalized segment such as `favicon.ico`. The public page read now returns not found before any D1 call, so metadata and page rendering produce a normal `404` without a server exception.
+
+- Observation: Real audible acceptance requires artist-approved audio.
+  Evidence: Michael requires the repository and verification flow to remain free of temporary or generated assets. Range parsing, access denial, exact R2 reads, player state, and meaningful-listen logic are fully verified with in-memory bytes and non-persistent binding doubles. Browser playback through a real derivative remains recorded as pending until approved material is supplied.
+
+- Observation: Customer-facing saved state needs the current inactive revision as well as active list projections.
+  Evidence: An active-only favorites read cannot safely restore a previously removed favorite because a null expected revision would conflict with the durable row. The public favorite control now reads the exact customer's current active or removed revision before sending a desired-state compare-and-set mutation.
+
+- Observation: A useful customer library is a live access decision plus durable history, not a stored entitlement list.
+  Evidence: Milestone 4 enumerates the exact customer's candidate resources, passes every requested action through `readAccessFacts` and `decideAccess` at the server-selected time, includes only currently allowed resources in the live library, and retains revoked, expired, exhausted, scheduled, and delivered records in separate history projections.
+
+- Observation: Resume state belongs to D1 and can remain additive to public playback.
+  Evidence: The root server enables history only for an active D1 customer with the active customer-library module. The player loads server-projected positions and revisions, serializes idempotent checkpoints, refreshes after a compare-and-set conflict, and keeps public playback running if account history is unavailable.
+
+- Observation: D1 validates a rebuilt child's composite parent key against the legacy parent schema before the final parent rebuild is complete.
+  Evidence: The first local application of migration `0014` stopped before acceptance with `foreign key mismatch - "__new_entitlements" referencing "access_grants"`. A migration-only unique subject index on the legacy grants table gives the new entitlement foreign key a valid parent during the transition; the corrected migration then applied all 28 commands, retained no bridge index, advanced schema version 6, and passed `PRAGMA foreign_key_check`.
+
+- Observation: Large exact D1 authority predicates can exceed SQLite's expression-tree depth even when every individual condition is valid.
+  Evidence: The real Milestone 6 runtime reached D1's expression-depth limit of 100 in membership and license fulfillment. Building the same guarded predicates as balanced boolean trees retained every authority and idempotency condition while the complete signed-webhook journey passed.
+
+- Observation: Verified subscription lifecycle events can arrive before the initial paid invoice and multiple events can share one provider timestamp.
+  Evidence: The recurring coordinator now stores pre-invoice lifecycle evidence, lets terminal deletion preempt later fulfillment, reconciles nonterminal state after invoice activation, and applies deterministic same-second precedence in favor of terminal and access-reducing facts.
+
+- Observation: Finite-use delivery needs a resumable sequence that grants neither early access nor a stranded consumed credit.
+  Evidence: Download-credit redemption prepares an exact future-dated entitlement that `decideAccess` rejects, then reserves and consumes one credit, verifies the pinned row, and atomically activates that same entitlement. Every mutation repeats the exact current published, protected, delivery-ready pinned-revision predicate. Withdrawal before reservation, at consumption, and after consumption leaves access inert and resumes only for the exact republished revision without another spend.
+
+- Observation: An exclusive acquisition pre-read is insufficient when a competing path can win at a later D1 batch boundary.
+  Evidence: The license-credit reservation batch now repeats one request, issued-license, and active-checkout predicate on the account, reservation, every lot, every allocation, the ledger, and the audit receipt. An injected winning checkout after the credit pre-read leaves every losing credit record byte-for-byte unchanged and makes downstream license issuance unreachable.
+
+- Observation: Generated composite references require an actually unique parent key in SQLite.
+  Evidence: The initial Milestone 7 course revision referenced `(access_plan_id, access_plan_revision)` against a parent pair without a unique index. The forward correction uses a real foreign key to `access_plans.id`, retains the revision as a frozen application-validated snapshot, and leaves every migration checkpoint clean under `PRAGMA foreign_key_check`.
+
+- Observation: Reusable page sections need immutable revision pins and a separate publication authority.
+  Evidence: Pages now store ordered links to exact published section revisions. Owners author, publish, and archive sections; a scoped `pages.write` editor may compose only already-published revisions inside an assigned page, while page structure and public publication remain owner-controlled.
+
+- Observation: Account-scoped update links can expose another customer's commerce history unless the linked resource participates in every read predicate.
+  Evidence: Order-linked What's New reads, unread counts, details, and receipts now require the exact active customer's fulfilled test order. D1 also rejects a public order update at the schema boundary.
+
+- Observation: Generated SQLite rebuilds do not synthesize values for new non-null columns when copying the legacy table.
+  Evidence: Drizzle generated a contact-form copy that selected the two new columns from the old schema. The inspected migration substitutes empty defaults, keeps foreign keys disabled across the parent rebuild, preserves existing consent and inquiry children, advances schema version 13, and passes the fresh and applied-chain foreign-key checks.
+
+- Observation: Group-level distinct counts cannot produce a correct day-level session total by summation.
+  Evidence: One session that performs actions in several event/resource groups appears once in every group. Schema version 15 persists the global distinct session and linked-account totals on `telemetry_aggregate_days` before raw events can be pruned; live and finalized administration now read those day-level values.
+
+- Observation: A generated one-table legal-pointer rebuild cannot preserve both sides of a circular D1 foreign-key relationship under Wrangler's migration transaction.
+  Evidence: The first generated correction passed an autocommit in-memory check and failed the real local D1 transaction. The inspected replacement rebuilds legal documents and versions together under deferred enforcement, creates the required composite uniqueness before copying, applies through Wrangler, and leaves all seven pointer/version foreign-key rows valid with zero violations.
+
+- Observation: Server-owned outcomes need a different telemetry entry boundary from browser-observed facts.
+  Evidence: Browsers are forbidden from claiming contact submission, fulfillment, entitlement, license, membership, subscription, and protected-delivery outcomes. The server now prepares a deterministic event in the same D1 batch as its durable source, obeys the exact request's consent, GPC, and DNT state, removes identity in anonymous mode, and refuses a late event after its UTC day has been finalized.
+
+- Observation: A redacted operations table is useful only when real failures enter it and stored safe-looking values are re-evaluated before display.
+  Evidence: Catalog delivery now records fixed-code, internal-derivative failures idempotently. The browser projection additionally rejects Stripe keys, webhook secrets, provider identifiers, hosted Checkout URLs, PAN-shaped strings, payment/customer fields, unsafe subjects, and free-form reasons while retaining enumerated access reasons and stable diagnostic codes.
+
+- Observation: The current installed Playwright wrapper expects a `playwright-cli` executable that `@playwright/mcp` 0.0.78 no longer exports.
+  Evidence: The package now exports `playwright-mcp`. The final dedicated CLI launch therefore stopped without a browser action; completed milestone browser journeys, the full HTTP integration gate, and the responsive, keyboard, contrast, reduced-motion, touch, and overflow contracts remain the local acceptance evidence. No screenshot or browser artifact was created.
+
+- Observation: Local signed Stripe events prove the application contract without proving provider delivery.
+  Evidence: The Milestone 6 and 10 laboratories sign Stripe-shaped test events locally and exercise the real webhook route, D1 fulfillment, replay, access, and evidence paths. Creating a real hosted Test Checkout session and receiving Stripe's actual webhook would create external test-account state and remains a separately approved acceptance rehearsal.
 
 ## Decision Log
 
@@ -149,6 +269,22 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Rationale: Streaming, downloads, lessons, licenses, memberships, subscriptions, credits, and explicit grants share the same access facts and denial semantics.
   Date/Author: 2026-07-18 / Codex
 
+- Decision: Keep canonical owner, editor, and customer roles in D1 and make real owner bootstrap an explicit later setup action.
+  Rationale: M1 needs deterministic fictional identities to prove role resolution without assigning authority to a real person. Hosted and artist-specific authority begins only through an approved setup operation.
+  Date/Author: 2026-07-18 / Codex
+
+- Decision: Use one checked-in local-only Wrangler configuration for Vite bindings and migration rehearsal.
+  Rationale: Matching D1 and R2 identifiers plus one persistence root make restart behavior real and repeatable. Sites hosting continues to use `.openai/hosting.json`; the local configuration is never a deployment command.
+  Date/Author: 2026-07-18 / Codex
+
+- Decision: Enable the runtime laboratory only through `npm run dev:runtime` and package production with simulation explicitly off.
+  Rationale: Fictional identity selection and laboratory writes are useful for deterministic local proof and must fail closed in normal development and production output.
+  Date/Author: 2026-07-18 / Codex
+
+- Decision: Support one validated HTTP byte range per media request and reject multi-range input with `416`.
+  Rationale: Browser audio seeking and resume require bounded, open-ended, and suffix ranges. The single-range contract keeps R2 reads exact and avoids multipart response complexity while preserving correct full and partial delivery.
+  Date/Author: 2026-07-18 / Codex
+
 - Decision: Build music distribution first.
   Rationale: Catalog publication, streaming, customer libraries, direct delivery, licensing, and recurring support form the center of the product.
   Date/Author: 2026-07-18 / Michael and Codex
@@ -165,9 +301,17 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Rationale: Browsing, streaming, memberships, subscriptions, licensing, Courses, contact, telemetry, and administration run through the Site, D1, and R2 without a model request. An artist deliberately chooses any material shared with ChatGPT Work, and the active workspace plan and controls govern that sharing.
   Date/Author: 2026-07-18 / Michael and Codex
 
-- Decision: Build the current Sites application as a non-financial web experience.
-  Rationale: Current official Sites guidance defines that scope. The application will carry artist-controlled access, membership, subscription, credit, licensing, entitlement, and delivery state. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
-  Date/Author: 2026-07-18 / Michael and Codex
+- Decision: Run the complete commerce domain as a permanently test-locked simulation in the Build Week Sites installation.
+  Rationale: Stripe Test Mode creates simulated objects without accepting real payment methods, making real charges, or moving money. Stripe-hosted Test Checkout keeps card entry outside `a-op`; verified `livemode = false` webhooks exercise orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery. The Sites adapter rejects live keys and live events before writes and cannot be promoted to live through administration or ordinary configuration.
+  Date/Author: 2026-07-19 / Michael and Codex
+
+- Decision: Keep one commerce domain and require an explicit compatible-deployment capability for any future live operation.
+  Rationale: Shared order and fulfillment contracts preserve the product as a complete artist-owned system. A chosen environment must permit and technically support real transactions, and live activation requires a fresh check, source-controlled capability, dedicated validation, and artist approval.
+  Date/Author: 2026-07-19 / Michael and Codex
+
+- Decision: Keep the neutral installation free of temporary imagery and omit the living mosaic from the `a-op` baseline.
+  Rationale: The starting application should carry the artist's own approved material when it exists. Open left-aligned typographic headers keep the neutral product complete without manufacturing an interim image identity.
+  Date/Author: 2026-07-18 / Michael
 
 - Decision: Use ten bounded worker assignments in four integration waves.
   Rationale: Independent modules can move in parallel while the primary task owns shared contracts, integration, and the running application.
@@ -181,17 +325,181 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Rationale: Those decisions belong to the artist and can create external or legal consequences.
   Date/Author: 2026-07-18 / Michael and Codex
 
+- Decision: Keep content structure and publication owner-controlled while allowing editors to maintain assigned drafts.
+  Rationale: Page kind, module ownership, and the public revision determine availability. Storing them with the revision and promoting them together lets editors work inside an approved scope without changing the public gate before the owner publishes.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Bind every durable mutation and audit receipt to live in-transaction authority and an exact operation marker.
+  Rationale: Server-owned role facts and compare-and-swap state must still match when D1 executes the batch. A receipt proves that the requested state was the state actually written.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Preserve already-applied development data with a guarded forward repair after correcting the original migration chain.
+  Rationale: Fresh installations should never lose child rows, and an existing local database should return to the same valid neutral state without a reset or any change to artist-edited parents or replacement children.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Publish catalog aggregates through immutable revisions and freeze exact track revisions inside release and collection revisions.
+  Rationale: Public catalog state remains reproducible as tracks evolve, and D1 foreign keys enforce the aggregate relationship rather than relying on application convention.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Treat media registration ownership as provenance only.
+  Rationale: Protected delivery authority comes from current D1 roles and access records. Revoking an editor therefore removes protected-stream access even when that editor originally registered the source.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Keep all Milestone 3 verification free of synthetic media and wait for artist-approved audio before running the audible and R2 publication journey.
+  Rationale: The implementation can prove validation, authorization, range semantics, immutable catalog state, player behavior, and zero-read denials with in-memory data. Real media evidence should represent material the artist has approved for this Site.
+  Date/Author: 2026-07-19 / Michael and Codex
+
+- Decision: Mount the persistent player at the root application boundary.
+  Rationale: One provider and one audio element preserve active playback and queue state across every public and operator route while rendering visible controls only for an approved stream.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Create the customer role through one explicit signed-in activation operation.
+  Rationale: Page reads remain read-only, the official ChatGPT identity supplies email and display name, and D1 atomically creates or reuses the application user, profile, customer role, and idempotent receipt while refusing disabled or revoked accounts.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Treat playlists as ordered track-root references and listening history as a frozen heard revision plus current resume projection.
+  Rationale: A playlist follows the track's current published revision while preserving customer order. Listening history records what the customer heard and separately resolves whether the track remains available now.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Derive the live customer library from current access decisions and keep access and delivery history separately durable.
+  Rationale: Revocation, expiry, exhaustion, membership, subscription, license, credit, and direct-grant changes must affect delivery and the visible library immediately without erasing the historical customer record.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Freeze each access-plan definition after its first grant-set issuance and copy its revision into the issued set.
+  Rationale: Existing customer authority must remain reproducible when an artist creates a later definition. Archived plans retain their grant and entitlement history, while a changed scope begins as a new plan.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Activate plan issuance only after one exact grant and one exact entitlement exist for every plan item.
+  Rationale: A pending grant set is never access authority. The atomic activation barrier, composite customer and resource foreign keys, and idempotent audit receipt prevent partial, cross-customer, replayed, or mismatched access from becoming live.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Keep finite-use values unavailable until the Milestone 6 credit ledger owns reservation and consumption.
+  Rationale: A stored remaining-use number without an atomic delivery ledger would display a limit the application cannot enforce safely. Milestone 5 grants are open-use; Milestone 6 adds the complete finite-use lifecycle before enabling that input.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Make account Access a core customer surface independent of the optional saved-music library.
+  Rationale: Every installation needs visible current authority, entitlement history, and delivery history. Favorites, playlists, and listening history remain activatable customer-library behavior.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Let the signed paid invoice own initial recurring activation and keep earlier lifecycle facts as durable pending evidence.
+  Rationale: A checkout completion does not prove recurring payment. Deferral, terminal preemption, and deterministic reconciliation preserve exactly-once orders, credits, relationships, and access across provider event ordering.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Give one license request one exclusive acquisition path across hosted checkout, license-credit redemption, and owner issuance.
+  Rationale: Existing open checkout and reserved-credit records are durable claims. Atomic issuance gates repeat the exact source condition so concurrent paths cannot create duplicate licenses or consume an unnecessary credit.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Make download-credit redemption a resumable pending-entitlement sequence.
+  Rationale: A future-dated exact entitlement is non-authoritative before consumption, while deterministic prepare, reserve, consume, and activate operations can recover safely without duplicate or stranded state.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Generate Test Mode license documents deterministically from immutable issued snapshots and deliver them only after `decideAccess` succeeds.
+  Rationale: Leased retryable jobs and idempotent R2 writes make document generation recoverable. Central authorization before every R2 read preserves revocation and expiry immediately.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Keep the frozen course access-plan revision as application-validated historical data and reference the durable access-plan identity directly.
+  Rationale: SQLite can enforce the stable plan identity while publication validates the recorded revision. This avoids a false composite foreign key and retains the exact access definition used by the published course.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Let owners publish reusable content sections and let scoped page editors compose only those published revisions.
+  Rationale: The artist controls reusable public language once, while assigned editors can arrange approved material without gaining section-authoring, structural, or publication authority.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Keep order-linked What's New activity private to the exact customer who owns the fulfilled test order.
+  Rationale: Account audience alone is not sufficient for customer-specific commerce history. Every feed, detail, unread, and read-receipt query repeats the exact order ownership and active-customer predicate.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Store booking information and public contact details as explicit contact-form configuration.
+  Rationale: They are public artist-authored contact content, distinct from private inquiry data, and belong in the same owner-controlled revisioned form configuration without a media or external delivery dependency.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Persist global daily telemetry totals separately from per-event and per-resource groups.
+  Rationale: Group rows support useful breakdowns, while one day-level distinct calculation preserves truthful session and linked-account totals after retention removes source events.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Insert server-owned telemetry only beside the exact durable mutation that proves the outcome.
+  Rationale: The shared D1 batch makes the fact replay-safe and prevents a browser, failed mutation, late finalized-day write, or changed consent state from manufacturing operational outcomes. Consent-required mode records only a granted browser request; anonymous mode stores no user link.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Bind every legal document pointer to the matching document and immutable version with composite foreign keys.
+  Rationale: A Privacy pointer must never reference a Terms version, including through direct D1 writes. Rebuilding both circular parents together keeps fresh and upgraded installations equivalent.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Treat operational diagnostics as an allowlisted projection over real fixed-code failure records.
+  Rationale: Operators need actionable component, code, time, count, and safe internal subject evidence. Provider objects, payment data, secrets, private paths, customer fields, and artist-authored free text do not belong in the browser diagnostic surface.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Make `verify:sites-package` the strict Build Week packaging boundary.
+  Rationale: Ordinary source builds remain available before an artist activates commerce. The Sites package gate requires complete `pk_test_`, `sk_test_`, and `whsec_` configuration first, rejects live or malformed values, and then runs the complete integrated gate. No administration or ordinary Sites configuration exposes a live switch.
+  Date/Author: 2026-07-19 / Codex
+
+- Decision: Resolve every setup media dependency before the first dependency-ordered topic mutation.
+  Rationale: A missing or incompatible track, Course, or hosted-video derivative must fail the aggregate application before artist, navigation, catalog, legal, or receipt state can change. Writers re-resolve immediately at their own mutation boundary.
+  Date/Author: 2026-07-19 / Codex
+
 - Decision: Let documentation follow working modules.
   Rationale: The repository needs clear setup and operating contracts, while working behavior remains the measure of progress.
   Date/Author: 2026-07-18 / Michael
 
 ## Outcomes & Retrospective
 
-Planning outcome as of 2026-07-18: the project has one lowercase name, one private GitHub repository, one controlling plan, one official Sites foundation, one exact visual starting framework, one modular capability contract, one music-first build order, one complete capability map, one artist-controlled fork model, and one explicit data boundary.
+Milestone 0 outcome as of 2026-07-18: the active tree is now the official Sites React structure on `codex/sites-rebuild`. It runs locally, builds into Cloudflare Worker-compatible output, packages logical D1 and R2 bindings, and presents the complete neutral visual foundation in dark and light themes.
 
-Implementation begins with the official starter and runtime proof. The current source still contains the previous Nuxt application. The next milestone replaces that active tree and establishes the first runnable Sites commit.
+The first React surface includes the open public shell, left-aligned typographic headers, functional page layouts, pinned Lato, exact semantic tokens, and keyboard, touch, responsive, theme, and reduced-motion behavior. The neutral installation contains no temporary imagery. The old Nuxt application remains recoverable through Git history and no Sound for Movement content, identity, media, data, secrets, endpoints, or machine paths entered the new tree.
 
-The governing documents now agree on the first implementation: exact Sound for Movement visual behavior with plain `a-op` labels, Sites-provided D1 and R2 storage, artist ownership, local artist-approved media preparation, application-driven public operation without model requests, `Courses` nomenclature, capability activation from a streaming-first core, and the current Sites non-financial runtime scope. The active product plan focuses on the application artists use and the durable state it owns.
+Verification passed for strict type checking, lint, the five-stage production build, three focused server/foundation checks, desktop and mobile containment, dark and light theme operation, support-page navigation, theme persistence, and browser diagnostics. Milestone 1 now owns D1 persistence, R2 object and range behavior, identity, server roles, redacted errors, health, and simulation-mode proof.
+
+Milestone 1 outcome as of 2026-07-19: the application now has one durable Worker runtime spine. The generated and inspected migration creates users, profiles, canonical roles, role assignments, audit events, runtime proofs, and media records. Prepared D1 statements, atomic batches, typed repositories, narrow R2 projections, request identifiers, redacted errors and logs, health, official identity helpers, and the default-deny `decideAccess` contract are integrated into running routes.
+
+The runtime gate applies local migrations, starts the test-only laboratory, writes a D1 proof and R2 verification object, resolves anonymous, customer, editor, and owner authority, streams full and partial bytes, stops the server, reads the same D1 and R2 state from a fresh process, deletes the verification object, and confirms ordinary development returns `404` for the laboratory. The final `npm test` passed strict type checking, lint, repository formatting, the five-stage production build, production simulation-off and browser-bundle scans, two foundation checks, 45 focused runtime checks, and the real binding journey with `200`, `206`, `403`, `404`, and `416`. No verification media remains. Hosted dispatch behavior remains an approval-gated Milestone 10 check.
+
+Milestone 2 outcome as of 2026-07-19: the running application now reads artist identity, active modules, public navigation, footer links, and public pages from published D1 revisions. Owners can draft and publish artist state, activate dependency-valid modules, publish primary and footer navigation as one snapshot, explicitly bootstrap an installation, assign or revoke scoped editors, and control page structure and publication. Editors can maintain assigned page drafts, customers can update their own profile, and public, account, setup, and administration shells expose these operations with real status and results.
+
+The M2 schema contains eighteen tables and six forward migrations. Transaction statements repeat current owner, editor, scope, active-account, and revision predicates; exact operation markers join successful state changes to their audit receipts. Page module ownership and kind publish with immutable revision content, and module transitions compare one registry revision plus the complete ten-module vector. A migration-chain review found and repaired a generated foreign-key cascade defect without resetting local D1 or touching changed parents. Final checks passed strict types, lint, formatting, 79 focused runtime tests, 21 schema/static tests, the five-stage production build, packaged migration and secret-boundary inspection, a complete HTTP authority and publication journey, and DOM-only desktop/mobile checks in dark and light themes. The journey restored its exact D1 baseline and touched zero R2 objects and zero temporary files; the neutral interface contains zero imagery.
+
+Milestone 3 outcome as of 2026-07-19: the music center now carries versioned tracks, releases, collections, credits, immutable source metadata, approved derivatives, processing state, and frozen publication mappings in D1. Owners can create, revise, preview, publish, and unpublish every catalog aggregate. Scoped editors can maintain assigned drafts. Public music index, track, release, and collection routes expose only published, active-module state through public-safe projections.
+
+The root-persistent player carries an approved queue across application routes and provides play, pause, seek, previous, next, repeat, volume, queue, error status, keyboard operation, reduced-motion behavior, and meaningful-listen observation. Public and account-gated track delivery passes through `decideAccess`, validates one HTTP range, and reads only the authorized byte interval. Revoked editors cannot retain delivery access through source provenance, published artwork dependencies block destructive source rejection, and invalid catch-all page segments return a normal `404` before D1.
+
+The final Milestone 3 gate passed 25 unit and integration checks, 16 schema and interface checks, seven structured-page boundary checks, strict type checking, lint, repository formatting, the five-stage production build, packaged migration and server-boundary inspection, and DOM-only desktop/mobile checks in dark and light themes. The packaged runtime contains thirty tables across ten migrations and no client-visible server values. The repository contains no image, audio, or video files; tests made no R2 writes. Audible playback, browser seeking through a real derivative, and approved R2 publication remain pending until artist-approved audio is supplied.
+
+Milestone 4 outcome as of 2026-07-19: a signed-in person can explicitly activate a customer account, maintain their profile, save published tracks and releases, arrange published tracks into revision-safe ordered playlists, inspect frozen listening history, and resume through the root-persistent player. Every write derives the actor from the official authenticated identity, repeats active-customer and module authority inside D1, uses an idempotency receipt, and applies compare-and-set state where concurrent changes matter.
+
+The account library now explains direct grants, memberships, subscriptions, licenses, and credits from current server-owned facts. Every live resource action is passed through `decideAccess`; revoked, expired, exhausted, and scheduled facts leave the live library immediately while remaining visible in grant and entitlement history. Protected stream and download routes decide access before R2, unauthorized requests perform zero object reads, successful downloads record one redacted delivery, and anonymous delivery is possible only for intentionally public downloads.
+
+The final Milestone 4 gate passed 30 customer, access, delivery, schema, and player checks; 13 API and interface checks; strict type checking; lint; repository formatting; the five-stage production build; packaged migration and server-boundary inspection; and a no-screenshot local HTTP journey for the public Site, signed-in activation UI, and protected customer route. The packaged runtime contains thirty-seven tables across fourteen migrations and no client-visible server values. Verification created no image or media asset, invoked no image or screenshot tool, and wrote no R2 object. Milestone 5 now owns artist grant, revocation, expiry, access-plan, entitlement, and delivery administration.
+
+Milestone 5 outcome as of 2026-07-19: owners can define one current published-resource access scope, issue it to an active customer exactly once, inspect the resulting grant and entitlement set, and revoke or expire the complete relationship without erasing history. Plan definitions freeze after first issuance; pending sets confer no authority; composite D1 constraints keep each grant and entitlement on the exact customer and resource; and every mutation repeats live owner authority and writes one idempotent audit receipt.
+
+Account Access is a core customer surface independent of favorites and playlists. It projects current resources, access explanations, grant and entitlement history, and completed delivery history from server-owned facts. Authorized protected track pages receive revision-pinned stream URLs, and ready downloads receive same-origin revision-pinned links only while the downloads module and exact entitlement remain active. The final gate passed 27 focused state and delivery checks, 18 static contract checks, strict types, lint, formatting, the five-stage production build, packaged runtime inspection, and the production-off HTTP journey. The journey restored the exact D1 baseline and created zero media bytes, R2 objects, images, screenshots, or temporary files. Milestone 6 now owns finite-use credit accounting and the complete test-locked commerce, membership, subscription, and licensing lifecycle.
+
+Build Week commerce boundary as of 2026-07-19: `PRODUCT.md` remains the canonical complete product narrative. The Sites installation will exercise checkout, orders, memberships, subscriptions, licensing, credits, entitlements, account results, and protected delivery through one Stripe Test Mode simulation. It will accept only test keys, keep payment entry on Stripe's hosted test surface, verify signatures, reject live events before writes, label test state visibly, and expose no live-commerce switch. The same domain can serve a future compatible deployment only after a fresh environment check, source-controlled capability, live validation, and artist approval.
+
+Milestone 6 outcome as of 2026-07-19: the running application now carries one complete simulated commerce journey without accepting real payment or moving money. A signed-in customer can choose an active test product, license offer, membership, subscription, or credit product, continue to Stripe-hosted Test Checkout, return to durable account history, and receive the exact order, relationship, license, credits, entitlement, and protected delivery created by a verified signed test event. Operators can configure products and frozen benefits, inspect customer relationships and operational evidence, generate protected license documents, and manage the resulting histories. Every relevant surface persistently states `Stripe Test Mode` and `No real payment will be accepted.`
+
+The recurring coordinator defers activation until a paid invoice, reconciles out-of-order lifecycle events, gives terminal and access-reducing evidence deterministic precedence, and creates each renewal order once. One license request has one exclusive acquisition path. Download credits use a non-authoritative pending entitlement followed by exact reserve, consume, and activation phases. License documents are deterministic, retryable, R2-backed Test Mode records and remain protected by central access on every delivery. Live credentials fail preflight, signed live events and invalid signatures write nothing, failed and canceled checkouts grant nothing, replay creates no duplicate state, and no card field enters React, D1, logs, telemetry, or audit records.
+
+The final Milestone 6 gate passed 129 domain and integration checks, 70 static contracts, 22 final integrity and delivery checks, 17 schema-chain checks, strict type checking, lint, the five-stage production build, packaged runtime inspection, and the real D1 signed-webhook HTTP journey. The reopened download-withdrawal and competing-acquisition paths now repeat their full authority predicates at every state-changing statement; an independent final audit found no remaining critical or high-severity issue. The packaged runtime contains eighty-three application tables across twenty-three migrations as Milestone 7's data foundation begins. The journey restored its exact D1 and module baseline and touched zero R2 objects, media rows, screenshots, image tools, repository assets, or temporary files.
+
+Milestone 7 outcome as of 2026-07-19: the running application now carries Courses with ordered sections, lessons, mixed-media records, progress, completion, resume, and centrally authorized delivery; video drafts and publication with context, credits, transcripts, hosted delivery, and click-gated external embeds; editorial posts; reusable immutable content-section revisions; composed structured pages; What's New publication, unread state, read receipts, and public or customer-private resource links; and an owner-managed stored-only contact system with frozen consent, public booking information, public contact details, inquiry state, and notes.
+
+Publishing and private reads repeat live module, customer, editor, owner, revision, linked-resource, and readiness predicates at D1 execution boundaries. Public page reads join their pinned reusable sections into one publication snapshot. Order-linked updates remain account-private to the exact fulfilled test-order customer. Existing contact records survived the schema-version 13 parent rebuild with empty defaults for the two new public fields.
+
+The final Milestone 7 gate passed 39 functional and integration checks, 26 static and schema checks, strict type checking, full lint, repository formatting, the five-stage production build, packaged runtime inspection, local migration application, and a clean foreign-key check. The packaged runtime contains eighty-six application tables across twenty-six migrations. The milestone introduced no image, audio, video, screenshot, generated asset, temporary asset, or R2 object; real media journeys remain reserved for artist-approved material.
+
+Milestone 8 outcome as of 2026-07-19: the running application now records a strict allowlist of first-party audience facts, with random browser sessions, optional consented internal linkage, immediate consent/GPC/DNT enforcement, anonymous unlinking, meaningful-listen timing, replay-safe server outcomes, daily aggregation, retention, and owner reporting. Server facts for contact, favorites, playlists, Course completion, update reads, downloads, protected delivery, license issuance, memberships, subscriptions, and video load share the exact durable mutation or observable playback boundary. Finalized days reject late facts, and global day-level session/account totals survive source-event pruning without group overcount.
+
+Owners can answer the installation-specific legal setup, save immutable Privacy and Terms drafts, approve an exact version, publish it separately, revise it without replacing the current public version, and inspect history. Composite D1 references prevent any document pointer from crossing into the other document's version. Operations now shows binding and schema health, count-only R2 state, failed media jobs, fixed-code delivery failures, redacted audit projections, exact customer relationships, access explanations through `decideAccess`, and guarded job retry. Stripe test/live keys, webhook material, provider objects, Checkout URLs, card-shaped values, payment/customer fields, free-form reasons, private paths, and unsafe subjects remain outside browser diagnostics.
+
+The final Milestone 8 gate passed 27 focused unit and integration checks, 25 static/schema/laboratory checks, strict type checking, full lint, repository formatting, the five-stage production build, packaged runtime inspection, local forward migration rehearsal, and the real HTTP journey. The packaged runtime contains ninety-three application tables across twenty-nine migrations at schema version 15. The journey visibly proved consent before and after approval, exactly one source fact and owner aggregate, owner-only operations, redacted failure evidence, legal draft replay, approval, publication, history, public rendering, cleanup, and a production-mode `404`. It restored every D1 baseline and created zero R2 objects, media bytes, images, screenshots, repository assets, or temporary files. Milestone 9 now owns the complete ChatGPT Work setup, proposal, media-preparation, export, restore, diagnosis, and maintenance lifecycle.
+
+Milestone 9 outcome as of 2026-07-19: a fresh ChatGPT Work task now has one strict fourteen-topic setup language, zero-write preview, exact-hash approval, owner-only deterministic apply, replay-safe receipts, safe diagnosis, fixed local media preparation profiles, approval-first Site publication, and customer-independent portability. Media bindings resolve approved ready sources and exact derivatives before any setup topic writes. Export verification checks fixed paths and checksums; disposable restore applies the complete checked-in D1 migration chain in memory, restores every portable entity twice without duplicates, and reproduces the exact semantic fingerprint with zero foreign-key violations.
+
+The Milestone 9 gate passed 65 unit and integration checks, 30 static contracts, the complete fourteen-topic HTTP journey, strict type checking, lint, formatting, production build, packaged schema inspection, and schema version 19 across ninety-nine application tables and thirty-three migrations. Cleanup restored exact counts, mutable state, source fingerprint, and foreign keys. No media conversion, temporary asset, screenshot, R2 object, external call, environment-file inspection, or hosting action ran.
+
+Milestone 10 local outcome as of 2026-07-19: one integrated gate now composes the current production build, forward migrations, all ten user-story families, M2, M5, M6, M8, and M9 clean-state laboratories, security headers, client budgets, application-schema recovery, and exact cleanup. The Stripe Test Mode journey proves a signed `livemode = false` webhook, exactly-once fulfillment, idempotent replay, zero-write live-event and invalid-signature rejection, durable customer and owner evidence, and protected access after entitlement. The packaged client is 966,936 bytes with a 189,805-byte largest file, source maps absent, and the production dependency audit reports zero vulnerabilities after locking PostCSS 8.5.14.
+
+The repository contains no image, audio, video, or document asset. Final static hardening passed twenty checks for contrast, keyboard and touch behavior, reduced motion, responsive containment, Test Mode visibility, payment-data absence, executable-content boundaries, sandboxed external video, secrets, dependency locking, and Worker headers. A final Stripe audit passed eighty-two focused checks with no missing implementation requirement. Actual Stripe-hosted Test Checkout/provider-webhook acceptance and Sites version hosting remain external approval-gated work; the current local application, packaging gate, and branch are ready for that stage.
 
 ## Context and Orientation
 
@@ -203,7 +511,7 @@ The private remote is:
 
     https://github.com/sunflower-of-parchman/a-op.git
 
-`main` currently contains the prior Nuxt implementation plus the new governing documents. The first build milestone creates `codex/sites-rebuild`, initializes the official Sites starter, and replaces the active application tree. The branch returns to `main` after the complete integrated candidate passes its gate and Michael chooses the save or merge action.
+`main` remains at clean planning authority commit `4c96148`. The active branch is `codex/sites-rebuild`; Milestone 0 replaced its tracked Nuxt tree with the official Sites starter and the first React visual foundation. The prior implementation remains available in Git history. The branch returns to `main` only after the complete integrated candidate passes its gate and Michael chooses the save or merge action.
 
 Current governing files:
 
@@ -215,6 +523,7 @@ Current governing files:
 - `docs/architecture/product-contract.md`: product, fork, capability, and completion contract.
 - `docs/architecture/visual-direction.md`: exact starting visual foundation.
 - `docs/architecture/data-and-ai-boundary.md`: Sites storage, local media, and ChatGPT Work data boundary.
+- `docs/architecture/commerce-environment.md`: permanent Sites Stripe Test Mode, fulfillment, and no-card-data boundary.
 - `docs/architecture/configuration-authority.md`: repository, D1, module, secret, and setup authority.
 - `docs/architecture/authorization.md`: identity, roles, access, and fulfillment authority.
 - `docs/architecture/media-processing-contract.md`: local media preparation, R2 publication, derivatives, and delivery.
@@ -313,6 +622,7 @@ Server modules may use a different exact folder name when the starter requires i
 - `media_objects`, `media_derivatives`, `media_jobs`, `media_job_attempts`.
 - `favorites`, `playlists`, `playlist_tracks`, `listening_history`.
 - `entitlements`, `access_grants`, `download_events`.
+- `commerce_products`, `checkout_sessions`, `orders`, `stripe_events`.
 - `membership_plans`, `subscriptions`, `subscription_events`, `benefit_definitions`.
 - `credit_accounts`, `credit_ledger_entries`, `credit_reservations`.
 - `license_options`, `license_terms_versions`, `issued_licenses`, `license_documents`.
@@ -392,13 +702,13 @@ The module registry keeps the supported capability set explicit:
       telemetryEvents: string[];
     }
 
-The application owns access-plan definitions, membership and subscription state, entitlements, credits, license issuance, and protected delivery. Validated owner actions update those records and the audit ledger together. Idempotency keys prevent repeated grants, renewals, credit changes, license issuance, or revocations from creating duplicate state.
+The application owns access-plan definitions, membership and subscription state, entitlements, credits, license issuance, protected delivery, and one commerce domain. Validated owner actions and verified fulfillment events update those records and the audit ledger together. Idempotency keys prevent repeated grants, renewals, credit changes, license issuance, fulfillment, or revocations from creating duplicate state.
 
-Current official Sites guidance defines Sites as a non-financial web experience. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
+`docs/architecture/commerce-environment.md` defines the Build Week Sites adapter as `stripe-test-simulation`. It accepts only Stripe test credentials, creates Stripe-hosted Test Checkout sessions, verifies webhook signatures, rejects `livemode` events before writes, and exposes no control that can enable live commerce. Checkout sessions, orders, memberships, subscriptions, licenses, credit-ledger entries, fulfillment events, and every commerce-created entitlement store `stripe_environment = 'test'` and `livemode = 0`. A future compatible deployment requires a fresh rules and technical-support check, source-controlled capability, live validation, and artist approval.
 
 ### ChatGPT Work operation
 
-`SETUP.md` and `AGENTS.md` teach a fresh ChatGPT Work task to:
+The Milestone 9 setup guide and `AGENTS.md` teach a fresh ChatGPT Work task to:
 
 1. Check the local Sites project and bindings.
 2. Discuss the artist's material, rights, catalog, active modules, navigation, memberships, subscriptions, licensing, Courses, video, contact, telemetry, privacy, terms, and publication.
@@ -426,9 +736,9 @@ Port the complete foundation in `docs/architecture/visual-direction.md` into Rea
 - Pin Lato and its license.
 - Implement the exact semantic color values and both themes.
 - Implement shared type, spacing, corner, surface, control, focus, motion, and accessibility primitives.
-- Build the neutral `a-op` home shell and living image mosaic with four rows.
-- Build the two-row mosaic header primitive for About, Courses, Videos, Membership, Licensing, Contact, FAQ, and What's New.
-- Track recent mosaic compositions so a composition repeats only after the available combination space has been exhausted.
+- Build the neutral `a-op` home shell with an open left-aligned typographic header.
+- Build the shared open header primitive for About, Courses, Videos, Membership, Licensing, Contact, FAQ, and What's New.
+- Keep the neutral installation free of temporary image assets; add imagery only from artist-approved material.
 - Keep Music, detail, account, authentication, cart, administration, and legal surfaces on functional layouts.
 
 Start the development server, open the exact printed local URL once, and run the production build.
@@ -438,7 +748,7 @@ Acceptance:
 - The active application source is the official Sites structure.
 - The old Nuxt application paths have left the active tree.
 - The development server renders the complete `a-op` visual foundation in dark and light themes.
-- The living image mosaic runs from redistribution-safe neutral assets, pauses outside the viewport, and honors reduced motion.
+- Public and support headers remain open, left aligned, responsive, and free of temporary imagery.
 - `npm run build` creates Cloudflare Worker-compatible output.
 - The governing files remain present and current.
 
@@ -551,15 +861,24 @@ Implement recurring access and music-rights workflows:
 - Credit ledger with grant, reservation, consumption, release, reversal, expiration, and balance.
 - Licensing options per track, intended-use input, terms version, artist approval or license-credit redemption, issued license, generated document, entitlement, download, and customer history.
 - Owner administration for plans, subscribers, renewals, cancellations, credits, licenses, and issued documents.
+- One commerce domain connecting test checkout, orders, memberships, subscriptions, licenses, credits, entitlements, account state, and protected delivery.
+- A Sites commerce adapter permanently fixed to `stripe-test-simulation`, with clear failure for missing test credentials and hard failure for recognized live credentials.
+- Stripe-hosted Test Checkout, persistent Test Mode labels, signed webhook verification over the unmodified body, `livemode = false` enforcement, test-environment fields on related records, and redacted idempotent fulfillment.
+- No payment-card fields or unrestricted Stripe objects in React, D1, logs, telemetry, audit records, exports, or diagnostics.
 
 Acceptance:
 
 - An owner activates a customer's membership or subscription and the customer receives its access and credits.
+- A signed-in customer selects a test product, completes Stripe-hosted Test Checkout with a Stripe-provided test method, receives exactly one verified test order and fulfillment, returns to visible account state, and receives the intended protected access.
 - Renewal adds the configured benefits exactly once through an idempotent server action.
 - Cancellation applies at the configured boundary.
 - One license credit covers the configured track and project scope and enters the immutable ledger.
 - A customer obtains an issued license and sees it in account history.
 - The artist can audit the complete subscription and license lifecycle.
+- Missing test credentials fail setup clearly; live credentials and signed `livemode = true` events fail before every application write.
+- Invalid signatures, cancelled or failed checkout, and browser return parameters create zero entitlement, credit, membership, subscription, or license state.
+- Exact webhook replay creates zero duplicate orders, licenses, credit grants, memberships, subscriptions, or entitlements.
+- Checkout, return, account, and administration views persistently state `Stripe Test Mode` and `No real payment will be accepted.`
 
 ### Milestone 7: Build Courses, video, pages, What's New, and contact
 
@@ -649,13 +968,14 @@ Run the complete user stories in one application:
 4. Artist-controlled access grant, library, and protected download.
 5. Membership or subscription activation, renewal, credits, and cancellation.
 6. License approval or credit redemption, issuance, document, and delivery.
-7. Course access, progress, and resume.
-8. Video, update, and contact.
-9. Telemetry, legal documents, diagnostics, export, and recovery.
+7. Stripe Test Checkout, signed webhook, exactly-once order and fulfillment, account result, protected access, and administration evidence.
+8. Course access, progress, and resume.
+9. Video, update, and contact.
+10. Telemetry, legal documents, diagnostics, export, and recovery.
 
 Verify production build, D1 migrations, R2 object policy, authorization boundaries, access-operation idempotency, accessibility, keyboard use, reduced motion, mobile layouts, touch targets, contrast, performance, redaction, and recovery.
 
-Save one Sites version from the exact validated commit and packaged output. After Michael approves the specific hosting action and access level, use `sites:sites-hosting`, wait for deployment success, and open the returned Sites URL.
+Save one Sites version from the exact validated commit and packaged output. After Michael approves the specific hosting action and access level, use `sites:sites-hosting`, wait for deployment success, open the returned Sites URL, and verify that its production URL remains permanently locked to `stripe-test-simulation`.
 
 Acceptance:
 
@@ -664,6 +984,17 @@ Acceptance:
 - The approved hosted Site uses connected D1 and R2 bindings.
 - Public music, customer account, protected delivery, and owner administration work at the hosted URL.
 - Hosted errors and logs preserve the redaction contract.
+
+Stripe Test Mode acceptance:
+
+- A fresh Sites installation defaults to `stripe-test-simulation`; missing test credentials fail setup clearly and every recognized live credential fails preflight, build validation, and runtime initialization.
+- Stripe-hosted Test Checkout and a signed `livemode = false` webhook complete the ten-step judge journey with exactly one order and exact fulfillment.
+- Invalid signatures and signed live-mode events create or modify zero application state and preserve pre-existing records.
+- Failed, expired, or cancelled test checkouts may retain non-fulfilling operational evidence, create no order fulfillment, grant, entitlement, credit, membership, subscription, or license, and preserve pre-existing access.
+- Webhook replay creates no duplicate order, license, credit grant, membership, subscription, entitlement, or audit result.
+- React, D1, logs, telemetry, audit records, exports, diagnostics, and client bundles contain no payment-card fields, secrets, or unrestricted provider objects.
+- Checkout, return, account, and administration surfaces persistently show `Stripe Test Mode` and `No real payment will be accepted.`
+- No administration control or ordinary Sites configuration can convert the hosted demonstration to live Stripe operation.
 
 ## Parallel Execution
 
@@ -714,6 +1045,7 @@ Review the governing files:
     sed -n '1,220p' PLANS.md
     sed -n '1,320p' docs/architecture/visual-direction.md
     sed -n '1,240p' docs/architecture/data-and-ai-boundary.md
+    sed -n '1,260p' docs/architecture/commerce-environment.md
     sed -n '1,999p' plans/migrateAopToSites.md
 
 ### Refresh official Sites facts
@@ -1029,6 +1361,12 @@ The Sound for Movement company repository remains live, private, and read-only t
 
 Revision note, 2026-07-18: Renamed the product and private GitHub repository to `a-op`, set the full title to `a-op: artist-owned platform`, centered the active plan entirely on working product behavior, placed the official Sites foundation first, allowed the active Nuxt tree to be replaced once the starter is ready, and retained the live Sound for Movement company repository as a private read-only functional reference.
 
-Revision note, 2026-07-18: Made the complete Sound for Movement visual framework the exact React starting point, added modular capability activation and artist-controlled fork ownership, adopted `Courses` as the public teaching name, moved media intake to artist-approved local processing followed by Site publication, and recorded the verified D1, R2, application-runtime, and ChatGPT Work data boundaries.
+Revision note, 2026-07-18: Made the Sound for Movement design system the React starting point, added modular capability activation and artist-controlled fork ownership, adopted `Courses` as the public teaching name, moved media intake to artist-approved local processing followed by Site publication, and recorded the verified D1, R2, application-runtime, and ChatGPT Work data boundaries.
 
 Revision note, 2026-07-18: Centered the governing documents on application capabilities and durable state. Added exact artist-ownership language, identified D1 and R2 as Sites-provided storage inside the Sites service boundary, qualified model-training statements by workspace controls, and aligned access, memberships, subscriptions, credits, licensing, and delivery with the current Sites non-financial runtime scope.
+
+Revision note, 2026-07-18: Completed Milestone 0 on `codex/sites-rebuild`. Recorded the exact official starter versions, reviewed replacement manifest, active React and Worker structure, exact visual token implementation, open public layouts, Worker typing decision, focused verification, production build, and live desktop/mobile browser journey. Updated the repository-state and next-milestone descriptions to match the runnable Sites application.
+
+Revision note, 2026-07-18: Removed the living mosaic from the product baseline at Michael's direction. Deleted every generated mosaic and social-card file, removed their code and provenance, and revised the governing product, visual, implementation, and verification contracts around open left-aligned headers with no temporary imagery.
+
+Revision note, 2026-07-19: Completed Milestone 1. Added the seven-table D1 identity and runtime schema, inspected migration and local rehearsal, canonical fictional role fixtures, central access decisions, bound R2 helpers and range delivery, official optional and protected identity routes, redacted runtime envelopes, health, an explicit test-only laboratory, production simulation-off checks, client-boundary scans, and a repeatable D1/R2 restart journey with full cleanup.

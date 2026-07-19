@@ -1,0 +1,266 @@
+.content,
+.detail,
+.workspace {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  padding-block: clamp(3rem, 8vw, 7rem);
+}
+
+.heading,
+.sectionHeading,
+.workspaceHeader {
+  display: grid;
+  max-width: 58rem;
+  gap: 0.75rem;
+}
+
+.heading p,
+.workspaceHeader p,
+.summary,
+.metadata,
+.operation,
+.empty,
+.readStatus {
+  color: var(--ink-muted);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.unreadStatus {
+  width: fit-content;
+  padding-block: 0.65rem;
+  border-block: 1px solid var(--slate);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--slate);
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.75fr) minmax(16rem, 1.25fr) auto;
+  align-items: center;
+  min-height: 7rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--slate);
+  gap: clamp(1.25rem, 4vw, 4rem);
+}
+
+.rowIdentity {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.rowIdentity h2,
+.rowIdentity h3 {
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+}
+
+.rowIdentity a,
+.textLink,
+.resourceLink {
+  text-decoration-color: transparent;
+  text-underline-offset: 0.35rem;
+}
+
+.rowIdentity a:hover,
+.textLink:hover,
+.resourceLink:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+.detailHeader {
+  display: grid;
+  min-height: clamp(20rem, 44vw, 34rem);
+  align-content: end;
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-bottom: 1px solid var(--slate);
+  gap: 1.25rem;
+}
+
+.detailHeader h1 {
+  max-width: 64rem;
+}
+
+.summary {
+  max-width: 48rem;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.body {
+  display: grid;
+  max-width: 48rem;
+  gap: 1.5rem;
+}
+
+.body h2 {
+  margin-top: 1.25rem;
+  font-size: clamp(1.6rem, 3.5vw, 2.75rem);
+}
+
+.body p,
+.body blockquote {
+  margin: 0;
+  color: var(--ink-muted);
+  white-space: pre-wrap;
+}
+
+.body blockquote {
+  padding-inline-start: 1.25rem;
+  border-inline-start: 2px solid var(--accent);
+  font-size: 1.08rem;
+}
+
+.receipt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 3rem;
+  padding-block: 0.75rem;
+  border-block: 1px solid var(--slate);
+  gap: 0.75rem;
+}
+
+.resourceBoundary {
+  display: grid;
+  max-width: 48rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--slate);
+  gap: 0.5rem;
+}
+
+.workspace {
+  padding-block: 0;
+}
+
+.operation {
+  min-height: 1.6rem;
+}
+
+.form,
+.field,
+.blockList,
+.blockItem,
+.preview {
+  display: grid;
+  gap: 1rem;
+}
+
+.form {
+  max-width: 68rem;
+  gap: 1.25rem;
+}
+
+.lockedFields {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  gap: 0.45rem;
+}
+
+.field > span {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--slate);
+  border-radius: 4px;
+  background: var(--field);
+  color: var(--ink);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.blockList {
+  border-top: 1px solid var(--slate);
+}
+
+.blockItem {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--slate);
+}
+
+.blockHeading,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.blockHeading h3 {
+  font-size: 1.1rem;
+}
+
+.textButton {
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.35rem;
+}
+
+.textButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.preview {
+  max-width: 58rem;
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  border-top: 1px solid var(--slate);
+}
+
+@media (max-width: 720px) {
+  .row,
+  .fieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .row {
+    align-items: start;
+    gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .textButton,
+  .textLink {
+    transition-duration: 0.01ms;
+  }
+}

@@ -10,9 +10,10 @@ The current Sites implementation follows:
 - `docs/architecture/data-and-ai-boundary.md`
 - `docs/architecture/configuration-authority.md`
 - `docs/architecture/authorization.md`
+- `docs/architecture/commerce-environment.md`
 - `docs/architecture/media-processing-contract.md`
 
-These documents carry the React, Sites, D1, R2, modular-capability, exact visual-foundation, artist-fork, Courses, local-media, ownership, ChatGPT Work, and current Sites non-financial-runtime decisions made on 2026-07-18.
+These documents carry the React, Sites, D1, R2, modular-capability, exact visual-foundation, artist-fork, Courses, local-media, ownership, ChatGPT Work, and permanently test-locked Build Week commerce decisions.
 
 ## Historical Nuxt decisions
 

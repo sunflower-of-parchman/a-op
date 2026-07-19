@@ -42,7 +42,9 @@ Server-managed runtime values own private delivery credentials, external worker 
 
 ## Installation state
 
-`setup/project-state.json` records non-secret setup facts: schema version, enabled modules, completed checks, Sites binding names, and remaining approval-gated actions. D1 remains authoritative for product state. Git remains authoritative for source. The project-state file remains a resumable status ledger.
+D1 records the resumable installation checkpoint in `setup_state`, exact aggregate applications in `setup_applications`, and customer-independent export evidence in `export_manifests`. These records contain status, schema versions, canonical hashes, safe counts, actor references, fixed failure codes, and timestamps. Proposal contents, machine paths, credentials, provider payloads, customer data, and media bytes do not enter these tables.
+
+Working proposal and approval JSON stays under the ignored `setup/proposals/` boundary. The ignored `setup/local-paths.json` file maps stable aliases to artist-approved machine paths and is never returned by the Site, written to D1, included in exports, or copied into a ChatGPT Work task. Git remains authoritative for source, and D1 remains authoritative for product state.
 
 ## Setup lifecycle
 
@@ -55,8 +57,10 @@ The ChatGPT Work setup lifecycle is:
     -> explicit artist approval
     -> deterministic application
     -> public and administrative verification
-    -> project-state update
+    -> durable status and fingerprint verification
 
 Installation begins from the complete visual foundation. The setup conversation focuses on the artist's material, active capabilities, rights, access, memberships, subscriptions, licensing, and publication. Later natural-language work can reshape the visual system and structure as deeply as the artist chooses.
 
-Applying the same approved proposal is idempotent. It updates intended records, reuses approved media objects and jobs, and preserves audit history.
+Preview compiles the complete operation plan with `writesPerformed: 0`. Apply recomputes the current source fingerprint, validates the exact proposal and approval hashes, and dispatches only fixed internal operations. The aggregate application and each domain operation marker make reapply idempotent. Approved media objects and jobs reuse content-addressed identities. Local-workspace, Git, R2 publication, and external actions remain separate approved workflows.
+
+The Sites commerce adapter is permanently `stripe-test-simulation`. Setup can activate the simulated commerce journey only with complete Stripe test credentials. Missing active-journey credentials, malformed credentials, every recognized live credential, and every live commerce mode fail closed. Setup exposes no live-commerce control.

@@ -8,11 +8,11 @@ From that music-first foundation, artists can offer memberships and subscription
 
 ## A complete starting point
 
-Every fresh `a-op` installation begins as a composed, working site. Its starting visual framework is the complete Sound for Movement design system rebuilt for React and Sites: Lato, rigorous open layouts, exact light and dark themes, established controls, restrained motion, and a living image mosaic.
+Every fresh `a-op` installation begins as a composed, working site. Its starting visual framework is the Sound for Movement design system rebuilt for React and Sites: Lato, rigorous open layouts, exact light and dark themes, established controls, and restrained motion.
 
 The installation begins with plain `a-op` labels, placeholders, and general product names. `Courses` is the teaching area. `What's New` carries in-app updates. The artist adds their own music, writing, artwork, photography, video, collaborators, course material, access plans, and terms.
 
-Sound for Movement shows how deeply the living image mosaic can become personal. Michael's version can draw from album artwork, published educational imagery, approved community-donated images, and approved collaborator photography. In `a-op`, each artist builds their own image library from album artwork, course and video imagery, photography, collaborators, community-donated images with permission, and approved original generated work. The combinations keep changing, giving the site a living visual surface drawn from the artist's real body of work.
+The neutral installation uses open typographic headers and contains no temporary image library. Each artist adds album artwork, course and video imagery, photography, collaborator material, community-donated images with permission, or approved original generated work when those materials are ready for their Site.
 
 ## Use the parts you need
 
@@ -24,7 +24,7 @@ An artist can begin with music publishing and streaming. They can add customer l
 
 An artist takes a fork of `a-op` and operates it as their own site. They control their deployment, content, catalog, data, customer relationship, and artist-specific source changes. The shared code is open source under `AGPL-3.0-or-later`.
 
-Artists retain ownership of their music, images, writing, video, course material, code, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
+Artists retain ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
 
 ChatGPT Work and Codex help the artist change their fork through natural language. The artist can reshape the visual system, rename sections, reorganize pages, activate or deactivate capabilities, and add new functionality while the repository's contracts keep music, access, storage, and recovery working together.
 
@@ -62,6 +62,16 @@ Signed-in customers can build playlists, save favorites, see listening history, 
 Artists define each plan, its included access, download credits, license credits, customer benefits, dates, and status rules.
 
 Customers can see their current plan, access, benefits, credits, renewal date, and history. Artists can manage plans, members, subscribers, renewals, cancellations, credits, access, and history through `a-op`.
+
+## Commerce environments and the Build Week presentation
+
+`a-op` has one connected commerce domain for checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery. The deployment environment determines whether that domain is simulated or live.
+
+The Build Week presentation demonstrates commerce through Stripe Test mode. It accepts no real payment and moves no money. Test checkout events exercise the same order, licensing, membership, subscription, credit, entitlement, and protected-delivery contracts used by the application. Live commerce is disabled in the ChatGPT Sites deployment.
+
+The Sites installation accepts only Stripe test credentials, uses Stripe-hosted Test Checkout and Stripe-provided test payment methods, verifies webhook signatures, rejects every live-mode event before it can write state, and marks related records as test data. Payment-card fields never enter the React application, D1, logs, telemetry, or audit records. Checkout, return, account, and administration views identify the experience as Stripe Test Mode and state that no real payment will be accepted.
+
+`a-op` keeps live commerce behind an explicit deployment capability. An artist must verify the rules and technical support of their chosen environment before activating real payments. Live activation requires deliberate configuration, validation, and artist approval; it is unavailable from Sites administration and ordinary Sites configuration.
 
 ## Licensing
 
@@ -105,7 +115,7 @@ Artists use ChatGPT Work and Codex to create, configure, personalize, maintain, 
 
 Sites hosts the React application. Sites-provided D1 stores structured product state, and Sites-provided R2 stores music, images, video, documents, and exports. Sign in with ChatGPT establishes customer and trusted-operator identity, while server-owned roles and access decisions protect private resources.
 
-Artists add music to their Site from an approved local path or through administration. Local tools prepare the approved files, R2 stores the bytes, and D1 stores their metadata and access rules. The current [Sites data-residency guidance](https://learn.chatgpt.com/docs/sites#understand-limits-and-unsupported-uses) places deployed Site code, D1 and R2 data, generated artifacts, and logs inside the Sites service boundary.
+Artists add music to their Site from an approved local path or through administration. Local tools prepare the approved files, R2 stores the bytes, and D1 stores their metadata and access rules. Current [Sites guidance](https://help.openai.com/en/articles/20001339) states that Sites does not support data residency or inference residency at launch. This applies to deployed Site code, D1 and R2 data and file storage, generated artifacts, and logs.
 
 Ordinary site operation is application-driven and makes no model request. Material enters a ChatGPT Work task only when the artist deliberately shares it there.
 

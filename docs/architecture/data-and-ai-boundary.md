@@ -2,7 +2,7 @@
 
 ## Artist ownership
 
-Artists retain ownership of their music, images, writing, video, course material, code, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
+Artists retain ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
 
 ## Durable application storage
 
@@ -15,7 +15,7 @@ Artists retain ownership of their music, images, writing, video, course material
 
 The current official [Sites persistence guidance](https://learn.chatgpt.com/docs/sites#choose-a-supported-site-shape) assigns durable structured data to D1 and uploaded file bytes to R2. Sites provisions and connects those logical bindings through `.openai/hosting.json`.
 
-D1 and R2 are Sites-provided storage inside the Sites service boundary. Current official [Sites limits guidance](https://learn.chatgpt.com/docs/sites#understand-limits-and-unsupported-uses) includes deployed Sites, Site code, D1 and R2 data and file storage, generated artifacts, and logs in that boundary. Sites does not support data residency or inference residency at launch.
+D1 and R2 are Sites-provided storage inside the Sites service boundary. This describes the operating environment and makes no geographic residency guarantee. Current [Sites guidance](https://help.openai.com/en/articles/20001339) states that Sites does not support data residency or inference residency at launch. This applies to deployed Site code, D1 and R2 data and file storage, generated artifacts, and logs.
 
 ## How music reaches the site
 

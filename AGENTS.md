@@ -14,7 +14,7 @@ Working behavior leads every milestone. A capability is complete when its public
 
 Every fresh installation starts from the complete Sound for Movement-derived visual foundation defined in `docs/architecture/visual-direction.md`. Port it faithfully into React before introducing module-specific visual patterns.
 
-The foundation includes Lato, the exact semantic color values, complete dark and light themes, open composition, established controls and surfaces, responsive spacing, the living image mosaic, motion, and accessibility behavior. `a-op` presents it with plain labels, placeholders, and general product names. Use `Courses` for teaching content and `What's New` for in-app updates.
+The foundation includes Lato, the exact semantic color values, complete dark and light themes, open composition, established controls and surfaces, responsive spacing, motion, and accessibility behavior. `a-op` presents it with plain labels, placeholders, and general product names. Use `Courses` for teaching content and `What's New` for in-app updates.
 
 After the complete baseline runs, ChatGPT Work and Codex can help the artist change the visual system, page structure, navigation, language, imagery, active capabilities, and new functionality in their own fork.
 
@@ -48,11 +48,11 @@ Functional code receives first priority. Documentation preserves the contracts n
 
 Use the lowercase product styling in copy, metadata, repository documentation, and interface labels. Each artist controls their fork, deployment, content, data, customer relationship, and artist-specific changes under the repository license.
 
-Artists retain ownership of their music, images, writing, video, course material, code, and business data. Describe storage and model use precisely: approved Site files live in Sites-provided R2, structured Site state lives in Sites-provided D1, ordinary Site operation makes no model request, and material enters ChatGPT Work only when the artist deliberately shares it there.
+Artists retain ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data. Describe storage and model use precisely: approved Site files live in Sites-provided R2, structured Site state lives in Sites-provided D1, ordinary Site operation makes no model request, and material enters ChatGPT Work only when the artist deliberately shares it there.
 
 ## Sound for Movement reference
 
-Michael explicitly authorizes the complete live Sound for Movement visual framework to become the starting visual framework for `a-op`. Rebuild the design system, tokens, primitives, layout, light and dark themes, living image mosaic, motion, and accessibility behavior in React and record the implementation in `docs/provenance.md`.
+Michael explicitly authorizes the live Sound for Movement design system to become the starting visual framework for `a-op`. Rebuild the tokens, primitives, layout, light and dark themes, motion, and accessibility behavior in React and record the implementation in `docs/provenance.md`. Use open typographic headers in the neutral installation. Add imagery only from material an artist has approved for their Site.
 
 The live Sound for Movement company repository remains Michael's private, read-only reference for functionality and the visual source. Sound for Movement retains its name, logos, music, teaching material, writing, imagery, customer records, analytics, prices, terms, secrets, endpoints, and production state. Each `a-op` installation uses its artist's own approved material. Store the optional local reference path only in ignored local configuration.
 
@@ -68,7 +68,7 @@ The live Sound for Movement company repository remains Michael's private, read-o
 - Use the current official Sign in with ChatGPT helpers for identity-aware customer and administration routes. Resolve owner, editor, and customer authority from server-owned D1 records.
 - Route every protected stream, download, course asset, license file, and customer resource through the central `decideAccess` contract.
 - Keep secrets and private runtime values server-managed. Logs, errors, exports, browser output, and diagnostics use redacted fields.
-- Keep the Sites application within the current official non-financial web-experience scope. Build artist-controlled access, membership and subscription records, credits, licensing records, entitlements, and protected delivery as application capabilities. Any future transaction work begins with a fresh official-policy check and an approved architecture decision.
+- Keep the Sites application within the current official non-financial web-experience scope. The Build Week installation demonstrates the complete commerce domain through Stripe Test mode as a simulation: test keys and test objects only, no real payment methods, no real charges, and no money movement. Stripe-hosted Test Checkout owns test payment entry. Reject live credentials and `livemode` events before state changes. A future compatible deployment can activate live commerce only after a fresh policy and platform check, deliberate configuration, and Michael's approval.
 
 ## Functional build order
 
@@ -98,7 +98,7 @@ The public Site and administration area remain complete web experiences. Applica
 
 ## Interface direction
 
-Follow `docs/architecture/visual-direction.md` as the exact first implementation. Use open layouts. Add cards only for meaningful selectable items or functional boundaries. Keep the living image mosaic, functional page layouts, and administration working surface distinct.
+Follow `docs/architecture/visual-direction.md` as the exact first implementation. Use open layouts. Add cards only for meaningful selectable items or functional boundaries. Keep public headers, functional page layouts, and the administration working surface distinct.
 
 Administration uses direct navigation, status, and action. Every control performs a real operation and reports its result.
 
