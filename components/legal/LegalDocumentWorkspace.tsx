@@ -8,6 +8,7 @@ import {
   type LegalSetupAnswers,
   type LegalTelemetryMode,
 } from "@/lib/legal/index.ts";
+import { getLegalDocumentStarter } from "@/lib/legal/public-starters.ts";
 import styles from "./LegalDocuments.module.css";
 
 interface MutationResponse {
@@ -55,6 +56,9 @@ export function LegalDocumentWorkspace({
   const router = useRouter();
   const initialAnswers =
     initial.draft.setupAnswers ?? createDefaultLegalSetupAnswers();
+  const starter = getLegalDocumentStarter(initial.id);
+  const initialWriting =
+    initial.draft.setupAnswers === null ? starter : initial.draft;
   const [revision, setRevision] = useState(initial.revision);
   const [draftVersion, setDraftVersion] = useState(initial.draft.version);
   const [draftVersionId, setDraftVersionId] = useState(initial.draft.id);
@@ -234,7 +238,7 @@ export function LegalDocumentWorkspace({
           <label className={styles.field}>
             <span>Title</span>
             <input
-              defaultValue={initial.draft.title}
+              defaultValue={initialWriting.title}
               maxLength={160}
               name="title"
               required
@@ -243,7 +247,7 @@ export function LegalDocumentWorkspace({
           <label className={styles.field}>
             <span>Introduction</span>
             <textarea
-              defaultValue={initial.draft.introduction}
+              defaultValue={initialWriting.introduction}
               maxLength={4000}
               name="introduction"
               rows={4}
@@ -252,7 +256,7 @@ export function LegalDocumentWorkspace({
           <label className={styles.field}>
             <span>Document body</span>
             <textarea
-              defaultValue={initial.draft.bodyText}
+              defaultValue={initialWriting.bodyText}
               maxLength={40000}
               name="bodyText"
               required

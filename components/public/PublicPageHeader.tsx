@@ -3,14 +3,8 @@ export interface PublicPageHeaderProps {
   title: string;
 }
 
-export function PublicPageHeader({ variant, title }: PublicPageHeaderProps) {
-  return (
-    <header
-      className={`public-page-heading public-page-heading--${variant} page-frame`}
-    >
-      <h1>{title}</h1>
-    </header>
-  );
+export function PublicPageHeader({ title }: PublicPageHeaderProps) {
+  return <h1 className="sr-only">{title}</h1>;
 }
 
 export default PublicPageHeader;

@@ -459,8 +459,8 @@ test("schema and forward migrations cover the authority and music foundations", 
     /WHERE "editor_permissions"\."revoked_at" is null/,
   );
   assert.match(migrations.sql, /ALTER TABLE `profiles` ADD `revision`/);
-  assert.equal(migrations.names.length, 33);
-  assert.match(migrations.names.at(-1), /^0032_.+\.sql$/);
+  assert.equal(migrations.names.length, 34);
+  assert.match(migrations.names.at(-1), /^0033_.+\.sql$/);
   assert.ok(
     migrations.names.every((name) => /^\d+_.+\.sql$/.test(name)),
     "Migration discovery must remain independent of generated names.",

@@ -101,7 +101,7 @@
 }
 
 .history span[data-state="pending"] {
-  color: var(--status-amber);
+  color: var(--ink);
 }
 
 .history span[data-state="revoked"],

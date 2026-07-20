@@ -144,11 +144,10 @@ test("setup apply dispatches only D1 operations and records every other boundary
   assert.doesNotMatch(responseSource(applyRoute), RESPONSE_SECRET_FIELDS);
 });
 
-test("setup UI keeps exact approval and Stripe Test Mode visible in an open responsive workspace", async () => {
-  const [component, styles, notice, commerceDomain] = await Promise.all([
+test("setup UI keeps exact approval and domain Test Mode constraints in an open responsive workspace", async () => {
+  const [component, styles, commerceDomain] = await Promise.all([
     source("../components/setup/SetupWorkspace.tsx"),
     source("../components/setup/SetupWorkspace.module.css"),
-    source("../components/commerce/CommerceTestModeNotice.tsx"),
     source("../lib/commerce/domain.ts"),
   ]);
 
@@ -161,13 +160,7 @@ test("setup UI keeps exact approval and Stripe Test Mode visible in an open resp
   assert.match(component, /Apply exact approval/);
   assert.match(component, /preview\?\.readyForApply !== true/);
   assert.match(component, /"idempotency-key"/);
-  assert.match(component, /CommerceTestModeNotice/);
-  assert.match(
-    component,
-    /permanently configured for Stripe Test Mode simulation/,
-  );
-  assert.match(component, /exposes no live-commerce switch/);
-  assert.match(notice, /aria-label=\{STRIPE_TEST_MODE_LABEL\}/);
+  assert.doesNotMatch(component, /CommerceTestModeNotice/);
   assert.match(commerceDomain, /"Stripe Test Mode"/);
   assert.match(commerceDomain, /"No real payment will be accepted\."/);
 

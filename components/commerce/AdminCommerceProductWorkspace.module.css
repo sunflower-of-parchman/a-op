@@ -226,7 +226,7 @@
   padding: 0.36rem 0.52rem;
   border: 1px solid var(--status-amber);
   border-radius: 999px;
-  color: var(--status-amber);
+  color: var(--ink);
   font-size: 0.72rem;
   line-height: 1;
 }
@@ -286,7 +286,7 @@
 }
 
 .actionHelp a {
-  color: var(--accent);
+  color: var(--ink);
   text-underline-offset: 0.3rem;
 }
 

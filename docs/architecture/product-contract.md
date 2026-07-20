@@ -43,7 +43,7 @@ Official Sites identity helpers establish identity. Server-owned D1 role records
 The complete codebase includes:
 
 1. Artist identity, navigation, structured pages, drafts, previews, publication, and revision history.
-2. Releases, tracks, collections, credits, taxonomies, artwork, original audio, derivatives, waveforms, streaming, queue, playlists, favorites, and history.
+2. Releases, albums, tracks, collections, credits, meter, tempo, musical key, duration, artwork, original audio, derivatives, waveforms, streaming, queue, playlists, favorites, and history.
 3. Downloads, memberships, subscriptions, renewal dates, cancellations, customer libraries, access grants, credits, and auditable entitlements.
 4. Artist-defined licensing options, supported uses, versioned terms, inquiries, approvals, credit redemption, issued licenses, protected documents, and history.
 5. Courses, lessons, structured mixed media, progress, public and entitled access, video, transcripts, and editorial publishing.
@@ -62,7 +62,7 @@ Artist-controlled grants, active memberships and subscriptions, issued licenses,
 
 Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The Build Week Sites installation therefore runs the complete commerce domain as a Stripe Test Mode simulation. Stripe test objects represent checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery without accepting a real payment or moving money. Stripe hosts the test payment interface; card fields never enter `a-op`.
 
-The Sites runtime accepts only `pk_test_` and `sk_test_` credentials, verifies Stripe webhook signatures, rejects `livemode` events before writes, stores the environment on related records, and shows persistent Test Mode status. The public demonstration cannot enable live commerce through administration or ordinary configuration. A future compatible deployment begins live-commerce work only after a fresh rules and technical-support check, explicit deployment capability, validated live configuration, and artist approval.
+The Sites runtime accepts only `pk_test_` and `sk_test_` credentials, verifies Stripe webhook signatures, rejects `livemode` events before writes, stores the environment on related records, and identifies Test Mode at checkout actions and on resulting records. The public demonstration cannot enable live commerce through administration or ordinary configuration. A future compatible deployment begins live-commerce work only after a fresh rules and technical-support check, explicit deployment capability, validated live configuration, and artist approval.
 
 ## Portability
 

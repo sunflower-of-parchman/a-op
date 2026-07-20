@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { AdminCommerceEvidence } from "@/db/commerce-surface-read.ts";
 
 import styles from "./Commerce.module.css";
-import { CommerceTestModeNotice } from "./CommerceTestModeNotice";
 
 export interface AdminCommerceProps {
   readonly activeProductCount: number;
@@ -50,8 +49,6 @@ export function AdminCommerce({
           customer relationships, and fulfillment.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="This Sites installation is permanently locked to the simulated Stripe test adapter. There is no live commerce control." />
 
       <dl className={styles.summaryList}>
         <div className={styles.summaryItem}>

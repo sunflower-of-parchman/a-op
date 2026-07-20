@@ -7,7 +7,6 @@ import type { AdminCommerceProductDTO } from "@/db/commerce-admin-read.ts";
 import type { CommerceProductType } from "@/lib/commerce/domain.ts";
 
 import styles from "./AdminCommerceProductWorkspace.module.css";
-import { CommerceTestModeNotice } from "./CommerceTestModeNotice";
 import { useCommerceProductMutation } from "./useCommerceProductMutation";
 
 export interface AdminCommerceProductWorkspaceProps {
@@ -295,8 +294,6 @@ export function AdminCommerceProductWorkspace({
           the browser.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="This Sites installation has no live commerce control. Product administration accepts test price IDs only and never collects card details or Stripe secrets." />
 
       <dl className={styles.summary}>
         <div>

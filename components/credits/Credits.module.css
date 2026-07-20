@@ -130,8 +130,8 @@
 }
 
 .testLabel {
-  border-color: var(--status-amber);
-  color: var(--status-amber);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .reconciliation {

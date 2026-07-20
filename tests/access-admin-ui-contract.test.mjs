@@ -22,7 +22,7 @@ async function source(path) {
   return readFile(new URL(path, import.meta.url), "utf8");
 }
 
-test("Access and Customers are real core owner and account destinations", async () => {
+test("Entitlements is the visible owner destination while Account has no secondary navigation", async () => {
   const [
     adminLayout,
     accountLayout,
@@ -40,9 +40,9 @@ test("Access and Customers are real core owner and account destinations", async 
   ]);
 
   assert.match(adminLayout, /resolveAdministrationNavigation/);
-  assert.match(accountLayout, /resolveAccountNavigation/);
-  assert.match(navigation, /href: "\/admin\/access", label: "Access"/);
-  assert.match(navigation, /href: "\/admin\/customers", label: "Customers"/);
+  assert.doesNotMatch(accountLayout, /resolveAccountNavigation/);
+  assert.match(navigation, /href: "\/admin\/access", label: "Entitlements"/);
+  assert.doesNotMatch(navigation, /href: "\/admin\/customers"/);
   assert.match(
     navigation,
     /customerActive[\s\S]*?href: "\/account\/access", label: "Access"/,
@@ -120,18 +120,14 @@ test("customer Access renders only server-projected same-origin download control
   );
 });
 
-test("customer Access persistently identifies stored commerce Test Mode records", async () => {
+test("customer Access identifies stored commerce Test Mode records without a page notice", async () => {
   const [account, customerAccessRead] = await Promise.all([
     source(files.account),
     source(files.customerAccessRead),
   ]);
 
-  assert.match(account, /<CommerceTestModeNotice/);
+  assert.doesNotMatch(account, /CommerceTestModeNotice/);
   assert.match(account, /STRIPE_TEST_MODE_LABEL/);
-  assert.match(
-    account,
-    /Commerce-derived memberships, subscriptions, licenses, credits, entitlements, and deliveries/,
-  );
   assert.ok((account.match(/commerceTestMode/g) ?? []).length >= 3);
   assert.match(customerAccessRead, /stripe_environment, livemode/);
   assert.match(

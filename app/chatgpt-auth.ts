@@ -1,5 +1,7 @@
+import { env } from "cloudflare:workers";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { resolveLocalAccountPreviewUser } from "@/lib/auth/local-account-preview";
 
 export type ChatGPTUser = {
   displayName: string;
@@ -16,10 +18,21 @@ const SIGN_IN_PATH = "/signin-with-chatgpt";
 const SIGN_OUT_PATH = "/signout-with-chatgpt";
 const CALLBACK_PATH = "/callback";
 
+function localAccountPreviewUser(): ChatGPTUser | null {
+  return resolveLocalAccountPreviewUser({
+    AOP_RUNTIME_ENV: env.AOP_RUNTIME_ENV,
+    AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: env.AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW,
+  });
+}
+
+export function isLocalAccountPreviewEnabled(): boolean {
+  return localAccountPreviewUser() !== null;
+}
+
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
   const email = requestHeaders.get(USER_EMAIL_HEADER);
-  if (!email) return null;
+  if (!email) return localAccountPreviewUser();
 
   const encodedFullName = requestHeaders.get(USER_FULL_NAME_HEADER);
   const fullName =

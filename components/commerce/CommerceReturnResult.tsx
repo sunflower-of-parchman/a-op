@@ -3,7 +3,6 @@ import type { CommerceReturnState } from "@/db/commerce-surface-read.ts";
 
 import styles from "./Commerce.module.css";
 import { CommerceReturnRefresh } from "./CommerceReturnRefresh";
-import { CommerceTestModeNotice } from "./CommerceTestModeNotice";
 
 export interface CommerceReturnResultProps {
   readonly browserCanceled?: boolean;
@@ -107,7 +106,6 @@ export function CommerceReturnResult({
     return (
       <div className={`page-frame ${styles.page}`}>
         <section className={styles.section} aria-labelledby="return-title">
-          <CommerceTestModeNotice />
           <div className={styles.resultTitle}>
             <h2 id="return-title">
               {browserCanceled
@@ -143,7 +141,6 @@ export function CommerceReturnResult({
   return (
     <div className={`page-frame ${styles.page}`}>
       <section className={styles.section} aria-labelledby="return-title">
-        <CommerceTestModeNotice />
         <div className={styles.resultState}>
           <div className={styles.resultTitle}>
             <h2 id="return-title">{copy.title}</h2>

@@ -419,6 +419,8 @@ export async function listActiveCommerceProducts(
         currency: product.currency,
         billingInterval: product.billingInterval,
         intervalCount: product.intervalCount,
+        resourceType: product.resourceType,
+        resourceId: product.resourceId,
       }),
     );
   }

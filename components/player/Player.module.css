@@ -39,18 +39,34 @@
   display: grid;
   grid-template-columns: minmax(10rem, 0.8fr) auto minmax(13rem, 1.2fr) auto;
   align-items: center;
-  min-height: 8.5rem;
+  min-height: 6.5rem;
   gap: clamp(1rem, 2.5vw, 2.25rem);
 }
 
-.nowPlaying,
+.nowPlayingIdentity,
 .trackIdentity {
   display: grid;
   min-width: 0;
   gap: 0.15rem;
 }
 
-.nowPlaying a,
+.nowPlaying {
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  gap: 0.85rem;
+}
+
+.playerArtwork {
+  width: 3.75rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--slate);
+  border-radius: 2px;
+  background: var(--field);
+}
+
+.nowPlayingIdentity a,
 .trackIdentity a {
   width: fit-content;
   max-width: 100%;
@@ -63,13 +79,13 @@
   white-space: nowrap;
 }
 
-.nowPlaying a:hover,
+.nowPlayingIdentity a:hover,
 .trackIdentity a:hover {
-  color: var(--accent);
+  color: var(--ink);
   text-decoration-color: currentColor;
 }
 
-.nowPlaying span,
+.nowPlayingIdentity span,
 .trackIdentity span {
   overflow: hidden;
   color: var(--ink-muted);
@@ -82,7 +98,68 @@
 .playerOptions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.transport {
+  gap: clamp(0.7rem, 1.5vw, 1.25rem);
+}
+
+.iconButton,
+.primaryIconButton {
+  position: relative;
+  display: grid;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  place-items: center;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.iconButton svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.primaryIconButton svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.iconButton:hover,
+.primaryIconButton:hover {
+  background: var(--field);
+}
+
+.iconButton:focus-visible,
+.primaryIconButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.iconButton:disabled,
+.primaryIconButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.iconButton[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+.iconBadge {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 0.18rem;
+  font-size: 0.58rem;
+  line-height: 1;
 }
 
 .controlButton,
@@ -121,13 +198,24 @@
 }
 
 .compactPlayButton {
-  min-width: 3.5rem;
+  width: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink);
+}
+
+.playButton svg,
+.compactPlayButton svg {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .controlButton:hover,
 .quietButton:hover,
 .compactPlayButton:hover {
-  border-color: var(--accent);
+  border-color: var(--ink);
   background: var(--field);
 }
 
@@ -180,7 +268,7 @@
 .volumeControl input {
   width: 100%;
   min-height: 2.75rem;
-  accent-color: var(--accent);
+  accent-color: var(--ink);
   cursor: pointer;
 }
 
@@ -189,11 +277,18 @@
 }
 
 .volumeControl {
-  display: grid;
-  width: 6.5rem;
-  gap: 0.15rem;
+  display: flex;
+  align-items: center;
+  width: 8.5rem;
+  gap: 0.5rem;
   color: var(--ink-muted);
   font-size: 0.72rem;
+}
+
+.volumeControl svg {
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .playerError {
@@ -251,7 +346,7 @@
 }
 
 .queueItem[aria-current="true"] {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .trackList {
@@ -269,7 +364,7 @@
 }
 
 .trackRow[aria-current="true"] > span:first-child {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .trackDuration {
@@ -363,6 +458,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .iconButton,
+  .primaryIconButton,
   .controlButton,
   .primaryControl,
   .quietButton,

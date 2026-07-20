@@ -10,12 +10,14 @@ export interface PublicFavoriteControlProps {
   readonly targetType: FavoriteTargetType;
   readonly targetId: string;
   readonly label: string;
+  readonly compact?: boolean;
 }
 
 export async function PublicFavoriteControl({
   targetType,
   targetId,
   label,
+  compact = false,
 }: PublicFavoriteControlProps) {
   const authenticatedUser = await getChatGPTUser();
   if (!authenticatedUser) return null;
@@ -41,6 +43,7 @@ export async function PublicFavoriteControl({
     <FavoriteToggle
       initialActive={favorite?.active ?? false}
       initialRevision={favorite?.revision ?? null}
+      compact={compact}
       label={label}
       targetId={targetId}
       targetType={targetType}

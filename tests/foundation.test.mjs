@@ -4,30 +4,42 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-test("packages the open a-op foundation and public page header", async () => {
-  const [home, publicPage, pageHeader, layout, manifest] = await Promise.all([
-    readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
-    readFile(
-      new URL("../app/(public)/[slug]/page.tsx", import.meta.url),
-      "utf8",
-    ),
-    readFile(
-      new URL("../components/public/PublicPageHeader.tsx", import.meta.url),
-      "utf8",
-    ),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(
-      new URL("../dist/server/.vite/manifest.json", import.meta.url),
-      "utf8",
-    ),
-  ]);
+test("packages the functional-only home and quiet public page labels", async () => {
+  const [home, publicPage, pageHeader, footer, layout, manifest] =
+    await Promise.all([
+      readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
+      readFile(
+        new URL("../app/(public)/[slug]/page.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL("../components/public/PublicPageHeader.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL("../components/public/SiteFooter.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+      readFile(
+        new URL("../dist/server/.vite/manifest.json", import.meta.url),
+        "utf8",
+      ),
+    ]);
 
   assert.match(layout, /a-op: artist-owned platform/i);
-  assert.match(pageHeader, /public-page-heading--\$\{variant\} page-frame/);
-  assert.match(home, /readPublishedArtistRevision/);
-  assert.match(home, /artist\.headline/);
-  assert.match(home, /Sites-provided R2/);
-  assert.match(home, /Sites-provided D1/);
+  assert.match(pageHeader, /<h1 className="sr-only">\{title\}<\/h1>/);
+  assert.match(home, /return <div \/>/);
+  assert.doesNotMatch(home, /readPublishedArtistRevision|artist\.headline/);
+  assert.doesNotMatch(footer, /TelemetryConsentControl|Audience privacy/);
+  assert.match(footer, /label: "Explore"/);
+  assert.match(footer, /label: "Membership"/);
+  assert.match(footer, /label: "Courses"/);
+  assert.match(footer, /label: "Support"/);
+  assert.match(footer, /label: "Connect"/);
+  assert.match(footer, /readPublicNavigationSnapshot\(env\.DB, "primary"\)/);
+  assert.match(footer, /© \{new Date\(\)\.getUTCFullYear\(\)\}/);
+  assert.doesNotMatch(home, /Sites-provided R2|Sites-provided D1|ChatGPT/);
   assert.match(layout, /card:\s*"summary"/);
   assert.doesNotMatch(layout, /images:\s*\[/);
   assert.doesNotMatch(home, /site-creator-vinext-starter|Building your site/i);
@@ -50,6 +62,10 @@ test("packages exact theme, storage, type, and open-layout foundations", async (
   assert.match(css, /--accent-action:\s*#9a3f05/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /min-height:\s*2\.75rem/);
+  const themeToggle = css.match(/\.theme-toggle \{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(themeToggle);
+  assert.match(themeToggle, /border:\s*0/);
+  assert.doesNotMatch(themeToggle, /border-color|background-color/);
   assert.match(layout, /@fontsource\/lato\/300\.css/);
   assert.match(layout, /@fontsource\/lato\/400\.css/);
   assert.deepEqual(JSON.parse(hosting), { d1: "DB", r2: "MEDIA" });

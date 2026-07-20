@@ -4,7 +4,6 @@ import { TelemetryPageView } from "@/components/telemetry";
 
 import styles from "./Commerce.module.css";
 import { CommerceCheckoutButton } from "./CommerceCheckoutButton";
-import { CommerceTestModeNotice } from "./CommerceTestModeNotice";
 
 export type CommerceCheckoutAccess =
   "customer" | "signed-out" | "activation-required";
@@ -106,8 +105,6 @@ export function CommerceCatalog({
             and return here after the signed test event is processed.
           </p>
         </div>
-
-        <CommerceTestModeNotice />
 
         {products.length === 0 ? (
           <p className={styles.emptyState}>

@@ -65,7 +65,7 @@ test("public and customer journeys preserve intended use, frozen terms, Test Che
   ]);
 
   for (const view of [catalog, customer]) {
-    assert.match(view, /<CommerceTestModeNotice/);
+    assert.doesNotMatch(view, /CommerceTestModeNotice/);
     assert.match(view, /Test (?:offer|record)/);
   }
   assert.match(catalog, /id=\{`offer-\$\{offer\.slug\}`\}/);
@@ -114,8 +114,7 @@ test("owner administration exposes safe decisions and queued operational evidenc
     source(files.controls),
   ]);
 
-  assert.match(admin, /<CommerceTestModeNotice/);
-  assert.match(admin, /there is no live commerce control/i);
+  assert.doesNotMatch(admin, /CommerceTestModeNotice/);
   assert.match(admin, /Approve request/);
   assert.match(admin, /Reject request/);
   assert.match(admin, /Issue owner-approved license/);
@@ -157,4 +156,48 @@ test("licensing interfaces remain open, responsive, theme-token based, and asset
   );
   assert.match(combined, /type="submit"/);
   assert.match(combined, /type="button"/);
+});
+
+test("empty licensing shows generic offers, subscriptions, education, custom contact, and working FAQs", async () => {
+  const [publicPage, catalog, contactForm, styles] = await Promise.all([
+    source(files.publicPage),
+    source(files.catalog),
+    source("../components/contact/ContactForm.tsx"),
+    source(files.styles),
+  ]);
+
+  assert.match(publicPage, /listActiveCommerceProducts\(env\.DB\)/);
+  assert.match(publicPage, /readPublicContactForm\(env\.DB\)/);
+  assert.doesNotMatch(publicPage, /PublicPageHeader/);
+  assert.match(catalog, />One-Time Licenses</);
+  assert.match(catalog, />Licensing Subscriptions</);
+  assert.match(catalog, />Education Plans</);
+  assert.match(catalog, /title="Custom Licensing"/);
+  assert.match(catalog, /function CustomLicensingPreview/);
+  assert.match(catalog, /aria-label="Custom Licensing form"/);
+  assert.match(catalog, /<span>Name<\/span>/);
+  assert.match(catalog, /<span>Email<\/span>/);
+  assert.match(catalog, /<span>Company<\/span>/);
+  assert.match(catalog, /<span>Project<\/span>/);
+  assert.match(catalog, /<span>Message<\/span>/);
+  assert.match(catalog, /<span>Consent<\/span>/);
+  assert.match(catalog, /disabled type="submit"/);
+  assert.match(catalog, />Licensing FAQ</);
+  assert.equal(
+    catalog.match(/id: "(?:student|one-time|extended)-license"/g)?.length,
+    3,
+  );
+  assert.equal(catalog.match(/id: "license-subscription-[12]"/g)?.length, 2);
+  assert.equal(catalog.match(/id: "education-plan-[123]"/g)?.length, 3);
+  assert.equal(catalog.match(/"licensing-faq-[1-5]"/g)?.length, 5);
+  assert.match(catalog, /<details className=\{styles\.faqItem\}/);
+  assert.match(catalog, /<summary>/);
+  assert.match(catalog, />Question</);
+  assert.match(catalog, /<p>Answer<\/p>/);
+  assert.doesNotMatch(catalog, /\$(?:25|60|100|250|300|500)|20\.83|41\.67/);
+  assert.match(contactForm, /fetch\("\/api\/contact"/);
+  assert.match(contactForm, /selectedCategory/);
+  assert.match(contactForm, /embedded \? styles\.embedded/);
+  assert.match(styles, /\.planGrid/);
+  assert.match(styles, /\.faqItem\[open\] \.faqMarker/);
 });

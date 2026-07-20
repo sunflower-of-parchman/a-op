@@ -1,0 +1,175 @@
+.page {
+  display: grid;
+  min-height: min(48rem, calc(100svh - 5.25rem));
+  align-items: center;
+  padding-block: clamp(3.5rem, 9vw, 8rem);
+}
+
+.membership {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.72fr) minmax(28rem, 1.28fr);
+  align-items: center;
+  gap: clamp(3rem, 9vw, 9rem);
+}
+
+.offer,
+.offerIdentity,
+.offerActions {
+  display: grid;
+}
+
+.offer {
+  max-width: 24rem;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+.offerIdentity {
+  gap: 1rem;
+}
+
+.offerIdentity h2 {
+  max-width: 16ch;
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-weight: 300;
+  line-height: 1.05;
+}
+
+.offerIdentity > p:not(.price),
+.licensingNote {
+  color: var(--ink-muted);
+}
+
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+}
+
+.price span {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.offerActions {
+  justify-items: start;
+  gap: 0.9rem;
+}
+
+.textLink,
+.licensingNote a,
+.accountLinks a {
+  color: var(--ink);
+  text-underline-offset: 0.28em;
+}
+
+.licensingNote {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.licensingNote a {
+  margin-left: 0.2em;
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(10rem, 0.9fr) minmax(13rem, 1.1fr) auto;
+  gap: 0.75rem;
+}
+
+.benefitLink {
+  display: flex;
+  min-width: 0;
+  align-items: end;
+  overflow: hidden;
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color 240ms ease,
+    background-color 240ms ease,
+    transform 240ms ease;
+}
+
+.benefitLink span {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--slate);
+}
+
+.benefitLink:hover {
+  border-color: var(--ink);
+  background: var(--canvas-raised);
+  transform: translateY(-2px);
+}
+
+.benefitLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.courses {
+  grid-column: 1 / -1;
+}
+
+.music,
+.credits {
+  min-height: 13rem;
+}
+
+.accountLinks {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 0.8rem 2rem;
+  padding-top: 0.25rem;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .page {
+    min-height: auto;
+  }
+
+  .membership {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .offer {
+    max-width: 32rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .benefits {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, minmax(9rem, auto)) auto;
+  }
+
+  .courses,
+  .accountLinks {
+    grid-column: auto;
+  }
+
+  .music,
+  .credits {
+    min-height: 9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefitLink {
+    transition: none;
+  }
+
+  .benefitLink:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,234 @@
+.page {
+  display: grid;
+  gap: clamp(3rem, 7vw, 6rem);
+}
+
+.page :global(.account-content) {
+  max-width: none;
+}
+
+.accountTop {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(24rem, 1.1fr);
+  align-items: stretch;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.summary > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  padding-inline: clamp(0rem, 2vw, 1.5rem);
+  gap: 1rem;
+}
+
+.summary > div:first-child {
+  padding-inline-start: 0;
+}
+
+.summary > div:last-child {
+  padding-inline-end: 0;
+}
+
+.summary > div + div {
+  border-left: 1px solid var(--slate);
+}
+
+.summary dt {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.summary dd {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 300;
+}
+
+.accountTop .summary {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.accountTop .summary > div,
+.accountTop .summary > div:first-child,
+.accountTop .summary > div:last-child {
+  padding: 1rem 0;
+}
+
+.accountTop .summary > div:first-child {
+  padding-top: 0;
+}
+
+.accountTop .summary > div:last-child {
+  padding-bottom: 0;
+}
+
+.accountTop .summary > div + div {
+  border-top: 1px solid var(--slate);
+  border-left: 0;
+}
+
+.updates {
+  display: grid;
+  align-content: start;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--card);
+  gap: 1.5rem;
+}
+
+.updatesHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.updatesHeader > div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.updatesHeader h2 {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+}
+
+.updatesHeader p,
+.updatesHeader > a,
+.latestUpdate time,
+.latestUpdate > a,
+.noUpdates {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.updatesHeader > a,
+.latestUpdate > a {
+  text-decoration-color: currentColor;
+}
+
+.latestUpdate {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--slate);
+  gap: 1rem 1.25rem;
+}
+
+.latestUpdate > div {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.latestUpdate h3 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.latestUpdate p {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.noUpdates {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--slate);
+}
+
+.section {
+  min-width: 0;
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  border-top: 1px solid var(--slate);
+}
+
+.sectionHeading {
+  display: grid;
+  max-width: 48rem;
+  margin-bottom: 1.5rem;
+  gap: 0.65rem;
+}
+
+.sectionHeading h2,
+.signOut h2 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.sectionHeading p,
+.signOut p {
+  color: var(--ink-muted);
+}
+
+.signOut {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding-top: clamp(2rem, 5vw, 4rem);
+  border-top: 1px solid var(--slate);
+  gap: 1.5rem 3rem;
+}
+
+.signOut > div {
+  display: grid;
+  gap: 0.45rem;
+}
+
+@media (max-width: 760px) {
+  .accountTop {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .summary > div,
+  .summary > div:first-child,
+  .summary > div:last-child {
+    padding: 1rem 0;
+  }
+
+  .summary > div:first-child {
+    padding-top: 0;
+  }
+
+  .summary > div:last-child {
+    padding-bottom: 0;
+  }
+
+  .summary > div + div {
+    border-top: 1px solid var(--slate);
+    border-left: 0;
+  }
+
+  .signOut {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .signOut :global(.button) {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .updatesHeader {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .latestUpdate {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

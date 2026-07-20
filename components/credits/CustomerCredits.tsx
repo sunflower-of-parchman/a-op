@@ -1,4 +1,3 @@
-import { CommerceTestModeNotice } from "@/components/commerce";
 import type {
   CreditAccountDetailDTO,
   CreditKind,
@@ -236,15 +235,9 @@ export function CustomerCredits({
   return (
     <div className={`account-content ${styles.page}`}>
       <header className="workspace-section-heading">
-        <p className="eyebrow">Credits</p>
-        <h2>Credit balances and history</h2>
-        <p>
-          Download and license credits retain their grants, reservations,
-          consumption, reversals, expiration, and exact ledger totals.
-        </p>
+        <h2>Credits</h2>
+        <p>Download and license credit balances and history.</p>
       </header>
-
-      <CommerceTestModeNotice detail="Credits created by verified commerce are Stripe Test Mode records. They simulate benefits and protected access without accepting payment." />
 
       <section className={styles.section} aria-labelledby="use-download-credit">
         <div className={styles.headingGroup}>

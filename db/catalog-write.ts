@@ -448,21 +448,21 @@ export async function saveTrackDraft(
       .prepare(
         `INSERT INTO track_revisions
           (id, track_id, revision, title, subtitle, description, duration_ms,
-           isrc, copyright_notice, explicit, view_mode, stream_mode,
+           meter, tempo_bpm, musical_key, isrc, copyright_notice, explicit, view_mode, stream_mode,
            download_mode, original_media_id, streaming_derivative_id,
            download_derivative_id, tags_json, created_by_user_id)
          SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12,
-                ?13, ?14, ?15, ?16, ?17, ?18
+                ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21
          WHERE ${
            created
              ? `EXISTS (
                   SELECT 1 FROM tracks
                   WHERE id = ?2 AND draft_revision_id = ?1
-                    AND last_operation_key = ?19
+                    AND last_operation_key = ?22
                 )`
              : `EXISTS (
                   SELECT 1 FROM tracks
-                  WHERE id = ?2 AND version = ?19
+                  WHERE id = ?2 AND version = ?22
                     AND publication_state != 'archived'
                 )`
          } AND ${authority.sql}`,
@@ -475,6 +475,9 @@ export async function saveTrackDraft(
         input.subtitle,
         input.description,
         input.durationMs,
+        input.meter ?? null,
+        input.tempoBpm ?? null,
+        input.musicalKey ?? null,
         input.isrc,
         input.copyrightNotice,
         input.explicit ? 1 : 0,

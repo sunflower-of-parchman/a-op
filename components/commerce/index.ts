@@ -16,8 +16,4 @@ export {
   CommerceReturnResult,
   type CommerceReturnResultProps,
 } from "./CommerceReturnResult";
-export {
-  CommerceTestModeNotice,
-  type CommerceTestModeNoticeProps,
-} from "./CommerceTestModeNotice";
 export { CustomerOrders, type CustomerOrdersProps } from "./CustomerOrders";

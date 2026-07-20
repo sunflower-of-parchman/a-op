@@ -10,7 +10,6 @@ const files = {
   adminPage: "../app/admin/commerce/page.tsx",
   accountLayout: "../app/account/layout.tsx",
   adminLayout: "../app/admin/layout.tsx",
-  notice: "../components/commerce/CommerceTestModeNotice.tsx",
   catalog: "../components/commerce/CommerceCatalog.tsx",
   checkout: "../components/commerce/CommerceCheckoutButton.tsx",
   returnResult: "../components/commerce/CommerceReturnResult.tsx",
@@ -28,29 +27,26 @@ async function source(path) {
   return readFile(new URL(path, import.meta.url), "utf8");
 }
 
-test("every commerce surface persistently identifies the test-only boundary", async () => {
-  const [notice, catalog, returnResult, customerOrders, adminCommerce] =
+test("commerce keeps test provenance at actions and records without repeated notices", async () => {
+  const [catalog, checkout, returnResult, customerOrders, adminCommerce] =
     await Promise.all([
-      source(files.notice),
       source(files.catalog),
+      source(files.checkout),
       source(files.returnResult),
       source(files.customerOrders),
       source(files.adminCommerce),
     ]);
 
-  assert.match(notice, /STRIPE_TEST_MODE_LABEL/);
-  assert.match(notice, /NO_REAL_PAYMENT_STATEMENT/);
-  assert.match(notice, /This Site cannot accept a real payment/);
   for (const surface of [
     catalog,
     returnResult,
     customerOrders,
     adminCommerce,
   ]) {
-    assert.match(surface, /<CommerceTestModeNotice/);
-    assert.match(surface, /Test (?:record|event|fulfillment|only)/);
+    assert.doesNotMatch(surface, /CommerceTestModeNotice/);
   }
-  assert.match(adminCommerce, /There is no live commerce control/);
+  assert.match(checkout, /Continue in Stripe Test Mode/);
+  assert.match(customerOrders, /Test record/);
 });
 
 test("public product selection uses active module-gated products and hosted Test Checkout", async () => {
@@ -190,10 +186,10 @@ test("owner commerce administration is read-only operational evidence", async ()
   );
   assert.doesNotMatch(adminCommerce, /type="(?:button|submit)"|<form/);
   assert.doesNotMatch(read, /raw_body_digest AS|result_json AS/);
-  assert.match(accountLayout, /resolveAccountNavigation/);
+  assert.doesNotMatch(accountLayout, /resolveAccountNavigation/);
   assert.match(adminLayout, /resolveAdministrationNavigation/);
   assert.match(navigation, /href: "\/account\/orders", label: "Orders"/);
-  assert.match(navigation, /href: "\/admin\/commerce", label: "Commerce"/);
+  assert.doesNotMatch(navigation, /href: "\/admin\/commerce"/);
 });
 
 test("commerce interfaces stay open, responsive, keyboard-native, and asset-free", async () => {

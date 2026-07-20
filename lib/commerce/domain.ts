@@ -43,6 +43,8 @@ export interface CommerceProductDTO extends CommerceTestStatusDTO {
   readonly currency: string;
   readonly billingInterval: CommerceBillingInterval;
   readonly intervalCount: number;
+  readonly resourceType: "track" | "release" | "collection" | null;
+  readonly resourceId: string | null;
 }
 
 export interface CommerceCheckoutSelection {

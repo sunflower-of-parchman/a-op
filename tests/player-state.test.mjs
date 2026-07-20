@@ -11,6 +11,7 @@ import {
   playerReducer,
   resolveNextIndex,
   resolvePreviousIndex,
+  resolveShuffleIndex,
   trackResumePosition,
 } from "../components/player/player-state.ts";
 
@@ -106,6 +107,15 @@ test("resolves previous, next, and repeat behavior deterministically", () => {
   assert.equal(nextRepeatMode("one"), "off");
 });
 
+test("resolves shuffle to a different bounded queue item", () => {
+  assert.equal(resolveShuffleIndex(0, 5, 0), 1);
+  assert.equal(resolveShuffleIndex(0, 5, 0.999999), 4);
+  assert.equal(resolveShuffleIndex(3, 5, 0), 4);
+  assert.equal(resolveShuffleIndex(3, 5, 0.5), 1);
+  assert.equal(resolveShuffleIndex(0, 1, 0.5), null);
+  assert.equal(resolveShuffleIndex(-1, 5, 0.5), null);
+});
+
 test("clamps media values and formats time for visible controls", () => {
   assert.equal(clampPlayerTime(-5, 10_000), 0);
   assert.equal(clampPlayerTime(14_000, 10_000), 10_000);
@@ -119,4 +129,26 @@ test("clamps media values and formats time for visible controls", () => {
   assert.equal(formatPlayerTime(0), "0:00");
   assert.equal(formatPlayerTime(65_000), "1:05");
   assert.equal(formatPlayerTime(3_665_000), "1:01:05");
+});
+
+test("clears the active queue while preserving player preferences", () => {
+  const loaded = playerReducer(
+    {
+      ...INITIAL_PLAYER_STATE,
+      repeat: "all",
+      shuffle: true,
+      volume: 0.4,
+    },
+    {
+      type: "load",
+      queue: [track("one", "/media/stream/one")],
+      currentIndex: 0,
+    },
+  );
+  const cleared = playerReducer(loaded, { type: "clear" });
+  assert.equal(cleared.queue.length, 0);
+  assert.equal(cleared.currentIndex, -1);
+  assert.equal(cleared.repeat, "all");
+  assert.equal(cleared.shuffle, true);
+  assert.equal(cleared.volume, 0.4);
 });

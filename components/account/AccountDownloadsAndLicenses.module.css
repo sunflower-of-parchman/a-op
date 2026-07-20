@@ -1,0 +1,145 @@
+.collection {
+  min-width: 0;
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  min-height: 8rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  cursor: pointer;
+  gap: 1rem 2rem;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::after {
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-top: 0.35rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.collection[open] .summary::after {
+  transform: translateY(0.25rem) rotate(225deg);
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.heading,
+.identity {
+  display: grid;
+  min-width: 0;
+  gap: 0.4rem;
+}
+
+.title {
+  color: var(--ink);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  letter-spacing: -0.035em;
+}
+
+.description,
+.count,
+.meta,
+.reference,
+.empty,
+.documentState {
+  color: var(--ink-muted);
+}
+
+.description {
+  font-size: 0.95rem;
+}
+
+.count {
+  grid-column: 2;
+  grid-row: 1;
+  padding-inline-end: 2rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.list {
+  margin: 0;
+  padding: 0 clamp(1.25rem, 3vw, 2rem) clamp(0.5rem, 1vw, 1rem);
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 6rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--slate);
+  gap: 1rem 2rem;
+}
+
+.identity > a,
+.identity > span:first-child {
+  width: fit-content;
+  color: var(--ink);
+  font-size: 1.05rem;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.32rem;
+}
+
+.identity > a:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+.meta,
+.reference,
+.documentState {
+  font-size: 0.85rem;
+}
+
+.reference {
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  margin-inline: clamp(1.25rem, 3vw, 2rem);
+  padding-block: 1.5rem 2rem;
+  border-top: 1px solid var(--slate);
+}
+
+@media (max-width: 620px) {
+  .summary {
+    min-height: 0;
+  }
+
+  .count {
+    padding-inline-end: 1.5rem;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .row :global(.button) {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary::after {
+    transition-duration: 0.01ms;
+  }
+}

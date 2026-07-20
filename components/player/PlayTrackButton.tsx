@@ -1,6 +1,7 @@
 "use client";
 
 import type { PlayerTrackDTO } from "@/lib/catalog/public-dto";
+import { PauseIcon, PlayIcon } from "./PlayerIcons";
 import { usePlayer } from "./PlayerProvider";
 import styles from "./Player.module.css";
 
@@ -33,7 +34,7 @@ export function PlayTrackButton({
       onClick={() => playQueue(queue, selectedIndex)}
       type="button"
     >
-      {action}
+      {isPlaying ? <PauseIcon /> : <PlayIcon />}
     </button>
   );
 }

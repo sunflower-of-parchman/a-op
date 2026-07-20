@@ -6,6 +6,7 @@ import {
   normalizeIdentityEmail,
   resolveApplicationIdentity,
 } from "../lib/auth/application-identity.ts";
+import { resolveLocalAccountPreviewUser } from "../lib/auth/local-account-preview.ts";
 import {
   FICTIONAL_RUNTIME_IDENTITIES,
   bootstrapFictionalRuntimeIdentities,
@@ -83,6 +84,31 @@ test("anonymous and unregistered identities receive no application authority", a
   assert.equal(
     normalizeIdentityEmail(" Person@Example.Test "),
     "person@example.test",
+  );
+});
+
+test("local account preview supplies only the fictional customer outside production", () => {
+  assert.deepEqual(
+    resolveLocalAccountPreviewUser({
+      AOP_RUNTIME_ENV: "development",
+      AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "1",
+    }),
+    {
+      displayName: "Fictional Customer",
+      email: "customer@a-op.invalid",
+      fullName: "Fictional Customer",
+    },
+  );
+  assert.equal(
+    resolveLocalAccountPreviewUser({ AOP_RUNTIME_ENV: "development" }),
+    null,
+  );
+  assert.equal(
+    resolveLocalAccountPreviewUser({
+      AOP_RUNTIME_ENV: "production",
+      AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "1",
+    }),
+    null,
   );
 });
 

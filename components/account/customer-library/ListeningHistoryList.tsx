@@ -40,6 +40,9 @@ function availablePlayerTrack(
     title: track.title,
     subtitle: track.subtitle,
     durationMs: track.durationMs,
+    meter: null,
+    tempoBpm: null,
+    musicalKey: null,
     streamUrl: track.streamUrl,
   };
 }

@@ -1,89 +1,350 @@
 import Image from "next/image";
 import Link from "next/link";
-import type {
-  CatalogIndexItemDTO,
-  PublicCatalogKind,
-  PublicMusicIndexDTO,
-} from "@/lib/catalog/public-dto";
+import { PublicFavoriteControl } from "@/components/account";
 import { PlayTrackButton } from "@/components/player";
 import { TelemetryPageView } from "@/components/telemetry";
+import type { CommerceProductDTO } from "@/lib/commerce/domain.ts";
+import type {
+  CatalogIndexItemDTO,
+  PublicMusicIndexDTO,
+  PublicMusicView,
+} from "@/lib/catalog/public-dto";
+import type {
+  CustomerFavoriteDTO,
+  CustomerPlaylistDTO,
+  ListeningHistoryDTO,
+} from "@/lib/customer-library/types.ts";
+import type { LicenseOfferDTO } from "@/lib/licensing/types.ts";
+import { EmptyTrackPreview } from "./EmptyTrackPreview";
+import { MobileMusicControls } from "./MobileMusicControls";
 import { MusicFilters } from "./MusicFilters";
+import { MusicSort } from "./MusicSort";
+import { PublicTrackActions } from "./PublicTrackActions";
+import { TrackColumnHeader } from "./TrackColumnHeader";
 import styles from "./Music.module.css";
 
-const KIND_LABELS: Readonly<Record<PublicCatalogKind, string>> = {
-  release: "Release",
-  track: "Track",
-  collection: "Collection",
-};
+const LIBRARY_LINKS: readonly {
+  readonly href: string;
+  readonly label: string;
+  readonly view: PublicMusicView;
+}[] = [
+  { href: "/music?view=explore", label: "Explore", view: "explore" },
+  { href: "/music", label: "Tracks", view: "tracks" },
+  {
+    href: "/music?view=collections",
+    label: "Collections",
+    view: "collections",
+  },
+  { href: "/music?view=albums", label: "Albums", view: "albums" },
+  {
+    href: "/music?view=favorites",
+    label: "Favorites",
+    view: "favorites",
+  },
+];
 
-function displayDate(value: string): string {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return value;
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(date);
+function durationLabel(value: number | null): string {
+  const totalSeconds = Math.floor((value ?? 0) / 1_000);
+  const minutes = Math.floor(totalSeconds / 60);
+  return `${minutes}:${String(totalSeconds % 60).padStart(2, "0")}`;
 }
 
-function resultLabel(count: number): string {
-  return `${count} published ${count === 1 ? "result" : "results"}`;
+function viewTitle(view: PublicMusicView): string {
+  if (view === "tracks") return "All Tracks";
+  if (view === "collections") return "Collections";
+  if (view === "albums") return "Albums";
+  if (view === "favorites") return "Favorites";
+  return "Explore";
 }
 
-function CatalogRow({ item }: { readonly item: CatalogIndexItemDTO }) {
-  const rowClassName = item.artwork
-    ? styles.catalogRow
-    : `${styles.catalogRow} ${styles.catalogRowWithoutArtwork}`;
+function resultLabel(count: number, view: PublicMusicView): string {
+  const noun =
+    view === "tracks"
+      ? "track"
+      : view === "collections"
+        ? "collection"
+        : view === "albums"
+          ? "album"
+          : "item";
+  return `${count} ${count === 1 ? noun : `${noun}s`}`;
+}
 
+function EmptyMessage({ children }: { readonly children: string }) {
+  return <p className={styles.emptyMessage}>{children}</p>;
+}
+
+interface CatalogRowProps {
+  readonly item: CatalogIndexItemDTO;
+  readonly product: CommerceProductDTO | null;
+  readonly licenseOffer: LicenseOfferDTO | null;
+  readonly playlists: readonly CustomerPlaylistDTO[];
+}
+
+function CatalogRow({
+  item,
+  product,
+  licenseOffer,
+  playlists,
+}: CatalogRowProps) {
   return (
-    <article className={rowClassName}>
-      {item.artwork ? (
-        <div className={styles.indexArtwork}>
-          <Image
-            alt={item.artwork.alt}
-            fill
-            sizes="(max-width: 720px) 72px, 104px"
-            src={item.artwork.url}
-            unoptimized
-          />
-        </div>
-      ) : null}
-
-      <div className={styles.catalogIdentity}>
-        <span className={styles.kindLabel}>{KIND_LABELS[item.kind]}</span>
-        <h2>
-          <Link href={item.href}>{item.title}</Link>
-        </h2>
-        {item.subtitle ? <p>{item.subtitle}</p> : null}
-      </div>
-
-      <div className={styles.catalogSummary}>
-        {item.description ? <p>{item.description}</p> : null}
-        <div className={styles.catalogMetadata}>
-          <time dateTime={item.publishedAt}>
-            {displayDate(item.publishedAt)}
-          </time>
-          {item.trackCount !== null ? (
-            <span>
-              {item.trackCount} {item.trackCount === 1 ? "track" : "tracks"}
-            </span>
+    <article className={styles.catalogRow}>
+      <div className={styles.catalogLead}>
+        <div
+          aria-hidden={item.artwork ? undefined : "true"}
+          className={`${styles.indexArtwork} ${item.artwork ? "" : styles.indexArtworkEmpty}`}
+        >
+          {item.artwork ? (
+            <Image
+              alt={item.artwork.alt}
+              fill
+              sizes="56px"
+              src={item.artwork.url}
+              unoptimized
+            />
           ) : null}
         </div>
+
+        <div className={styles.catalogIdentity}>
+          <h3>
+            <Link href={item.href}>{item.title}</Link>
+            <span>{durationLabel(item.durationMs)}</span>
+          </h3>
+        </div>
       </div>
 
-      {item.playableTrack ? (
-        <PlayTrackButton compact track={item.playableTrack} />
+      <dl className={styles.trackFacts}>
+        <div>
+          <dt>Tempo</dt>
+          <dd>{item.tempoBpm === null ? "" : `${item.tempoBpm} BPM`}</dd>
+        </div>
+        <div>
+          <dt>Meter</dt>
+          <dd>{item.meter ?? ""}</dd>
+        </div>
+        <div>
+          <dt>Key</dt>
+          <dd>{item.musicalKey ?? ""}</dd>
+        </div>
+      </dl>
+
+      <div className={styles.catalogPlayback}>
+        {item.playableTrack ? (
+          <PlayTrackButton compact track={item.playableTrack} />
+        ) : null}
+      </div>
+
+      <div className={styles.catalogActions}>
+        <PublicTrackActions
+          artworkAlt={item.artwork?.alt ?? null}
+          artworkUrl={item.artwork?.url ?? null}
+          downloadHref="/account/library"
+          licenseHref={
+            licenseOffer
+              ? `/licensing#offer-${licenseOffer.slug}`
+              : "/licensing"
+          }
+          playlists={playlists}
+          productHref={
+            product ? `/commerce#${product.offerAnchorId}` : "/commerce"
+          }
+          trackHref={item.href}
+          trackId={item.id}
+          trackSubtitle={item.subtitle}
+          trackTitle={item.title}
+        />
+      </div>
+    </article>
+  );
+}
+
+function CatalogCard({ item }: { readonly item: CatalogIndexItemDTO }) {
+  return (
+    <article className={styles.catalogCard}>
+      <Link className={styles.catalogCardLink} href={item.href}>
+        {item.artwork ? (
+          <div className={styles.cardArtwork}>
+            <Image
+              alt={item.artwork.alt}
+              fill
+              sizes="(max-width: 720px) 45vw, 240px"
+              src={item.artwork.url}
+              unoptimized
+            />
+          </div>
+        ) : null}
+        <span className={styles.cardIdentity}>
+          <strong>{item.title}</strong>
+          <span>
+            {item.kind === "release"
+              ? item.publishedAt.slice(0, 4)
+              : `${item.trackCount ?? 0} ${(item.trackCount ?? 0) === 1 ? "track" : "tracks"}`}
+          </span>
+        </span>
+      </Link>
+      {item.kind === "release" ? (
+        <PublicFavoriteControl
+          compact
+          label={item.title}
+          targetId={item.id}
+          targetType="release"
+        />
       ) : null}
     </article>
   );
 }
 
-export function MusicIndex({ data }: { readonly data: PublicMusicIndexDTO }) {
+function CardSection({
+  empty,
+  items,
+  title,
+}: {
+  readonly empty: string;
+  readonly items: readonly CatalogIndexItemDTO[];
+  readonly title: string | null;
+}) {
+  return (
+    <section className={styles.viewSection}>
+      {title ? <h2>{title}</h2> : null}
+      {items.length === 0 ? (
+        <EmptyMessage>{empty}</EmptyMessage>
+      ) : (
+        <div className={styles.catalogGrid}>
+          {items.map((item) => (
+            <CatalogCard item={item} key={`${item.kind}:${item.id}`} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function EmptyCatalogPreview({
+  count,
+  kind,
+}: {
+  readonly count: number;
+  readonly kind: "album" | "collection";
+}) {
+  const title = kind === "album" ? "Album" : "Collection";
+  const route = kind === "album" ? "releases" : "collections";
+  return (
+    <div
+      aria-label={`${title} interface previews`}
+      className={styles.catalogGrid}
+      role="list"
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <article
+          className={styles.catalogCard}
+          key={`${kind}:${index + 1}`}
+          role="listitem"
+        >
+          <Link
+            aria-label={`Open ${title} preview ${index + 1}`}
+            className={styles.catalogCardLink}
+            href={`/music/${route}/preview-${index + 1}`}
+          >
+            <span
+              aria-hidden="true"
+              className={`${styles.cardArtwork} ${styles.cardArtworkEmpty}`}
+            />
+            <span className={styles.cardIdentity}>
+              <strong>{title}</strong>
+              <span>5 tracks</span>
+            </span>
+          </Link>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+export interface MusicIndexProps {
+  readonly data: PublicMusicIndexDTO;
+  readonly favorites?: readonly CustomerFavoriteDTO[];
+  readonly licenseOffers: readonly LicenseOfferDTO[];
+  readonly listeningHistory?: readonly ListeningHistoryDTO[];
+  readonly playlists?: readonly CustomerPlaylistDTO[];
+  readonly products: readonly CommerceProductDTO[];
+  readonly view: PublicMusicView;
+}
+
+export function MusicIndex({
+  data,
+  favorites = [],
+  licenseOffers,
+  listeningHistory = [],
+  playlists = [],
+  products,
+  view,
+}: MusicIndexProps) {
   const filterKey = [
     data.query.q,
     data.query.kind,
-    data.query.tag ?? "",
     data.query.sort,
+    data.query.meter ?? "",
+    data.query.tempoMin ?? "",
+    data.query.tempoMax ?? "",
+    data.query.musicalKey ?? "",
+    data.query.durationMinMs ?? "",
+    data.query.durationMaxMs ?? "",
+    view,
   ].join(":");
+  const trackProducts = new Map(
+    products
+      .filter(
+        (product) =>
+          product.productType === "track" &&
+          product.resourceType === "track" &&
+          product.resourceId !== null,
+      )
+      .map((product) => [product.resourceId as string, product] as const),
+  );
+  const trackLicenseOffers = new Map(
+    licenseOffers.map((offer) => [offer.snapshot.track.id, offer] as const),
+  );
+  const favoriteKeys = new Set(
+    favorites.map((favorite) => `${favorite.targetType}:${favorite.targetId}`),
+  );
+  const tracks = data.items.filter((item) => item.kind === "track");
+  const albums = data.items.filter((item) => item.kind === "release");
+  const collections = data.items.filter((item) => item.kind === "collection");
+  const visibleTracks =
+    view === "favorites"
+      ? tracks.filter((item) => favoriteKeys.has(`track:${item.id}`))
+      : tracks;
+  const visibleAlbums =
+    view === "favorites"
+      ? albums.filter((item) => favoriteKeys.has(`release:${item.id}`))
+      : albums;
+  const visibleCollections =
+    view === "favorites"
+      ? collections.filter((item) => favoriteKeys.has(`collection:${item.id}`))
+      : collections;
+  const visibleCount =
+    view === "tracks"
+      ? visibleTracks.length
+      : view === "albums"
+        ? visibleAlbums.length
+        : view === "collections"
+          ? visibleCollections.length
+          : view === "favorites"
+            ? visibleTracks.length +
+              visibleAlbums.length +
+              visibleCollections.length
+            : data.items.length;
+  const showEmptyTrackPreview =
+    visibleTracks.length === 0 ||
+    (visibleTracks.length === 1 &&
+      visibleTracks[0].title === "Track" &&
+      visibleTracks[0].artwork === null &&
+      visibleTracks[0].playableTrack === null &&
+      visibleTracks[0].durationMs === null &&
+      visibleTracks[0].meter === null &&
+      visibleTracks[0].tempoBpm === null &&
+      visibleTracks[0].musicalKey === null);
+  const displayedCount =
+    view === "tracks" && showEmptyTrackPreview ? 5 : visibleCount;
 
   return (
     <>
@@ -92,47 +353,228 @@ export function MusicIndex({ data }: { readonly data: PublicMusicIndexDTO }) {
         resourceId="site"
         resourceType="site"
       />
-      <header className="functional-page-heading page-frame">
-        <h1>Music</h1>
-      </header>
+      <div className={styles.libraryShell}>
+        <aside className={styles.librarySidebar}>
+          <details className={styles.sidebarDisclosure} open>
+            <summary>
+              <span>Browse and filter</span>
+            </summary>
+            <div className={styles.sidebarContent}>
+              <div className={styles.sidebarUpper}>
+                <nav aria-label="Music library">
+                  <p className={styles.sidebarLabel}>Library</p>
+                  <ul className={styles.libraryNavigation}>
+                    {LIBRARY_LINKS.map((item) => (
+                      <li key={item.view}>
+                        <Link
+                          aria-current={view === item.view ? "page" : undefined}
+                          href={item.href}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
 
-      <div className={`page-frame ${styles.musicContent}`}>
-        {data.catalogSize === 0 ? (
-          <section
-            aria-labelledby="empty-catalog-title"
-            className={styles.emptyState}
-          >
-            <h2 id="empty-catalog-title">No music has been published yet.</h2>
-          </section>
-        ) : (
-          <>
-            <MusicFilters
-              availableTags={data.availableTags}
-              key={filterKey}
-              query={data.query}
-            />
-            <p aria-live="polite" className={styles.resultCount} role="status">
-              {resultLabel(data.items.length)}
-            </p>
+                <MusicFilters
+                  availableKeys={data.availableKeys}
+                  availableMeters={data.availableMeters}
+                  key={filterKey}
+                  query={data.query}
+                  view={view}
+                />
+              </div>
 
-            {data.items.length === 0 ? (
-              <section className={styles.emptyState}>
-                <h2>No published music matches these filters.</h2>
-                <Link className={styles.textLink} href="/music">
-                  Clear filters
-                </Link>
+              <div className={styles.sidebarCustomer}>
+                <section>
+                  <div className={styles.sidebarSectionHeading}>
+                    <p className={styles.sidebarLabel}>Your playlists</p>
+                    <Link
+                      aria-label="Create playlist"
+                      href="/account/playlists"
+                    >
+                      +
+                    </Link>
+                  </div>
+                  {playlists.length > 0 ? (
+                    <ul className={styles.customerLinks}>
+                      {playlists.map((playlist) => (
+                        <li key={playlist.id}>
+                          <Link href={`/account/playlists/${playlist.id}`}>
+                            {playlist.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </section>
+
+                <section>
+                  <div className={styles.sidebarSectionHeading}>
+                    <p className={styles.sidebarLabel}>Recently played</p>
+                    <Link href="/account/listening-history">See all</Link>
+                  </div>
+                  {listeningHistory.length > 0 ? (
+                    <ul className={styles.recentLinks}>
+                      {listeningHistory.slice(0, 3).map((history) => (
+                        <li key={history.id}>
+                          {history.track.href ? (
+                            <Link href={history.track.href}>
+                              {history.track.title ??
+                                history.listenedRevision.title}
+                            </Link>
+                          ) : (
+                            history.listenedRevision.title
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </section>
+              </div>
+            </div>
+          </details>
+        </aside>
+
+        <main className={styles.libraryMain}>
+          <MobileMusicControls
+            availableKeys={data.availableKeys}
+            availableMeters={data.availableMeters}
+            query={data.query}
+            view={view}
+          />
+          <header className={styles.libraryHeader}>
+            <h1>Music Library</h1>
+          </header>
+
+          <div className={styles.listHeader}>
+            <h2>{viewTitle(view)}</h2>
+            <div className={styles.listTools}>
+              <MusicSort query={data.query} view={view} />
+              <p aria-live="polite" role="status">
+                {resultLabel(displayedCount, view)}
+              </p>
+            </div>
+          </div>
+
+          {view === "tracks" ? (
+            <section className={styles.trackTable}>
+              <TrackColumnHeader />
+              {showEmptyTrackPreview ? (
+                <EmptyTrackPreview playlists={playlists} />
+              ) : (
+                <ol
+                  aria-label="Published tracks"
+                  className={styles.catalogList}
+                >
+                  {visibleTracks.map((item) => (
+                    <li key={item.id}>
+                      <CatalogRow
+                        item={item}
+                        licenseOffer={trackLicenseOffers.get(item.id) ?? null}
+                        product={trackProducts.get(item.id) ?? null}
+                        playlists={playlists}
+                      />
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+          ) : view === "collections" ? (
+            visibleCollections.length === 0 ? (
+              <section className={styles.viewSection}>
+                <EmptyCatalogPreview count={2} kind="collection" />
               </section>
             ) : (
-              <ol aria-label="Published music" className={styles.catalogList}>
-                {data.items.map((item) => (
-                  <li key={`${item.kind}:${item.id}`}>
-                    <CatalogRow item={item} />
-                  </li>
-                ))}
-              </ol>
-            )}
-          </>
-        )}
+              <CardSection
+                empty="No collections have been published yet."
+                items={visibleCollections}
+                title={null}
+              />
+            )
+          ) : view === "albums" ? (
+            visibleAlbums.length === 0 ? (
+              <section className={styles.viewSection}>
+                <EmptyCatalogPreview count={3} kind="album" />
+              </section>
+            ) : (
+              <CardSection
+                empty="No albums have been published yet."
+                items={visibleAlbums}
+                title={null}
+              />
+            )
+          ) : view === "favorites" ? (
+            <div className={styles.favoriteSections}>
+              <CardSection
+                empty="No favorite albums yet."
+                items={visibleAlbums}
+                title="Favorite Albums"
+              />
+              <CardSection
+                empty="No favorite collections yet."
+                items={visibleCollections}
+                title="Favorite Collections"
+              />
+              <section className={styles.viewSection}>
+                <h2>Favorite Tracks</h2>
+                {visibleTracks.length === 0 ? (
+                  <EmptyMessage>No favorite tracks yet.</EmptyMessage>
+                ) : (
+                  <ol className={styles.catalogList}>
+                    {visibleTracks.map((item) => (
+                      <li key={item.id}>
+                        <CatalogRow
+                          item={item}
+                          licenseOffer={trackLicenseOffers.get(item.id) ?? null}
+                          product={trackProducts.get(item.id) ?? null}
+                          playlists={playlists}
+                        />
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
+            </div>
+          ) : data.items.length === 0 ? (
+            <EmptyMessage>No music has been published yet.</EmptyMessage>
+          ) : (
+            <div className={styles.exploreSections}>
+              <CardSection
+                empty="No albums have been published yet."
+                items={albums}
+                title="Albums"
+              />
+              <CardSection
+                empty="No collections have been published yet."
+                items={collections}
+                title="Collections"
+              />
+              <section className={styles.viewSection}>
+                <h2>Tracks</h2>
+                {tracks.length === 0 ? (
+                  <EmptyMessage>
+                    No tracks have been published yet.
+                  </EmptyMessage>
+                ) : (
+                  <ol className={styles.catalogList}>
+                    {tracks.map((item) => (
+                      <li key={item.id}>
+                        <CatalogRow
+                          item={item}
+                          licenseOffer={trackLicenseOffers.get(item.id) ?? null}
+                          product={trackProducts.get(item.id) ?? null}
+                          playlists={playlists}
+                        />
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
+            </div>
+          )}
+        </main>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CommerceTestModeNotice } from "@/components/commerce";
 import type { CreditAccountDetailDTO } from "@/lib/benefit-credits/types.ts";
 import type { CreditCustomerDTO } from "@/db/credit-surface-read.ts";
 
@@ -320,8 +319,6 @@ export function AdminCredits({
           contracts.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="Commerce-created credit lots are Stripe Test Mode records. This administration area has no live payment or live credential control." />
 
       {customers.length === 0 ? (
         <p className={styles.emptyState}>No active customers available.</p>

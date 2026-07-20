@@ -65,6 +65,9 @@ function trackInput(overrides = {}) {
     subtitle: null,
     description: "A fictional, asset-free catalog proof.",
     durationMs: null,
+    meter: "4/4",
+    tempoBpm: 120,
+    musicalKey: "C minor",
     isrc: null,
     copyrightNotice: "",
     explicit: false,
@@ -291,6 +294,17 @@ test("catalog write, frozen read, replay, and dependency journey stays durable a
     "Memory track, first revision",
   );
   assert.equal(publicRelease.tracks[0].track.streamUrl, null);
+  assert.equal(publicRelease.tracks[0].track.meter, "4/4");
+  assert.equal(publicRelease.tracks[0].track.tempoBpm, 120);
+  assert.equal(publicRelease.tracks[0].track.musicalKey, "C minor");
+  const indexedTrack = publicIndex.items.find(
+    (item) => item.kind === "track" && item.slug === "memory-track",
+  );
+  assert.equal(indexedTrack?.meter, "4/4");
+  assert.equal(indexedTrack?.tempoBpm, 120);
+  assert.equal(indexedTrack?.musicalKey, "C minor");
+  assert.deepEqual(publicIndex.availableMeters, ["4/4"]);
+  assert.deepEqual(publicIndex.availableKeys, ["C minor"]);
   assert.deepEqual(Object.keys(publicTrack).sort(), [
     "artwork",
     "credits",

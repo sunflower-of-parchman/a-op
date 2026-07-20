@@ -10,7 +10,11 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "Courses" };
 
-export default async function CoursesPage() {
+export default async function CoursesPage({
+  searchParams,
+}: {
+  readonly searchParams: Promise<{ category?: string | string[] }>;
+}) {
   await requireActiveModule(env.DB, "courses");
   const identity = await resolveApplicationIdentity(
     env.DB,
@@ -21,5 +25,11 @@ export default async function CoursesPage() {
     identity,
     new Date().toISOString(),
   );
-  return <CourseIndex courses={courses} />;
+  const categoryValue = (await searchParams).category;
+  const previewCategory = Array.isArray(categoryValue)
+    ? categoryValue[0]
+    : categoryValue;
+  return (
+    <CourseIndex courses={courses} previewCategory={previewCategory ?? null} />
+  );
 }

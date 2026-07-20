@@ -29,6 +29,7 @@ import {
   playerReducer,
   resolveNextIndex,
   resolvePreviousIndex,
+  resolveShuffleIndex,
   trackResumePosition,
   type PlayerState,
 } from "./player-state";
@@ -44,6 +45,10 @@ interface PlayerContextValue {
     tracks: readonly PlayerTrackDTO[],
     selectedIndex: number,
   ) => void;
+  readonly previewQueue: (
+    tracks: readonly PlayerTrackDTO[],
+    selectedIndex: number,
+  ) => void;
   readonly togglePlayback: () => void;
   readonly playPrevious: () => void;
   readonly playNext: () => void;
@@ -51,6 +56,8 @@ interface PlayerContextValue {
   readonly seek: (timeMs: number) => void;
   readonly setVolume: (volume: number) => void;
   readonly cycleRepeat: () => void;
+  readonly toggleShuffle: () => void;
+  readonly closePlayer: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextValue | null>(null);
@@ -357,6 +364,34 @@ export function PlayerProvider({
     [currentTrack?.id, loadAndPlay, playElement, setAudioPosition, state.phase],
   );
 
+  const previewQueue = useCallback(
+    (tracks: readonly PlayerTrackDTO[], selectedIndex: number) => {
+      const requestedTrack = tracks[selectedIndex];
+      if (
+        !requestedTrack ||
+        requestedTrack.streamUrl !== null ||
+        selectedIndex < 0 ||
+        selectedIndex >= tracks.length
+      ) {
+        return;
+      }
+
+      const audio = audioRef.current;
+      playbackOperationRef.current += 1;
+      pendingResumeMsRef.current = null;
+      loadedStreamUrlRef.current = null;
+      loadedTrackIdRef.current = null;
+      if (audio) {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      }
+      dispatch({ type: "load", queue: tracks, currentIndex: selectedIndex });
+      dispatch({ type: "phase", phase: "idle" });
+    },
+    [],
+  );
+
   const togglePlayback = useCallback(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack || !isPlayableTrack(currentTrack)) return;
@@ -380,8 +415,12 @@ export function PlayerProvider({
   const selectTrackAt = useCallback(
     (index: number) => {
       const track = state.queue[index];
-      if (!track || !isPlayableTrack(track)) return;
+      if (!track) return;
       dispatch({ type: "select", currentIndex: index });
+      if (!isPlayableTrack(track)) {
+        dispatch({ type: "phase", phase: "idle" });
+        return;
+      }
       loadAndPlay(track);
     },
     [loadAndPlay, state.queue],
@@ -414,13 +453,16 @@ export function PlayerProvider({
   }, [currentTrack, selectTrackAt, setAudioPosition, state]);
 
   const playNext = useCallback(() => {
-    const nextIndex = resolveNextIndex(
-      state.currentIndex,
-      state.queue.length,
-      state.repeat,
-    );
+    const nextIndex = state.shuffle
+      ? (resolveShuffleIndex(
+          state.currentIndex,
+          state.queue.length,
+          Math.random(),
+        ) ??
+        resolveNextIndex(state.currentIndex, state.queue.length, state.repeat))
+      : resolveNextIndex(state.currentIndex, state.queue.length, state.repeat);
     if (nextIndex !== null) selectTrackAt(nextIndex);
-  }, [selectTrackAt, state.currentIndex, state.queue.length, state.repeat]);
+  }, [selectTrackAt, state]);
 
   const selectQueueIndex = useCallback(
     (index: number) => {
@@ -455,11 +497,30 @@ export function PlayerProvider({
     dispatch({ type: "repeat", repeat: nextRepeatMode(state.repeat) });
   }, [state.repeat]);
 
+  const toggleShuffle = useCallback(() => {
+    dispatch({ type: "shuffle", shuffle: !state.shuffle });
+  }, [state.shuffle]);
+
+  const closePlayer = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+    }
+    loadedStreamUrlRef.current = null;
+    loadedTrackIdRef.current = null;
+    pendingResumeMsRef.current = null;
+    meaningfulListenRef.current = INITIAL_MEANINGFUL_LISTEN_STATE;
+    dispatch({ type: "clear" });
+  }, []);
+
   const context = useMemo<PlayerContextValue>(
     () => ({
       state,
       currentTrack,
       playQueue,
+      previewQueue,
       togglePlayback,
       playPrevious,
       playNext,
@@ -467,17 +528,22 @@ export function PlayerProvider({
       seek,
       setVolume,
       cycleRepeat,
+      toggleShuffle,
+      closePlayer,
     }),
     [
       currentTrack,
+      closePlayer,
       cycleRepeat,
       playNext,
       playPrevious,
       playQueue,
+      previewQueue,
       seek,
       selectQueueIndex,
       setVolume,
       state,
+      toggleShuffle,
       togglePlayback,
     ],
   );
@@ -518,11 +584,22 @@ export function PlayerProvider({
             return;
           }
 
-          const nextIndex = resolveNextIndex(
-            state.currentIndex,
-            state.queue.length,
-            state.repeat,
-          );
+          const nextIndex = state.shuffle
+            ? (resolveShuffleIndex(
+                state.currentIndex,
+                state.queue.length,
+                Math.random(),
+              ) ??
+              resolveNextIndex(
+                state.currentIndex,
+                state.queue.length,
+                state.repeat,
+              ))
+            : resolveNextIndex(
+                state.currentIndex,
+                state.queue.length,
+                state.repeat,
+              );
           if (nextIndex === null) {
             dispatch({ type: "phase", phase: "ended" });
           } else {

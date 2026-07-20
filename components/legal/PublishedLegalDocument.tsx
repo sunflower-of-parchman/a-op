@@ -8,9 +8,12 @@ export function PublishedLegalDocument({
 }) {
   return (
     <article className={`page-frame ${styles.publicDocument}`}>
-      {document.introduction ? (
-        <p className="intro-copy">{document.introduction}</p>
-      ) : null}
+      <header className={styles.publicHeading}>
+        <h1>{document.title}</h1>
+        {document.introduction ? (
+          <p className="intro-copy">{document.introduction}</p>
+        ) : null}
+      </header>
       <section
         className={styles.publicBoundary}
         aria-label="Site legal boundary"

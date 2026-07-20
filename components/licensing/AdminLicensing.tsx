@@ -1,4 +1,3 @@
-import { CommerceTestModeNotice } from "@/components/commerce";
 import type { LicenseAdministrationDTO } from "@/lib/licensing/types.ts";
 
 import styles from "./Licensing.module.css";
@@ -56,8 +55,6 @@ export function AdminLicensing({ administration }: AdminLicensingProps) {
           rights, queued documents, and access history from one connected view.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="This Sites installation remains permanently locked to simulated Stripe Test Checkout. Licensing records are test records and there is no live commerce control." />
 
       <dl className={styles.summaryList}>
         <div className={styles.summaryItem}>

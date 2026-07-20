@@ -1,8 +1,5 @@
 import Link from "next/link";
-import {
-  CommerceCheckoutButton,
-  CommerceTestModeNotice,
-} from "@/components/commerce";
+import { CommerceCheckoutButton } from "@/components/commerce";
 import type { CreditAccountDetailDTO } from "@/lib/benefit-credits/index.ts";
 import type {
   CustomerLicenseHistoryDTO,
@@ -58,8 +55,6 @@ export function CustomerLicenses({
           and access history stay connected here.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="Approved offers may continue to Stripe-hosted Test Checkout. Test events exercise licensing and protected-delivery contracts without moving money." />
 
       <section className={styles.section} aria-labelledby="requests-title">
         <div className={styles.headingGroup}>

@@ -13,6 +13,7 @@ export interface PlayerState {
   readonly durationMs: number | null;
   readonly volume: number;
   readonly repeat: RepeatMode;
+  readonly shuffle: boolean;
   readonly error: string | null;
 }
 
@@ -31,7 +32,9 @@ export type PlayerAction =
     }
   | { readonly type: "volume"; readonly volume: number }
   | { readonly type: "repeat"; readonly repeat: RepeatMode }
-  | { readonly type: "error"; readonly message: string };
+  | { readonly type: "shuffle"; readonly shuffle: boolean }
+  | { readonly type: "error"; readonly message: string }
+  | { readonly type: "clear" };
 
 export const INITIAL_PLAYER_STATE: PlayerState = Object.freeze({
   queue: Object.freeze([]),
@@ -41,6 +44,7 @@ export const INITIAL_PLAYER_STATE: PlayerState = Object.freeze({
   durationMs: null,
   volume: 1,
   repeat: "off",
+  shuffle: false,
   error: null,
 });
 
@@ -90,6 +94,21 @@ export function resolveNextIndex(
   }
   if (currentIndex + 1 < queueLength) return currentIndex + 1;
   return repeat === "all" ? 0 : null;
+}
+
+export function resolveShuffleIndex(
+  currentIndex: number,
+  queueLength: number,
+  randomValue: number,
+): number | null {
+  if (queueLength <= 1 || currentIndex < 0 || currentIndex >= queueLength) {
+    return null;
+  }
+  const normalizedRandom = Number.isFinite(randomValue)
+    ? Math.min(Math.max(randomValue, 0), 0.999999999999)
+    : 0;
+  const offset = 1 + Math.floor(normalizedRandom * (queueLength - 1));
+  return (currentIndex + offset) % queueLength;
 }
 
 export function resolvePreviousIndex(
@@ -179,7 +198,16 @@ export function playerReducer(
       return { ...state, volume: clampPlayerVolume(action.volume) };
     case "repeat":
       return { ...state, repeat: action.repeat };
+    case "shuffle":
+      return { ...state, shuffle: action.shuffle };
     case "error":
       return { ...state, phase: "error", error: action.message };
+    case "clear":
+      return {
+        ...INITIAL_PLAYER_STATE,
+        repeat: state.repeat,
+        shuffle: state.shuffle,
+        volume: state.volume,
+      };
   }
 }

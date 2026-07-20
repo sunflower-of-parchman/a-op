@@ -6,6 +6,7 @@ declare namespace Cloudflare {
     IMAGES: ImagesBinding;
     AOP_RUNTIME_ENV?: string;
     AOP_SIMULATION_MODE?: string;
+    AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW?: string;
     AOP_OWNER_BOOTSTRAP_EMAIL?: string;
     STRIPE_PUBLISHABLE_KEY?: string;
     STRIPE_SECRET_KEY?: string;

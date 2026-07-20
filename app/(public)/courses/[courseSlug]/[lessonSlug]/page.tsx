@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
-import { LessonExperience } from "@/components/courses";
+import { CoursePreviewPost, LessonExperience } from "@/components/courses";
 import styles from "@/components/courses/Courses.module.css";
 import { readPublishedCourseLesson } from "@/db/course-read.ts";
 import { resolveApplicationIdentity } from "@/lib/auth/application-identity.ts";
@@ -31,6 +31,12 @@ export async function generateMetadata({
   readonly params: Promise<{ courseSlug: string; lessonSlug: string }>;
 }): Promise<Metadata> {
   const { courseSlug, lessonSlug } = await params;
+  if (
+    /^preview-[1-2]$/.test(courseSlug) &&
+    /^post-(?:10|[1-9])$/.test(lessonSlug)
+  ) {
+    return { title: "Post", description: "Blurb" };
+  }
   const { lesson } = await lessonForRequest(courseSlug, lessonSlug);
   return lesson
     ? {
@@ -46,6 +52,13 @@ export default async function CourseLessonPage({
   readonly params: Promise<{ courseSlug: string; lessonSlug: string }>;
 }) {
   const { courseSlug, lessonSlug } = await params;
+  if (
+    /^preview-[1-2]$/.test(courseSlug) &&
+    /^post-(?:10|[1-9])$/.test(lessonSlug)
+  ) {
+    await requireActiveModule(env.DB, "courses");
+    return <CoursePreviewPost courseSlug={courseSlug} postSlug={lessonSlug} />;
+  }
   const { identity, lesson } = await lessonForRequest(courseSlug, lessonSlug);
   if (!lesson) notFound();
   const returnTo = `/courses/${courseSlug}/${lessonSlug}`;

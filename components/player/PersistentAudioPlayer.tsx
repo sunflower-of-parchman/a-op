@@ -6,13 +6,26 @@ import {
   formatPlayerTime,
   resolveNextIndex,
   resolvePreviousIndex,
+  resolveShuffleIndex,
 } from "./player-state";
+import {
+  CloseIcon,
+  NextIcon,
+  PauseIcon,
+  PlayIcon,
+  PreviousIcon,
+  QueueIcon,
+  RepeatIcon,
+  ShuffleIcon,
+  VolumeIcon,
+} from "./PlayerIcons";
 import { usePlayer } from "./PlayerProvider";
 import styles from "./Player.module.css";
 
 export function PersistentAudioPlayer() {
   const {
     currentTrack,
+    closePlayer,
     cycleRepeat,
     playNext,
     playPrevious,
@@ -20,6 +33,7 @@ export function PersistentAudioPlayer() {
     selectQueueIndex,
     setVolume,
     state,
+    toggleShuffle,
     togglePlayback,
   } = usePlayer();
   const [queueOpen, setQueueOpen] = useState(false);
@@ -42,17 +56,17 @@ export function PersistentAudioPlayer() {
   if (!currentTrack) return null;
 
   const playing = state.phase === "playing" || state.phase === "loading";
-  const nextIndex = resolveNextIndex(
-    state.currentIndex,
-    state.queue.length,
-    state.repeat,
-  );
+  const nextIndex = state.shuffle
+    ? (resolveShuffleIndex(state.currentIndex, state.queue.length, 0) ??
+      resolveNextIndex(state.currentIndex, state.queue.length, state.repeat))
+    : resolveNextIndex(state.currentIndex, state.queue.length, state.repeat);
   const previousIndex = resolvePreviousIndex(
     state.currentIndex,
     state.queue.length,
     state.repeat,
   );
   const durationMs = state.durationMs ?? currentTrack.durationMs;
+  const previewing = currentTrack.streamUrl === null;
   const status = state.error
     ? state.error
     : state.phase === "loading"
@@ -69,34 +83,42 @@ export function PersistentAudioPlayer() {
     <section aria-label="Audio player" className={styles.player}>
       <div className={styles.playerInner}>
         <div className={styles.nowPlaying}>
-          <Link href={currentTrack.href}>{currentTrack.title}</Link>
-          {currentTrack.subtitle ? <span>{currentTrack.subtitle}</span> : null}
+          <div aria-hidden="true" className={styles.playerArtwork} />
+          <div className={styles.nowPlayingIdentity}>
+            <Link href={currentTrack.href}>{currentTrack.title}</Link>
+            {currentTrack.subtitle ? (
+              <span>{currentTrack.subtitle}</span>
+            ) : null}
+          </div>
         </div>
 
         <div aria-label="Playback controls" className={styles.transport}>
           <button
-            className={styles.controlButton}
+            aria-label="Previous track"
+            className={styles.iconButton}
             disabled={previousIndex === null && state.currentTimeMs <= 3000}
             onClick={playPrevious}
             type="button"
           >
-            Previous
+            <PreviousIcon />
           </button>
           <button
             aria-label={`${playing ? "Pause" : "Play"} ${currentTrack.title}`}
-            className={styles.primaryControl}
+            className={styles.primaryIconButton}
+            disabled={previewing}
             onClick={togglePlayback}
             type="button"
           >
-            {playing ? "Pause" : "Play"}
+            {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
           <button
-            className={styles.controlButton}
+            aria-label="Next track"
+            className={styles.iconButton}
             disabled={nextIndex === null}
             onClick={playNext}
             type="button"
           >
-            Next
+            <NextIcon />
           </button>
         </div>
 
@@ -121,29 +143,42 @@ export function PersistentAudioPlayer() {
 
         <div className={styles.playerOptions}>
           <button
-            className={styles.quietButton}
+            aria-label={`Shuffle ${state.shuffle ? "on" : "off"}`}
+            aria-pressed={state.shuffle}
+            className={styles.iconButton}
+            onClick={toggleShuffle}
+            type="button"
+          >
+            <ShuffleIcon />
+          </button>
+          <button
+            aria-label={`Repeat ${state.repeat === "off" ? "off" : state.repeat}`}
+            aria-pressed={state.repeat !== "off"}
+            className={styles.iconButton}
             onClick={cycleRepeat}
             type="button"
           >
-            Repeat:{" "}
-            {state.repeat === "off"
-              ? "Off"
-              : state.repeat === "all"
-                ? "All"
-                : "One"}
+            <RepeatIcon />
+            {state.repeat === "one" ? (
+              <span aria-hidden="true" className={styles.iconBadge}>
+                1
+              </span>
+            ) : null}
           </button>
           <button
+            aria-label={`Open queue with ${state.queue.length} tracks`}
             aria-controls={queueId}
             aria-expanded={queueOpen}
-            className={styles.quietButton}
+            className={styles.iconButton}
             onClick={() => setQueueOpen((open) => !open)}
             ref={queueToggleRef}
             type="button"
           >
-            Queue ({state.queue.length})
+            <QueueIcon />
           </button>
           <label className={styles.volumeControl}>
-            <span>Volume</span>
+            <VolumeIcon />
+            <span className="sr-only">Volume</span>
             <input
               aria-label="Volume"
               max={100}
@@ -156,6 +191,14 @@ export function PersistentAudioPlayer() {
               value={Math.round(state.volume * 100)}
             />
           </label>
+          <button
+            aria-label="Close audio player"
+            className={styles.iconButton}
+            onClick={closePlayer}
+            type="button"
+          >
+            <CloseIcon />
+          </button>
         </div>
 
         <p
@@ -176,7 +219,8 @@ export function PersistentAudioPlayer() {
           <div className={styles.queueHeading}>
             <h2>Queue</h2>
             <button
-              className={styles.quietButton}
+              aria-label="Close queue"
+              className={styles.iconButton}
               onClick={() => {
                 setQueueOpen(false);
                 queueToggleRef.current?.focus();
@@ -184,7 +228,7 @@ export function PersistentAudioPlayer() {
               ref={queueCloseRef}
               type="button"
             >
-              Close queue
+              <CloseIcon />
             </button>
           </div>
           <ol className={styles.queueList}>

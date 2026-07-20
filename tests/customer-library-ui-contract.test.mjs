@@ -16,6 +16,9 @@ const files = {
   history: "../components/account/customer-library/ListeningHistoryList.tsx",
   resume: "../components/account/customer-library/ResumeListeningButton.tsx",
   styles: "../components/account/customer-library/CustomerLibrary.module.css",
+  publicFavorite:
+    "../components/account/customer-library/PublicFavoriteControl.tsx",
+  favoriteToggle: "../components/account/customer-library/FavoriteToggle.tsx",
 };
 
 async function source(path) {
@@ -69,6 +72,20 @@ test("favorites expose true empty state and desired-state remove and restore", a
   assert.match(favorites, /expectedRevision: item\.revision/);
   assert.match(favorites, /item\.active \? "Remove" : "Restore"/);
   assert.match(favorites, /This catalog item is no longer available\./);
+});
+
+test("the music library can use the real favorite mutation as a compact row action", async () => {
+  const [control, toggle, styles] = await Promise.all([
+    source(files.publicFavorite),
+    source(files.favoriteToggle),
+    source(files.styles),
+  ]);
+
+  assert.match(control, /compact = false/);
+  assert.match(control, /compact=\{compact\}/);
+  assert.match(toggle, /<FavoriteHeartIcon active=\{active\} \/>/);
+  assert.match(toggle, /styles\.favoriteButton/);
+  assert.match(styles, /\.favoriteButton/);
 });
 
 test("playlist controls use published catalog options, explicit order, and CAS mutations", async () => {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CommerceTestModeNotice } from "@/components/commerce";
 import { STRIPE_TEST_MODE_LABEL } from "@/lib/commerce/domain.ts";
 import type {
   CustomerAccessEffectiveState,
@@ -83,8 +82,6 @@ export function CustomerAccessLibrary({
         <h2>{title}</h2>
         <p>{description}</p>
       </header>
-
-      <CommerceTestModeNotice detail="Commerce-derived memberships, subscriptions, licenses, credits, entitlements, and deliveries are marked below from their stored test provenance." />
 
       <section className={styles.section} aria-labelledby="available-title">
         <div className={styles.sectionHeading}>

@@ -11,7 +11,9 @@
 .history,
 .historyRows,
 .publicDocument,
-.publicBoundary {
+.publicBoundary,
+.publicHeading,
+.publicStarterNotice {
   display: grid;
 }
 
@@ -37,7 +39,7 @@
 }
 
 .eyebrow {
-  color: var(--accent);
+  color: var(--ink);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -198,7 +200,7 @@
   width: 1.2rem;
   height: 1.2rem;
   margin-top: 0.1rem;
-  accent-color: var(--accent);
+  accent-color: var(--ink);
 }
 
 .fixedFacts dl {
@@ -236,7 +238,7 @@
 .historyRow summary {
   min-height: 2.75rem;
   cursor: pointer;
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .historyRow p,
@@ -254,6 +256,30 @@
 .publicDocument {
   padding-block: clamp(1rem, 3vw, 2.5rem) clamp(4rem, 9vw, 8rem);
   gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.publicHeading {
+  max-width: 64rem;
+  gap: 1rem;
+}
+
+.publicHeading h1 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+
+.publicStarterNotice {
+  max-width: 60rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--slate);
+  gap: 0.4rem;
+}
+
+.publicStarterNotice h2 {
+  font-size: 1rem;
+}
+
+.publicStarterNotice p {
+  color: var(--ink-muted);
 }
 
 .publicBoundary {

@@ -8,7 +8,10 @@ const files = {
   navigation: "../lib/modules/navigation.ts",
   registry: "../lib/modules/registry.ts",
   customerPage: "../app/account/memberships/page.tsx",
+  publicPage: "../app/(public)/membership/page.tsx",
   adminPage: "../app/admin/memberships/page.tsx",
+  landing: "../components/memberships/MembershipLanding.tsx",
+  landingStyles: "../components/memberships/MembershipLanding.module.css",
   customer: "../components/memberships/CustomerMemberships.tsx",
   admin: "../components/memberships/AdminMemberships.tsx",
   styles: "../components/memberships/Memberships.module.css",
@@ -20,7 +23,7 @@ async function source(path) {
   return readFile(new URL(path, import.meta.url), "utf8");
 }
 
-test("Memberships is one identity-aware, role-gated, module-gated account and owner destination", async () => {
+test("Memberships stays identity-aware and role-gated without a dedicated admin navigation item", async () => {
   const [
     accountLayout,
     adminLayout,
@@ -37,9 +40,9 @@ test("Memberships is one identity-aware, role-gated, module-gated account and ow
     source(files.adminPage),
   ]);
 
-  assert.match(accountLayout, /resolveAccountNavigation/);
+  assert.doesNotMatch(accountLayout, /resolveAccountNavigation/);
   assert.match(adminLayout, /resolveAdministrationNavigation/);
-  assert.match(navigation, /activeSet\.has\(key\)/);
+  assert.doesNotMatch(navigation, /href: "\/admin\/memberships"/);
   assert.match(navigation, /uniqueByHref/);
   assert.match(registry, /accountRoutes: \["\/account\/memberships"\]/);
   assert.match(registry, /adminRoutes: \["\/admin\/memberships"\]/);
@@ -64,7 +67,42 @@ test("Memberships is one identity-aware, role-gated, module-gated account and ow
   assert.match(adminPage, /activeModules\.includes\("subscriptions"\)/);
 });
 
-test("customer and owner interfaces show durable periods, benefits, credits, history, and persistent Test Mode provenance", async () => {
+test("public Membership uses a real published offer or a record-free neutral preview", async () => {
+  const [page, landing, styles, registry] = await Promise.all([
+    source(files.publicPage),
+    source(files.landing),
+    source(files.landingStyles),
+    source(files.registry),
+  ]);
+
+  assert.match(page, /requireActiveModule\(env\.DB, "memberships"\)/);
+  assert.match(page, /listActiveCommerceProducts\(env\.DB\)/);
+  assert.match(page, /productType === "subscription"/);
+  assert.match(page, /productType === "membership"/);
+  assert.match(landing, /product\?\.name \?\? "Membership"/);
+  assert.match(landing, /: "Price"/);
+  assert.match(landing, /`\/commerce#\$\{product\.offerAnchorId\}`/);
+  assert.match(landing, /href="\/licensing"/);
+  for (const destination of [
+    "/courses",
+    "/music",
+    "/account/credits",
+    "/account/playlists",
+    "/account/favorites",
+    "/account/memberships",
+  ]) {
+    assert.match(landing, new RegExp(destination.replaceAll("/", "\\/")));
+  }
+  assert.match(registry, /publicRoutes: \["\/membership", "\/commerce"\]/);
+  assert.match(registry, /label: "Membership",\s+href: "\/membership"/);
+  assert.match(styles, /@media \(max-width: 900px\)/);
+  assert.match(styles, /@media \(max-width: 620px\)/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.doesNotMatch(landing, /<(?:img|audio|video|picture|source)\b/i);
+  assert.doesNotMatch(styles, /(?:background-)?image\s*:|url\(|gradient\(/i);
+});
+
+test("customer and owner interfaces show durable periods, benefits, credits, history, and record-level Test Mode provenance", async () => {
   const [customer, admin] = await Promise.all([
     source(files.customer),
     source(files.admin),
@@ -75,7 +113,7 @@ test("customer and owner interfaces show durable periods, benefits, credits, his
   assert.match(customer, /Cancellation boundary/);
   assert.match(customer, /Included benefits/);
   assert.match(customer, /Subscription history/);
-  assert.match(customer, /CommerceTestModeNotice/);
+  assert.doesNotMatch(customer, /CommerceTestModeNotice/);
   assert.match(customer, /membership\.source === "stripe_test"/);
   assert.match(customer, /subscription\.source === "stripe_test"/);
 
@@ -83,8 +121,7 @@ test("customer and owner interfaces show durable periods, benefits, credits, his
   assert.match(admin, /Activation atomically creates the relationship/);
   assert.match(admin, /customerCreditLabel/);
   assert.match(admin, /compactHistory/);
-  assert.match(admin, /CommerceTestModeNotice/);
-  assert.match(admin, /There is no live-commerce control/);
+  assert.doesNotMatch(admin, /CommerceTestModeNotice/);
   assert.match(admin, /relationship\.source === "stripe_test"/);
   assert.match(admin, /Follows verified Test Mode events/);
   assert.ok((combined.match(/Stripe Test Mode/g) ?? []).length >= 5);

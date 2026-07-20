@@ -64,12 +64,12 @@
 
 .rowTitle {
   width: fit-content;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--ink);
   text-underline-offset: 0.3rem;
 }
 
 .rowTitle:hover {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .meta,
@@ -78,7 +78,7 @@
 }
 
 .availability[data-available="false"] {
-  color: var(--status-amber);
+  color: var(--ink);
 }
 
 .actions,
@@ -142,7 +142,7 @@
 }
 
 .trackPosition {
-  color: var(--accent);
+  color: var(--ink);
   font-size: 0.8rem;
   font-weight: 400;
 }
@@ -185,7 +185,7 @@
   align-items: center;
   width: fit-content;
   min-height: 2.75rem;
-  color: var(--accent);
+  color: var(--ink);
   text-underline-offset: 0.35rem;
 }
 
@@ -202,4 +202,36 @@
   .formActions {
     width: 100%;
   }
+}
+.favoriteToggleCompact {
+  display: grid;
+  place-items: center;
+}
+
+.favoriteButton {
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1.55rem;
+  line-height: 1;
+  place-items: center;
+}
+
+.favoriteButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.favoriteButton[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+.favoriteButton svg {
+  width: 1.65rem;
+  height: 1.65rem;
 }

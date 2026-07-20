@@ -1015,6 +1015,9 @@ export const trackRevisions = sqliteTable(
     subtitle: text("subtitle"),
     description: text("description").notNull().default(""),
     durationMs: integer("duration_ms"),
+    meter: text("meter"),
+    tempoBpm: integer("tempo_bpm"),
+    musicalKey: text("musical_key"),
     isrc: text("isrc"),
     copyrightNotice: text("copyright_notice").notNull().default(""),
     explicit: integer("explicit", { mode: "boolean" }).notNull().default(false),
@@ -1070,6 +1073,10 @@ export const trackRevisions = sqliteTable(
     check(
       "track_revisions_duration_nonnegative",
       sql`${table.durationMs} is null or ${table.durationMs} >= 0`,
+    ),
+    check(
+      "track_revisions_tempo_positive",
+      sql`${table.tempoBpm} is null or (${table.tempoBpm} > 0 and ${table.tempoBpm} <= 1000)`,
     ),
     check("track_revisions_explicit_valid", sql`${table.explicit} in (0, 1)`),
     check(

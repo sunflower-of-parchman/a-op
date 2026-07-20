@@ -455,7 +455,8 @@ async function readCatalog(binding: D1Database): Promise<PortableRecord[]> {
     rows(
       binding,
       `SELECT id, track_id, revision, title, subtitle, description,
-              duration_ms, isrc, copyright_notice, explicit, view_mode,
+              duration_ms, meter, tempo_bpm, musical_key, isrc,
+              copyright_notice, explicit, view_mode,
               stream_mode, download_mode, original_media_id,
               streaming_derivative_id, download_derivative_id, tags_json
        FROM track_revisions ORDER BY track_id, revision, id`,
@@ -533,8 +534,12 @@ async function readCatalog(binding: D1Database): Promise<PortableRecord[]> {
     ...trackRows.map((row) =>
       publicationAggregate("track", "track-revision", row),
     ),
-    ...trackRevisionRows.map((row) =>
-      portableRecord(
+    ...trackRevisionRows.map((row) => {
+      const meter = nullableString(row, "meter");
+      const tempoBpm = nullableInteger(row, "tempo_bpm");
+      const musicalKey = nullableString(row, "musical_key");
+
+      return portableRecord(
         "track-revision",
         string(row, "id"),
         {
@@ -543,6 +548,9 @@ async function readCatalog(binding: D1Database): Promise<PortableRecord[]> {
           subtitle: nullableString(row, "subtitle"),
           description: string(row, "description"),
           durationMs: nullableInteger(row, "duration_ms"),
+          ...(meter === null ? {} : { meter }),
+          ...(tempoBpm === null ? {} : { tempoBpm }),
+          ...(musicalKey === null ? {} : { musicalKey }),
           isrc: nullableString(row, "isrc"),
           copyrightNotice: string(row, "copyright_notice"),
           explicit: boolean(row, "explicit"),
@@ -566,8 +574,8 @@ async function readCatalog(binding: D1Database): Promise<PortableRecord[]> {
             nullableString(row, "download_derivative_id"),
           ),
         },
-      ),
-    ),
+      );
+    }),
     ...releaseRows.map((row) =>
       publicationAggregate("release", "release-revision", row),
     ),

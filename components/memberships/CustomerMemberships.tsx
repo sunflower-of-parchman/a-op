@@ -1,4 +1,3 @@
-import { CommerceTestModeNotice } from "@/components/commerce";
 import type { CreditKind } from "@/lib/benefit-credits/types.ts";
 import type { CustomerMembershipSurfaceDTO } from "./types.ts";
 import styles from "./Memberships.module.css";
@@ -23,13 +22,6 @@ function creditLabel(kind: CreditKind): string {
 }
 
 export function CustomerMemberships({ data }: CustomerMembershipsProps) {
-  const providerBacked =
-    data.directMemberships.some(
-      ({ membership }) => membership.source === "stripe_test",
-    ) ||
-    data.subscriptions.some(
-      ({ subscription }) => subscription.source === "stripe_test",
-    );
   const history = data.subscriptions
     .flatMap(({ subscription, subscriptionPlan, history: events }) =>
       events.map((event) => ({ event, subscription, subscriptionPlan })),
@@ -49,14 +41,6 @@ export function CustomerMemberships({ data }: CustomerMembershipsProps) {
           relationship history from this artist.
         </p>
       </header>
-
-      <CommerceTestModeNotice
-        detail={
-          providerBacked
-            ? "Records marked Stripe Test Mode came from verified test events. No real payment was accepted."
-            : "This installation keeps commerce records in the test-only environment and cannot accept a real payment."
-        }
-      />
 
       <section className={styles.section} aria-labelledby="credit-title">
         <header className={styles.sectionHeading}>

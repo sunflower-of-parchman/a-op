@@ -5,9 +5,7 @@ export interface ApplicationNavigationItem {
   readonly label: string;
 }
 
-const EDITOR_MODULE_KEYS = new Set<ModuleKey>([
-  "courses",
-  "video",
+const ACCOUNT_NAVIGATION_EXCLUDED_MODULE_KEYS = new Set<ModuleKey>([
   "whats-new",
 ]);
 
@@ -45,12 +43,15 @@ export function resolveAccountNavigation(
 ): readonly ApplicationNavigationItem[] {
   const activeSet = new Set(activeModules);
   const moduleNavigation = customerActive
-    ? MODULE_REGISTRY.filter(({ key }) => activeSet.has(key)).flatMap(
-        ({ accountRoutes, label }) =>
-          accountRoutes.map((href) => ({
-            href,
-            label: accountRouteLabel(href, label, accountRoutes.length),
-          })),
+    ? MODULE_REGISTRY.filter(
+        ({ key }) =>
+          activeSet.has(key) &&
+          !ACCOUNT_NAVIGATION_EXCLUDED_MODULE_KEYS.has(key),
+      ).flatMap(({ accountRoutes, label }) =>
+        accountRoutes.map((href) => ({
+          href,
+          label: accountRouteLabel(href, label, accountRoutes.length),
+        })),
       )
     : [];
 
@@ -73,40 +74,21 @@ export function resolveAdministrationNavigation(
   owner: boolean,
 ): readonly ApplicationNavigationItem[] {
   const activeSet = new Set(activeModules);
-  const moduleNavigation = MODULE_REGISTRY.filter(
-    ({ key, adminRoutes }) =>
-      activeSet.has(key) &&
-      adminRoutes.length > 0 &&
-      (owner || EDITOR_MODULE_KEYS.has(key)),
-  ).map(({ adminRoutes, label }) => ({
-    href: adminRoutes[0],
-    label,
-  }));
 
   return uniqueByHref([
-    { href: "/admin", label: "Overview" },
-    { href: "/admin/music", label: "Music" },
-    ...(owner
-      ? [
-          { href: "/admin/artist", label: "Artist & modules" },
-          { href: "/admin/editors", label: "Editors" },
-          { href: "/admin/access", label: "Access" },
-          { href: "/admin/customers", label: "Customers" },
-          { href: "/admin/commerce", label: "Commerce" },
-          { href: "/admin/credits", label: "Credits" },
-        ]
+    { href: "/admin", label: "Metrics" },
+    ...(owner && activeSet.has("contact")
+      ? [{ href: "/admin/contact", label: "Inquiries" }]
       : []),
-    { href: "/admin/pages", label: "Pages" },
-    ...(owner
-      ? [{ href: "/admin/content-sections", label: "Content sections" }]
+    ...(activeSet.has("courses")
+      ? [{ href: "/admin/courses", label: "Courses" }]
       : []),
-    ...moduleNavigation,
-    ...(owner
-      ? [
-          { href: "/admin/legal", label: "Privacy & terms" },
-          { href: "/admin/setup", label: "Setup & portability" },
-          { href: "/admin/operations", label: "Operations" },
-        ]
+    ...(activeSet.has("whats-new")
+      ? [{ href: "/admin/whats-new", label: "What's New" }]
       : []),
+    ...(activeSet.has("video")
+      ? [{ href: "/admin/videos", label: "Videos" }]
+      : []),
+    ...(owner ? [{ href: "/admin/access", label: "Entitlements" }] : []),
   ]);
 }

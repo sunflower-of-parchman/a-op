@@ -129,21 +129,24 @@ test("generated customer and administration navigation is unique and resolvable"
     account.filter(({ href }) => href === "/account/memberships"),
     [{ href: "/account/memberships", label: "Memberships" }],
   );
-  assert.deepEqual(
-    owner.filter(({ href }) => href === "/admin/memberships"),
-    [{ href: "/admin/memberships", label: "Memberships" }],
+  assert.equal(
+    account.some(({ href }) => href === "/account/whats-new"),
+    false,
   );
-  assert.deepEqual(
-    editor.map(({ href }) => href),
-    [
-      "/admin",
-      "/admin/music",
-      "/admin/pages",
-      "/admin/courses",
-      "/admin/videos",
-      "/admin/whats-new",
-    ],
-  );
+  assert.deepEqual(owner, [
+    { href: "/admin", label: "Metrics" },
+    { href: "/admin/contact", label: "Inquiries" },
+    { href: "/admin/courses", label: "Courses" },
+    { href: "/admin/whats-new", label: "What's New" },
+    { href: "/admin/videos", label: "Videos" },
+    { href: "/admin/access", label: "Entitlements" },
+  ]);
+  assert.deepEqual(editor, [
+    { href: "/admin", label: "Metrics" },
+    { href: "/admin/courses", label: "Courses" },
+    { href: "/admin/whats-new", label: "What's New" },
+    { href: "/admin/videos", label: "Videos" },
+  ]);
 });
 
 test("active commerce capability routes expose the simulated catalog", () => {
@@ -163,8 +166,8 @@ test("active commerce capability routes expose the simulated catalog", () => {
     ),
     {
       id: "public.membership",
-      label: "Memberships",
-      href: "/commerce",
+      label: "Membership",
+      href: "/membership",
       order: 50,
     },
   );
@@ -192,22 +195,15 @@ test("active commerce capability routes expose the simulated catalog", () => {
   ]);
 });
 
-test("public home discovers Test Checkout only when commerce is active", async () => {
-  const source = await readFile(
-    new URL("../app/(public)/page.tsx", import.meta.url),
-    "utf8",
-  );
-  assert.match(source, /commerceModuleKeys/);
-  for (const moduleKey of [
-    "downloads",
-    "licensing",
-    "memberships",
-    "subscriptions",
-  ]) {
-    assert.match(source, new RegExp(`"${moduleKey}"`));
-  }
-  assert.match(source, /commerceCatalogActive \?/);
-  assert.match(source, />Stripe Test Mode</);
-  assert.match(source, /No real payment will be accepted\./);
-  assert.match(source, /href="\/commerce"/);
+test("public home leaves capability discovery to the active navigation", async () => {
+  const [home, header] = await Promise.all([
+    readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
+    readFile(
+      new URL("../components/public/SiteHeader.tsx", import.meta.url),
+      "utf8",
+    ),
+  ]);
+  assert.match(home, /return <div \/>/);
+  assert.match(header, /readPublicNavigationSnapshot\(env\.DB, "primary"\)/);
+  assert.match(header, /navigation\?\.items/);
 });

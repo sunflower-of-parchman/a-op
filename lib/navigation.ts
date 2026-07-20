@@ -19,10 +19,4 @@ export const footerNavigation = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "FAQ", href: "/faq" },
-  { label: "Admin", href: "/admin" },
-  {
-    label: "GitHub repository",
-    href: "https://github.com/sunflower-of-parchman/a-op",
-    external: true,
-  },
 ] satisfies readonly NavigationItem[];

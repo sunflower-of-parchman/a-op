@@ -30,6 +30,9 @@ export interface TrackWorkspaceInitial {
   readonly subtitle: string | null;
   readonly description: string;
   readonly durationMs: number | null;
+  readonly meter: string | null;
+  readonly tempoBpm: number | null;
+  readonly musicalKey: string | null;
   readonly isrc: string | null;
   readonly copyrightNotice: string;
   readonly explicit: boolean;
@@ -71,6 +74,9 @@ export function TrackWorkspace({
     subtitle: initial.subtitle ?? "",
     description: initial.description,
     durationMs: initial.durationMs === null ? "" : String(initial.durationMs),
+    meter: initial.meter ?? "",
+    tempoBpm: initial.tempoBpm === null ? "" : String(initial.tempoBpm),
+    musicalKey: initial.musicalKey ?? "",
     isrc: initial.isrc ?? "",
     copyrightNotice: initial.copyrightNotice,
     explicit: initial.explicit,
@@ -121,6 +127,9 @@ export function TrackWorkspace({
             description: draft.description,
             durationMs:
               draft.durationMs === "" ? null : Number(draft.durationMs),
+            meter: draft.meter || null,
+            tempoBpm: draft.tempoBpm === "" ? null : Number(draft.tempoBpm),
+            musicalKey: draft.musicalKey || null,
             isrc: draft.isrc || null,
             copyrightNotice: draft.copyrightNotice,
             explicit: draft.explicit,
@@ -264,6 +273,32 @@ export function TrackWorkspace({
                 onChange={(event) => update("durationMs", event.target.value)}
                 type="number"
                 value={draft.durationMs}
+              />
+            </label>
+            <label className="field-group">
+              <span>Meter</span>
+              <input
+                maxLength={16}
+                onChange={(event) => update("meter", event.target.value)}
+                value={draft.meter}
+              />
+            </label>
+            <label className="field-group">
+              <span>Tempo in BPM</span>
+              <input
+                max={1000}
+                min={1}
+                onChange={(event) => update("tempoBpm", event.target.value)}
+                type="number"
+                value={draft.tempoBpm}
+              />
+            </label>
+            <label className="field-group">
+              <span>Key</span>
+              <input
+                maxLength={32}
+                onChange={(event) => update("musicalKey", event.target.value)}
+                value={draft.musicalKey}
               />
             </label>
             <label className="field-group">
@@ -415,6 +450,12 @@ export function TrackWorkspace({
                 ? `${draft.durationMs} milliseconds`
                 : "Not entered",
             },
+            { label: "Meter", value: draft.meter || "Not entered" },
+            {
+              label: "Tempo",
+              value: draft.tempoBpm ? `${draft.tempoBpm} BPM` : "Not entered",
+            },
+            { label: "Key", value: draft.musicalKey || "Not entered" },
             { label: "ISRC", value: draft.isrc || "Not entered" },
             {
               label: "Explicit material",

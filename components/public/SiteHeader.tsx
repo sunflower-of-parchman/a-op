@@ -1,25 +1,31 @@
 import { env } from "cloudflare:workers";
 import Link from "next/link";
-import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import {
+  PublicNavigation,
+  type PublicNavigationItem,
+} from "@/components/public/PublicNavigation";
 import {
   readPublishedArtistRevision,
   readPublicNavigationSnapshot,
 } from "@/db/site-read.ts";
-import {
-  hasApplicationRole,
-  resolveApplicationIdentity,
-} from "@/lib/auth/application-identity.ts";
+
+const FOOTER_ONLY_ROUTES = new Set(["/about", "/contact", "/whats-new"]);
 
 export async function SiteHeader() {
-  const [authenticatedUser, artist, navigation] = await Promise.all([
-    getChatGPTUser(),
+  const [artist, navigation] = await Promise.all([
     readPublishedArtistRevision(env.DB),
     readPublicNavigationSnapshot(env.DB, "primary"),
   ]);
-  const identity = await resolveApplicationIdentity(env.DB, authenticatedUser);
-  const canAdminister = hasApplicationRole(identity, "owner", "editor");
   const productName = artist?.displayName ?? "a-op";
+  const navigationItems: PublicNavigationItem[] = (navigation?.items ?? [])
+    .filter(({ href }) => !FOOTER_ONLY_ROUTES.has(href))
+    .map(({ id, href, label }) => ({
+      id,
+      href,
+      label,
+    }));
+  const accountHref = "/account";
+  const loginHref = "/login";
 
   return (
     <header className="site-header">
@@ -32,34 +38,11 @@ export async function SiteHeader() {
           {productName}
         </Link>
 
-        <nav className="site-navigation" aria-label="Primary navigation">
-          <ul className="site-navigation__list">
-            {(navigation?.items ?? []).map((item) => (
-              <li key={item.id}>
-                <Link className="site-navigation__link" href={item.href}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            {canAdminister ? (
-              <li>
-                <Link className="site-navigation__link" href="/admin">
-                  Admin
-                </Link>
-              </li>
-            ) : null}
-            <li>
-              <Link
-                className="site-navigation__link"
-                href={authenticatedUser ? "/account" : chatGPTSignInPath("/")}
-              >
-                {authenticatedUser ? "Account" : "Sign in"}
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        <ThemeToggle />
+        <PublicNavigation
+          accountHref={accountHref}
+          items={navigationItems}
+          loginHref={loginHref}
+        />
       </div>
     </header>
   );

@@ -1,58 +1,71 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useTransition,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import type {
-  PublicCatalogKind,
-  PublicCatalogSort,
   PublicMusicQuery,
+  PublicMusicView,
 } from "@/lib/catalog/public-dto";
 import styles from "./Music.module.css";
 
 export interface MusicFiltersProps {
-  readonly availableTags: readonly string[];
+  readonly availableKeys: readonly string[];
+  readonly availableMeters: readonly string[];
+  readonly embedded?: boolean;
   readonly query: PublicMusicQuery;
+  readonly view: PublicMusicView;
 }
-
-const KIND_OPTIONS: readonly {
-  readonly value: "all" | PublicCatalogKind;
-  readonly label: string;
-}[] = [
-  { value: "all", label: "All music" },
-  { value: "release", label: "Releases" },
-  { value: "track", label: "Tracks" },
-  { value: "collection", label: "Collections" },
-];
-
-const SORT_OPTIONS: readonly {
-  readonly value: PublicCatalogSort;
-  readonly label: string;
-}[] = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "title", label: "Title" },
-];
 
 function musicUrl(form: HTMLFormElement): string {
   const data = new FormData(form);
   const params = new URLSearchParams();
-  const q = String(data.get("q") ?? "").trim();
-  const kind = String(data.get("kind") ?? "all");
-  const tag = String(data.get("tag") ?? "");
-  const sort = String(data.get("sort") ?? "newest");
+  const text = (name: string) => String(data.get(name) ?? "").trim();
+  const q = text("q");
+  const view = text("view");
+  const sort = text("sort");
 
+  if (view !== "tracks") params.set("view", view);
   if (q) params.set("q", q);
-  if (kind !== "all") params.set("kind", kind);
-  if (tag) params.set("tag", tag);
   if (sort !== "newest") params.set("sort", sort);
+  for (const name of [
+    "meter",
+    "tempoMin",
+    "tempoMax",
+    "musicalKey",
+    "durationMin",
+    "durationMax",
+  ]) {
+    const value = text(name);
+    if (value) params.set(name, value);
+  }
 
   const query = params.toString();
   return query ? `/music?${query}` : "/music";
 }
 
-export function MusicFilters({ availableTags, query }: MusicFiltersProps) {
+export function MusicFilters({
+  availableKeys,
+  availableMeters,
+  embedded = false,
+  query,
+  view,
+}: MusicFiltersProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,7 +73,17 @@ export function MusicFilters({ availableTags, query }: MusicFiltersProps) {
     startTransition(() => router.push(href));
   }
 
-  return (
+  function applySelection(event: ChangeEvent<HTMLSelectElement>) {
+    event.currentTarget.form?.requestSubmit();
+  }
+
+  function applyInput(event: ChangeEvent<HTMLInputElement>) {
+    if (timer.current) clearTimeout(timer.current);
+    const form = event.currentTarget.form;
+    timer.current = setTimeout(() => form?.requestSubmit(), 350);
+  }
+
+  const form = (
     <form
       action="/music"
       aria-busy={pending}
@@ -69,61 +92,118 @@ export function MusicFilters({ availableTags, query }: MusicFiltersProps) {
       onSubmit={submit}
       role="search"
     >
+      <input name="view" type="hidden" value={view} />
+      <input name="sort" type="hidden" value={query.sort} />
       <label className={styles.searchField}>
-        <span>Search music</span>
-        <input defaultValue={query.q} name="q" type="search" />
+        <span>Search tracks</span>
+        <input
+          defaultValue={query.q}
+          name="q"
+          onChange={applyInput}
+          placeholder="Search tracks…"
+          type="search"
+        />
       </label>
 
-      <label>
-        <span>Type</span>
-        <select defaultValue={query.kind} name="kind">
-          {KIND_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      {availableTags.length > 0 ? (
-        <label>
-          <span>Tag</span>
-          <select defaultValue={query.tag ?? ""} name="tag">
-            <option value="">All tags</option>
-            {availableTags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
+      <details className={styles.musicalFilter}>
+        <summary>Meter</summary>
+        {availableMeters.length > 0 ? (
+          <select
+            aria-label="Meter"
+            defaultValue={query.meter ?? ""}
+            name="meter"
+            onChange={applySelection}
+          >
+            <option aria-label="All meters" value="" />
+            {availableMeters.map((meter) => (
+              <option key={meter} value={meter}>
+                {meter}
               </option>
             ))}
           </select>
-        </label>
-      ) : null}
+        ) : null}
+      </details>
 
-      <label>
-        <span>Sort</span>
-        <select defaultValue={query.sort} name="sort">
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <details className={styles.musicalFilter}>
+        <summary>Tempo</summary>
+        <div className={styles.rangeFields}>
+          <input
+            aria-label="Minimum tempo"
+            defaultValue={query.tempoMin ?? ""}
+            min={1}
+            name="tempoMin"
+            onChange={applyInput}
+            placeholder="Min"
+            type="number"
+          />
+          <input
+            aria-label="Maximum tempo"
+            defaultValue={query.tempoMax ?? ""}
+            min={1}
+            name="tempoMax"
+            onChange={applyInput}
+            placeholder="Max"
+            type="number"
+          />
+        </div>
+      </details>
 
-      <div className={styles.filterActions}>
-        <button className={styles.applyButton} disabled={pending} type="submit">
-          {pending ? "Applying" : "Apply"}
-        </button>
-        <button
-          className={styles.clearButton}
-          disabled={pending}
-          onClick={() => startTransition(() => router.push("/music"))}
-          type="button"
-        >
-          Clear
-        </button>
-      </div>
+      <details className={styles.musicalFilter}>
+        <summary>Key</summary>
+        {availableKeys.length > 0 ? (
+          <select
+            aria-label="Key"
+            defaultValue={query.musicalKey ?? ""}
+            name="musicalKey"
+            onChange={applySelection}
+          >
+            <option aria-label="All keys" value="" />
+            {availableKeys.map((musicalKey) => (
+              <option key={musicalKey} value={musicalKey}>
+                {musicalKey}
+              </option>
+            ))}
+          </select>
+        ) : null}
+      </details>
+
+      <details className={styles.musicalFilter}>
+        <summary>Duration</summary>
+        <div className={styles.rangeFields}>
+          <input
+            aria-label="Minimum duration in seconds"
+            defaultValue={
+              query.durationMinMs === null ? "" : query.durationMinMs / 1000
+            }
+            min={0}
+            name="durationMin"
+            onChange={applyInput}
+            placeholder="Min"
+            type="number"
+          />
+          <input
+            aria-label="Maximum duration in seconds"
+            defaultValue={
+              query.durationMaxMs === null ? "" : query.durationMaxMs / 1000
+            }
+            min={0}
+            name="durationMax"
+            onChange={applyInput}
+            placeholder="Max"
+            type="number"
+          />
+        </div>
+      </details>
     </form>
+  );
+
+  if (embedded) return form;
+
+  return (
+    <details className={styles.filterDisclosure} open>
+      <summary>Filters</summary>
+      {form}
+    </details>
   );
 }
 

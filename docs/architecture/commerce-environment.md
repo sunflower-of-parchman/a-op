@@ -56,7 +56,7 @@ React input, D1, logs, telemetry, audit events, exports, and diagnostics never s
 
 ## Visible status
 
-Checkout entry, Stripe return, customer order and access history, and relevant administration surfaces carry a persistent `Stripe Test Mode` label and the statement `No real payment will be accepted.` Test records remain visually and structurally distinguishable from any future production records.
+Test-only status appears where someone starts a simulated checkout and on records created by the test adapter. General account, catalog, return, and administration pages do not repeat a persistent environment notice. Test records remain visually and structurally distinguishable from any future production records.
 
 ## Future live capability
 

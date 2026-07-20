@@ -25,6 +25,12 @@ interface PublicQueryInput {
   readonly kind?: unknown;
   readonly tag?: unknown;
   readonly sort?: unknown;
+  readonly meter?: unknown;
+  readonly tempoMin?: unknown;
+  readonly tempoMax?: unknown;
+  readonly musicalKey?: unknown;
+  readonly durationMinMs?: unknown;
+  readonly durationMaxMs?: unknown;
 }
 
 export interface CatalogDetailAccessRequest {
@@ -43,6 +49,9 @@ interface PublicTrackRow {
   subtitle: unknown;
   description: unknown;
   duration_ms: unknown;
+  meter: unknown;
+  tempo_bpm: unknown;
+  musical_key: unknown;
   explicit: unknown;
   view_mode: unknown;
   stream_mode: unknown;
@@ -157,6 +166,17 @@ function readNullableInteger(value: unknown, label: string): number | null {
   return value === null ? null : readInteger(value, label);
 }
 
+function queryInteger(value: unknown): number | null {
+  if (typeof value === "number" && Number.isSafeInteger(value) && value >= 0) {
+    return value;
+  }
+  if (typeof value === "string" && /^\d+$/.test(value)) {
+    const parsed = Number(value);
+    return Number.isSafeInteger(parsed) ? parsed : null;
+  }
+  return null;
+}
+
 function readBoolean(value: unknown, label: string): boolean {
   if (value !== 0 && value !== 1) integrity(`D1 returned an invalid ${label}.`);
   return value === 1;
@@ -231,11 +251,23 @@ function normalizePublicMusicQuery(
   const sort = CATALOG_SORTS.has(input.sort as PublicCatalogSort)
     ? (input.sort as PublicCatalogSort)
     : "newest";
+  const meter =
+    typeof input.meter === "string" ? input.meter.trim().slice(0, 16) : "";
+  const musicalKey =
+    typeof input.musicalKey === "string"
+      ? input.musicalKey.trim().slice(0, 32)
+      : "";
   return Object.freeze({
     q,
     kind,
     tag: normalizedTag.length > 0 ? normalizedTag : null,
     sort,
+    meter: meter || null,
+    tempoMin: queryInteger(input.tempoMin),
+    tempoMax: queryInteger(input.tempoMax),
+    musicalKey: musicalKey || null,
+    durationMinMs: queryInteger(input.durationMinMs),
+    durationMaxMs: queryInteger(input.durationMaxMs),
   });
 }
 
@@ -263,6 +295,9 @@ function playerTrack(
     title: readNonBlank(row.title, "track title"),
     subtitle: readNullableString(row.subtitle, "track subtitle"),
     durationMs: readNullableInteger(row.duration_ms, "track duration"),
+    meter: readNullableString(row.meter, "track meter"),
+    tempoBpm: readNullableInteger(row.tempo_bpm, "track tempo"),
+    musicalKey: readNullableString(row.musical_key, "track key"),
     streamUrl:
       streamReady && streamMode !== "unavailable" && streamAllowed
         ? `/api/media/tracks/${encodeURIComponent(id)}/stream?revision=${encodeURIComponent(revisionId)}`
@@ -323,6 +358,9 @@ const TRACK_PROJECTION_SQL = `
   track_revisions.subtitle AS subtitle,
   track_revisions.description AS description,
   track_revisions.duration_ms AS duration_ms,
+  track_revisions.meter AS meter,
+  track_revisions.tempo_bpm AS tempo_bpm,
+  track_revisions.musical_key AS musical_key,
   track_revisions.explicit AS explicit,
   track_revisions.view_mode AS view_mode,
   track_revisions.stream_mode AS stream_mode,
@@ -1071,6 +1109,40 @@ function matchesQuery(item: CatalogIndexItemDTO, query: PublicMusicQuery) {
   ) {
     return false;
   }
+  const hasMusicalFilter =
+    query.meter !== null ||
+    query.tempoMin !== null ||
+    query.tempoMax !== null ||
+    query.musicalKey !== null ||
+    query.durationMinMs !== null ||
+    query.durationMaxMs !== null;
+  if (hasMusicalFilter && item.kind !== "track") return false;
+  if (query.meter && item.meter !== query.meter) return false;
+  if (query.musicalKey && item.musicalKey !== query.musicalKey) return false;
+  if (
+    query.tempoMin !== null &&
+    (item.tempoBpm === null || item.tempoBpm < query.tempoMin)
+  ) {
+    return false;
+  }
+  if (
+    query.tempoMax !== null &&
+    (item.tempoBpm === null || item.tempoBpm > query.tempoMax)
+  ) {
+    return false;
+  }
+  if (
+    query.durationMinMs !== null &&
+    (item.durationMs === null || item.durationMs < query.durationMinMs)
+  ) {
+    return false;
+  }
+  if (
+    query.durationMaxMs !== null &&
+    (item.durationMs === null || item.durationMs > query.durationMaxMs)
+  ) {
+    return false;
+  }
   if (!query.q) return true;
   const needle = query.q.toLocaleLowerCase();
   return [item.title, item.subtitle ?? "", item.description, ...item.tags]
@@ -1126,6 +1198,10 @@ export async function readPublicMusicIndex(
       artwork: null,
       trackCount: null,
       playableTrack: track.streamUrl ? track : null,
+      durationMs: track.durationMs,
+      meter: track.meter,
+      tempoBpm: track.tempoBpm,
+      musicalKey: track.musicalKey,
       tags: readTags(row.tags_json),
     });
   });
@@ -1147,6 +1223,10 @@ export async function readPublicMusicIndex(
         trackCount: tracks.length,
         playableTrack:
           tracks.find(({ track }) => track.streamUrl !== null)?.track ?? null,
+        durationMs: null,
+        meter: null,
+        tempoBpm: null,
+        musicalKey: null,
         tags: base.tags,
       });
     }),
@@ -1169,6 +1249,10 @@ export async function readPublicMusicIndex(
         trackCount: tracks.length,
         playableTrack:
           tracks.find(({ track }) => track.streamUrl !== null)?.track ?? null,
+        durationMs: null,
+        meter: null,
+        tempoBpm: null,
+        musicalKey: null,
         tags: base.tags,
       });
     }),
@@ -1184,6 +1268,20 @@ export async function readPublicMusicIndex(
       left.localeCompare(right, undefined, { sensitivity: "base" }),
     ),
   );
+  const availableMeters = Object.freeze(
+    [
+      ...new Set(trackItems.flatMap(({ meter }) => (meter ? [meter] : []))),
+    ].sort(),
+  );
+  const availableKeys = Object.freeze(
+    [
+      ...new Set(
+        trackItems.flatMap(({ musicalKey }) =>
+          musicalKey ? [musicalKey] : [],
+        ),
+      ),
+    ].sort(),
+  );
 
   return Object.freeze({
     items: sortItems(
@@ -1191,6 +1289,8 @@ export async function readPublicMusicIndex(
       query.sort,
     ),
     availableTags,
+    availableMeters,
+    availableKeys,
     catalogSize: allItems.length,
     query,
   });

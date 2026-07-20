@@ -48,7 +48,7 @@ test("context, credits, and transcript precede every player and external media s
     /sandbox="allow-scripts allow-same-origin allow-presentation"/,
   );
   assert.match(consent, /referrerPolicy="no-referrer"/);
-  assert.match(consent, /videoId === null/);
+  assert.match(consent, /!videoId/);
   assert.match(workspace, /videoId=\{null\}/);
 });
 

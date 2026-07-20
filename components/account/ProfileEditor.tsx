@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export interface ProfileEditorProps {
   readonly displayName: string;
@@ -11,6 +12,7 @@ export function ProfileEditor({
   displayName: initialDisplayName,
   revision: initialRevision,
 }: ProfileEditorProps) {
+  const router = useRouter();
   const [displayName, setDisplayName] = useState(initialDisplayName);
   const [revision, setRevision] = useState(initialRevision);
   const [message, setMessage] = useState("");
@@ -43,6 +45,7 @@ export function ProfileEditor({
         setRevision(body.result.revision);
       }
       setMessage("Profile saved.");
+      router.refresh();
     } catch (error) {
       setMessage(
         error instanceof Error

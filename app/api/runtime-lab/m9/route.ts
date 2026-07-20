@@ -350,7 +350,7 @@ function factsForRun(runId: string): RunFacts {
     trackId: `track_m9_${shortId}`,
     initialTrackRevisionId: `track_revision_m9_${shortId}_initial`,
     trackKey: `m9-track-${shortId}`,
-    trackTitle: `Fictional M9 Track ${shortId}`,
+    trackTitle: "Track",
     releaseKey: `m9-release-${shortId}`,
     releaseTitle: `Fictional M9 Release ${shortId}`,
     collectionKey: `m9-collection-${shortId}`,
@@ -690,7 +690,7 @@ async function beginRun(
       `INSERT INTO track_revisions
         (id, track_id, revision, title, subtitle, description, view_mode,
          stream_mode, download_mode, tags_json, created_by_user_id)
-       VALUES (?1, ?2, 1, ?3, 'Runtime verification', '', 'public', 'protected',
+       VALUES (?1, ?2, 1, ?3, '', '', 'public', 'protected',
                'protected', '[]', ?4)`,
     ).bind(
       run.initialTrackRevisionId,

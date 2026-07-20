@@ -1,162 +1,51 @@
 .shell {
   width: min(calc(100% - 4rem), 1280px);
-  min-height: calc(100svh - 5.25rem);
   margin-inline: auto;
 }
 
 .accountHeader {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  padding-block: clamp(3rem, 7vw, 5.5rem);
-  border-bottom: 1px solid var(--slate);
+  align-items: end;
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(2rem, 5vw, 3.5rem);
   gap: clamp(2.5rem, 8vw, 8rem);
 }
 
 .headingGroup {
   display: grid;
   max-width: 48rem;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .headingGroup h1 {
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
 }
 
-.description {
-  max-width: 42rem;
-  color: var(--ink-muted);
-  font-size: clamp(1rem, 1.5vw, 1.12rem);
-}
-
-.identity {
-  display: grid;
-  justify-items: end;
-  min-width: 12rem;
-  color: var(--ink-muted);
-  text-align: end;
-}
-
-.identityLabel,
-.identityEmail {
-  font-size: 0.8rem;
-}
-
-.identityName {
-  color: var(--ink);
-  font-weight: 400;
-}
-
-.identityEmail {
-  overflow-wrap: anywhere;
-}
-
-.statusRegion {
-  padding-block: 1.25rem;
-  border-bottom: 1px solid var(--slate);
-}
-
-.statusList,
-.statusLabel,
-.statusValue,
-.statusDetail {
-  margin: 0;
-  padding: 0;
-}
-
-.statusItem {
-  display: grid;
-  grid-template-columns: minmax(8rem, 0.35fr) minmax(8rem, 0.25fr) minmax(
-      0,
-      1fr
-    );
-  align-items: baseline;
-  gap: 0.75rem clamp(1.5rem, 4vw, 4rem);
-}
-
-.statusLabel {
-  color: var(--ink-muted);
-  font-size: 0.84rem;
-}
-
-.statusValue {
-  color: var(--ink-muted);
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-.statusValue[data-tone="positive"] {
-  color: var(--status-green);
-}
-
-.statusValue[data-tone="attention"] {
-  color: var(--status-amber);
-}
-
-.statusValue[data-tone="critical"] {
-  color: var(--status-red);
-}
-
-.statusDetail {
-  color: var(--ink-muted);
-  font-size: 0.84rem;
-}
-
-.navigation {
-  min-width: 0;
-  overflow-x: auto;
-  padding-block: 0.25rem;
-  border-bottom: 1px solid var(--slate);
-  scrollbar-width: none;
-}
-
-.navigation::-webkit-scrollbar {
-  display: none;
-}
-
-.navigationList {
-  display: flex;
-  width: max-content;
-  min-width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.navigationLink {
-  display: flex;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
+.administrationLink {
+  display: inline-flex;
   align-items: center;
-  padding-inline: 1rem;
-  color: var(--ink-muted);
-  font-size: 0.92rem;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 4px;
+  background: var(--action);
+  color: #fffdfc;
+  font-size: 0.9rem;
   text-decoration: none;
-  white-space: nowrap;
   transition:
-    box-shadow 200ms ease,
-    color 200ms ease,
-    background-color 200ms ease;
+    background-color 200ms ease,
+    transform 200ms ease;
+  justify-self: end;
 }
 
-.navigationList li:first-child .navigationLink {
-  padding-inline-start: 0;
-}
-
-.navigationLink:hover {
-  color: var(--accent);
-  background: var(--field);
-}
-
-.navigationLinkCurrent {
-  color: var(--ink);
-  font-weight: 400;
-  box-shadow: inset 0 -2px var(--accent);
+.administrationLink:hover {
+  background: var(--accent-action);
+  transform: translateY(-1px);
 }
 
 .content {
   min-width: 0;
-  padding-block: clamp(2.5rem, 7vw, 6rem);
+  padding-block: 0 clamp(3rem, 7vw, 6rem);
 }
 
 @media (max-width: 720px) {
@@ -166,27 +55,17 @@
 
   .accountHeader {
     grid-template-columns: minmax(0, 1fr);
+    align-items: start;
     gap: 2rem;
   }
 
-  .identity {
-    justify-items: start;
-    min-width: 0;
-    text-align: start;
-  }
-
-  .statusItem {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.25rem 1.5rem;
-  }
-
-  .statusDetail {
-    grid-column: 1 / -1;
+  .administrationLink {
+    justify-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .navigationLink {
+  .administrationLink {
     transition-duration: 0.01ms;
   }
 }

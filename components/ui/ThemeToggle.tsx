@@ -123,7 +123,9 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       style={{ minBlockSize: 44, minInlineSize: 44 }}
     >
-      <span className="theme-toggle__label">{nextTheme} theme</span>
+      <span className="theme-toggle__icon" aria-hidden="true">
+        {nextTheme === "light" ? "☀" : "☾"}
+      </span>
     </button>
   );
 }

@@ -849,6 +849,9 @@ function newTrackInput(
     subtitle,
     description: "",
     durationMs: null,
+    meter: null,
+    tempoBpm: null,
+    musicalKey: null,
     isrc: null,
     copyrightNotice: "",
     explicit: false,
@@ -889,6 +892,9 @@ function updatedTrackInput(
     durationMs: Object.hasOwn(changes, "durationMs")
       ? (changes.durationMs ?? null)
       : current.durationMs,
+    meter: current.meter,
+    tempoBpm: current.tempoBpm,
+    musicalKey: current.musicalKey,
     isrc: current.isrc,
     copyrightNotice: current.copyrightNotice,
     explicit: current.explicit,

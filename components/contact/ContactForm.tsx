@@ -5,13 +5,32 @@ import type { PublicContactFormDTO } from "@/lib/contact/index.ts";
 import { TelemetryPageView } from "@/components/telemetry";
 import styles from "./Contact.module.css";
 
-export function ContactForm({ form }: { form: PublicContactFormDTO }) {
+export interface ContactFormProps {
+  readonly form: PublicContactFormDTO;
+  readonly title?: string;
+  readonly description?: string | null;
+  readonly defaultCategory?: string;
+  readonly embedded?: boolean;
+}
+
+export function ContactForm({
+  form,
+  title,
+  description,
+  defaultCategory,
+  embedded = false,
+}: ContactFormProps) {
   const operationKey = useRef(crypto.randomUUID());
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [tone, setTone] = useState<"neutral" | "positive" | "critical">(
     "neutral",
   );
+  const selectedCategory = defaultCategory
+    ? form.categories.find((category) =>
+        category.toLowerCase().includes(defaultCategory.toLowerCase()),
+      )
+    : undefined;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -65,15 +84,24 @@ export function ContactForm({ form }: { form: PublicContactFormDTO }) {
   }
 
   return (
-    <section className={styles.section} aria-labelledby="contact-form-heading">
+    <section
+      className={`${styles.section} ${embedded ? styles.embedded : ""}`}
+      aria-labelledby="contact-form-heading"
+    >
       <TelemetryPageView
         eventName="contact-view"
         resourceId={form.id}
         resourceType="contact"
       />
       <div className={styles.headingGroup}>
-        <h2 id="contact-form-heading">{form.title}</h2>
-        {form.description ? <p>{form.description}</p> : null}
+        <h2 id="contact-form-heading">{title ?? form.title}</h2>
+        {description !== undefined ? (
+          description ? (
+            <p>{description}</p>
+          ) : null
+        ) : form.description ? (
+          <p>{form.description}</p>
+        ) : null}
       </div>
       {form.bookingInformation || form.publicContactDetails ? (
         <div className={styles.publicDetails}>
@@ -110,7 +138,11 @@ export function ContactForm({ form }: { form: PublicContactFormDTO }) {
         </div>
         <label className={styles.field}>
           <span>Inquiry category</span>
-          <select name="category" required defaultValue="">
+          <select
+            name="category"
+            required
+            defaultValue={selectedCategory ?? ""}
+          >
             <option value="" disabled>
               Select a category
             </option>

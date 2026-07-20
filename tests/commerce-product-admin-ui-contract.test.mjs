@@ -8,7 +8,6 @@ const files = {
   styles: "../components/commerce/AdminCommerceProductWorkspace.module.css",
   mutation: "../components/commerce/useCommerceProductMutation.ts",
   read: "../db/commerce-admin-read.ts",
-  notice: "../components/commerce/CommerceTestModeNotice.tsx",
 };
 
 async function source(path) {
@@ -92,19 +91,16 @@ test("product setup submits exact server-compatible create and state operations"
   );
 });
 
-test("product administration stays visibly test-only, cardless, responsive, and asset-free", async () => {
-  const [workspace, styles, mutation, notice] = await Promise.all([
+test("product administration stays point-of-action test-only, cardless, responsive, and asset-free", async () => {
+  const [workspace, styles, mutation] = await Promise.all([
     source(files.workspace),
     source(files.styles),
     source(files.mutation),
-    source(files.notice),
   ]);
-  const combined = `${workspace}\n${mutation}\n${notice}`;
-  assert.match(workspace, /<CommerceTestModeNotice/);
-  assert.match(workspace, /no live commerce control/i);
+  const combined = `${workspace}\n${mutation}`;
+  assert.doesNotMatch(workspace, /CommerceTestModeNotice/);
+  assert.match(workspace, /New Test Mode product/);
   assert.match(workspace, /No API key or payment detail belongs in/);
-  assert.match(notice, /NO_REAL_PAYMENT_STATEMENT/);
-  assert.match(notice, /STRIPE_TEST_MODE_LABEL/);
   assert.doesNotMatch(combined, /pk_(?:test|live)_|sk_(?:test|live)_/);
   assert.doesNotMatch(
     combined,

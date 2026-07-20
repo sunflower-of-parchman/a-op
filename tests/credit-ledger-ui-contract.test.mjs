@@ -40,8 +40,7 @@ test("customer credit page reads both same-customer reconciled account histories
   );
   assert.match(read, /activeCustomerCondition\(actor\)/);
   assert.match(read, /balancesReconciled:/);
-  assert.match(customer, /<CommerceTestModeNotice/);
-  assert.match(customer, /Stripe Test Mode/);
+  assert.doesNotMatch(customer, /CommerceTestModeNotice/);
   assert.match(customer, /Balances reconciled/);
   assert.match(customer, /Active lots/);
   assert.match(customer, /Reservations/);
@@ -65,8 +64,7 @@ test("owner workspace remains customer-scoped and exposes only exact current ope
   assert.match(page, /readOwnerCreditAccountDetail\(/);
   assert.match(surfaceRead, /activeOwnerCondition\(actorUserId\)/);
   assert.match(surfaceRead, /customer_role\.role_key = 'customer'/);
-  assert.match(admin, /<CommerceTestModeNotice/);
-  assert.match(admin, /no live payment or live credential control/i);
+  assert.doesNotMatch(admin, /CommerceTestModeNotice/);
   assert.match(grant, /Manual owner grant/);
   assert.match(admin, /Expire reservation/);
   assert.match(admin, /Reverse consumption/);
@@ -85,22 +83,21 @@ test("owner workspace remains customer-scoped and exposes only exact current ope
   assert.match(controls, /router\.refresh\(\)/);
 });
 
-test("credit navigation additions are minimal and role-scoped", async () => {
+test("credit administration remains role-scoped without a dedicated admin navigation item", async () => {
   const [accountLayout, adminLayout, navigation] = await Promise.all([
     source(files.accountLayout),
     source(files.adminLayout),
     source(files.navigation),
   ]);
 
-  assert.match(accountLayout, /resolveAccountNavigation/);
+  assert.doesNotMatch(accountLayout, /resolveAccountNavigation/);
   assert.match(adminLayout, /resolveAdministrationNavigation/);
   assert.match(
     navigation,
     /\{ href: "\/account\/credits", label: "Credits" \}/,
   );
-  assert.match(navigation, /\{ href: "\/admin\/credits", label: "Credits" \}/);
+  assert.doesNotMatch(navigation, /href: "\/admin\/credits"/);
   assert.match(navigation, /customerActive\s*\? \[/);
-  assert.match(navigation, /owner\s*\? \[/);
 });
 
 test("credit interfaces are open, responsive, keyboard-native, and asset-free", async () => {

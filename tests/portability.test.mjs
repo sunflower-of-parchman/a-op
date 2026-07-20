@@ -796,7 +796,7 @@ test("rehearses the verified export twice in disposable in-memory SQLite without
   assert.equal(report.commerceBindingState, "pending");
   assert.equal(report.externalVideoBindingState, "pending");
   assert.equal(report.applicationSchemaRestored, true);
-  assert.equal(report.migrationCount, 33);
+  assert.equal(report.migrationCount, 34);
   assert.equal(report.foreignKeyViolationCount, 0);
   assert.equal(report.sourceObjectKeysRestored, 0);
   assert.equal(report.mediaBytesRestored, 0);

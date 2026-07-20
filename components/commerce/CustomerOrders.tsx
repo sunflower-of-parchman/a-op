@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { CustomerCommerceOrder } from "@/db/commerce-surface-read.ts";
 
 import styles from "./Commerce.module.css";
-import { CommerceTestModeNotice } from "./CommerceTestModeNotice";
 
 export interface CustomerOrdersProps {
   readonly orders: readonly CustomerCommerceOrder[];
@@ -39,18 +38,13 @@ export function CustomerOrders({ orders }: CustomerOrdersProps) {
   return (
     <div className={styles.section}>
       <div className={styles.headingGroup}>
-        <h2>Test orders</h2>
-        <p>
-          Application-owned order and fulfillment history for this customer
-          relationship.
-        </p>
+        <h2>Orders</h2>
+        <p>Your order and fulfillment history.</p>
       </div>
-
-      <CommerceTestModeNotice detail="Every order on this page is test data created from a verified Stripe test event." />
 
       {orders.length === 0 ? (
         <div className={styles.emptyState}>
-          <p>No test orders yet.</p>
+          <p>No orders yet.</p>
           <Link className={styles.inlineLink} href="/commerce">
             View available test products
           </Link>
@@ -92,7 +86,6 @@ export function CustomerOrders({ orders }: CustomerOrdersProps) {
                     Verified renewal invoice
                   </span>
                 )}
-                <Link href="/account/access">View access</Link>
               </div>
             </li>
           ))}

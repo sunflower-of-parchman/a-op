@@ -319,7 +319,7 @@ test("navigation follows active modules in one stable order", () => {
       ["customer-library", "memberships", "courses", "video", "contact"],
       "public",
     ).map(({ label }) => label),
-    ["Music", "About", "Courses", "Videos", "Memberships", "Contact"],
+    ["Music", "About", "Courses", "Videos", "Membership", "Contact"],
   );
 
   const adminLabels = resolveModuleNavigation(

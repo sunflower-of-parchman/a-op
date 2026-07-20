@@ -43,6 +43,9 @@ export interface TrackDraftInput {
   readonly subtitle: string | null;
   readonly description: string;
   readonly durationMs: number | null;
+  readonly meter: string | null;
+  readonly tempoBpm: number | null;
+  readonly musicalKey: string | null;
   readonly isrc: string | null;
   readonly copyrightNotice: string;
   readonly explicit: boolean;
@@ -141,6 +144,9 @@ export interface CatalogTrackView {
   readonly subtitle: string | null;
   readonly description: string;
   readonly durationMs: number | null;
+  readonly meter: string | null;
+  readonly tempoBpm: number | null;
+  readonly musicalKey: string | null;
   readonly isrc: string | null;
   readonly copyrightNotice: string;
   readonly explicit: boolean;
@@ -165,6 +171,9 @@ export interface CatalogTrackListItem {
   readonly title: string;
   readonly subtitle: string | null;
   readonly durationMs: number | null;
+  readonly meter: string | null;
+  readonly tempoBpm: number | null;
+  readonly musicalKey: string | null;
   readonly explicit: boolean;
   readonly streamMode: CatalogAccessMode;
   readonly streamReady: boolean;

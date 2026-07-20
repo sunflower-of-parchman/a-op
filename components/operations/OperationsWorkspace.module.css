@@ -94,7 +94,7 @@
 }
 
 .diagnostics [data-status="attention"] dd:first-of-type {
-  color: var(--status-amber);
+  color: var(--ink);
 }
 
 .diagnostics [data-status="unavailable"] dd:first-of-type {

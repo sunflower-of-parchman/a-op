@@ -19,6 +19,9 @@ function trackInput(overrides = {}) {
     subtitle: null,
     description: "",
     durationMs: 185_000,
+    meter: null,
+    tempoBpm: null,
+    musicalKey: null,
     isrc: "USABC2601234",
     copyrightNotice: "",
     explicit: false,
@@ -370,6 +373,13 @@ test("catalog numeric and identifier validation rejects unsafe values", () => {
     );
   }
 
+  for (const tempoBpm of [0, 1001, 0.5, Number.NaN]) {
+    assertInvalid(
+      validateTrackDraftInput(trackInput({ tempoBpm })),
+      "tempoBpm",
+    );
+  }
+
   assertInvalid(
     validateTrackDraftInput(trackInput({ slug: "unsafe/track" })),
     "slug",
@@ -396,6 +406,21 @@ test("catalog numeric and identifier validation rejects unsafe values", () => {
     validateMediaDerivativeRegistrationInput(derivativeInput({ channels: 0 })),
     "channels",
   );
+});
+
+test("track musical metadata is normalized for durable catalog records", () => {
+  const result = validateTrackDraftInput(
+    trackInput({
+      meter: " 4/4 ",
+      tempoBpm: 120,
+      musicalKey: " C minor ",
+    }),
+  );
+
+  assert.equal(result.ok, true);
+  assert.equal(result.value.meter, "4/4");
+  assert.equal(result.value.tempoBpm, 120);
+  assert.equal(result.value.musicalKey, "C minor");
 });
 
 test("release dates and ISRCs require real normalized values", () => {

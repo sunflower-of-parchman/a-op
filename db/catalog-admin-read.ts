@@ -38,6 +38,9 @@ interface TrackDraftRow extends AggregateDraftRow {
   subtitle: unknown;
   description: unknown;
   duration_ms: unknown;
+  meter: unknown;
+  tempo_bpm: unknown;
+  musical_key: unknown;
   isrc: unknown;
   copyright_notice: unknown;
   explicit: unknown;
@@ -292,7 +295,8 @@ export async function readAdminTrackDraft(
               tracks.draft_revision_id, tracks.published_revision_id,
               tracks.updated_at, tracks.published_at,
               draft.revision, draft.title, draft.subtitle, draft.description,
-              draft.duration_ms, draft.isrc, draft.copyright_notice,
+              draft.duration_ms, draft.meter, draft.tempo_bpm,
+              draft.musical_key, draft.isrc, draft.copyright_notice,
               draft.explicit, draft.view_mode, draft.stream_mode,
               draft.download_mode, draft.original_media_id,
               draft.streaming_derivative_id, draft.download_derivative_id,
@@ -313,6 +317,9 @@ export async function readAdminTrackDraft(
     subtitle: nullableString(row.subtitle, "track subtitle"),
     description: string(row.description, "track description"),
     durationMs: nullableInteger(row.duration_ms, "track duration"),
+    meter: nullableString(row.meter, "track meter"),
+    tempoBpm: nullableInteger(row.tempo_bpm, "track tempo"),
+    musicalKey: nullableString(row.musical_key, "track key"),
     isrc: nullableString(row.isrc, "track ISRC"),
     copyrightNotice: string(row.copyright_notice, "copyright notice"),
     explicit: boolean(row.explicit, "explicit flag"),

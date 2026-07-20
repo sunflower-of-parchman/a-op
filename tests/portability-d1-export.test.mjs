@@ -88,12 +88,14 @@ function seedLogicalMediaAndProviderBoundPrice(database) {
        'portable_track_revision', 'published', 1,
        '2026-07-19T12:00:00.000Z');
     INSERT INTO track_revisions
-      (id, track_id, revision, title, description, copyright_notice,
+      (id, track_id, revision, title, description, duration_ms, meter,
+       tempo_bpm, musical_key, copyright_notice,
        explicit, view_mode, stream_mode, download_mode, original_media_id,
        streaming_derivative_id, tags_json)
     VALUES
       ('portable_track_revision', 'portable_track', 1, 'Portable track',
-       'Fictional portable track.', '2026 Fictional Artist', 0, 'public',
+       'Fictional portable track.', 185000, '4/4', 120, 'C minor',
+       '2026 Fictional Artist', 0, 'public',
        'public', 'protected', 'portable_media', 'portable_stream',
        '["fictional"]');
     INSERT INTO access_plans
@@ -257,7 +259,7 @@ test("D1 export emits every fixed document with provider-neutral definitions onl
   assert.equal(rehearsal.duplicateCount, 0);
   assert.equal(rehearsal.commerceBindingState, "pending");
   assert.equal(rehearsal.applicationSchemaRestored, true);
-  assert.equal(rehearsal.migrationCount, 33);
+  assert.equal(rehearsal.migrationCount, 34);
   assert.equal(rehearsal.foreignKeyViolationCount, 0);
   assert.equal(rehearsal.sourceObjectKeysRestored, 0);
   assert.equal(rehearsal.mediaBytesRestored, 0);
@@ -308,6 +310,29 @@ test("D1 export emits every fixed document with provider-neutral definitions onl
       intervalCount: 1,
       revision: 1,
     },
+  );
+  const trackRevision = verified.snapshot.catalog.find(
+    ({ entity, id }) =>
+      entity === "track-revision" && id === "portable_track_revision",
+  );
+  assert.ok(trackRevision);
+  assert.equal(
+    Object.fromEntries(
+      trackRevision.fields.map(({ name, value }) => [name, value]),
+    ).meter,
+    "4/4",
+  );
+  assert.equal(
+    Object.fromEntries(
+      trackRevision.fields.map(({ name, value }) => [name, value]),
+    ).tempoBpm,
+    120,
+  );
+  assert.equal(
+    Object.fromEntries(
+      trackRevision.fields.map(({ name, value }) => [name, value]),
+    ).musicalKey,
+    "C minor",
   );
   const grantTemplate = verified.snapshot.access.find(
     ({ entity, id }) =>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FavoriteHeartIcon } from "@/components/ui/FavoriteHeartIcon";
 import type {
   FavoriteMutationResult,
   FavoriteTargetType,
@@ -14,6 +15,7 @@ export interface FavoriteToggleProps {
   readonly label: string;
   readonly initialActive: boolean;
   readonly initialRevision: number | null;
+  readonly compact?: boolean;
 }
 
 export function FavoriteToggle({
@@ -22,6 +24,7 @@ export function FavoriteToggle({
   label,
   initialActive,
   initialRevision,
+  compact = false,
 }: FavoriteToggleProps) {
   const [active, setActive] = useState(initialActive);
   const [revision, setRevision] = useState(initialRevision);
@@ -61,18 +64,32 @@ export function FavoriteToggle({
   }
 
   return (
-    <div className={styles.favoriteToggle}>
+    <div
+      className={compact ? styles.favoriteToggleCompact : styles.favoriteToggle}
+    >
       <button
         aria-label={`${active ? "Remove" : "Save"} ${label} ${active ? "from" : "to"} favorites`}
         aria-pressed={active}
-        className="button button-secondary"
+        className={compact ? styles.favoriteButton : "button button-secondary"}
         disabled={working}
         onClick={() => void updateFavorite()}
         type="button"
       >
-        {working ? "Saving…" : active ? "Remove favorite" : "Save favorite"}
+        {compact ? (
+          <FavoriteHeartIcon active={active} />
+        ) : working ? (
+          "Saving…"
+        ) : active ? (
+          "Remove favorite"
+        ) : (
+          "Save favorite"
+        )}
       </button>
-      <p aria-live="polite" className={styles.status} data-tone={tone}>
+      <p
+        aria-live="polite"
+        className={compact ? "sr-only" : styles.status}
+        data-tone={tone}
+      >
         {message}
       </p>
     </div>

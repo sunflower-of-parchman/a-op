@@ -2,6 +2,13 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 export async function resolve(specifier, context, nextResolve) {
+  if (specifier === "cloudflare:workers") {
+    return {
+      shortCircuit: true,
+      url: new URL("./cloudflare-workers.mjs", import.meta.url).href,
+    };
+  }
+
   if (specifier === "next/headers" || specifier === "next/navigation") {
     return nextResolve(`${specifier}.js`, context);
   }

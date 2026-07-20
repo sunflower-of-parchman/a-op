@@ -355,14 +355,14 @@ export const MODULE_REGISTRY = Object.freeze([
     deactivatable: true,
     requires: [],
     coreRequirements: ["identity", "access"],
-    publicRoutes: ["/commerce"],
+    publicRoutes: ["/membership", "/commerce"],
     accountRoutes: ["/account/memberships"],
     adminRoutes: ["/admin/memberships"],
     publicNavigation: [
       {
         id: "public.membership",
-        label: "Memberships",
-        href: "/commerce",
+        label: "Membership",
+        href: "/membership",
         order: 50,
       },
     ],

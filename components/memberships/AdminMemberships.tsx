@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { CommerceTestModeNotice } from "@/components/commerce";
 import type {
   MembershipDTO,
   MembershipPlanDTO,
@@ -564,8 +563,6 @@ export function AdminMemberships({
           durable access period from server-owned records.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="There is no live-commerce control. Provider-backed records follow verified Test Mode events." />
 
       <p className={styles.message} aria-live="polite" role="status">
         {message}

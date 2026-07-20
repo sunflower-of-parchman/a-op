@@ -14,19 +14,8 @@ export function UpdateIndex({
   return (
     <section
       className={accountView ? styles.content : `${styles.content} page-frame`}
+      aria-label="Published updates"
     >
-      <header className={styles.heading}>
-        <p className={styles.eyebrow}>Published by the artist</p>
-        <h2>
-          {accountView
-            ? "Your update feed"
-            : "Music and activity in one place."}
-        </h2>
-        <p>
-          Updates connect directly to the artist&apos;s catalog, Courses,
-          videos, and published pages.
-        </p>
-      </header>
       {unreadCount !== null ? (
         <p className={styles.unreadStatus}>
           {unreadCount === 0

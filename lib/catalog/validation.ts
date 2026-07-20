@@ -21,6 +21,8 @@ export const CATALOG_INPUT_LIMITS = Object.freeze({
   description: 50_000,
   copyrightNotice: 1_000,
   catalogNumber: 80,
+  meter: 16,
+  musicalKey: 32,
   tag: 64,
   tags: 32,
   credits: 64,
@@ -308,6 +310,9 @@ export function validateTrackDraftInput(
       "subtitle",
       "description",
       "durationMs",
+      "meter",
+      "tempoBpm",
+      "musicalKey",
       "isrc",
       "copyrightNotice",
       "explicit",
@@ -331,6 +336,15 @@ export function validateTrackDraftInput(
   }
   if (typeof record.explicit !== "boolean")
     issue(issues, "explicit", "explicit must be a boolean.");
+  const tempoBpm = nonnegativeInteger(
+    record.tempoBpm,
+    "tempoBpm",
+    issues,
+    true,
+  );
+  if (tempoBpm !== null && (tempoBpm < 1 || tempoBpm > 1000)) {
+    issue(issues, "tempoBpm", "tempoBpm must be between 1 and 1000.");
+  }
   const result: TrackDraftInput = {
     slug: slug(record, issues) ?? "",
     title: text(record, "title", CATALOG_INPUT_LIMITS.title, issues) ?? "",
@@ -353,6 +367,14 @@ export function validateTrackDraftInput(
       "durationMs",
       issues,
       true,
+    ),
+    meter: nullableText(record, "meter", CATALOG_INPUT_LIMITS.meter, issues),
+    tempoBpm,
+    musicalKey: nullableText(
+      record,
+      "musicalKey",
+      CATALOG_INPUT_LIMITS.musicalKey,
+      issues,
     ),
     isrc: normalizedIsrc,
     copyrightNotice:

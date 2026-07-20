@@ -40,6 +40,12 @@
   gap: clamp(2rem, 5vw, 4rem);
 }
 
+.embedded {
+  width: 100%;
+  margin-inline: 0;
+  padding-block: 0;
+}
+
 .headingGroup {
   max-width: 58rem;
   gap: 0.75rem;
@@ -106,7 +112,7 @@
   width: 1.25rem;
   height: 1.25rem;
   margin-top: 0.15rem;
-  accent-color: var(--accent);
+  accent-color: var(--ink);
 }
 
 .consent small {
@@ -195,7 +201,7 @@
   min-height: 2.75rem;
   width: fit-content;
   cursor: pointer;
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .noteList {

@@ -16,14 +16,20 @@ export default defineConfig(async ({ command }) => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
   const runtimeLabEnabled =
     command === "serve" && process.env.AOP_ENABLE_RUNTIME_LAB === "1";
+  const localAccountPreviewEnabled =
+    command === "serve" && process.env.AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW === "1";
   const runtimeConfiguration = runtimeLabEnabled
     ? {
         AOP_RUNTIME_ENV: "test",
         AOP_SIMULATION_MODE: "runtime-lab",
+        AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "0",
       }
     : {
         AOP_RUNTIME_ENV: command === "build" ? "production" : "development",
         AOP_SIMULATION_MODE: "off",
+        AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: localAccountPreviewEnabled
+          ? "1"
+          : "0",
       };
 
   return {

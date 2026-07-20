@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CommerceTestModeNotice } from "@/components/commerce/CommerceTestModeNotice";
 import type { SetupWorkspace as SetupWorkspaceState } from "@/db/setup-state.ts";
 
 import styles from "./SetupWorkspace.module.css";
@@ -245,8 +244,6 @@ export function SetupWorkspace({
           replay-safe results.
         </p>
       </header>
-
-      <CommerceTestModeNotice detail="This Build Week installation has one commerce domain permanently configured for Stripe Test Mode simulation. Setup exposes no live-commerce switch." />
 
       <output className={styles.output} aria-live="polite">
         {message}
