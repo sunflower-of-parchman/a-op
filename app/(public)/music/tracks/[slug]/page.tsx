@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PublicFavoriteControl } from "@/components/account";
 import { MusicDetail } from "@/components/music/MusicDetail";
-import { PreviewTrackDetail } from "@/components/music/PreviewTrackDetail";
 import { readCurrentCatalogTrack } from "@/lib/catalog/read-current-detail";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +13,6 @@ export async function generateMetadata({
   readonly params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (slug === "preview") return { title: "Track" };
   const track = await readCurrentCatalogTrack(env.DB, slug);
   return track
     ? { title: track.title, description: track.description || undefined }
@@ -27,7 +25,6 @@ export default async function TrackPage({
   readonly params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  if (slug === "preview") return <PreviewTrackDetail />;
   const track = await readCurrentCatalogTrack(env.DB, slug);
   if (!track) notFound();
   return (

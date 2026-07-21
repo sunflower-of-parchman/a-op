@@ -10,6 +10,7 @@ import {
   readArtistRevision,
   readInstallationState,
   readNavigationSnapshot,
+  readPublicNavigationSnapshot,
   readPublishedPageBySlug,
 } from "../db/site-read.ts";
 
@@ -207,6 +208,44 @@ test("public navigation keeps core items and filters inactive module links", asy
   assert.equal(draftSnapshot?.version, 2);
   assert.deepEqual(fake.calls[0].bindings, ["primary", "published"]);
   assert.match(fake.calls[0].sql, /LEFT JOIN artist_modules/);
+});
+
+test("published navigation presents the complete neutral framework only before setup", async () => {
+  const rows = [
+    navigationRow(),
+    navigationRow({
+      item_id: "nav_courses",
+      item_key: "courses",
+      item_label: "Courses",
+      href: "/courses",
+      position: 1,
+      module_key: "courses",
+      module_active: 0,
+    }),
+  ];
+  const fake = fakeBinding([
+    { kind: "first", value: { status: "unconfigured" } },
+    { kind: "all", value: rows },
+    { kind: "first", value: { status: "applied" } },
+    { kind: "all", value: rows },
+  ]);
+
+  const preview = await readPublicNavigationSnapshot(fake.binding, "primary");
+  const configured = await readPublicNavigationSnapshot(
+    fake.binding,
+    "primary",
+  );
+
+  assert.deepEqual(
+    preview?.items.map(({ itemKey }) => itemKey),
+    ["music", "courses"],
+  );
+  assert.deepEqual(
+    configured?.items.map(({ itemKey }) => itemKey),
+    ["music"],
+  );
+  assert.match(fake.calls[0].sql, /FROM setup_state/);
+  assert.deepEqual(fake.calls[1].bindings, ["primary", "published"]);
 });
 
 test("published page reads require both publication and active linked module", async () => {

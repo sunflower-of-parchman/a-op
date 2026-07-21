@@ -167,7 +167,7 @@ const [packagedHosting, sourceMigrationNames, packagedMigrationNames] =
 
 assert.deepEqual(JSON.parse(packagedHosting), { d1: "DB", r2: "MEDIA" });
 assert.deepEqual(packagedMigrationNames, sourceMigrationNames);
-assert.equal(sourceMigrationNames.length, 35);
+assert.equal(sourceMigrationNames.length, 36);
 assert.match(sourceMigrationNames.at(-1), /^0035_.+\.sql$/);
 
 const [sourceMigrations, packagedMigrations] = await Promise.all([

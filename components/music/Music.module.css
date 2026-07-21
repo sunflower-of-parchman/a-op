@@ -472,42 +472,6 @@
   background: var(--field);
 }
 
-.previewArtworkButton {
-  position: relative;
-  display: grid;
-  flex: 0 0 auto;
-  width: 3.5rem;
-  min-height: 3.5rem;
-  padding: 0;
-  border: 1px solid var(--slate);
-  border-radius: 2px;
-  background: var(--field);
-  color: var(--ink);
-  cursor: pointer;
-  place-items: center;
-}
-
-.previewArtworkButton span {
-  opacity: 0;
-  font-size: 1rem;
-  transition: opacity 160ms ease;
-}
-
-.playTriangle {
-  transform: translateX(0.08rem);
-}
-
-.previewArtworkButton:hover span,
-.previewArtworkButton:focus-visible span,
-.previewArtworkButton[aria-pressed="true"] span {
-  opacity: 1;
-}
-
-.previewArtworkButton:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-}
-
 .indexArtwork img,
 .detailArtwork img {
   object-fit: cover;
@@ -529,22 +493,6 @@
   color: var(--ink-muted);
   font-size: 0.78rem;
   font-weight: 300;
-}
-
-.catalogIdentity h3 > .previewTrackTitle {
-  color: var(--ink);
-  font-size: 1rem;
-  font-weight: 400;
-}
-
-.previewTrackTitle {
-  color: var(--ink);
-  text-decoration-color: transparent;
-  text-underline-offset: 0.3rem;
-}
-
-.previewTrackTitle:hover {
-  text-decoration-color: currentColor;
 }
 
 .catalogIdentity h3 a,
@@ -836,92 +784,6 @@
   display: none;
 }
 
-.previewDetail {
-  min-height: calc(100vh - 5.25rem);
-  padding-block: clamp(2rem, 5vw, 4rem) 8rem;
-}
-
-.backToMusic {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  color: var(--ink-muted);
-  text-decoration: none;
-}
-
-.previewDetailLayout {
-  display: grid;
-  grid-template-columns: minmax(15rem, 25rem) minmax(0, 1fr);
-  align-items: center;
-  margin-top: 1rem;
-  gap: clamp(2rem, 5vw, 5rem);
-}
-
-.previewDetailArtwork {
-  display: grid;
-  width: 100%;
-  aspect-ratio: 1;
-  border: 1px solid var(--slate);
-  border-radius: 2px;
-  background: var(--field);
-  color: var(--ink);
-  cursor: pointer;
-  place-items: center;
-}
-
-.previewDetailArtwork span {
-  display: grid;
-  width: 5rem;
-  aspect-ratio: 1;
-  border: 1px solid var(--slate);
-  border-radius: 50%;
-  background: var(--card);
-  place-items: center;
-}
-
-.detailPlayTriangle {
-  transform: translateX(0.12rem);
-}
-
-.previewDetailIdentity {
-  display: grid;
-  align-content: center;
-  gap: 1.25rem;
-}
-
-.previewDetailTitle {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-}
-
-.previewDetailTitle h1 {
-  font-size: clamp(2.5rem, 6vw, 4.75rem);
-  font-weight: 300;
-}
-
-.previewDetailTitle p,
-.previewDetailDuration {
-  color: var(--ink-muted);
-}
-
-.previewDetailActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.previewDetailActions a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--slate);
-  border-radius: 3px;
-  color: var(--ink);
-  text-decoration: none;
-}
-
 .trackAction,
 .trackActionDisabled {
   display: inline-flex;
@@ -1031,13 +893,6 @@
   right: 0.35rem;
 }
 
-.previewCatalogDetail {
-  container-name: music-main;
-  container-type: inline-size;
-  min-height: calc(100vh - 5.25rem);
-  padding-block: clamp(2rem, 5vw, 4rem) 8rem;
-}
-
 @container music-main (max-width: 74rem) {
   .catalogRow {
     grid-template-areas: "lead actions";
@@ -1057,85 +912,6 @@
   .trackColumnHeader {
     display: none;
   }
-}
-
-.backToMusic {
-  gap: 0.55rem;
-}
-
-.previewCatalogHeader {
-  display: grid;
-  grid-template-columns: minmax(12rem, 22rem) minmax(10rem, 1fr) auto;
-  align-items: center;
-  min-height: 25rem;
-  margin-top: 1rem;
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  border: 1px solid var(--slate);
-  border-radius: 8px;
-  background: var(--card);
-  gap: clamp(2rem, 5vw, 4rem);
-}
-
-.previewCatalogArtwork {
-  width: 100%;
-  aspect-ratio: 1;
-  border: 1px solid var(--slate);
-  border-radius: 3px;
-  background: var(--field);
-}
-
-.previewCatalogIdentity h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 300;
-}
-
-.previewCatalogIdentity p {
-  margin-top: 1rem;
-  color: var(--ink-muted);
-}
-
-.previewCatalogActions {
-  display: flex;
-  align-items: center;
-  align-self: start;
-  gap: 0.5rem;
-}
-
-.previewCatalogActions a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0.55rem 0.85rem;
-  border-radius: 4px;
-  background: var(--action);
-  color: #fffdfc;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.previewCatalogActions button {
-  display: grid;
-  width: 2.75rem;
-  min-height: 2.75rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  cursor: pointer;
-  place-items: center;
-}
-
-.previewCatalogActions button[aria-pressed="true"] {
-  color: var(--accent);
-}
-
-.previewCatalogActions svg {
-  width: 1.65rem;
-  height: 1.65rem;
-}
-
-.previewCatalogTracks {
-  margin-top: clamp(3rem, 6vw, 5rem);
 }
 
 .exploreSections,
@@ -1383,12 +1159,6 @@
   }
 }
 
-@media (hover: none) {
-  .previewArtworkButton span {
-    opacity: 1;
-  }
-}
-
 @media (max-width: 720px) {
   .libraryShell {
     width: calc(100% - 2rem);
@@ -1396,7 +1166,6 @@
 
   .catalogRow,
   .detailHeader,
-  .previewDetailLayout,
   .creditList > div {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1443,26 +1212,8 @@
     display: none;
   }
 
-  .previewDetailTitle {
-    align-items: start;
-    flex-direction: column;
-  }
-
   .catalogGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .previewCatalogHeader {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 0;
-  }
-
-  .previewCatalogArtwork {
-    width: min(100%, 22rem);
-  }
-
-  .previewCatalogActions {
-    align-self: auto;
   }
 
   .catalogActions {

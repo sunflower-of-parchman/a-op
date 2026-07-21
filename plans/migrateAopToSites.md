@@ -107,6 +107,8 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] (2026-07-21 05:18Z) Updated the Stripe adapter for the current `hosted_page` Checkout value and 2026-06-24 invoice shape, including paid-state derivation from terminal status plus zero remaining amount and exact subscription period projection from the non-proration subscription line. Fixed provider delivery ordering when a paid invoice reaches D1 before `checkout.session.completed`; the delayed checkout event now records an idempotent already-fulfilled receipt. Strict types and 22 focused Stripe projection and recurring-fulfillment checks passed.
 - [x] (2026-07-21 cleanup) Removed the completed rehearsal's 957 MB local Wrangler D1/R2 state, 3.1 GB Sound for Movement import and public judge-media trees, demo setup proposals and local aliases, hosted fictional account file, stale Nuxt environment files, and generated TypeScript cache. Removed the artist-specific packet builder, verifier, audio server, documentation, package commands, hard-coded licensing artwork, and artist-name fallbacks. Archived the two task-created Stripe Test products and prices, canceled the two task-created Test subscriptions, deleted their two fictional Test customers, and removed the temporary checkout, binding, and listener files. Strict types, 29 focused commerce and licensing checks, diff integrity, and the complete five-stage neutral production build passed. The generated build and local cache were removed afterward. No production, Sites hosting, domain, DNS, or live-commerce action occurred.
 - [x] (2026-07-21 06:08Z) Retired the development-only fictional account preview so the standard local server now starts signed out and accepts identity only from Sites-forwarded headers. Permanently deleted the obsolete Vercel project `artist-owned-platform-build-week` (`prj_6pTKSerIV9WeGdIxKrmyKdnnZFoH`) and the obsolete Supabase project of the same name (`rlcbhgdptjiofiqyznvn`). Preserved the current GitHub repository and its complete Nuxt-to-Sites Build Week history; the Sound for Movement Vercel and Supabase projects were untouched.
+- [x] (2026-07-21 framework pass) Restored the complete neutral public framework before setup without expanding protected module authority. The unconfigured installation now exposes every supported public index route through the header and footer, keeps detail and protected routes gated, routes signed-out Account through the working local Login page, and presents honest empty states. Removed interface-only Music, Courses, Videos, Membership, and Licensing records, inherited licensing categories, and their dead components and styles. The in-app Browser click-through reached every public, support, legal, login, and signed-out account destination without an application-owned `404`. Strict types, 52 focused source and packaged-foundation checks, lint with zero errors, formatting, diff integrity, the five-stage neutral production build, and the packaged 36-migration runtime boundary passed.
+- [x] (2026-07-21 homepage framework) Preserved the approved 2026-07-20 Sound for Movement-derived public composition after removing the rehearsal content. The existing media mosaic remains present on Home, Courses, Videos, Membership, Licensing, What's New, About, and Login; neutral mosaic surfaces keep its original geometry before artist images exist. The homepage retains featured Music, Courses, featured Video, About, Membership, and Licensing with quiet publication states before artist records exist. Strict types, the two packaged foundation checks, formatting, diff integrity, and live in-app Browser inspection passed.
 - [x] Implement Courses, lessons, mixed media, access, progress, and resume.
 - [x] Implement video, structured pages, What's New, contact, and inquiry administration.
 - [x] Implement telemetry, consent, retention, privacy, terms, diagnostics, and operations.
@@ -116,6 +118,12 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: One configured FAQ footer item suppressed the fallback public directory.
+  Evidence: The footer treated any configured nonlegal item as a complete directory. Merging configured footer items with the primary public navigation restored About, Contact, What's New, Membership, Courses, Videos, Licensing, and FAQ while retaining deduplication.
+
+- Observation: Module activation and pre-setup framework visibility had been represented by one gate.
+  Evidence: Optional public index routes returned `404` while setup remained unconfigured, even though the neutral clone needs those routes for capability review. A separate presentation check now exposes only public index surfaces during setup; detail routes, account authority, APIs, delivery, and durable writes continue through the active-module and access contracts.
 
 - Observation: The completed milestone laboratory had become a second application inside the release tree.
   Evidence: Its production-disabled routes, fictional D1 fixtures, orchestration scripts, source-contract tests, simulation configuration, and runtime-proof table totaled about ten thousand lines even though direct domain integration tests already cover the durable access, commerce, licensing, setup, and cleanup behavior. Five current product tests were meanwhile absent from every package verification command.
@@ -298,6 +306,14 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Evidence: Emitting null-valued Meter, Tempo, and Key fields changed an older archive's semantic fingerprint after restore. Current exports omit absent optional fields, restore older records as null, and round-trip supplied values exactly; the complete portability export and double-restore rehearsal passes.
 
 ## Decision Log
+
+- Decision: Present the complete supported public framework while setup is unconfigured, with honest empty states and no fabricated content.
+  Rationale: A fresh clone must let an artist inspect the product structure and choose capabilities. Presentation permission applies only to public index surfaces; configured module state remains authoritative after setup and all protected operations retain their existing server gates.
+  Date/Author: 2026-07-21 / Michael and Codex
+
+- Decision: Derive Licensing sections only from the artist's published offers.
+  Rationale: One-Time Licenses, Licensing Plans, and Education were Sound for Movement-specific groupings. The neutral installation has one `License options` empty state, and each artist's real product types and authored terms determine the populated surface.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Preserve the complete repository history while removing obsolete hosted demo infrastructure and the local fictional account shortcut.
   Rationale: The Nuxt prototype, Daymark rehearsal, Sites rebuild, and finished backend form material Build Week evidence. A fresh checkout should still begin empty and signed out, and retired public demo infrastructure should no longer remain active.
@@ -592,6 +608,8 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Date/Author: 2026-07-18 / Michael
 
 ## Outcomes & Retrospective
+
+Framework-release outcome as of 2026-07-21: the empty clone is a complete, clickable product framework rather than a content demonstration. Public navigation, support pages, legal starters, Login, and every supported capability index remain visible while setup is unconfigured. Music, Courses, Videos, Membership, Licensing, Contact, and What's New tell the truth about absent records; they contain no preview catalog, course, playlist, plan, benefit, pricing, category, or artist-specific licensing content. Configured installations still derive public navigation from active modules, and detail routes, delivery, account authority, administration, and mutations retain their server-owned gates.
 
 Milestone 0 outcome as of 2026-07-18: the active tree is now the official Sites React structure on `codex/sites-rebuild`. It runs locally, builds into Cloudflare Worker-compatible output, packages logical D1 and R2 bindings, and presents the complete neutral visual foundation in dark and light themes.
 

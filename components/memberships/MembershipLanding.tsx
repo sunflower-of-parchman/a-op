@@ -36,13 +36,19 @@ function cadence(product: CommerceProductDTO): string {
 }
 
 export function MembershipLanding({ images, product }: MembershipLandingProps) {
-  const offerHref = product
-    ? `/commerce#${product.offerAnchorId}`
-    : "/account/memberships";
+  if (!product) {
+    return (
+      <div className={`page-frame ${styles.page}`}>
+        <p className={styles.empty}>No membership is published.</p>
+      </div>
+    );
+  }
+
+  const offerHref = `/commerce#${product.offerAnchorId}`;
 
   return (
     <div className={`page-frame ${styles.page}`}>
-      {product?.productType === "membership" ? (
+      {product.productType === "membership" ? (
         <TelemetryPageView
           eventName="membership-view"
           resourceId={product.id}
@@ -53,27 +59,21 @@ export function MembershipLanding({ images, product }: MembershipLandingProps) {
       <section className={styles.membership} aria-labelledby="membership-title">
         <div className={styles.offer}>
           <div className={styles.offerIdentity}>
-            <h2 id="membership-title">
-              {product?.name ?? "Membership benefits"}
-            </h2>
-            {product ? (
-              <p className={styles.price}>
-                {money(product.amountMinor, product.currency)}
-                <span>{cadence(product)}</span>
-              </p>
-            ) : null}
-            {product?.description ? <p>{product.description}</p> : null}
+            <h2 id="membership-title">{product.name}</h2>
+            <p className={styles.price}>
+              {money(product.amountMinor, product.currency)}
+              <span>{cadence(product)}</span>
+            </p>
+            {product.description ? <p>{product.description}</p> : null}
           </div>
 
           <div className={styles.offerActions}>
             <Link className="button button-primary" href={offerHref}>
-              {product ? "View membership" : "Manage membership"}
+              View membership
             </Link>
-            {product ? (
-              <Link className={styles.textLink} href="/account/memberships">
-                Manage membership
-              </Link>
-            ) : null}
+            <Link className={styles.textLink} href="/account/memberships">
+              Manage membership
+            </Link>
           </div>
         </div>
 

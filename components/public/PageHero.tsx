@@ -12,7 +12,7 @@ export function PageHero({
   readonly mosaicImages?: readonly PublicArtwork[];
   readonly title: string;
 }) {
-  if (mosaicImages && mosaicImages.length > 0) {
+  if (mosaicImages) {
     return <MediaMosaic images={mosaicImages} title={title} />;
   }
   if (!hero) {

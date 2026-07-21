@@ -13,11 +13,13 @@ register(
 const [
   { activateCustomer },
   { activeCustomerCondition },
-  { requireActiveModule },
+  { requireActiveModule, requirePublicModulePresentation },
+  { isFrameworkPreviewActive },
 ] = await Promise.all([
   import("../db/customer-activation.ts"),
   import("../db/authority-guards.ts"),
   import("../lib/modules/active-module.ts"),
+  import("../lib/modules/framework-preview.ts"),
 ]);
 
 let requestSequence = 0;
@@ -318,6 +320,44 @@ test("customer and optional-module guards fail closed on current D1 facts", asyn
   );
   assert.match(calls[0].sql, /FROM artist_modules/);
   assert.deepEqual(calls[0].bindings, ["downloads"]);
+});
+
+test("the unconfigured framework presents public module indexes without granting active-module authority", async (t) => {
+  const memory = await createInMemoryD1();
+  t.after(() => memory.close());
+
+  assert.equal(await isFrameworkPreviewActive(memory.binding), true);
+  await requirePublicModulePresentation(memory.binding, "courses");
+  await assertRuntimeCode(
+    requireActiveModule(memory.binding, "courses"),
+    "MODULE_INACTIVE",
+    404,
+  );
+
+  const configuredBinding = {
+    prepare() {
+      return {
+        bind() {
+          return this;
+        },
+        async first() {
+          return { active: 0, setup_status: "applied" };
+        },
+      };
+    },
+  };
+  await assertRuntimeCode(
+    requirePublicModulePresentation(configuredBinding, "courses"),
+    "MODULE_INACTIVE",
+    404,
+  );
+
+  memory.database
+    .prepare(
+      "UPDATE artist_modules SET active = 1 WHERE module_key = 'courses'",
+    )
+    .run();
+  await requirePublicModulePresentation(memory.binding, "courses");
 });
 
 test("the account endpoint accepts only empty JSON and derives identity server-side", async () => {

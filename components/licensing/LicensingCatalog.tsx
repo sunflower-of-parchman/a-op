@@ -16,7 +16,6 @@ export interface LicensingCatalogProps {
   readonly contactForm: PublicContactFormDTO | null;
   readonly offers: readonly LicenseOfferDTO[];
   readonly pendingLicenseTypes: readonly PublicCommerceIntentPreview[];
-  readonly pendingPlans: readonly PublicCommerceIntentPreview[];
   readonly requestAccess: LicensingRequestAccess;
   readonly signInHref: string;
 }
@@ -130,22 +129,14 @@ function PublishedPlanList({
   );
 }
 
-function CustomLicensingCallout({
-  available,
-}: {
-  readonly available: boolean;
-}) {
+function LicensingInquiryCallout() {
   return (
-    <section className={styles.customCard} aria-labelledby="custom-title">
+    <section className={styles.customCard} aria-labelledby="inquiry-title">
       <div className={styles.customPanel}>
-        <h2 id="custom-title">Custom Licensing</h2>
-        {available ? (
-          <Link className="button button-primary" href="/contact">
-            Contact for Custom Licensing
-          </Link>
-        ) : (
-          <span>Contact is not currently available.</span>
-        )}
+        <h2 id="inquiry-title">Licensing inquiries</h2>
+        <Link className="button button-primary" href="/contact">
+          Contact the artist
+        </Link>
       </div>
     </section>
   );
@@ -191,55 +182,22 @@ export function LicensingCatalog({
   contactForm,
   offers,
   pendingLicenseTypes,
-  pendingPlans,
   requestAccess,
   signInHref,
 }: LicensingCatalogProps) {
-  const educationPattern = /education|school|academic/i;
-  const membershipPattern = /\bmembership\b/i;
-  const recurringProducts = commerceProducts.filter(
-    (product) =>
-      product.productType === "subscription" ||
-      product.productType === "membership",
-  );
-  const educationProducts = recurringProducts.filter((product) =>
-    educationPattern.test(`${product.slug} ${product.name}`),
-  );
-  const licensingSubscriptions = recurringProducts.filter(
-    (product) =>
-      !educationPattern.test(`${product.slug} ${product.name}`) &&
-      !membershipPattern.test(`${product.slug} ${product.name}`) &&
-      product.productType === "subscription",
-  );
-  const pendingEducationPlans = pendingPlans.filter((product) =>
-    educationPattern.test(product.name),
-  );
-  const pendingLicensingPlans = pendingPlans.filter(
-    (product) =>
-      !educationPattern.test(product.name) &&
-      !membershipPattern.test(product.name),
+  const licenseProducts = commerceProducts.filter(
+    (product) => product.productType === "license",
   );
 
   return (
     <main className={`page-frame ${styles.page}`}>
       <section
         className={styles.section}
-        aria-labelledby="license-offers-title"
+        aria-labelledby="license-options-title"
       >
-        <h2 id="license-offers-title">One-Time Licenses</h2>
+        <h2 id="license-options-title">License options</h2>
 
-        {offers.length === 0 ? (
-          pendingLicenseTypes.length > 0 ? (
-            <PreviewPlanList
-              actionHref="/music?view=tracks"
-              actionLabel="Buy License"
-              actionStyle="button"
-              products={pendingLicenseTypes}
-            />
-          ) : (
-            <p>No one-time licenses are published.</p>
-          )
-        ) : (
+        {offers.length > 0 ? (
           <ol className={styles.offerList}>
             {offers.map((offer) => {
               const { option, terms, testPrice, track } = offer.snapshot;
@@ -291,38 +249,33 @@ export function LicensingCatalog({
               );
             })}
           </ol>
-        )}
+        ) : null}
+        {licenseProducts.length > 0 ? (
+          <PublishedPlanList products={licenseProducts} />
+        ) : null}
+        {pendingLicenseTypes.length > 0 ? (
+          <PreviewPlanList
+            actionHref="/music?view=tracks"
+            actionLabel="View music"
+            products={pendingLicenseTypes}
+          />
+        ) : null}
+        {offers.length === 0 &&
+        licenseProducts.length === 0 &&
+        pendingLicenseTypes.length === 0 ? (
+          <p className={styles.emptyState}>No license options are published.</p>
+        ) : null}
       </section>
 
-      <section className={styles.section} aria-labelledby="subscriptions-title">
-        <h2 id="subscriptions-title">Licensing Plans</h2>
-        {licensingSubscriptions.length > 0 ? (
-          <PublishedPlanList products={licensingSubscriptions} />
-        ) : pendingLicensingPlans.length > 0 ? (
-          <PreviewPlanList products={pendingLicensingPlans} />
-        ) : (
-          <p>No licensing plans are published.</p>
-        )}
-      </section>
-
-      <section className={styles.section} aria-labelledby="education-title">
-        <h2 id="education-title">Education</h2>
-        {educationProducts.length > 0 ? (
-          <PublishedPlanList products={educationProducts} />
-        ) : pendingEducationPlans.length > 0 ? (
-          <PreviewPlanList products={pendingEducationPlans} />
-        ) : (
-          <p>No education plans are published.</p>
-        )}
-      </section>
-
-      <section
-        className={styles.section}
-        id="custom-licensing"
-        aria-label="Custom Licensing"
-      >
-        <CustomLicensingCallout available={contactForm !== null} />
-      </section>
+      {contactForm ? (
+        <section
+          className={styles.section}
+          id="licensing-inquiries"
+          aria-label="Licensing inquiries"
+        >
+          <LicensingInquiryCallout />
+        </section>
+      ) : null}
     </main>
   );
 }

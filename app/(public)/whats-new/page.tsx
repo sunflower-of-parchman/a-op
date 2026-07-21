@@ -6,14 +6,14 @@ import { UpdateIndex } from "@/components/updates/UpdateIndex";
 import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
 import { countUnreadUpdates, listPublishedUpdates } from "@/db/updates-read.ts";
 import { resolveApplicationIdentity } from "@/lib/auth/application-identity.ts";
-import { requireActiveModule } from "@/lib/modules/active-module.ts";
+import { requirePublicModulePresentation } from "@/lib/modules/active-module.ts";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "What's New" };
 
 export default async function WhatsNewPage() {
-  await requireActiveModule(env.DB, "whats-new");
+  await requirePublicModulePresentation(env.DB, "whats-new");
   const authenticatedUser = await getChatGPTUser();
   const identity = await resolveApplicationIdentity(env.DB, authenticatedUser);
   const customerUserId = identity?.roles.includes("customer")

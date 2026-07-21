@@ -13,7 +13,10 @@ test("video pages and delivery are module-gated and authorize R2 after the centr
     source("../lib/video/delivery.ts"),
     source("../app/api/videos/[videoId]/media/route.ts"),
   ]);
-  assert.match(publicIndex, /requireActiveModule\(env\.DB, "video"\)/);
+  assert.match(
+    publicIndex,
+    /requirePublicModulePresentation\(env\.DB, "video"\)/,
+  );
   assert.match(mediaRoute, /resolveApplicationIdentity/);
   assert.match(mediaRoute, /deliverHostedVideo/);
   const decisionIndex = delivery.indexOf("await publicVideoDecision");
@@ -50,6 +53,19 @@ test("context, credits, and transcript precede every player and external media s
   assert.match(consent, /referrerPolicy="strict-origin-when-cross-origin"/);
   assert.match(consent, /!videoId/);
   assert.match(workspace, /videoId=\{null\}/);
+});
+
+test("an empty Videos installation keeps the page shell without mock videos", async () => {
+  const [route, index] = await Promise.all([
+    source("../app/(public)/videos/page.tsx"),
+    source("../components/video/VideoIndex.tsx"),
+  ]);
+  assert.doesNotMatch(route, /searchParams|previewSelection/);
+  assert.match(index, /No videos have been published\./);
+  assert.doesNotMatch(
+    index,
+    /PREVIEW_VIDEO_COUNT|PreviewPlaylist|preview-|>Title<|>Subheading<|>Date</,
+  );
 });
 
 test("video and update mutations resolve live server authority, module state, and idempotency", async () => {

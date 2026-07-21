@@ -13,7 +13,7 @@ const FOOTER_GROUPS = Object.freeze([
   Object.freeze({ label: "Explore", keys: ["music", "videos"] }),
   Object.freeze({ label: "Membership", keys: ["membership", "licensing"] }),
   Object.freeze({ label: "Courses", keys: ["courses"] }),
-  Object.freeze({ label: "Support", keys: ["about", "contact"] }),
+  Object.freeze({ label: "Support", keys: ["about", "contact", "faq"] }),
   Object.freeze({ label: "Connect", keys: ["whats-new"] }),
 ]);
 
@@ -55,10 +55,13 @@ export async function SiteFooter() {
   const configuredDirectoryItems = footerItems.filter(
     (item) => !legalItems.some(({ id }) => id === item.id),
   );
-  const directoryItems =
-    configuredDirectoryItems.length > 0
-      ? configuredDirectoryItems
-      : (primaryNavigation?.items ?? []);
+  const directoryItems = [
+    ...(primaryNavigation?.items ?? []),
+    ...configuredDirectoryItems,
+  ].filter(
+    (item, index, items) =>
+      items.findIndex(({ itemKey }) => itemKey === item.itemKey) === index,
+  );
   const groups = FOOTER_GROUPS.map((group) => ({
     label: group.label,
     items: group.keys

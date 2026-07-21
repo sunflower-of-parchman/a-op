@@ -67,7 +67,7 @@ test("Memberships stays identity-aware and role-gated without a dedicated admin 
   assert.match(adminPage, /activeModules\.includes\("subscriptions"\)/);
 });
 
-test("public Membership uses published records without invented price copy", async () => {
+test("public Membership uses published records and stays neutral when empty", async () => {
   const [page, landing, styles, registry] = await Promise.all([
     source(files.publicPage),
     source(files.landing),
@@ -75,11 +75,19 @@ test("public Membership uses published records without invented price copy", asy
     source(files.registry),
   ]);
 
-  assert.match(page, /requireActiveModule\(env\.DB, "memberships"\)/);
+  assert.match(
+    page,
+    /requirePublicModulePresentation\(env\.DB, "memberships"\)/,
+  );
   assert.match(page, /listActiveCommerceProducts\(env\.DB\)/);
   assert.match(page, /productType === "subscription"/);
   assert.match(page, /productType === "membership"/);
-  assert.match(landing, /product\?\.name \?\? "Membership benefits"/);
+  assert.match(landing, /if \(!product\)/);
+  assert.match(landing, /No membership is published\./);
+  assert.ok(
+    landing.indexOf("if (!product)") <
+      landing.indexOf('aria-label="Membership benefits"'),
+  );
   assert.doesNotMatch(landing, /: "Price"/);
   assert.match(landing, /`\/commerce#\$\{product\.offerAnchorId\}`/);
   for (const destination of [

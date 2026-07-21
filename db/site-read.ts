@@ -8,6 +8,7 @@ import {
   isEditorPermissionKey,
   type EditorPermissionKey,
 } from "../lib/auth/editor-permissions.ts";
+import { isFrameworkPreviewActive } from "../lib/modules/framework-preview.ts";
 import { activePageEditorCondition } from "./authority-guards.ts";
 
 export type SiteRevisionView = "draft" | "published";
@@ -866,11 +867,14 @@ export async function readNavigationSnapshot(
   });
 }
 
-export function readPublicNavigationSnapshot(
+export async function readPublicNavigationSnapshot(
   binding: D1Database,
   setId: NavigationSetId,
 ): Promise<NavigationSnapshot | null> {
-  return readNavigationSnapshot(binding, setId, "published", "public");
+  const audience = (await isFrameworkPreviewActive(binding))
+    ? "administration"
+    : "public";
+  return readNavigationSnapshot(binding, setId, "published", audience);
 }
 
 /** Reads only a published page whose linked optional module is active. */

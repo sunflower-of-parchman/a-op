@@ -5,7 +5,7 @@ import { PageHero } from "@/components/public/PageHero";
 import { listActiveCommerceProducts } from "@/db/commerce-read.ts";
 import { readPublicArtwork } from "@/db/public-media.ts";
 import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
-import { requireActiveModule } from "@/lib/modules/active-module.ts";
+import { requirePublicModulePresentation } from "@/lib/modules/active-module.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MembershipPage() {
-  await requireActiveModule(env.DB, "memberships");
+  await requirePublicModulePresentation(env.DB, "memberships");
   const [products, mosaicImages, pianoArtwork, teachingArtwork] =
     await Promise.all([
       listActiveCommerceProducts(env.DB),

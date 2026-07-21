@@ -49,7 +49,8 @@
 }
 
 .anchor,
-.tile {
+.tile,
+.emptyTile {
   position: relative;
   display: block;
   min-width: 0;
@@ -60,6 +61,10 @@
 
 .tile {
   animation: tile-structure-enter 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.emptyTile {
+  border: 1px solid color-mix(in srgb, var(--slate) 45%, transparent);
 }
 
 .home .anchor,

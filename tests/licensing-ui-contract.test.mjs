@@ -28,10 +28,15 @@ test("licensing pages use live module-gated server state and correct authority",
     source(files.read),
   ]);
 
-  for (const page of [publicPage, accountPage, adminPage]) {
+  assert.match(
+    publicPage,
+    /requirePublicModulePresentation\(env\.DB, "licensing"\)/,
+  );
+  for (const page of [accountPage, adminPage]) {
     assert.match(page, /requireActiveModule\(env\.DB, "licensing"\)/);
     assert.match(page, /export const dynamic = "force-dynamic"/);
   }
+  assert.match(publicPage, /export const dynamic = "force-dynamic"/);
   assert.match(publicPage, /listActiveLicenseOffers\(env\.DB\)/);
   assert.match(publicPage, /chatGPTSignInPath\("\/licensing"\)/);
   assert.match(publicPage, /identity\?\.roles\.includes\("customer"\)/);
@@ -160,7 +165,7 @@ test("licensing interfaces remain open, responsive, theme-token based, and artis
   assert.match(combined, /type="button"/);
 });
 
-test("empty licensing reports unpublished sections without invented plans or FAQs", async () => {
+test("empty licensing stays neutral without inherited categories, plans, or FAQs", async () => {
   const [publicPage, catalog, contactForm, styles] = await Promise.all([
     source(files.publicPage),
     source(files.catalog),
@@ -171,16 +176,16 @@ test("empty licensing reports unpublished sections without invented plans or FAQ
   assert.match(publicPage, /listActiveCommerceProducts\(env\.DB\)/);
   assert.match(publicPage, /readPublicContactForm\(env\.DB\)/);
   assert.doesNotMatch(publicPage, /PublicPageHeader/);
-  assert.match(catalog, />One-Time Licenses</);
-  assert.match(catalog, />Licensing Plans</);
-  assert.match(catalog, />Education</);
-  assert.match(catalog, /function CustomLicensingCallout/);
-  assert.match(catalog, /aria-label="Custom Licensing"/);
+  assert.match(catalog, />License options</);
+  assert.doesNotMatch(catalog, />One-Time Licenses</);
+  assert.doesNotMatch(catalog, />Licensing Plans</);
+  assert.doesNotMatch(catalog, />Education</);
+  assert.match(catalog, /function LicensingInquiryCallout/);
+  assert.match(catalog, /aria-label="Licensing inquiries"/);
   assert.match(catalog, /href="\/contact"/);
-  assert.match(catalog, /Contact is not currently available\./);
-  assert.match(catalog, /No one-time licenses are published\./);
-  assert.match(catalog, /No licensing plans are published\./);
-  assert.match(catalog, /No education plans are published\./);
+  assert.match(catalog, /contactForm \? \(/);
+  assert.match(catalog, /No license options are published\./);
+  assert.doesNotMatch(publicPage, /"subscription"/);
   assert.doesNotMatch(catalog, />Price<|>Benefit<|>Question<|>Answer</);
   assert.doesNotMatch(catalog, /\$(?:25|60|100|250|300|500)|20\.83|41\.67/);
   assert.match(contactForm, /fetch\("\/api\/contact"/);

@@ -5,7 +5,7 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 
 test("packages the functional home and quiet public page labels", async () => {
-  const [home, publicPage, pageHeader, footer, layout, manifest] =
+  const [home, publicPage, pageHeader, pageHero, footer, layout, manifest] =
     await Promise.all([
       readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
       readFile(
@@ -14,6 +14,10 @@ test("packages the functional home and quiet public page labels", async () => {
       ),
       readFile(
         new URL("../components/public/PublicPageHeader.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL("../components/public/PageHero.tsx", import.meta.url),
         "utf8",
       ),
       readFile(
@@ -32,6 +36,10 @@ test("packages the functional home and quiet public page labels", async () => {
   assert.match(home, /readPublishedArtistRevision/);
   assert.match(home, /readPublicMosaicImages/);
   assert.match(home, /<MediaMosaic/);
+  assert.match(home, /No releases have been published\./);
+  assert.match(home, /No Courses have been published\./);
+  assert.match(home, /No videos have been published\./);
+  assert.match(pageHero, /if \(mosaicImages\)/);
   assert.match(home, /<CourseCards/);
   assert.match(home, /<ExternalVideoConsent/);
   assert.match(home, /href="\/membership"/);
@@ -42,7 +50,10 @@ test("packages the functional home and quiet public page labels", async () => {
   assert.match(footer, /label: "Courses"/);
   assert.match(footer, /label: "Support"/);
   assert.match(footer, /label: "Connect"/);
+  assert.match(footer, /keys: \["about", "contact", "faq"\]/);
   assert.match(footer, /readPublicNavigationSnapshot\(env\.DB, "primary"\)/);
+  assert.match(footer, /\.\.\.\(primaryNavigation\?\.items \?\? \[\]\)/);
+  assert.match(footer, /\.\.\.configuredDirectoryItems/);
   assert.match(footer, /© \{new Date\(\)\.getUTCFullYear\(\)\}/);
   assert.doesNotMatch(home, /Sites-provided R2|Sites-provided D1|ChatGPT/);
   assert.match(layout, /card:\s*"summary"/);

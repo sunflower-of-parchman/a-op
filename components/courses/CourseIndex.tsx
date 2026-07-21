@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { PublishedCourseSummary } from "@/lib/courses/types.ts";
 import type { PublicArtwork } from "@/db/public-media.ts";
 import { PageHero } from "@/components/public/PageHero";
-import { CoursePreviewIndex } from "./CoursePreview";
 import styles from "./Courses.module.css";
 
 function accessLabel(course: PublishedCourseSummary): string {
@@ -17,15 +16,20 @@ export function CourseIndex({
   artworkBySlug,
   courses,
   mosaicImages,
-  previewCategory,
 }: {
   readonly artworkBySlug?: Readonly<Record<string, PublicArtwork | null>>;
   readonly courses: readonly PublishedCourseSummary[];
   readonly mosaicImages?: readonly PublicArtwork[];
-  readonly previewCategory?: string | null;
 }) {
   if (courses.length === 0) {
-    return <CoursePreviewIndex category={previewCategory ?? null} />;
+    return (
+      <>
+        <PageHero hero={null} mosaicImages={mosaicImages} title="Courses" />
+        <div className={`page-frame ${styles.indexContent}`}>
+          <p className={styles.empty}>No Courses have been published.</p>
+        </div>
+      </>
+    );
   }
 
   return (

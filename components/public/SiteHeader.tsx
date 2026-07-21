@@ -36,7 +36,7 @@ export async function SiteHeader() {
       href,
       label,
     }));
-  const accountHref = "/account";
+  const accountHref = authenticatedUser ? "/account" : "/login";
   const loginHref = "/login";
 
   return (

@@ -5,6 +5,10 @@
   padding-block: clamp(4rem, 9vw, 8rem);
 }
 
+.empty {
+  color: var(--ink-muted);
+}
+
 .membership {
   display: grid;
   grid-template-columns: minmax(15rem, 0.72fr) minmax(28rem, 1.28fr);

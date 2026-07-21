@@ -20,7 +20,7 @@ test("About and Login are dedicated public routes with direct destinations", asy
   assert.match(about, /href="\/contact"/);
   assert.match(login, /getChatGPTUser\(\)/);
   assert.match(login, /chatGPTSignInPath\("\/account"\)/);
-  assert.match(login, /Sign in with ChatGPT/);
+  assert.match(login, /Continue with ChatGPT/);
   assert.match(navigation, /loginHref/);
   assert.match(navigation, /label: "Log in"/);
 });
@@ -38,7 +38,7 @@ test("Contact remains visible until its real published form is ready", async () 
     /form \? <ContactForm form=\{form\} \/> : <ContactUnavailable \/>/,
   );
   assert.doesNotMatch(page, /notFound/);
-  assert.match(unavailable, /No inquiry can be submitted/);
+  assert.match(unavailable, /No contact form is published\./);
   assert.match(form, /fetch\("\/api\/contact"/);
   assert.match(form, /consentVersionId: form\.consent\.id/);
 });

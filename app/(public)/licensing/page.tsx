@@ -9,7 +9,7 @@ import { readPublicContactForm } from "@/db/contact-read.ts";
 import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
 import { listActiveLicenseOffers } from "@/db/licensing-read.ts";
 import { resolveApplicationIdentity } from "@/lib/auth/application-identity.ts";
-import { requireActiveModule } from "@/lib/modules/active-module.ts";
+import { requirePublicModulePresentation } from "@/lib/modules/active-module.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +18,13 @@ export const metadata: Metadata = {
 };
 
 export default async function LicensingPage() {
-  await requireActiveModule(env.DB, "licensing");
+  await requirePublicModulePresentation(env.DB, "licensing");
   const [
     authenticatedUser,
     offers,
     commerceProducts,
     contactForm,
     mosaicImages,
-    pendingPlans,
     pendingLicenseTypes,
   ] = await Promise.all([
     getChatGPTUser(),
@@ -33,7 +32,6 @@ export default async function LicensingPage() {
     listActiveCommerceProducts(env.DB),
     readPublicContactForm(env.DB),
     readPublicMosaicImages(env.DB),
-    listPublicCommerceIntentPreviews(env.DB, "subscription"),
     listPublicCommerceIntentPreviews(env.DB, "license"),
   ]);
   const identity = await resolveApplicationIdentity(env.DB, authenticatedUser);
@@ -51,7 +49,6 @@ export default async function LicensingPage() {
         contactForm={contactForm}
         offers={offers}
         pendingLicenseTypes={pendingLicenseTypes}
-        pendingPlans={pendingPlans}
         requestAccess={requestAccess}
         signInHref={chatGPTSignInPath("/licensing")}
       />

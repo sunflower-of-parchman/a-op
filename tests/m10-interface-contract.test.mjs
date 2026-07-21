@@ -85,8 +85,8 @@ test("approved page heroes open Courses, Videos, Membership, and Licensing throu
   );
   assert.match(deliveryRoute, /PAGE_HERO_KEYS\.includes/);
   for (const page of pages) {
-    assert.match(page, /readPublicPageHero\(env\.DB/);
-    assert.match(page, /<PageHero/);
+    assert.match(page, /readPublicMosaicImages\(env\.DB\)/);
+    assert.match(page, /<(?:PageHero|CourseIndex)/);
   }
 });
 
@@ -105,11 +105,12 @@ test("the compact public navigation uses the agreed hamburger-to-close contract"
     /FOOTER_ONLY_ROUTES = new Set\(\["\/about", "\/contact", "\/whats-new"\]\)/,
   );
   assert.match(header, /!FOOTER_ONLY_ROUTES\.has\(href\)/);
+  assert.match(header, /authenticatedUser \? "\/account" : "\/login"/);
   assert.doesNotMatch(css, /\.site-header\s*\{[^}]*border-bottom:/);
   assert.match(navigation, /className="site-header__account"/);
   assert.match(navigation, /className="site-header__login"/);
   assert.match(navigation, />\s*Log in\s*<\/Link>/);
-  assert.match(navigation, />\s*Account\s*<\/Link>/);
+  assert.match(navigation, /<span>Account<\/span>/);
   assert.match(navigation, /usePathname\(\)/);
   assert.match(navigation, /aria-current=/);
   assert.match(css, /\.site-navigation__link\[aria-current="page"\]/);

@@ -13,9 +13,6 @@ const files = {
   mobileMusicControls: "../components/music/MobileMusicControls.tsx",
   trackActions: "../components/music/TrackActions.tsx",
   publicTrackActions: "../components/music/PublicTrackActions.tsx",
-  emptyTrackPreview: "../components/music/EmptyTrackPreview.tsx",
-  previewCatalogDetail: "../components/music/PreviewCatalogDetail.tsx",
-  previewTrackDetail: "../components/music/PreviewTrackDetail.tsx",
   trackColumnHeader: "../components/music/TrackColumnHeader.tsx",
   musicFilters: "../components/music/MusicFilters.tsx",
   musicSort: "../components/music/MusicSort.tsx",
@@ -52,8 +49,9 @@ test("owns the music routes through public-index and identity-aware detail bound
   assert.match(release, /readCurrentCatalogRelease\(env\.DB, slug\)/);
   assert.match(track, /readCurrentCatalogTrack\(env\.DB, slug\)/);
   assert.match(collection, /readCurrentCatalogCollection\(env\.DB, slug\)/);
-  assert.match(release, /<PreviewCatalogDetail kind="album" \/>/);
-  assert.match(collection, /<PreviewCatalogDetail kind="collection" \/>/);
+  assert.doesNotMatch(release, /preview/i);
+  assert.doesNotMatch(track, /preview/i);
+  assert.doesNotMatch(collection, /preview/i);
   assert.match(currentDetail, /getChatGPTUser\(\)/);
   assert.match(
     currentDetail,
@@ -70,9 +68,6 @@ test("owns the music routes through public-index and identity-aware detail bound
 test("keeps the complete neutral music library functional and literal when empty", async () => {
   const [
     index,
-    emptyTrackPreview,
-    previewCatalogDetail,
-    previewTrackDetail,
     trackColumnHeader,
     filters,
     mobileControls,
@@ -85,9 +80,6 @@ test("keeps the complete neutral music library functional and literal when empty
     styles,
   ] = await Promise.all([
     source(files.musicIndex),
-    source(files.emptyTrackPreview),
-    source(files.previewCatalogDetail),
-    source(files.previewTrackDetail),
     source(files.trackColumnHeader),
     source(files.musicFilters),
     source(files.mobileMusicControls),
@@ -99,7 +91,7 @@ test("keeps the complete neutral music library functional and literal when empty
     source(files.musicDetail),
     source(files.musicStyles),
   ]);
-  const combined = `${index}\n${emptyTrackPreview}\n${previewTrackDetail}\n${detail}`;
+  const combined = `${index}\n${detail}`;
 
   assert.match(index, /No music has been published yet\./);
   assert.match(index, /No collections have been published yet\./);
@@ -133,34 +125,17 @@ test("keeps the complete neutral music library functional and literal when empty
   assert.doesNotMatch(index, /No listening history yet\./);
   assert.doesNotMatch(index, /Streaming unavailable/);
   assert.match(index, /styles\.indexArtworkEmpty/);
-  assert.match(index, /<EmptyTrackPreview playlists=\{playlists\} \/>/);
-  assert.match(index, /<EmptyCatalogPreview count=\{3\} kind="album" \/>/);
-  assert.match(index, /<EmptyCatalogPreview count=\{2\} kind="collection" \/>/);
-  assert.match(index, /preview-\$\{index \+ 1\}/);
-  assert.match(emptyTrackPreview, /Array\.from\(\{ length: 5 \}/);
-  assert.match(
-    emptyTrackPreview,
-    /previewQueue\(EMPTY_TRACK_PREVIEW_QUEUE, index\)/,
-  );
-  assert.match(emptyTrackPreview, /className=\{styles\.playTriangle\}/);
-  assert.match(styles, /\.previewArtworkButton:hover span/);
+  assert.match(index, /hasNoPublishedTracks/);
+  assert.match(index, /No tracks have been published yet\./);
+  assert.doesNotMatch(index, /EmptyTrackPreview|EmptyCatalogPreview|preview-/);
   assert.match(index, /<TrackColumnHeader \/>/);
-  assert.match(previewCatalogDetail, /<TrackColumnHeader \/>/);
-  assert.match(
-    previewCatalogDetail,
-    /<EmptyTrackPreview playlists=\{\[\]\} \/>/,
-  );
-  assert.match(previewCatalogDetail, />Buy Downloads</);
   assert.match(trackColumnHeader, />Tempo</);
   assert.match(trackColumnHeader, />Meter</);
   assert.match(trackColumnHeader, />Key</);
   assert.match(index, /const displayedCount =/);
-  assert.match(emptyTrackPreview, /href="\/music\/tracks\/preview"/);
   for (const action of ["Add to Playlist", "License Track", "Buy Track"]) {
-    assert.match(previewTrackDetail, new RegExp(`>${action}<`));
     assert.match(trackActions, new RegExp(`>\\s*${action}\\s*<`));
   }
-  assert.match(previewTrackDetail, />Download</);
   assert.match(trackActions, /aria-label=\{`Download \$\{trackTitle\}`\}/);
   assert.match(trackActions, /<DownloadIcon \/>/);
   assert.doesNotMatch(
@@ -170,7 +145,6 @@ test("keeps the complete neutral music library functional and literal when empty
   assert.match(downloadIcon, /M12 3v17/);
   assert.doesNotMatch(downloadIcon, /M3 15v4/);
   assert.match(downloadIcon, /strokeLinecap="round"/);
-  assert.match(previewTrackDetail, />Favorite</);
   assert.match(trackActions, /Add to Favorites/);
   assert.match(index, /item\.tempoBpm/);
   assert.match(index, /item\.meter/);

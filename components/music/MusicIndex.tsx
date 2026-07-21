@@ -15,7 +15,6 @@ import type {
   ListeningHistoryDTO,
 } from "@/lib/customer-library/types.ts";
 import type { LicenseOfferDTO } from "@/lib/licensing/types.ts";
-import { EmptyTrackPreview } from "./EmptyTrackPreview";
 import { MobileMusicControls } from "./MobileMusicControls";
 import { MusicFilters } from "./MusicFilters";
 import { MusicSort } from "./MusicSort";
@@ -221,47 +220,6 @@ function CardSection({
   );
 }
 
-function EmptyCatalogPreview({
-  count,
-  kind,
-}: {
-  readonly count: number;
-  readonly kind: "album" | "collection";
-}) {
-  const title = kind === "album" ? "Album" : "Collection";
-  const route = kind === "album" ? "releases" : "collections";
-  return (
-    <div
-      aria-label={`${title} interface previews`}
-      className={styles.catalogGrid}
-      role="list"
-    >
-      {Array.from({ length: count }, (_, index) => (
-        <article
-          className={styles.catalogCard}
-          key={`${kind}:${index + 1}`}
-          role="listitem"
-        >
-          <Link
-            aria-label={`Open ${title} preview ${index + 1}`}
-            className={styles.catalogCardLink}
-            href={`/music/${route}/preview-${index + 1}`}
-          >
-            <span
-              aria-hidden="true"
-              className={`${styles.cardArtwork} ${styles.cardArtworkEmpty}`}
-            />
-            <span className={styles.cardIdentity}>
-              <strong>{title}</strong>
-              <span>5 tracks</span>
-            </span>
-          </Link>
-        </article>
-      ))}
-    </div>
-  );
-}
-
 export interface MusicIndexProps {
   readonly data: PublicMusicIndexDTO;
   readonly favorites?: readonly CustomerFavoriteDTO[];
@@ -336,7 +294,7 @@ export function MusicIndex({
               visibleAlbums.length +
               visibleCollections.length
             : data.items.length;
-  const showEmptyTrackPreview =
+  const hasNoPublishedTracks =
     visibleTracks.length === 0 ||
     (visibleTracks.length === 1 &&
       visibleTracks[0].title === "Track" &&
@@ -347,7 +305,7 @@ export function MusicIndex({
       visibleTracks[0].tempoBpm === null &&
       visibleTracks[0].musicalKey === null);
   const displayedCount =
-    view === "tracks" && showEmptyTrackPreview ? 5 : visibleCount;
+    view === "tracks" && hasNoPublishedTracks ? 0 : visibleCount;
 
   return (
     <>
@@ -464,8 +422,8 @@ export function MusicIndex({
           {view === "tracks" ? (
             <section className={styles.trackTable}>
               <TrackColumnHeader />
-              {showEmptyTrackPreview ? (
-                <EmptyTrackPreview playlists={playlists} />
+              {hasNoPublishedTracks ? (
+                <EmptyMessage>No tracks have been published yet.</EmptyMessage>
               ) : (
                 <ol
                   aria-label="Published tracks"
@@ -485,29 +443,17 @@ export function MusicIndex({
               )}
             </section>
           ) : view === "collections" ? (
-            visibleCollections.length === 0 ? (
-              <section className={styles.viewSection}>
-                <EmptyCatalogPreview count={2} kind="collection" />
-              </section>
-            ) : (
-              <CardSection
-                empty="No collections have been published yet."
-                items={visibleCollections}
-                title={null}
-              />
-            )
+            <CardSection
+              empty="No collections have been published yet."
+              items={visibleCollections}
+              title={null}
+            />
           ) : view === "albums" ? (
-            visibleAlbums.length === 0 ? (
-              <section className={styles.viewSection}>
-                <EmptyCatalogPreview count={3} kind="album" />
-              </section>
-            ) : (
-              <CardSection
-                empty="No albums have been published yet."
-                items={visibleAlbums}
-                title={null}
-              />
-            )
+            <CardSection
+              empty="No albums have been published yet."
+              items={visibleAlbums}
+              title={null}
+            />
           ) : view === "favorites" ? (
             <div className={styles.favoriteSections}>
               <CardSection

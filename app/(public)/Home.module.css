@@ -41,6 +41,14 @@
   aspect-ratio: 1;
 }
 
+.emptyArtwork {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--field);
+}
+
 .portrait {
   aspect-ratio: 4 / 5;
 }
@@ -97,6 +105,18 @@
 
 .videoPlayer > div {
   max-width: none;
+}
+
+.emptyMedia {
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  background: var(--field);
+}
+
+.emptyMessage {
+  margin: 0;
+  color: var(--ink-muted);
+  text-align: center;
 }
 
 .videoList {

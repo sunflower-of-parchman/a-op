@@ -7,28 +7,19 @@ import {
   readPublishedVideoBySlug,
 } from "@/db/video-read.ts";
 import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
-import { requireActiveModule } from "@/lib/modules/active-module.ts";
+import { requirePublicModulePresentation } from "@/lib/modules/active-module.ts";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "Videos" };
 
-export default async function VideosPage({
-  searchParams,
-}: {
-  readonly searchParams: Promise<{ video?: string | string[] }>;
-}) {
-  await requireActiveModule(env.DB, "video");
+export default async function VideosPage() {
+  await requirePublicModulePresentation(env.DB, "video");
   const [videos, mosaicImages] = await Promise.all([
     listPublishedVideos(env.DB),
     readPublicMosaicImages(env.DB),
   ]);
-  const rawSelection = (await searchParams).video;
-  const requestedSlug = Array.isArray(rawSelection)
-    ? rawSelection[0]
-    : rawSelection;
-  const activeSlug =
-    videos.find(({ slug }) => slug === requestedSlug)?.slug ?? videos[0]?.slug;
+  const activeSlug = videos[0]?.slug;
   const publishedVideos = (
     await Promise.all(
       videos.map(({ slug }) => readPublishedVideoBySlug(env.DB, slug)),
@@ -42,11 +33,7 @@ export default async function VideosPage({
   return (
     <>
       <PageHero hero={null} mosaicImages={mosaicImages} title="Videos" />
-      <VideoIndex
-        activeVideo={activeVideo}
-        previewSelection={requestedSlug ?? null}
-        videos={publishedVideos}
-      />
+      <VideoIndex activeVideo={activeVideo} videos={publishedVideos} />
     </>
   );
 }

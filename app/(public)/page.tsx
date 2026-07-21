@@ -57,20 +57,20 @@ export default async function Home() {
         ] as const,
     ),
   );
-  const displayName = artist?.displayName ?? "Artist";
+  const displayName = artist?.displayName ?? "a-op";
 
   return (
     <main className={styles.home}>
       <MediaMosaic images={mosaicImages} title={displayName} variant="home" />
 
-      {latestRelease ? (
-        <section
-          className={`${styles.section} page-frame`}
-          aria-labelledby="home-music"
-        >
-          <header className={styles.sectionHeading}>
-            <h2 id="home-music">Music</h2>
-          </header>
+      <section
+        className={`${styles.section} page-frame`}
+        aria-labelledby="home-music"
+      >
+        <header className={styles.sectionHeading}>
+          <h2 id="home-music">Music</h2>
+        </header>
+        {latestRelease ? (
           <div className={styles.releaseFeature}>
             {latestRelease.artwork ? (
               <img
@@ -98,35 +98,47 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </section>
-      ) : null}
+        ) : (
+          <div className={styles.releaseFeature}>
+            <div className={styles.emptyArtwork} aria-hidden="true" />
+            <div className={styles.releaseCopy}>
+              <p>No releases have been published.</p>
+              <Link className={styles.browseLink} href="/music">
+                Browse Music
+              </Link>
+            </div>
+          </div>
+        )}
+      </section>
 
-      {courses.length > 0 ? (
-        <section
-          className={`${styles.section} page-frame`}
-          aria-labelledby="home-courses"
-        >
-          <header className={styles.sectionHeading}>
-            <h2 id="home-courses">Courses</h2>
-          </header>
+      <section
+        className={`${styles.section} page-frame`}
+        aria-labelledby="home-courses"
+      >
+        <header className={styles.sectionHeading}>
+          <h2 id="home-courses">Courses</h2>
+        </header>
+        {courses.length > 0 ? (
           <CourseCards
             artworkBySlug={Object.fromEntries(artworkEntries)}
             courses={courses.slice(0, 2)}
           />
-          <Link className={styles.browseLink} href="/courses">
-            Browse Courses
-          </Link>
-        </section>
-      ) : null}
+        ) : (
+          <p className={styles.emptyMessage}>No Courses have been published.</p>
+        )}
+        <Link className={styles.browseLink} href="/courses">
+          Browse Courses
+        </Link>
+      </section>
 
-      {activeVideo ? (
-        <section
-          className={`${styles.section} page-frame`}
-          aria-labelledby="home-videos"
-        >
-          <header className={styles.sectionHeading}>
-            <h2 id="home-videos">Videos</h2>
-          </header>
+      <section
+        className={`${styles.section} page-frame`}
+        aria-labelledby="home-videos"
+      >
+        <header className={styles.sectionHeading}>
+          <h2 id="home-videos">Videos</h2>
+        </header>
+        {activeVideo ? (
           <div className={styles.videoFeature}>
             <div className={styles.videoPlayer}>
               {activeVideo.delivery.kind === "external" ? (
@@ -164,8 +176,21 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-        </section>
-      ) : null}
+        ) : (
+          <div className={styles.videoFeature}>
+            <div
+              aria-hidden="true"
+              className={`${styles.videoPlayer} ${styles.emptyMedia}`}
+            />
+            <div className={styles.videoCopy}>
+              <p>No videos have been published.</p>
+              <Link className={styles.browseLink} href="/videos">
+                Browse Videos
+              </Link>
+            </div>
+          </div>
+        )}
+      </section>
 
       {about ? (
         <section

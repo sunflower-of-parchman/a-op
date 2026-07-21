@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import type { PublicVideoDetailDTO } from "@/lib/video/types.ts";
 import { EmptyVideoPlayer } from "./EmptyVideoPlayer";
 import { ExternalVideoConsent } from "./ExternalVideoConsent";
 import { HostedVideoPlayer } from "./HostedVideoPlayer";
 import styles from "./Video.module.css";
-
-const PREVIEW_VIDEO_COUNT = 4;
 
 function formattedDate(value: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
@@ -94,33 +91,6 @@ function Player({
   );
 }
 
-function PreviewPlaylist({ selected }: { readonly selected: number }) {
-  return (
-    <ol className={styles.playlist}>
-      {Array.from({ length: PREVIEW_VIDEO_COUNT }, (_, index) => {
-        const videoNumber = index + 1;
-        const active = videoNumber === selected;
-        return (
-          <li key={videoNumber}>
-            <Link
-              aria-current={active ? "true" : undefined}
-              className={styles.playlistRow}
-              href={`/videos?video=preview-${videoNumber}`}
-            >
-              <span aria-hidden="true" className={styles.playlistArtwork} />
-              <span className={styles.playlistCopy}>
-                <strong>Title</strong>
-                <span>Date</span>
-                <span>Subheading</span>
-              </span>
-            </Link>
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
-
 function PublishedPlaylist({
   activeVideo,
   onSelect,
@@ -167,11 +137,9 @@ function VideoThumbnail({ video }: { readonly video: PublicVideoDetailDTO }) {
 
 export function VideoIndex({
   activeVideo,
-  previewSelection,
   videos,
 }: {
   readonly activeVideo: PublicVideoDetailDTO | null;
-  readonly previewSelection: string | null;
   readonly videos: readonly PublicVideoDetailDTO[];
 }) {
   const empty = videos.length === 0;
@@ -179,8 +147,6 @@ export function VideoIndex({
   const [externalConsent, setExternalConsent] = useState(false);
   const selectedVideo =
     videos.find((video) => video.id === selectedId) ?? activeVideo;
-  const previewMatch = /^preview-([1-4])$/.exec(previewSelection ?? "");
-  const selectedPreview = previewMatch ? Number(previewMatch[1]) : 1;
   const watchLink = selectedVideo ? externalWatchLink(selectedVideo) : null;
 
   function selectVideo(video: PublicVideoDetailDTO) {
@@ -189,6 +155,14 @@ export function VideoIndex({
       null,
       "",
       `/videos?video=${encodeURIComponent(video.slug)}`,
+    );
+  }
+
+  if (empty) {
+    return (
+      <main className={`${styles.viewingRoom} page-frame`}>
+        <p className={styles.empty}>No videos have been published.</p>
+      </main>
     );
   }
 
@@ -202,19 +176,15 @@ export function VideoIndex({
         />
         <div className={styles.nowPlayingCopy}>
           <p>Now Playing</p>
-          <h2>{selectedVideo?.title ?? "Title"}</h2>
-          <p>{selectedVideo?.summary || "Subheading"}</p>
-          <p>
-            {selectedVideo ? formattedDate(selectedVideo.publishedAt) : "Date"}
-          </p>
+          <h2>{selectedVideo?.title}</h2>
+          {selectedVideo?.summary ? <p>{selectedVideo.summary}</p> : null}
+          {selectedVideo ? (
+            <p>{formattedDate(selectedVideo.publishedAt)}</p>
+          ) : null}
           {watchLink ? (
             <a href={watchLink.href} rel="noreferrer" target="_blank">
               {watchLink.label}
             </a>
-          ) : empty ? (
-            <span aria-disabled="true" className={styles.disabledWatchLink}>
-              Watch on YouTube
-            </span>
           ) : null}
         </div>
       </section>
@@ -225,11 +195,9 @@ export function VideoIndex({
       >
         <header className={styles.playlistHeader}>
           <h2 id="playlist-title">Playlist</h2>
-          <p>{empty ? PREVIEW_VIDEO_COUNT : videos.length} videos</p>
+          <p>{videos.length} videos</p>
         </header>
-        {empty ? (
-          <PreviewPlaylist selected={selectedPreview} />
-        ) : selectedVideo ? (
+        {selectedVideo ? (
           <PublishedPlaylist
             activeVideo={selectedVideo}
             onSelect={selectVideo}

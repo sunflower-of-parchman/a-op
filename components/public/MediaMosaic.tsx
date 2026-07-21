@@ -359,7 +359,23 @@ export function MediaMosaic({
     };
   }, [images, variant, title]);
 
-  if (images.length === 0) return null;
+  if (images.length === 0) {
+    return (
+      <header className={styles[variant]}>
+        <div aria-hidden="true" className={styles.grid}>
+          {createLayout(variant, false).map((rect) => (
+            <span
+              className={styles.emptyTile}
+              key={rectId(rect)}
+              style={tileStyle(rect)}
+            />
+          ))}
+        </div>
+        <div className={styles.scrim} />
+        {title ? <h1>{title}</h1> : null}
+      </header>
+    );
+  }
 
   return (
     <header className={styles[variant]}>
