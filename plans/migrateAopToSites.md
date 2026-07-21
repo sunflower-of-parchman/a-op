@@ -118,19 +118,18 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] Implement ChatGPT Work setup, personalization, media preparation, export, restore rehearsal, diagnosis, and maintenance.
 - [x] Complete responsive, keyboard, accessibility, performance, security, and recovery verification across the integrated application.
 - [x] (2026-07-21 14:52Z) Corrected the neutral Sites release boundary so caller Stripe environment values cannot activate or block the pre-personalization build. Release preparation now removes all three Stripe Test variables before building; local setup and activated runtime validation remain strict. The focused commerce-preflight contract and the neutral production build passed with an unrelated 32-character `STRIPE_SECRET_KEY` present in the caller environment.
-- [x] (2026-07-21 14:58Z) Simplified the initial Sites path to one eligibility build, private Site linkage, and one final release preparation. Removed the duplicate `verify:sites-package` command, limited live-credential checks to the three Stripe inputs, required the assigned `project_id` before final preparation, and derived migration-chain length from the checked-in journal rather than the current count. Nine focused release and commerce contracts, the neutral five-stage production build under the conflicting caller environment, strict types, the runtime artifact verifier, and diff integrity passed.
-- [x] (2026-07-21 Sites connector gate) Added a pre-repository capability gate after a real Work test exposed only the Sites design picker and no hosting connector. New-installation tasks now stop before clone, install, build, localhost, or personalization unless they can create a Site, obtain source-write credentials, save a version, deploy it privately, and check deployment status. The README test prompt carries the same gate and exact failure statement.
 - [x] (2026-07-21 product definition pass) Reduced `PRODUCT.md` from 122 lines to 49 by keeping the durable product identity, connected capabilities, artist ownership, data and access model, Sites commerce boundary, and completion standard. Removed repeated setup, policy, interface, and platform-operating detail already owned by the architecture and setup contracts.
+- [x] (2026-07-21 Sites handoff simplification) Restored the normal `@sites` repository flow: clone, build, privately host, and verify the neutral Site before personalization. Removed the repository-owned connector-action preflight and the requirement to commit a `project_id` before release preparation. The focused Sites release contract and formatting checks passed.
 - [ ] Save a Sites version from the exact validated source.
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
 
+- Observation: A repository-owned inspection of task-visible connector actions made the normal `@sites` handoff more complicated and stopped Work before its own clone-and-host workflow could run.
+  Evidence: The added prompt and repository instructions required Work to prove individual internal hosting actions before cloning, even though `@sites` owns that workflow.
+
 - Observation: `PRODUCT.md` repeated most of `docs/architecture/product-contract.md` and several narrower operating contracts.
   Evidence: Capability descriptions appeared both as a full list and separate sections, while setup, storage, current platform guidance, privacy handling, and commerce mechanics repeated their dedicated documents.
-
-- Observation: Loading the Sites plugin does not guarantee that the active task receives the Sites hosting connector.
-  Evidence: The failed Work test exposed `sites-design-picker` but no action to create a Site, save a version, deploy privately, inspect deployment status, or obtain source-write credentials. The repository completed its neutral build correctly, but no ChatGPT Site could exist in that task.
 
 - Observation: The release process inherited a generic `STRIPE_SECRET_KEY` from the caller even though the neutral installation had no commerce configuration.
   Evidence: The variable was present, 32 characters long, and did not have a Stripe Test prefix; the other two Stripe variables were absent. Ordinary builds correctly allow absent commerce configuration, but validating the unrelated caller value caused the neutral production build to stop before Sites creation.
@@ -333,16 +332,16 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Rationale: Product identity, purpose, connected capabilities, ownership, and completion belong together. Release, setup, policy, storage, and implementation detail remain in their focused contracts.
   Date/Author: 2026-07-21 / Michael and Codex
 
-- Decision: Gate every repository-link installation on callable Sites hosting actions before repository work.
-  Rationale: The repository cannot supply a missing task connector. Failing before clone prevents a localhost preview from consuming time or being mistaken for the promised private Site, while a successfully provisioned task continues through the exact linked release flow.
+- Decision: Let `@sites` own the repository clone and Sites hosting workflow.
+  Rationale: The repository supplies the complete product and its release checks. The installed Sites workflow owns Site creation, project linkage, packaging, version saving, private deployment, and deployment status.
   Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Build and package every neutral Sites release with Stripe Test environment values removed from the child process.
   Rationale: Hosted runtime values belong in Sites settings and personalization follows successful neutral hosting. Removing the three exact commerce variables prevents ambient tool configuration from becoming release input while local setup and deliberately activated Test commerce continue to reject missing, malformed, or live values.
   Date/Author: 2026-07-21 / Michael and Codex
 
-- Decision: Use one canonical final release preparation after private Site linkage.
-  Rationale: One successful neutral build is sufficient before private Site creation. Committing the assigned `project_id` before `prepare:sites-release` produces the exact linked artifact once, while journal-derived migration checks and exact-input credential validation preserve meaningful release integrity without unrelated or stale-count failures.
+- Decision: Keep release preparation available as one verification command without requiring preassigned Site state.
+  Rationale: `@sites` can run the repository's exact source, artifact, binding, and migration checks when needed while owning project linkage through its normal hosting workflow.
   Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Complete and verify the neutral private Site before beginning artist personalization.
@@ -657,11 +656,11 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 
 Product-definition outcome as of 2026-07-21: `PRODUCT.md` now gives a complete 49-line account of what a-op is without duplicating its release, setup, privacy, storage, and implementation documentation.
 
-Sites connector-gate outcome as of 2026-07-21: the repository handoff now distinguishes the Sites workflow instructions and design picker from the callable hosting connector. A task missing creation, source-write, version-save, private-deploy, or deployment-status actions stops immediately with an exact statement that no Site was created. Localhost cannot satisfy or bypass this gate, and personalization remains after successful hosted verification.
+Sites handoff outcome as of 2026-07-21: the public prompt is again the simple two-line `@Sites` repository request. `@sites` owns cloning, Site creation, project linkage, packaging, version saving, and private deployment. The repository builds and verifies the complete neutral product before personalization without inspecting Work's internal connector actions.
 
 Neutral commerce-boundary outcome as of 2026-07-21: the release candidate no longer requires or consumes Stripe Test configuration. `prepare:sites-release` removes the three Stripe variables from its child environment, then verifies the complete application with simulated commerce inactive. Stripe Test setup remains a later deliberate Sites-settings action after the hosted neutral installation is verified, and runtime activation still fails closed for incomplete, malformed, or live configuration.
 
-Initial-release simplification outcome as of 2026-07-21: one ordinary neutral build establishes eligibility, Sites creates the private project and assigns `project_id`, and one clean synchronized `prepare:sites-release` run creates the final linked artifact. The redundant package gate is gone, unrelated environment credentials are outside Stripe validation, and sequential journal parity replaces the stale exact migration-count gate.
+Release-preparation outcome as of 2026-07-21: `prepare:sites-release` verifies clean synchronized source, the Worker, bindings, migrations, database-backed routes, and the artifact digest without requiring a preassigned Site project. Unrelated environment credentials remain outside Stripe validation, and sequential journal parity replaces the stale exact migration-count gate.
 
 Framework-release outcome as of 2026-07-21: the empty clone is a complete, clickable product framework rather than a content demonstration. Public navigation, support pages, legal starters, Login, and every supported capability index remain visible while setup is unconfigured. Music, Courses, Videos, Membership, Licensing, Contact, and What's New tell the truth about absent records; they contain no preview catalog, course, playlist, plan, benefit, pricing, category, or artist-specific licensing content. Configured installations still derive public navigation from active modules, and detail routes, delivery, account authority, administration, and mutations retain their server-owned gates.
 
@@ -1641,8 +1640,6 @@ Revision note, 2026-07-21: Moved capability and artist-material discovery after 
 
 Revision note, 2026-07-21: Removed Stripe Test environment values from the neutral release and package child processes after a generic caller `STRIPE_SECRET_KEY` blocked the pre-personalization build. Preserved strict validation for deliberate local setup and activated simulated commerce.
 
-Revision note, 2026-07-21: Simplified initial hosting to one eligibility build and one final linked release build, removed the duplicate package gate, scoped Stripe checks to exact inputs, and made migration verification follow the checked-in journal.
-
-Revision note, 2026-07-21: Added a fail-fast callable-tool gate after a Work task loaded the Sites design picker without the hosting connector and incorrectly continued to localhost.
-
 Revision note, 2026-07-21: Reduced `PRODUCT.md` to the durable product definition and left operational detail in the focused repository contracts.
+
+Revision note, 2026-07-21: Removed the connector-action preflight and preassigned-project requirement so the installed `@sites` workflow can clone, build, privately host, and verify the neutral repository through its normal path.

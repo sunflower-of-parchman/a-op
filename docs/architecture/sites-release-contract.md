@@ -4,27 +4,13 @@
 
 One private Sites release carries one exact `a-op` source commit, its generated Worker artifact, the repository hosting configuration, and the complete checked-in D1 migration chain. Deployment stops on any mismatch. A deployment agent never replaces repository routes, components, copy, repositories, or database access with a substitute Site.
 
-## Hosting capability preflight
+## Release preparation
 
-Before cloning, installing, building, or opening localhost for a repository-link request, inspect the active task's callable tools. Continue only when the task can create a Site, obtain source-write credentials, save a Site version, deploy it privately, and check deployment status. A Sites skill plus the design picker is an incomplete hosting surface.
-
-If any hosting action is absent, stop with `The full Sites hosting connector is unavailable. No Site has been created.` A local preview is not a fallback deployment and must never be reported as the new website. Repository code cannot add a connector that the task was not provisioned to use.
-
-## Initial Site linkage
-
-For a new installation, run one ordinary neutral production build first:
-
-    npm run build
-
-After that build succeeds and Michael approves creation of the private Site, create it once with the installed Sites hosting helper. Record the assigned non-empty `project_id` in `.openai/hosting.json`, commit and push that single linkage with the validated source, and then run the final preparation below. This avoids preparing and discarding an unlinked release artifact.
-
-## Required final preparation
-
-Run from a clean clone of `sunflower-of-parchman/a-op` on `main`:
+`@sites` owns cloning, Site creation, project linkage, packaging, version saving, and private deployment. When it needs an exact release candidate, run from a clean clone of `sunflower-of-parchman/a-op` on `main`:
 
     npm run prepare:sites-release
 
-The command fails unless `HEAD` equals `origin/main` and `.openai/hosting.json` contains the assigned `project_id`. It records the full source SHA, installs the lockfile exactly, confirms that installation did not change source, builds once, confirms that the build did not change source, and verifies:
+The command requires `HEAD` to equal `origin/main`. It records the full source SHA, installs the lockfile exactly, confirms that installation did not change source, builds once, confirms that the build did not change source, and verifies:
 
 - `dist/server/index.js`;
 - `dist/.openai/hosting.json` with logical `DB` and `MEDIA` bindings;

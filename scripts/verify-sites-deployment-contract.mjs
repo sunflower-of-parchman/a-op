@@ -115,12 +115,6 @@ assert.deepEqual(
     : ["d1", "r2"],
   ".openai/hosting.json may contain only project_id, d1, and r2.",
 );
-assert.match(
-  hosting.project_id ?? "",
-  /\S/,
-  "Create the private Site and commit its project_id before preparing the final release artifact.",
-);
-
 const migrationNames = (await readdir(resolve(root, "drizzle")))
   .filter((name) => /^\d{4}_.+\.sql$/.test(name))
   .sort();

@@ -161,13 +161,11 @@ The setup contract and commands are documented in [SETUP.md](SETUP.md).
 Open a new Work chat and paste this prompt:
 
 ```text
-Before cloning, installing, or building, confirm this task exposes the Sites hosting actions required to create a Site, obtain source-write credentials, save a version, deploy it privately, and check deployment status. If any action is missing, stop immediately and state: "The full Sites hosting connector is unavailable. No Site has been created."
-
 @Sites, let’s build my new artist-owned website from this repository:
 https://github.com/sunflower-of-parchman/a-op
 ```
 
-That request first proves the active Work task can host the Site. The Sites skill or design picker by itself is insufficient. If the hosting connector is incomplete, the task ends before repository work and cannot present localhost as the website. When the gate passes, the request builds and verifies the complete neutral private Site before asking for artist material or configuration. After the Site works, Work begins personalization by asking the artist to attach a context document or approved assets, share a Google Drive folder, approve a local asset folder, or begin with the blank Site. Work reviews the supplied material and presents the proposed capabilities and setup before changing the Site.
+`@Sites` clones the repository, builds and privately hosts the complete neutral Site, and verifies it before asking for artist material or configuration. After the Site works, Work begins personalization by asking the artist to attach a context document or approved assets, share a Google Drive folder, approve a local asset folder, or begin with the blank Site. Work reviews the supplied material and presents the proposed capabilities and setup before changing the Site.
 
 ## Stripe Test Mode
 
@@ -193,7 +191,7 @@ The Sites application compiles and produces its Worker deployment output. The re
 
 Before submission, the one-shot installer still needs a clean-state exercise against artist-approved source material. The exact approved Sites version must then be saved and deployed with Michael's approval.
 
-Initial Sites release uses one eligibility build, then private Site creation and one committed `project_id`. The single canonical `npm run prepare:sites-release` command then requires clean synchronized `main`, installs from the lockfile, builds without source changes, verifies the Worker, bindings, complete journal-matched migration chain, database-backed public routes, and artifact digest, and leaves the unchanged candidate ready for the official Sites packager. See [docs/architecture/sites-release-contract.md](docs/architecture/sites-release-contract.md).
+The installed `@Sites` workflow owns Site creation, project linkage, packaging, version saving, and private deployment. When it prepares an exact release candidate, `npm run prepare:sites-release` verifies clean synchronized source, the Worker, bindings, complete journal-matched migration chain, database-backed public routes, and artifact digest. See [docs/architecture/sites-release-contract.md](docs/architecture/sites-release-contract.md).
 
 The controlling implementation record is [plans/migrateAopToSites.md](plans/migrateAopToSites.md). The product contract is [PRODUCT.md](PRODUCT.md).
 

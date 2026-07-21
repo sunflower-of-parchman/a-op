@@ -31,7 +31,6 @@ test("Sites release preparation fails closed around one clean main artifact", as
   assert.match(verifier, /dist\/\.openai\/hosting\.json/);
   assert.match(verifier, /dist\/\.openai\/drizzle\/meta\/_journal\.json/);
   assert.match(verifier, /createHash\("sha256"\)/);
-  assert.match(verifier, /commit its project_id/);
   assert.doesNotMatch(verifier, /exactly 36 source migrations/);
 
   const ci = runner.indexOf("npm ci");
@@ -44,28 +43,19 @@ test("Sites release preparation fails closed around one clean main artifact", as
 
   assert.match(packageJson, /"prepare:sites-release"/);
   assert.doesNotMatch(packageJson, /"verify:sites-package"/);
-  assert.match(agents, /Sites hosting capability gate/);
-  assert.match(agents, /inspect the active task's callable tools/);
-  assert.match(agents, /The full Sites hosting connector is unavailable/);
-  assert.match(agents, /Do not clone, install, build, open localhost/);
+  assert.match(agents, /@sites.*clones the repository/);
+  assert.match(agents, /Sites hosting helper owns Site creation/);
   assert.match(contract, /Any failure is terminal/);
-  assert.match(contract, /Hosting capability preflight/);
-  assert.match(contract, /A local preview is not a fallback deployment/);
-  assert.match(contract, /Initial Site linkage/);
-  assert.match(contract, /assigned `project_id`/);
+  assert.match(contract, /@sites.*owns cloning/);
   assert.match(contract, /No membership is published\./);
   assert.match(agents, /npm run prepare:sites-release/);
-  assert.match(
-    agents,
-    /Ask no capability, content, asset, design, or setup question/,
-  );
+  assert.match(agents, /verifies it before personalization/);
   assert.doesNotMatch(agents, /Begin every installation by asking/);
   assert.match(
     readme,
     /@Sites, let’s build my new artist-owned website from this repository:/,
   );
-  assert.match(readme, /Before cloning, installing, or building/);
-  assert.match(readme, /deploy it privately/);
+  assert.match(readme, /@Sites.*clones the repository/);
   assert.doesNotMatch(readme, /First ask which supported capabilities/);
   assert.match(
     setup,
