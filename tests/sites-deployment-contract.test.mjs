@@ -7,13 +7,16 @@ async function source(path) {
 }
 
 test("Sites release preparation fails closed around one clean main artifact", async () => {
-  const [verifier, runner, packageJson, contract, agents] = await Promise.all([
-    source("scripts/verify-sites-deployment-contract.mjs"),
-    source("scripts/prepare-sites-release.sh"),
-    source("package.json"),
-    source("docs/architecture/sites-release-contract.md"),
-    source("AGENTS.md"),
-  ]);
+  const [verifier, runner, packageJson, contract, agents, readme, setup] =
+    await Promise.all([
+      source("scripts/verify-sites-deployment-contract.mjs"),
+      source("scripts/prepare-sites-release.sh"),
+      source("package.json"),
+      source("docs/architecture/sites-release-contract.md"),
+      source("AGENTS.md"),
+      source("README.md"),
+      source("SETUP.md"),
+    ]);
 
   assert.match(verifier, /git\("branch", "--show-current"\)/);
   assert.match(
@@ -41,4 +44,22 @@ test("Sites release preparation fails closed around one clean main artifact", as
   assert.match(contract, /Any failure is terminal/);
   assert.match(contract, /No membership is published\./);
   assert.match(agents, /npm run prepare:sites-release/);
+  assert.match(
+    agents,
+    /Ask no capability, content, asset, design, or setup question/,
+  );
+  assert.doesNotMatch(agents, /Begin every installation by asking/);
+  assert.match(
+    readme,
+    /@Sites, let’s build my new artist-owned website from this repository:/,
+  );
+  assert.doesNotMatch(readme, /First ask which supported capabilities/);
+  assert.match(
+    setup,
+    /Begin this conversation only after the neutral private Site/,
+  );
+  assert.match(
+    contract,
+    /Complete these hosted checks before asking the artist/,
+  );
 });

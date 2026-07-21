@@ -26,7 +26,9 @@ Music publishing, catalog, streaming, identity, access, and administration form 
 
 Public navigation, routes, administration, setup, jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history.
 
-Begin every installation by asking which supported capabilities the artist wants to use. Build the asset and information checklist from those choices, then inspect only artist-approved local folders. Present the resulting setup proposal before applying it. Imported content populates the existing product repositories and native interfaces; it never replaces the visual foundation, player, navigation, access controls, or module components with a content-specific renderer.
+A repository-link request to build a new artist-owned website first clones the repository, prepares the exact release artifact, creates a new private Site with fresh Sites-provided D1 and R2 resources, applies every migration, and verifies the complete neutral installation. Ask no capability, content, asset, design, or setup question before that hosted verification succeeds.
+
+After the neutral Site works, tell the artist that their new artist-owned website is ready and that it is time to personalize it. Ask them to attach a context document or approved assets, share a Google Drive folder containing material they want to use, approve a local asset folder, or begin with the blank Site. Review only material the artist deliberately provides, then present the proposed active capabilities, asset and information checklist, and exact setup proposal before applying it. Imported content populates the existing product repositories and native interfaces; it never replaces the visual foundation, player, navigation, access controls, or module components with a content-specific renderer.
 
 ## Active plan
 

@@ -41,3 +41,5 @@ The deployed version must be the saved version created from the verified archive
 - no unexpected `404`, `5xx`, binding error, migration error, or Worker exception appears.
 
 A response that cannot identify the saved version, source SHA, Worker digest, tested URL, and hosted result has not established a successful one-shot deployment.
+
+Complete these hosted checks before asking the artist about capabilities, content, assets, design, or setup. After they pass, tell the artist that their new artist-owned website is ready and that it is time to personalize it. Ask them to attach a context document or approved assets, share a Google Drive folder containing material they want to use, approve a local asset folder, or begin with the blank Site. Personalization follows `SETUP.md` and begins from the working neutral deployment.

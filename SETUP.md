@@ -1,10 +1,11 @@
 # Set up a-op through ChatGPT Work
 
-This guide gives ChatGPT Work and Codex one resumable setup contract for an artist's `a-op` Site. The complete visual foundation is already present. Setup gathers the artist's words, catalog, rights, access plans, relationships, legal drafts, and publication intent, then turns those decisions into one exact proposal.
+This guide gives ChatGPT Work and Codex one resumable personalization contract after an artist's complete neutral `a-op` Site has been privately deployed and verified. Setup gathers the artist's words, catalog, rights, access plans, relationships, legal drafts, and publication intent, then turns those decisions into one exact proposal.
 
-Setup is a sequence:
+The complete sequence is:
 
-    preflight
+    neutral private Site build and hosted verification
+    -> preflight
     -> conversation
     -> source-state fingerprint
     -> proposal
@@ -19,7 +20,9 @@ Local inspection and proposal commands are read-only. They perform no D1, R2, me
 
 Read `AGENTS.md`, `PRODUCT.md`, `PLANS.md`, `plans/migrateAopToSites.md`, the current contracts in `docs/architecture/`, and `docs/provenance.md`. Use the current installed `sites:sites-building` guidance before changing the Sites application. Keep `sites:sites-hosting` unopened until the documented hosting stage and Michael's approval for that exact action.
 
-Start with capability selection. Ask which parts of a-op the artist wants active, then produce a bounded asset and information checklist for those capabilities. After the artist identifies an approved local folder, inspect it without changing the Site and report what is ready, optional, or missing.
+Begin this conversation only after the neutral private Site passes its hosted acceptance checks. Tell the artist that their new artist-owned website is ready and that it is time to personalize it. Ask them to attach a context document or approved assets, share a Google Drive folder containing material they want to use, approve a local asset folder, or begin with the blank Site.
+
+Review only the material the artist deliberately provides. Propose the active capabilities and produce a bounded asset and information checklist from that material. Present the proposal for the artist's review before changing the Site, and report what is ready, optional, or missing.
 
 Content enters the product through the setup proposal, D1 repositories, and approved R2 media flow. It populates the existing public and administrative interfaces. A local import or rehearsal must not replace the visual foundation, navigation, persistent player, access decisions, or module components with a content-specific page renderer.
 

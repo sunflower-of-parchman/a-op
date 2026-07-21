@@ -144,7 +144,7 @@ npm run build
 
 Every installation starts with the Sound for Movement-derived visual foundation rebuilt in React for Sites: Lato, open layouts, dark and light themes, responsive behavior, and shared controls. The neutral installation uses plain labels and contains no artist media.
 
-Setup begins by choosing the capabilities the artist wants to use. ChatGPT Work and Codex then build a bounded checklist for those choices, inspect only artist-approved local folders, and prepare one exact proposal. Preview performs zero product writes. Apply requires approval tied to the exact proposal hash and current source state.
+The complete neutral Site is built, privately deployed, and verified before personalization begins. ChatGPT Work and Codex then review only the context and assets the artist deliberately provides, propose the active capabilities, build a bounded checklist, and prepare one exact setup proposal. Preview performs zero product writes. Apply requires approval tied to the exact proposal hash and current source state.
 
 Approved content enters the existing application:
 
@@ -158,31 +158,14 @@ The setup contract and commands are documented in [SETUP.md](SETUP.md).
 
 ## Try it with ChatGPT Work
 
-Open Work in the ChatGPT desktop app. Add any context document and asset folders you want it to use. Then paste this prompt:
+Open a new Work chat and paste this prompt:
 
 ```text
-Use @Sites and this repository as the source for my musician website:
+@Sites, let’s build my new artist-owned website from this repository:
 https://github.com/sunflower-of-parchman/a-op
-
-Open the repository through my connected GitHub account. Create a fork in my account if you have permission. If Work cannot open or fork it, stop and tell me the exact access I need to provide. Do not recreate the application from scratch.
-
-Read AGENTS.md, PRODUCT.md, README.md, SETUP.md, plans/migrateAopToSites.md, and the relevant contracts in docs/architecture/ before changing the application.
-
-First ask which supported capabilities I want to use. Then ask me to choose one starting path:
-
-1. Use my attached context document and inspect only the asset folders I approve.
-2. Start blank and help me add material album by album, track by track, and page by page.
-
-Keep the complete neutral visual framework, routes, navigation, player, access controls, and administration. Empty content is okay. Do not invent artist material, prices, license terms, legal decisions, or publication choices.
-
-Before changing product content or code, show me the exact information checklist and setup proposal. Wait for my approval.
-
-After approval, use the existing setup flow and product repositories. Structured state belongs in D1. Approved files belong in R2. Keep identity and protected access on the server. Use Stripe Test mode only if I activate commerce.
-
-Run the result as a private preview. Report what works, what still needs my input, and what failed. Do not publish the Site, connect a domain, use live Stripe credentials, or change repository visibility without my specific approval.
 ```
 
-This first run tests the full handoff from the repository and optional artist context into the existing application. The neutral installation remains usable when no content is supplied.
+That request builds and verifies the complete neutral private Site before asking for artist material or configuration. After the Site works, Work begins personalization by asking the artist to attach a context document or approved assets, share a Google Drive folder, approve a local asset folder, or begin with the blank Site. Work reviews the supplied material and presents the proposed capabilities and setup before changing the Site.
 
 ## Stripe Test Mode
 
