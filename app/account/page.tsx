@@ -1,10 +1,6 @@
 import { env } from "cloudflare:workers";
 import Link from "next/link";
-import {
-  chatGPTSignOutPath,
-  isLocalAccountPreviewEnabled,
-  requireChatGPTUser,
-} from "@/app/chatgpt-auth";
+import { chatGPTSignOutPath, requireChatGPTUser } from "@/app/chatgpt-auth";
 import {
   AccountDownloads,
   AccountLicenses,
@@ -195,17 +191,15 @@ export default async function AccountPage() {
         </section>
       ) : null}
 
-      {!isLocalAccountPreviewEnabled() ? (
-        <section className={styles.signOut} aria-label="Sign out">
-          <div>
-            <h2>Sign out</h2>
-            <p>Sign out when you are finished on this device.</p>
-          </div>
-          <a className="button button-secondary" href={chatGPTSignOutPath("/")}>
-            Sign out
-          </a>
-        </section>
-      ) : null}
+      <section className={styles.signOut} aria-label="Sign out">
+        <div>
+          <h2>Sign out</h2>
+          <p>Sign out when you are finished on this device.</p>
+        </div>
+        <a className="button button-secondary" href={chatGPTSignOutPath("/")}>
+          Sign out
+        </a>
+      </section>
     </div>
   );
 }

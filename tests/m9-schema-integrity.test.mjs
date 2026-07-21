@@ -52,9 +52,9 @@ test("the M9 foundation creates 99 tables and an inert setup checkpoint", async 
   const database = new DatabaseSync(":memory:");
 
   try {
-    assert.equal(migrations.names.length, 35);
+    assert.ok(migrations.names.length >= 35);
     assert.match(migrations.names[34], /^0034_.+\.sql$/);
-    for (const migration of migrations.contents)
+    for (const migration of migrations.contents.slice(0, 35))
       applyMigration(database, migration);
     assertClean(database);
 
@@ -119,7 +119,7 @@ test("M9 setup and export records enforce hashes, lifecycle, and portable-only s
   const database = new DatabaseSync(":memory:");
 
   try {
-    for (const migration of migrations.contents)
+    for (const migration of migrations.contents.slice(0, 35))
       applyMigration(database, migration);
     const proposalHash = "a".repeat(64);
     const approvalHash = "b".repeat(64);
@@ -228,7 +228,7 @@ test("the M9 migrations preserve existing artist, access, and commerce records",
               'active', 3);
     `);
 
-    for (const migration of migrations.contents.slice(29)) {
+    for (const migration of migrations.contents.slice(29, 35)) {
       applyMigration(database, migration);
     }
     assertClean(database);
@@ -274,7 +274,7 @@ test("access grant templates bind an exact access-plan revision and remain opera
   const database = new DatabaseSync(":memory:");
 
   try {
-    for (const migration of migrations.contents)
+    for (const migration of migrations.contents.slice(0, 35))
       applyMigration(database, migration);
     database.exec(`
       INSERT INTO users (id, email, normalized_email, status)
@@ -352,7 +352,7 @@ test("membership credit rules bind one exact plan revision with cadence and oper
   const database = new DatabaseSync(":memory:");
 
   try {
-    for (const migration of migrations.contents)
+    for (const migration of migrations.contents.slice(0, 35))
       applyMigration(database, migration);
     database.exec(`
       INSERT INTO users (id, email, normalized_email, status)
@@ -475,7 +475,7 @@ test("commerce binding intents preserve exact provider-neutral Test Mode subject
   const database = new DatabaseSync(":memory:");
 
   try {
-    for (const migration of migrations.contents)
+    for (const migration of migrations.contents.slice(0, 35))
       applyMigration(database, migration);
     database.exec(`
       INSERT INTO users (id, email, normalized_email, status)

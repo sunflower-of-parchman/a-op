@@ -7,9 +7,7 @@ const workerConfiguration = JSON.parse(
 );
 
 assert.equal(workerConfiguration.vars?.AOP_RUNTIME_ENV, "production");
-assert.equal(workerConfiguration.vars?.AOP_SIMULATION_MODE, "off");
 assert.notEqual(workerConfiguration.vars?.AOP_RUNTIME_ENV, "test");
-assert.notEqual(workerConfiguration.vars?.AOP_SIMULATION_MODE, "runtime-lab");
 assert.equal(
   Object.hasOwn(workerConfiguration.vars ?? {}, "AOP_OWNER_BOOTSTRAP_EMAIL"),
   false,
@@ -99,7 +97,6 @@ const expectedTables = [
   "releases",
   "role_assignments",
   "roles",
-  "runtime_proofs",
   "setup_applications",
   "setup_state",
   "subscription_events",
@@ -171,7 +168,7 @@ const [packagedHosting, sourceMigrationNames, packagedMigrationNames] =
 assert.deepEqual(JSON.parse(packagedHosting), { d1: "DB", r2: "MEDIA" });
 assert.deepEqual(packagedMigrationNames, sourceMigrationNames);
 assert.equal(sourceMigrationNames.length, 35);
-assert.match(sourceMigrationNames.at(-1), /^0034_.+\.sql$/);
+assert.match(sourceMigrationNames.at(-1), /^0035_.+\.sql$/);
 
 const [sourceMigrations, packagedMigrations] = await Promise.all([
   readMigrations(sourceMigrationDirectory, sourceMigrationNames),
@@ -183,6 +180,7 @@ const packagedMigrationTables = [
 ]
   .map((match) => match[1])
   .filter((table) => !table.startsWith("__new_"))
+  .filter((table) => table !== "runtime_proofs")
   .filter((table, index, tables) => tables.indexOf(table) === index)
   .sort();
 
@@ -256,17 +254,11 @@ async function textFiles(directory) {
 
 const clientFiles = await textFiles("dist/client");
 const prohibitedClientValues = [
-  "runtime-lab/range-proof-v1",
-  "owner@a-op.invalid",
-  "editor@a-op.invalid",
-  "customer@a-op.invalid",
-  "AOP_SIMULATION_MODE",
   "AOP_RUNTIME_ENV",
   "AOP_OWNER_BOOTSTRAP_EMAIL",
   "MEDIA_PUBLICATION_MAX_BYTES",
   "oai-authenticated-user-email",
   "SELECT COUNT(*) AS role_count FROM roles",
-  "INSERT INTO runtime_proofs",
   "cardNumber",
   "card_number",
   "paymentMethodData",
@@ -295,7 +287,6 @@ for (const file of clientFiles) {
 process.stdout.write(
   `${JSON.stringify({
     status: "passed",
-    productionSimulationMode: "off",
     clientFilesScanned: clientFiles.length,
     serverOnlyValuesFound: 0,
     packagedMigrationFiles: packagedMigrationNames.length,

@@ -69,7 +69,7 @@ function input(documentId, version) {
     introduction: `Artist-reviewed ${documentId} introduction, version ${version}.`,
     bodyText: [
       `Fictional ${documentId} body, version ${version}.`,
-      "Build Week commerce uses Stripe Test Mode only.",
+      "This Site uses Stripe Test Mode only.",
       "No real payment will be accepted and no money is moved.",
       "Sites does not support data residency or inference residency at launch.",
     ].join("\n"),

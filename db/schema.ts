@@ -100,15 +100,6 @@ export const roleAssignments = sqliteTable(
   ],
 );
 
-export const runtimeProofs = sqliteTable("runtime_proofs", {
-  key: text("key").primaryKey(),
-  value: text("value").notNull(),
-  revision: integer("revision").notNull().default(1),
-  updatedAt: text("updated_at")
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-});
-
 export const mediaObjects = sqliteTable(
   "media_objects",
   {
@@ -190,7 +181,7 @@ export const mediaObjects = sqliteTable(
     check("media_objects_revision_positive", sql`${table.revision} > 0`),
     check(
       "media_objects_key_namespace",
-      sql`${table.objectKey} glob 'originals/*' or ${table.objectKey} glob 'runtime-lab/*'`,
+      sql`${table.objectKey} glob 'originals/*'`,
     ),
   ],
 );
@@ -6301,7 +6292,6 @@ export type SetupStateRecord = typeof setupState.$inferSelect;
 export type ExportManifestRecord = typeof exportManifests.$inferSelect;
 export type RoleRecord = typeof roles.$inferSelect;
 export type RoleAssignmentRecord = typeof roleAssignments.$inferSelect;
-export type RuntimeProofRecord = typeof runtimeProofs.$inferSelect;
 export type MediaObjectRecord = typeof mediaObjects.$inferSelect;
 export type AuditEventRecord = typeof auditEvents.$inferSelect;
 export type InstallationStateRecord = typeof installationState.$inferSelect;

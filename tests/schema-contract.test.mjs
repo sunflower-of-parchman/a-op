@@ -3,18 +3,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 
-import { D1_BOOTSTRAP_STATEMENTS } from "../db/bootstrap.ts";
 import { MODULE_KEYS } from "../lib/modules/index.ts";
-
-const m1Tables = [
-  "audit_events",
-  "media_objects",
-  "profiles",
-  "role_assignments",
-  "roles",
-  "runtime_proofs",
-  "users",
-];
 
 const expectedTables = [
   "access_grant_sets",
@@ -98,7 +87,6 @@ const expectedTables = [
   "releases",
   "role_assignments",
   "roles",
-  "runtime_proofs",
   "setup_applications",
   "setup_state",
   "subscription_events",
@@ -389,29 +377,15 @@ test("schema and forward migrations cover the authority and music foundations", 
   ]
     .map((match) => match[1])
     .filter((table) => !table.startsWith("__new_"))
+    .filter((table) => table !== "runtime_proofs")
     .filter((table, index, tables) => tables.indexOf(table) === index)
-    .sort();
-  const bootstrapTables = D1_BOOTSTRAP_STATEMENTS.filter((statement) =>
-    statement.startsWith("CREATE TABLE IF NOT EXISTS"),
-  )
-    .map(
-      (statement) =>
-        statement.match(/^CREATE TABLE IF NOT EXISTS ([a-z_]+)/)?.[1],
-    )
-    .filter(Boolean)
     .sort();
 
   assert.deepEqual(schemaTables, expectedTables);
   assert.deepEqual(migrationTables, expectedTables);
-  assert.deepEqual(bootstrapTables, m1Tables);
 
   for (const role of ["owner", "editor", "customer"]) {
     assert.match(migrations.sql, new RegExp(`VALUES \\('${role}'`));
-    assert.ok(
-      D1_BOOTSTRAP_STATEMENTS.some((statement) =>
-        statement.includes(`VALUES ('${role}'`),
-      ),
-    );
   }
 
   assert.deepEqual(
@@ -459,8 +433,8 @@ test("schema and forward migrations cover the authority and music foundations", 
     /WHERE "editor_permissions"\."revoked_at" is null/,
   );
   assert.match(migrations.sql, /ALTER TABLE `profiles` ADD `revision`/);
-  assert.equal(migrations.names.length, 35);
-  assert.match(migrations.names.at(-1), /^0034_.+\.sql$/);
+  assert.equal(migrations.names.length, 36);
+  assert.match(migrations.names.at(-1), /^0035_.+\.sql$/);
   assert.ok(
     migrations.names.every((name) => /^\d+_.+\.sql$/.test(name)),
     "Migration discovery must remain independent of generated names.",
@@ -921,10 +895,7 @@ test("Sites, Worker, and local runtime bindings remain logically aligned", async
   assert.match(localConfig, /"binding": "MEDIA"/);
   assert.match(localConfig, /"migrations_dir": "\.\/drizzle"/);
   assert.match(viteConfig, /configPath:\s*"\.\/wrangler\.local\.jsonc"/);
-  assert.doesNotMatch(
-    `${hosting}\n${localConfig}`,
-    /AOP_RUNTIME_ENV|AOP_SIMULATION_MODE/,
-  );
+  assert.doesNotMatch(`${hosting}\n${localConfig}`, /AOP_RUNTIME_ENV/);
   assert.doesNotMatch(
     `${hosting}\n${localConfig}\n${viteConfig}`,
     /AOP_OWNER_BOOTSTRAP_EMAIL/,

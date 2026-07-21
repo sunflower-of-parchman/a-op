@@ -5,9 +5,6 @@ declare namespace Cloudflare {
     MEDIA: R2Bucket;
     IMAGES: ImagesBinding;
     AOP_RUNTIME_ENV?: string;
-    AOP_SIMULATION_MODE?: string;
-    AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW?: string;
-    AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA?: string;
     AOP_OWNER_BOOTSTRAP_EMAIL?: string;
     STRIPE_PUBLISHABLE_KEY?: string;
     STRIPE_SECRET_KEY?: string;

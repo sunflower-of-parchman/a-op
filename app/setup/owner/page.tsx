@@ -4,8 +4,6 @@ import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
 import { OwnerBootstrapControl } from "@/components/admin";
 import { readInstallationState } from "@/db/site-read.ts";
 import { normalizeIdentityEmail } from "@/lib/auth/application-identity.ts";
-import { FICTIONAL_RUNTIME_IDENTITIES } from "@/lib/auth/runtime-fixtures.ts";
-import { resolveSimulationMode } from "@/lib/runtime/index.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -14,10 +12,6 @@ export default async function OwnerSetupPage() {
     readInstallationState(env.DB),
     getChatGPTUser(),
   ]);
-  const runtimeLab = resolveSimulationMode({
-    AOP_RUNTIME_ENV: env.AOP_RUNTIME_ENV,
-    AOP_SIMULATION_MODE: env.AOP_SIMULATION_MODE,
-  });
   const authenticatedEmail = authenticatedUser
     ? normalizeIdentityEmail(authenticatedUser.email)
     : null;
@@ -26,9 +20,8 @@ export default async function OwnerSetupPage() {
     : null;
   const approved =
     authenticatedEmail !== null &&
-    ((approvedEmail !== null && authenticatedEmail === approvedEmail) ||
-      (runtimeLab.enabled &&
-        authenticatedEmail === FICTIONAL_RUNTIME_IDENTITIES.owner.email));
+    approvedEmail !== null &&
+    authenticatedEmail === approvedEmail;
 
   return (
     <div className="page-frame page-introduction">

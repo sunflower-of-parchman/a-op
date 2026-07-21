@@ -582,7 +582,7 @@ test("external actions remain blocked until their own exact Michael approval", a
   const proposal = validProposal();
   proposal.externalActions = [
     {
-      actionId: "host-build-week-site",
+      actionId: "host-artist-site",
       kind: "sites-hosting",
       summary: "Host the exact validated Site.",
       target: "site",
@@ -599,17 +599,17 @@ test("external actions remain blocked until their own exact Michael approval", a
   assert.equal(blocked.readyForApply, false);
   assert.ok(
     blocked.blockers.includes(
-      "external-action-approval-required:host-build-week-site",
+      "external-action-approval-required:host-artist-site",
     ),
   );
 
   const externalApproval = {
     schemaVersion: "aop.external-action-approval.v1",
-    approvalId: "host-build-week-site-approval",
+    approvalId: "host-artist-site-approval",
     proposalId: artifact.proposal.proposalId,
     proposalHash: artifact.proposalHash,
     sourceStateFingerprint: artifact.proposal.sourceStateFingerprint,
-    actionId: "host-build-week-site",
+    actionId: "host-artist-site",
     actionHash: await createExternalActionHash(
       artifact.proposal.externalActions[0],
     ),

@@ -98,8 +98,7 @@ const CREDENTIAL_PATTERN =
   /\b(?:pk|sk|rk)_(?:test|live)_[A-Za-z0-9]{8,}|\bwhsec_[A-Za-z0-9]{8,}/i;
 const PROVIDER_ID_PATTERN =
   /\b(?:price|prod|cus|evt|sub|ch|pm|pi|seti|src|tok|card|cs_(?:test|live))_[A-Za-z0-9]{6,}\b/;
-const OBJECT_KEY_PATTERN =
-  /(?:^|\s)(?:originals|derivatives|runtime-lab|exports)\//i;
+const OBJECT_KEY_PATTERN = /(?:^|\s)(?:originals|derivatives|exports)\//i;
 const MACHINE_PATH_PATTERN =
   /(?:file:\/\/|(?:^|\s)(?:~\/|\/Users\/|\/home\/|\/private\/|\/var\/|\/tmp\/)|(?<![A-Za-z0-9])[A-Za-z]:\\)/i;
 

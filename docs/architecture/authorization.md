@@ -4,7 +4,7 @@
 
 Sites supplies identity through its current official Sign in with ChatGPT helpers and forwarded authenticated-user headers. `getChatGPTUser()` supports optional identity-aware pages. `requireChatGPTUser(returnTo)` protects server-rendered account and administration pages. Dispatch owns the sign-in, sign-out, and callback paths.
 
-The standard local development command enables a fictional customer preview so the account interface can be reviewed before Sites hosting. The fallback is active only outside production and only when `AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW=1`; `npm run dev:anonymous` preserves the signed-out local journey. The preview creates no sign-in, sign-out, callback, cookie, or app-owned authentication route. Hosted builds continue to accept identity only from Sites-forwarded headers.
+The standard local development command starts signed out. Local and hosted application code accepts identity only from Sites-forwarded authenticated-user headers; it creates no sign-in, sign-out, callback, cookie, or app-owned authentication route.
 
 D1 records the application's durable identity and role facts:
 

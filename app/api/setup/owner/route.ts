@@ -6,9 +6,8 @@ import {
   requireIdempotencyKey,
 } from "@/lib/auth/authorize-application.ts";
 import { normalizeIdentityEmail } from "@/lib/auth/application-identity.ts";
-import { FICTIONAL_RUNTIME_IDENTITIES } from "@/lib/auth/runtime-fixtures.ts";
 import { apiJson, runApiRoute } from "@/lib/runtime/api.ts";
-import { RuntimeError, resolveSimulationMode } from "@/lib/runtime/index.ts";
+import { RuntimeError } from "@/lib/runtime/index.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -50,14 +49,7 @@ export async function POST(request: Request): Promise<Response> {
     const approvedEmail = env.AOP_OWNER_BOOTSTRAP_EMAIL
       ? normalizeIdentityEmail(env.AOP_OWNER_BOOTSTRAP_EMAIL)
       : null;
-    const runtimeLab = resolveSimulationMode({
-      AOP_RUNTIME_ENV: env.AOP_RUNTIME_ENV,
-      AOP_SIMULATION_MODE: env.AOP_SIMULATION_MODE,
-    });
-    const approved =
-      (approvedEmail !== null && email === approvedEmail) ||
-      (runtimeLab.enabled &&
-        email === FICTIONAL_RUNTIME_IDENTITIES.owner.email);
+    const approved = approvedEmail !== null && email === approvedEmail;
     if (!approved) {
       throw new RuntimeError(
         "OWNER_BOOTSTRAP_NOT_APPROVED",

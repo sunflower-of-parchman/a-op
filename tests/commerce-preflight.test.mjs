@@ -105,7 +105,7 @@ test("repository build and setup commands validate ignored local environment val
   }
 });
 
-test("the Sites packaging gate requires a complete test configuration before the full integrated gate", async () => {
+test("the Sites packaging gate requires a complete test configuration before release verification", async () => {
   const packageJson = JSON.parse(
     await readFile(new URL("../package.json", import.meta.url), "utf8"),
   );
@@ -118,6 +118,5 @@ test("the Sites packaging gate requires a complete test configuration before the
     /allow-missing|live/i,
   );
   assert.match(packageJson.scripts["verify:m10"], /verify:all/);
-  assert.match(packageJson.scripts["verify:m10"], /verify:m10:integration/);
   assert.match(packageJson.scripts["verify:m10"], /verify:m10:artifact/);
 });

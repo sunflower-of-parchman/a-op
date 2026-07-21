@@ -76,7 +76,7 @@ function seedLogicalMediaAndProviderBoundPrice(database) {
       (id, object_key, kind, visibility, owner_user_id, content_type,
        byte_length, status, approval_state)
     VALUES
-      ('recursive_export_media', 'runtime-lab/export-record-must-not-export',
+      ('recursive_export_media', 'originals/export-record/v1',
        'export', 'protected', '${OWNER}',
        'application/vnd.a-op.artist-export+json', 1, 'ready', 'approved');
 

@@ -57,10 +57,7 @@ function ownerBootstrapEmailIsValid(value: string | undefined): boolean {
 function productionOwnerBootstrapIsRequired(
   environment: Readonly<Record<string, string | undefined>>,
 ): boolean {
-  const runtimeLab =
-    environment.AOP_RUNTIME_ENV === "test" &&
-    environment.AOP_SIMULATION_MODE === "runtime-lab";
-  return environment.AOP_RUNTIME_ENV === "production" && !runtimeLab;
+  return environment.AOP_RUNTIME_ENV === "production";
 }
 
 function safeEnvironmentName(name: string): string {
@@ -202,7 +199,7 @@ export function runSetupPreflight(
         : "A fresh production installation requires a valid server-managed AOP_OWNER_BOOTSTRAP_EMAIL before owner bootstrap."
       : ownerBootstrapReady
         ? "A server-managed owner bootstrap identity is configured."
-        : "AOP_OWNER_BOOTSTRAP_EMAIL is required before a fresh non-runtime-lab production installation can bootstrap its owner.",
+        : "AOP_OWNER_BOOTSTRAP_EMAIL is required before a fresh production installation can bootstrap its owner.",
   );
 
   if (credentials.state === "ready") {

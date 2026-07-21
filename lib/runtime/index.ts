@@ -9,7 +9,6 @@ export type SafeJsonObject = { readonly [key: string]: SafeJsonValue };
 
 export const REDACTED_VALUE = "[REDACTED]";
 export const REQUEST_ID_HEADER = "x-request-id";
-export const SIMULATION_MODE_VARIABLE = "AOP_SIMULATION_MODE";
 export const RUNTIME_ENVIRONMENT_VARIABLE = "AOP_RUNTIME_ENV";
 
 const CIRCULAR_VALUE = "[CIRCULAR]";
@@ -581,70 +580,5 @@ export function createStructuredLogger(options: {
       options.sink(serializeLogRecord(nextRecord), nextRecord);
       return nextRecord;
     },
-  };
-}
-
-export type SimulationMode = "off" | "runtime-lab";
-export type RuntimeEnvironment =
-  "development" | "test" | "production" | "unknown";
-
-export type SimulationModeReason =
-  "disabled" | "enabled-for-test" | "invalid-mode" | "non-test-environment";
-
-export interface ServerRuntimeConfiguration {
-  readonly AOP_RUNTIME_ENV?: unknown;
-  readonly AOP_SIMULATION_MODE?: unknown;
-}
-
-export interface SimulationModeResolution {
-  readonly mode: SimulationMode;
-  readonly enabled: boolean;
-  readonly environment: RuntimeEnvironment;
-  readonly reason: SimulationModeReason;
-}
-
-function parseRuntimeEnvironment(value: unknown): RuntimeEnvironment {
-  return value === "development" || value === "test" || value === "production"
-    ? value
-    : "unknown";
-}
-
-/**
- * Resolves the test laboratory from server-managed values only. Unknown,
- * malformed, development, and production configurations all fail closed.
- */
-export function resolveSimulationMode(
-  configuration: ServerRuntimeConfiguration,
-): SimulationModeResolution {
-  const environment = parseRuntimeEnvironment(configuration.AOP_RUNTIME_ENV);
-  const rawMode = configuration.AOP_SIMULATION_MODE;
-
-  if (
-    rawMode === undefined ||
-    rawMode === null ||
-    rawMode === "" ||
-    rawMode === "off"
-  ) {
-    return { mode: "off", enabled: false, environment, reason: "disabled" };
-  }
-
-  if (rawMode !== "runtime-lab") {
-    return { mode: "off", enabled: false, environment, reason: "invalid-mode" };
-  }
-
-  if (environment !== "test") {
-    return {
-      mode: "off",
-      enabled: false,
-      environment,
-      reason: "non-test-environment",
-    };
-  }
-
-  return {
-    mode: "runtime-lab",
-    enabled: true,
-    environment,
-    reason: "enabled-for-test",
   };
 }

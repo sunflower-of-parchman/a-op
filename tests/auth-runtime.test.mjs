@@ -6,11 +6,6 @@ import {
   normalizeIdentityEmail,
   resolveApplicationIdentity,
 } from "../lib/auth/application-identity.ts";
-import { resolveLocalAccountPreviewUser } from "../lib/auth/local-account-preview.ts";
-import {
-  FICTIONAL_RUNTIME_IDENTITIES,
-  bootstrapFictionalRuntimeIdentities,
-} from "../lib/auth/runtime-fixtures.ts";
 
 function identityBinding(rows) {
   const calls = [];
@@ -85,71 +80,4 @@ test("anonymous and unregistered identities receive no application authority", a
     normalizeIdentityEmail(" Person@Example.Test "),
     "person@example.test",
   );
-});
-
-test("local account preview supplies only the fictional customer outside production", () => {
-  assert.deepEqual(
-    resolveLocalAccountPreviewUser({
-      AOP_RUNTIME_ENV: "development",
-      AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "1",
-    }),
-    {
-      displayName: "Fictional Customer",
-      email: "customer@a-op.invalid",
-      fullName: "Fictional Customer",
-    },
-  );
-  assert.equal(
-    resolveLocalAccountPreviewUser({ AOP_RUNTIME_ENV: "development" }),
-    null,
-  );
-  assert.equal(
-    resolveLocalAccountPreviewUser({
-      AOP_RUNTIME_ENV: "production",
-      AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "1",
-    }),
-    null,
-  );
-});
-
-test("fictional runtime roles bootstrap as one replay-safe D1 batch", async () => {
-  const prepared = [];
-  const batches = [];
-  const binding = {
-    prepare(sql) {
-      return {
-        bind(...bindings) {
-          const statement = { sql, bindings };
-          prepared.push(statement);
-          return statement;
-        },
-      };
-    },
-    async batch(statements) {
-      batches.push(statements);
-      return statements.map(() => ({ success: true, results: [] }));
-    },
-  };
-
-  const results = await bootstrapFictionalRuntimeIdentities(
-    binding,
-    "req_runtime-fixture-0001",
-  );
-
-  assert.equal(batches.length, 1);
-  assert.equal(prepared.length, 13);
-  assert.equal(results.length, 13);
-  assert.match(prepared[0].sql, /ON CONFLICT\(id\) DO UPDATE/);
-  assert.match(prepared[1].sql, /INSERT INTO profiles/);
-  assert.match(prepared[6].sql, /UPDATE role_assignments/);
-  assert.deepEqual(prepared[6].bindings, ["user_runtime_owner", "owner"]);
-  assert.match(prepared[7].sql, /INSERT INTO role_assignments/);
-  assert.match(prepared[12].sql, /ON CONFLICT\(id\) DO NOTHING/);
-
-  const serialized = JSON.stringify({
-    fixtures: FICTIONAL_RUNTIME_IDENTITIES,
-    prepared,
-  });
-  assert.match(serialized, /owner@a-op\.invalid/);
-  assert.doesNotMatch(serialized, /soundformovement|@gmail\.com|@openai\.com/i);
 });

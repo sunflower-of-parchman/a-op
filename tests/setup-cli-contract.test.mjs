@@ -34,10 +34,9 @@ test("setup preflight is read-only and succeeds without inactive commerce creden
 
 test("production preflight requires one valid owner bootstrap identity without exposing it", () => {
   for (const environment of [
-    { AOP_RUNTIME_ENV: "production", AOP_SIMULATION_MODE: "off" },
+    { AOP_RUNTIME_ENV: "production" },
     {
       AOP_RUNTIME_ENV: "production",
-      AOP_SIMULATION_MODE: "off",
       AOP_OWNER_BOOTSTRAP_EMAIL: "not-an-email-FictionalPrivate",
     },
   ]) {
@@ -53,7 +52,6 @@ test("production preflight requires one valid owner bootstrap identity without e
 
   const approved = run(["preflight"], {
     AOP_RUNTIME_ENV: "production",
-    AOP_SIMULATION_MODE: "off",
     AOP_OWNER_BOOTSTRAP_EMAIL: "approved-owner-FictionalPrivate@example.test",
   });
   assert.equal(approved.status, 0, approved.stderr);
@@ -67,21 +65,6 @@ test("production preflight requires one valid owner bootstrap identity without e
       (check) => check.id === "owner-bootstrap-identity",
     )?.status,
     "pass",
-  );
-});
-
-test("the test runtime laboratory keeps its fictional owner bootstrap path", () => {
-  const result = run(["preflight"], {
-    AOP_RUNTIME_ENV: "test",
-    AOP_SIMULATION_MODE: "runtime-lab",
-  });
-  assert.equal(result.status, 0, result.stderr);
-  const output = JSON.parse(result.stdout);
-  assert.equal(
-    output.preflight.checks.find(
-      (check) => check.id === "owner-bootstrap-identity",
-    )?.status,
-    "attention",
   );
 });
 

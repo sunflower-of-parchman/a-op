@@ -70,7 +70,7 @@ The live Sound for Movement company repository remains Michael's private, read-o
 - Use the current official Sign in with ChatGPT helpers for identity-aware customer and administration routes. Resolve owner, editor, and customer authority from server-owned D1 records.
 - Route every protected stream, download, course asset, license file, and customer resource through the central `decideAccess` contract.
 - Keep secrets and private runtime values server-managed. Logs, errors, exports, browser output, and diagnostics use redacted fields.
-- Keep the Sites application within the current official non-financial web-experience scope. The Build Week installation demonstrates the complete commerce domain through Stripe Test mode as a simulation: test keys and test objects only, no real payment methods, no real charges, and no money movement. Stripe-hosted Test Checkout owns test payment entry. Reject live credentials and `livemode` events before state changes. A future compatible deployment can activate live commerce only after a fresh policy and platform check, deliberate configuration, and Michael's approval.
+- Keep the Sites application within the current official non-financial web-experience scope. The Sites installation demonstrates the complete commerce domain through Stripe Test mode as a simulation: test keys and test objects only, no real payment methods, no real charges, and no money movement. Stripe-hosted Test Checkout owns test payment entry. Reject live credentials and `livemode` events before state changes. A future compatible deployment can activate live commerce only after a fresh policy and platform check, deliberate configuration, and Michael's approval.
 
 ## Functional build order
 

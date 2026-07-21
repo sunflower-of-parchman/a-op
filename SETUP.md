@@ -50,9 +50,9 @@ Run from the repository root. The environment-file option lets Node load the ign
 
 Preflight confirms the governing files, logical `DB` and `MEDIA` Sites bindings, local media-tool availability, ignored path aliases, the owner bootstrap identity, and the Stripe Test Mode boundary.
 
-A fresh non-runtime-lab production installation requires `AOP_OWNER_BOOTSTRAP_EMAIL` in its server-managed environment. Set it to the email address of the ChatGPT account approved for the one-time artist-owner bootstrap. Missing and malformed values block production preflight without printing the configured value. The test-only runtime laboratory keeps its fixed fictional owner path and does not require this setting.
+A fresh production installation requires `AOP_OWNER_BOOTSTRAP_EMAIL` in its server-managed environment. Set it to the email address of the ChatGPT account approved for the one-time artist-owner bootstrap. Missing and malformed values block production preflight without printing the configured value.
 
-The Sites commerce adapter is permanently `stripe-test-simulation`. Present malformed credentials and every recognized live credential produce a hard, redacted failure. The read-only setup interview can report an unconfigured inactive commerce journey, while activation requires complete `pk_test_`, `sk_test_`, and `whsec_` values. The Sites packaging gate is strict: `npm run verify:sites-package` fails clearly when any test credential is absent and runs the complete integrated gate only after the test configuration passes. The proposal, command output, D1, R2, logs, telemetry, audit records, and browser receive no credential or payment-card value.
+The Sites commerce adapter is permanently `stripe-test-simulation`. Present malformed credentials and every recognized live credential produce a hard, redacted failure. The read-only setup interview can report an unconfigured inactive commerce journey, while activation requires complete `pk_test_`, `sk_test_`, and `whsec_` values. The Sites packaging gate is strict: `npm run verify:sites-package` fails clearly when any test credential is absent and runs the release checks only after the test configuration passes. The proposal, command output, D1, R2, logs, telemetry, audit records, and browser receive no credential or payment-card value.
 
 ### Connect Stripe Test Mode
 

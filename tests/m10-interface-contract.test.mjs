@@ -190,32 +190,21 @@ test("the account shell is one personal page with real customer data and role-sc
   );
 });
 
-test("the standard local server previews the account without replacing hosted Sites authentication", async () => {
-  const [authentication, localPreview, packageSource, viteConfiguration] =
-    await Promise.all([
-      readFile("app/chatgpt-auth.ts", "utf8"),
-      readFile("lib/auth/local-account-preview.ts", "utf8"),
-      readFile("package.json", "utf8"),
-      readFile("vite.config.ts", "utf8"),
-    ]);
+test("the standard local server starts signed out and preserves hosted Sites authentication", async () => {
+  const [authentication, packageSource, viteConfiguration] = await Promise.all([
+    readFile("app/chatgpt-auth.ts", "utf8"),
+    readFile("package.json", "utf8"),
+    readFile("vite.config.ts", "utf8"),
+  ]);
   const packageJson = JSON.parse(packageSource);
 
-  assert.match(packageJson.scripts.dev, /AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW=1/);
   assert.doesNotMatch(
-    packageJson.scripts["dev:anonymous"],
+    packageJson.scripts.dev,
     /AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW/,
   );
-  assert.match(localPreview, /environment\.AOP_RUNTIME_ENV !== "development"/);
-  assert.match(
-    localPreview,
-    /environment\[LOCAL_ACCOUNT_PREVIEW_FLAG\] !== "1"/,
-  );
-  assert.match(localPreview, /email: "customer@a-op\.invalid"/);
-  assert.match(authentication, /isLocalAccountPreviewEnabled\(\): boolean/);
-  assert.match(
-    viteConfiguration,
-    /AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: localAccountPreviewEnabled\s*\? "1"\s*: "0"/,
-  );
+  assert.doesNotMatch(authentication, /localAccountPreview/);
+  assert.match(authentication, /if \(!email\) return null/);
+  assert.doesNotMatch(viteConfiguration, /AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW/);
   assert.match(
     viteConfiguration,
     /AOP_RUNTIME_ENV: command === "build" \? "production" : "development"/,
@@ -225,7 +214,6 @@ test("the standard local server previews the account without replacing hosted Si
 
   const accountPage = await readFile("app/account/page.tsx", "utf8");
   assert.doesNotMatch(accountPage, /Return home/);
-  assert.match(accountPage, /!isLocalAccountPreviewEnabled\(\)/);
   assert.match(accountPage, /href=\{chatGPTSignOutPath\("\/"\)\}/);
 });
 

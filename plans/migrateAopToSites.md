@@ -24,6 +24,7 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 
 ## Progress
 
+- [x] (2026-07-21 05:50Z) Removed the completed milestone runtime-laboratory and submission-gate layer: seven test-only application routes, seven runtime verifier scripts, eight obsolete tests, the fictional D1 role bootstrap, the runtime-proof repository and table, simulation-mode configuration, and their package commands. Generated and inspected migration 0035 to remove exact laboratory state and narrow media keys to the real `originals/*` namespace. Connected all five previously unreferenced product tests to focused verification commands. A read-only reference scan, package-command target check, and package JSON parse passed; no test suite ran during this cleanup review.
 - [x] (2026-07-18 19:09Z) Confirmed the product direction: artists create and operate `a-op` through ChatGPT Work and publish the web application with Sites.
 - [x] (2026-07-18 19:09Z) Inspected the current application, product description, architecture records, and the official Sites starter structure.
 - [x] (2026-07-18 19:09Z) Selected the official Sites React, TypeScript, vinext, Vite, Cloudflare Worker, D1, R2, and Sign in with ChatGPT foundation.
@@ -105,6 +106,7 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] (2026-07-21 05:13Z) Completed the approved external Stripe Test acceptance rehearsal. Owner binding now covers membership, subscription, and exact track-license intents. A real hosted subscription checkout and provider-signed current-version invoice created one fulfilled order, active subscription and membership, two Course entitlements, and 15 download credits. A real hosted one-time license checkout advanced an approved request to issued, created its fulfilled order and issued license, granted track and document entitlements, and queued deterministic document generation. The application accepted only `livemode = false` provider facts and stored no card data.
 - [x] (2026-07-21 05:18Z) Updated the Stripe adapter for the current `hosted_page` Checkout value and 2026-06-24 invoice shape, including paid-state derivation from terminal status plus zero remaining amount and exact subscription period projection from the non-proration subscription line. Fixed provider delivery ordering when a paid invoice reaches D1 before `checkout.session.completed`; the delayed checkout event now records an idempotent already-fulfilled receipt. Strict types and 22 focused Stripe projection and recurring-fulfillment checks passed.
 - [x] (2026-07-21 cleanup) Removed the completed rehearsal's 957 MB local Wrangler D1/R2 state, 3.1 GB Sound for Movement import and public judge-media trees, demo setup proposals and local aliases, hosted fictional account file, stale Nuxt environment files, and generated TypeScript cache. Removed the artist-specific packet builder, verifier, audio server, documentation, package commands, hard-coded licensing artwork, and artist-name fallbacks. Archived the two task-created Stripe Test products and prices, canceled the two task-created Test subscriptions, deleted their two fictional Test customers, and removed the temporary checkout, binding, and listener files. Strict types, 29 focused commerce and licensing checks, diff integrity, and the complete five-stage neutral production build passed. The generated build and local cache were removed afterward. No production, Sites hosting, domain, DNS, or live-commerce action occurred.
+- [x] (2026-07-21 06:08Z) Retired the development-only fictional account preview so the standard local server now starts signed out and accepts identity only from Sites-forwarded headers. Permanently deleted the obsolete Vercel project `artist-owned-platform-build-week` (`prj_6pTKSerIV9WeGdIxKrmyKdnnZFoH`) and the obsolete Supabase project of the same name (`rlcbhgdptjiofiqyznvn`). Preserved the current GitHub repository and its complete Nuxt-to-Sites Build Week history; the Sound for Movement Vercel and Supabase projects were untouched.
 - [x] Implement Courses, lessons, mixed media, access, progress, and resume.
 - [x] Implement video, structured pages, What's New, contact, and inquiry administration.
 - [x] Implement telemetry, consent, retention, privacy, terms, diagnostics, and operations.
@@ -114,6 +116,9 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: The completed milestone laboratory had become a second application inside the release tree.
+  Evidence: Its production-disabled routes, fictional D1 fixtures, orchestration scripts, source-contract tests, simulation configuration, and runtime-proof table totaled about ten thousand lines even though direct domain integration tests already cover the durable access, commerce, licensing, setup, and cleanup behavior. Five current product tests were meanwhile absent from every package verification command.
 
 - Observation: Vite copies ignored files under `public/` into the Sites artifact.
   Evidence: The retired local rehearsal previously produced a 1.6 GB client artifact. Removing the public rehearsal tree before the final build returned the neutral production artifact to 18 MB total output with no artist media.
@@ -294,6 +299,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 
 ## Decision Log
 
+- Decision: Preserve the complete repository history while removing obsolete hosted demo infrastructure and the local fictional account shortcut.
+  Rationale: The Nuxt prototype, Daymark rehearsal, Sites rebuild, and finished backend form material Build Week evidence. A fresh checkout should still begin empty and signed out, and retired public demo infrastructure should no longer remain active.
+  Date/Author: 2026-07-21 / Michael and Codex
+
 - Decision: Retire the artist-specific rehearsal packet after proving the application plumbing.
   Rationale: Fresh installations now exercise the general setup and media-publication paths with artist-approved sources; the repository carries no private rehearsal builder, content map, media, or public preview path.
   Date/Author: 2026-07-21 / Michael and Codex
@@ -369,6 +378,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - Decision: Enable the runtime laboratory only through `npm run dev:runtime` and package production with simulation explicitly off.
   Rationale: Fictional identity selection and laboratory writes are useful for deterministic local proof and must fail closed in normal development and production output.
   Date/Author: 2026-07-18 / Codex
+
+- Decision: Retire the completed milestone runtime laboratory from the release application.
+  Rationale: Direct integration tests now protect the durable domain boundaries. Removing test-only routes, fictional role mutation, simulation configuration, and the runtime-proof table leaves one application path for artists and customers while preserving historical migration evidence and focused release checks. This supersedes the 2026-07-18 runtime-laboratory decision.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Support one validated HTTP byte range per media request and reject multi-range input with `416`.
   Rationale: Browser audio seeking and resume require bounded, open-ended, and suffix ranges. The single-range contract keeps R2 reads exact and avoids multipart response complexity while preserving correct full and partial delivery.
@@ -639,6 +652,8 @@ Milestone 10 local outcome as of 2026-07-19: one integrated gate now composes th
 Administration Dashboard outcome as of 2026-07-19: an owner now enters Metrics as one responsive reporting surface with real D1 activity totals and consent-aware telemetry. The persistent administration rail contains only Metrics, Inquiries, Courses, What's New, Videos, and Entitlements. Content and media intake, setup, page composition, legal drafting, plans, commerce evidence, customer inspection, artist/module configuration, editors, portability, and operations remain durable application capabilities operated through ChatGPT Work, Codex, and their protected server contracts instead of appearing as everyday dashboard destinations.
 
 The repository contains no image, audio, video, or document asset. Final static hardening passed twenty checks for contrast, keyboard and touch behavior, reduced motion, responsive containment, Test Mode visibility, payment-data absence, executable-content boundaries, sandboxed external video, secrets, dependency locking, and Worker headers. The approved Stripe-hosted Test Checkout and provider-webhook acceptance now passes for both recurring membership fulfillment and one-time license issuance. The local rehearsal state was removed afterward; task-created Test subscriptions were canceled, Test customers were deleted, and Test products and prices were archived. Stripe retains its normal sandbox event and completed-session history. Sites version hosting remains approval-gated; the next release action is the neutral one-shot installer exercise.
+
+Release-cleanup outcome as of 2026-07-21: the active application no longer carries milestone runtime-lab routes, simulation mode, fictional role bootstrapping, runtime-proof state, or judge-oriented integration orchestration. Owner bootstrap now recognizes only the explicitly configured ChatGPT account. The forward D1 chain ends at migration 0035 with 98 product tables and an `originals/*` media-object namespace. All 132 retained tests are connected to a focused package command. Source-reading interface and API contracts remain for a later consolidation because they still cover authorization, empty-installation behavior, responsive accessibility, and browser/server boundaries that do not yet have equivalent observable journeys.
 
 ## Context and Orientation
 

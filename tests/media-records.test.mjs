@@ -33,10 +33,10 @@ function fakeBinding(firstRows = []) {
 }
 
 const record = {
-  id: "media_runtime-range",
-  objectKey: "runtime-lab/range-proof-v1",
+  id: "media_delivery_range",
+  objectKey: "originals/range-proof/v1",
   visibility: "protected",
-  ownerUserId: "user_runtime_owner",
+  ownerUserId: "user_delivery_owner",
   contentType: "text/plain; charset=utf-8",
   byteLength: 24,
 };

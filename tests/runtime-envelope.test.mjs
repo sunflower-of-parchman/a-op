@@ -11,11 +11,10 @@ import {
   createStructuredLogger,
   normalizeUnknownError,
   redactForJson,
-  resolveSimulationMode,
   serializeLogRecord,
 } from "../lib/runtime/index.ts";
 
-const REQUEST_ID = "req_runtime-lab-0001";
+const REQUEST_ID = "req_runtime-0001";
 const FIXED_TIME = new Date("2026-07-18T12:00:00.000Z");
 
 test("unknown errors produce a stable public envelope and a correlated response", async () => {
@@ -220,70 +219,4 @@ test("request IDs and structured logger output can be deterministic without cons
   assert.equal(writes.length, 1);
   assert.equal(writes[0].serialized, JSON.stringify(written));
   assert.deepEqual(writes[0].record, written);
-});
-
-test("simulation mode is strict, deterministic, server-selected, and test-only", () => {
-  const cases = [
-    [
-      {},
-      {
-        mode: "off",
-        enabled: false,
-        environment: "unknown",
-        reason: "disabled",
-      },
-    ],
-    [
-      { AOP_RUNTIME_ENV: "test", AOP_SIMULATION_MODE: "runtime-lab" },
-      {
-        mode: "runtime-lab",
-        enabled: true,
-        environment: "test",
-        reason: "enabled-for-test",
-      },
-    ],
-    [
-      { AOP_RUNTIME_ENV: "production", AOP_SIMULATION_MODE: "runtime-lab" },
-      {
-        mode: "off",
-        enabled: false,
-        environment: "production",
-        reason: "non-test-environment",
-      },
-    ],
-    [
-      { AOP_RUNTIME_ENV: "development", AOP_SIMULATION_MODE: "runtime-lab" },
-      {
-        mode: "off",
-        enabled: false,
-        environment: "development",
-        reason: "non-test-environment",
-      },
-    ],
-    [
-      { AOP_RUNTIME_ENV: "test", AOP_SIMULATION_MODE: "runtime-lab " },
-      {
-        mode: "off",
-        enabled: false,
-        environment: "test",
-        reason: "invalid-mode",
-      },
-    ],
-    [
-      { AOP_RUNTIME_ENV: "test", AOP_SIMULATION_MODE: true },
-      {
-        mode: "off",
-        enabled: false,
-        environment: "test",
-        reason: "invalid-mode",
-      },
-    ],
-  ];
-
-  for (const [configuration, expected] of cases) {
-    const first = resolveSimulationMode(configuration);
-    const second = resolveSimulationMode(configuration);
-    assert.deepEqual(first, expected);
-    assert.deepEqual(second, expected);
-  }
 });

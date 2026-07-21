@@ -149,7 +149,6 @@ test("licensing interfaces remain open, responsive, theme-token based, and artis
   assert.doesNotMatch(styles, /\.(?:card|panel|surface)\b/i);
   assert.doesNotMatch(styles, /url\(/i);
   assert.match(styles, /linear-gradient\(/i);
-  assert.doesNotMatch(combined, /\/judge-content\//);
   assert.doesNotMatch(combined, /<(?:audio|video|picture|source)\b/i);
   assert.doesNotMatch(combined, /type=["']file["']/i);
   assert.doesNotMatch(combined, /\bFormData\b|\bFileReader\b|\bR2Bucket\b/i);

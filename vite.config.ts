@@ -14,10 +14,6 @@ export default defineConfig(async ({ command }) => {
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import("@cloudflare/vite-plugin");
-  const runtimeLabEnabled =
-    command === "serve" && process.env.AOP_ENABLE_RUNTIME_LAB === "1";
-  const localAccountPreviewEnabled =
-    command === "serve" && process.env.AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW === "1";
   const localStripeTestConfiguration: Record<string, string> =
     command === "serve" &&
     process.env.STRIPE_PUBLISHABLE_KEY?.startsWith("pk_test_") &&
@@ -30,24 +26,7 @@ export default defineConfig(async ({ command }) => {
         }
       : {};
   const runtimeConfiguration = {
-    ...(runtimeLabEnabled
-      ? {
-          AOP_RUNTIME_ENV: "test",
-          AOP_SIMULATION_MODE: "runtime-lab",
-          AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: "0",
-          AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA: "customer",
-        }
-      : {
-          AOP_RUNTIME_ENV: command === "build" ? "production" : "development",
-          AOP_SIMULATION_MODE: "off",
-          AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: localAccountPreviewEnabled
-            ? "1"
-            : "0",
-          AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA:
-            process.env.AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA === "owner"
-              ? "owner"
-              : "customer",
-        }),
+    AOP_RUNTIME_ENV: command === "build" ? "production" : "development",
     ...localStripeTestConfiguration,
   };
 
