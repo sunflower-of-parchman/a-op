@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { getChatGPTUser } from "@/app/chatgpt-auth";
 import {
   AdminCommerce,
+  AdminCommerceBindings,
   AdminCommerceProductWorkspace,
 } from "@/components/commerce";
+import { readPendingCommerceBindings } from "@/db/commerce-binding-read.ts";
 import { readAdminCommerceProducts } from "@/db/commerce-admin-read.ts";
 import { listActiveCommerceProducts } from "@/db/commerce-read.ts";
 import { readAdminCommerceEvidence } from "@/db/commerce-surface-read.ts";
@@ -25,13 +27,16 @@ export default async function CommerceAdministrationPage() {
   const identity = await resolveApplicationIdentity(env.DB, authenticatedUser);
   if (!identity || !hasApplicationRole(identity, "owner")) notFound();
 
-  const [activeProducts, products, evidence] = await Promise.all([
-    listActiveCommerceProducts(env.DB),
-    readAdminCommerceProducts(env.DB, identity.userId),
-    readAdminCommerceEvidence(env.DB),
-  ]);
+  const [activeProducts, products, pendingBindings, evidence] =
+    await Promise.all([
+      listActiveCommerceProducts(env.DB),
+      readAdminCommerceProducts(env.DB, identity.userId),
+      readPendingCommerceBindings(env.DB),
+      readAdminCommerceEvidence(env.DB),
+    ]);
   return (
     <div className="admin-workspace">
+      <AdminCommerceBindings bindings={pendingBindings} />
       <AdminCommerceProductWorkspace products={products} />
       <AdminCommerce
         activeProductCount={activeProducts.length}

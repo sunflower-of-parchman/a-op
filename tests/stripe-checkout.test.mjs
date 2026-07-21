@@ -30,7 +30,7 @@ function validStripeResponse(overrides = {}) {
     object: "checkout.session",
     livemode: false,
     mode: "payment",
-    ui_mode: "hosted",
+    ui_mode: "hosted_page",
     url: "https://checkout.stripe.com/c/pay/cs_test_FictionalCheckoutSession001",
     client_secret: "cs_test_private_client_secret",
     customer_details: {
@@ -86,7 +86,7 @@ test("the client constructs one hosted, server-owned Test Checkout request", asy
 
   const body = new URLSearchParams(init.body);
   assert.equal(body.get("mode"), "payment");
-  assert.equal(body.get("ui_mode"), "hosted");
+  assert.equal(body.get("ui_mode"), "hosted_page");
   assert.equal(
     body.get("custom_text[submit][message]"),
     "No real payment will be accepted.",
@@ -165,10 +165,47 @@ test("every supported hosted Test Checkout mode carries the exact no-payment not
 
     assert.equal(transport.calls.length, 1);
     const body = new URLSearchParams(transport.calls[0].init.body);
-    assert.equal(body.get("ui_mode"), "hosted");
+    assert.equal(body.get("ui_mode"), "hosted_page");
     assert.deepEqual(body.getAll("custom_text[submit][message]"), [
       NO_REAL_PAYMENT_STATEMENT,
     ]);
+  }
+});
+
+test("local development can return from hosted Checkout over HTTP loopback only", async () => {
+  const transport = recordingFetch();
+  await createStripeTestCheckoutSession(
+    {
+      ...INPUT,
+      successUrl: "http://localhost:3000/commerce/return?checkout=local",
+      cancelUrl:
+        "http://localhost:3000/commerce/return?checkout=local&canceled=1",
+      allowHttpLoopback: true,
+    },
+    transport,
+  );
+
+  const body = new URLSearchParams(transport.calls[0].init.body);
+  assert.equal(
+    body.get("success_url"),
+    "http://localhost:3000/commerce/return?checkout=local",
+  );
+  assert.equal(
+    body.get("cancel_url"),
+    "http://localhost:3000/commerce/return?checkout=local&canceled=1",
+  );
+
+  for (const successUrl of [
+    "http://localhost:3000/commerce/return",
+    "http://127.0.0.1:3000/commerce/return",
+    "http://[::1]:3000/commerce/return",
+  ]) {
+    const rejected = recordingFetch();
+    await assertSafeRejects(
+      createStripeTestCheckoutSession({ ...INPUT, successUrl }, rejected),
+      "STRIPE_CHECKOUT_INPUT_INVALID",
+    );
+    assert.equal(rejected.calls.length, 0);
   }
 });
 

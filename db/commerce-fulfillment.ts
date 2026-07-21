@@ -1919,12 +1919,24 @@ export async function processVerifiedCheckoutEvent(
     );
   }
   if (checkout.mode === "subscription") {
+    const fulfilledOrder = await binding
+      .prepare(
+        "SELECT id, status FROM orders WHERE checkout_session_id = ?1 LIMIT 1",
+      )
+      .bind(checkout.id)
+      .first<ExistingOrderRow>();
+    if (fulfilledOrder && fulfilledOrder.status !== "fulfilled") {
+      throw integrity(
+        "The subscription checkout has a non-terminal provider order.",
+      );
+    }
     return processIgnoredCheckout(
       binding,
       input,
       checkout,
-      "awaiting-subscription-invoice",
+      fulfilledOrder ? "already-fulfilled" : "awaiting-subscription-invoice",
       "completed",
+      fulfilledOrder,
     );
   }
   if (product.productType === "license") {

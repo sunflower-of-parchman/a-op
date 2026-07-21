@@ -35,7 +35,7 @@ export default async function Home() {
       readPublicArtwork(
         env.DB,
         "media-about-profile-artwork",
-        "Portrait of Michael Wall",
+        "Artist portrait",
       ),
       readPublicMosaicImages(env.DB),
     ]);

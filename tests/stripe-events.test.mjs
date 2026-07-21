@@ -183,6 +183,39 @@ test("invoice lifecycle events use current subscription parent metadata", () => 
   }
 });
 
+test("current Stripe invoices derive paid state and subscription period from the subscription line", () => {
+  const projected = parseVerifiedStripeTestEvent(
+    stripeEvent(
+      "invoice.paid",
+      invoiceObject({
+        paid: null,
+        amount_remaining: 0,
+        period_start: 1_800_000_000,
+        period_end: 1_800_000_000,
+        lines: {
+          data: [
+            {
+              period: { start: 1_800_000_000, end: 1_802_592_000 },
+              parent: {
+                type: "subscription_item_details",
+                subscription_item_details: {
+                  subscription: "sub_FictionalSubscription001",
+                  proration: false,
+                },
+              },
+            },
+          ],
+        },
+      }),
+    ),
+  );
+
+  assert.equal(projected.objectKind, "invoice");
+  assert.equal(projected.invoice.paid, true);
+  assert.equal(projected.invoice.periodStartUnix, 1_800_000_000);
+  assert.equal(projected.invoice.periodEndUnix, 1_802_592_000);
+});
+
 test("legacy invoice subscription fields project through the same safe DTO", () => {
   const current = invoiceObject();
   const legacy = {

@@ -43,7 +43,7 @@ Artist actions create and update memberships, subscription state, entitlements, 
 
 Renewals, cancellations, expirations, credit reservations, credit releases, reversals, and revocations remain auditable state transitions. A browser navigation or client-side state change never grants access.
 
-Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The Build Week installation's Stripe Test Mode simulation follows `docs/architecture/commerce-environment.md`. Only a verified signed test webhook can turn a simulated checkout into application-owned access state. Browser redirects and client state grant nothing. Server-owned D1 state remains the authority for every protected action.
+Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The installation's Stripe Test Mode simulation follows `docs/architecture/commerce-environment.md`. Only a verified signed test webhook can turn a simulated checkout into application-owned access state. Browser redirects and client state grant nothing. Server-owned D1 state remains the authority for every protected action.
 
 ## Required verification
 

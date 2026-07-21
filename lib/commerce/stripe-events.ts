@@ -354,6 +354,53 @@ function invoiceSubscriptionDetails(
   });
 }
 
+function invoicePaid(
+  object: Record<string, unknown>,
+  status: StripeInvoiceFacts["status"],
+): boolean {
+  if (typeof object.paid === "boolean") return object.paid;
+  if (object.paid !== null && object.paid !== undefined) invalidPayload();
+
+  // Stripe's 2026-06-24 API removed the legacy invoice `paid` boolean.
+  // A current invoice is paid only when its terminal status and remaining
+  // amount agree; downstream fulfillment still verifies the exact amount.
+  return status === "paid" && integer(object.amount_remaining) === 0;
+}
+
+function invoicePeriod(
+  object: Record<string, unknown>,
+  stripeSubscriptionId: string,
+): Readonly<{ start: number; end: number }> {
+  const legacyStart = nullableInteger(object.period_start);
+  const legacyEnd = nullableInteger(object.period_end);
+  if (legacyStart !== null && legacyEnd !== null && legacyEnd > legacyStart) {
+    return Object.freeze({ start: legacyStart, end: legacyEnd });
+  }
+
+  const lines = record(object.lines);
+  if (!Array.isArray(lines.data)) invalidPayload();
+  const periods: Array<{ start: number; end: number }> = [];
+  for (const value of lines.data) {
+    const line = record(value);
+    const parent = record(line.parent);
+    if (parent.type !== "subscription_item_details") continue;
+    const details = record(parent.subscription_item_details);
+    if (
+      details.subscription !== stripeSubscriptionId ||
+      details.proration !== false
+    ) {
+      continue;
+    }
+    const period = record(line.period);
+    const start = integer(period.start);
+    const end = integer(period.end);
+    if (end <= start) invalidPayload();
+    periods.push({ start, end });
+  }
+  if (periods.length !== 1) invalidPayload();
+  return Object.freeze(periods[0]);
+}
+
 function invoiceEvent(
   event: Record<string, unknown>,
   type: StripeInvoiceEventType,
@@ -362,19 +409,22 @@ function invoiceEvent(
   if (object.object !== "invoice") invalidPayload();
   requireTestObject(object);
   const subscriptionDetails = invoiceSubscriptionDetails(object);
+  const stripeSubscriptionId = stripeId(
+    subscriptionDetails.subscription,
+    STRIPE_SUBSCRIPTION_ID,
+  );
+  const status = exactString(
+    object.status,
+    INVOICE_STATUSES,
+  ) as StripeInvoiceFacts["status"];
+  const period = invoicePeriod(object, stripeSubscriptionId);
 
   const invoice = Object.freeze({
     stripeInvoiceId: stripeId(object.id, STRIPE_INVOICE_ID),
     stripeCustomerId: stripeId(object.customer, STRIPE_CUSTOMER_ID),
-    stripeSubscriptionId: stripeId(
-      subscriptionDetails.subscription,
-      STRIPE_SUBSCRIPTION_ID,
-    ),
-    status: exactString(
-      object.status,
-      INVOICE_STATUSES,
-    ) as StripeInvoiceFacts["status"],
-    paid: typeof object.paid === "boolean" ? object.paid : invalidPayload(),
+    stripeSubscriptionId,
+    status,
+    paid: invoicePaid(object, status),
     amountPaid: integer(object.amount_paid),
     amountDue: integer(object.amount_due),
     currency: currency(object.currency),
@@ -382,12 +432,10 @@ function invoiceEvent(
       object.billing_reason,
       SUBSCRIPTION_BILLING_REASONS,
     ) as StripeInvoiceFacts["billingReason"],
-    periodStartUnix: integer(object.period_start),
-    periodEndUnix: integer(object.period_end),
+    periodStartUnix: period.start,
+    periodEndUnix: period.end,
     application: applicationMetadata(subscriptionDetails.metadata),
   });
-
-  if (invoice.periodEndUnix <= invoice.periodStartUnix) invalidPayload();
 
   return Object.freeze({
     ...eventBase(event, type),

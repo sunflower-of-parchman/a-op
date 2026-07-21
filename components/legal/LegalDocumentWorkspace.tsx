@@ -351,7 +351,7 @@ export function LegalDocumentWorkspace({
         <section className={styles.fixedFacts} aria-labelledby="fixed-facts">
           <div className={styles.sectionHeading}>
             <h3 id="fixed-facts">Fixed Sites facts</h3>
-            <p>These values remain fixed in this Build Week installation.</p>
+            <p>These values remain fixed in this Sites installation.</p>
           </div>
           <dl>
             <div>

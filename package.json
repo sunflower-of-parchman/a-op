@@ -9,8 +9,6 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "judge:audio:serve": "node scripts/serve-judge-audio-rehearsal.mjs",
-    "judge:packet:verify": "node scripts/verify-judge-content-packet.mjs",
     "setup:build-local": "node scripts/build-local-installer-proposal.mjs",
     "setup:install-local": "node scripts/install-local-site.mjs",
     "dev": "AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW=1 WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",

@@ -169,7 +169,7 @@ VALUES
    '{}'),
   ('legal_terms_version_1', 'terms', 1, 'Terms and Conditions',
    'Artist review required before publication.',
-   'This starter records the terms the artist must review for their Site. The Build Week installation demonstrates simulated commerce in Stripe Test Mode, accepts no real payment, and moves no money.',
+   'This starter records the terms the artist must review for their Site. The installation demonstrates simulated commerce in Stripe Test Mode, accepts no real payment, and moves no money.',
    '{}');--> statement-breakpoint
 UPDATE `installation_state`
 SET `schema_version` = 14,

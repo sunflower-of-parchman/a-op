@@ -129,7 +129,7 @@ function fixed(
     issues.push({
       code: "legal-fixed-boundary-invalid",
       field,
-      message: `${field} must retain the Sites Build Week boundary.`,
+      message: `${field} must retain the Sites commerce boundary.`,
     });
   }
 }

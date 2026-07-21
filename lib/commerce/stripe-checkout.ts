@@ -20,6 +20,7 @@ export interface StripeTestCheckoutInput {
   readonly stripeCustomerId?: unknown;
   readonly successUrl: unknown;
   readonly cancelUrl: unknown;
+  readonly allowHttpLoopback?: unknown;
 }
 
 export interface StripeTestCheckoutDependencies {
@@ -65,7 +66,7 @@ function safeApplicationId(value: unknown): string {
     : invalidInput();
 }
 
-function checkoutReturnUrl(value: unknown): URL {
+function checkoutReturnUrl(value: unknown, allowHttpLoopback: boolean): URL {
   if (typeof value !== "string" || value.length > 2_048) invalidInput();
 
   let url: URL;
@@ -75,8 +76,15 @@ function checkoutReturnUrl(value: unknown): URL {
     return invalidInput();
   }
 
+  const secure = url.protocol === "https:";
+  const localDevelopment =
+    allowHttpLoopback &&
+    url.protocol === "http:" &&
+    (url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1" ||
+      url.hostname === "[::1]");
   if (
-    url.protocol !== "https:" ||
+    (!secure && !localDevelopment) ||
     url.username.length > 0 ||
     url.password.length > 0 ||
     url.hash.length > 0
@@ -109,8 +117,9 @@ function formBody(input: StripeTestCheckoutInput): {
   const productId = safeApplicationId(input.productId);
   const customerUserId = safeApplicationId(input.customerUserId);
   const customerId = optionalCustomerId(input.stripeCustomerId);
-  const successUrl = checkoutReturnUrl(input.successUrl);
-  const cancelUrl = checkoutReturnUrl(input.cancelUrl);
+  const allowHttpLoopback = input.allowHttpLoopback === true;
+  const successUrl = checkoutReturnUrl(input.successUrl, allowHttpLoopback);
+  const cancelUrl = checkoutReturnUrl(input.cancelUrl, allowHttpLoopback);
 
   if (successUrl.origin !== cancelUrl.origin) invalidInput();
   if (
@@ -122,7 +131,7 @@ function formBody(input: StripeTestCheckoutInput): {
 
   const body = new URLSearchParams();
   body.set("mode", mode);
-  body.set("ui_mode", "hosted");
+  body.set("ui_mode", "hosted_page");
   body.set("client_reference_id", checkoutId);
   body.set("success_url", successUrl.toString());
   body.set("cancel_url", cancelUrl.toString());
@@ -227,8 +236,6 @@ export async function createStripeTestCheckoutSession(
         "idempotency-key": input.idempotencyKey,
       },
       body: body.toString(),
-      cache: "no-store",
-      redirect: "error",
     });
   } catch {
     throw new CommerceAdapterError(
@@ -241,7 +248,7 @@ export async function createStripeTestCheckoutSession(
   if (
     value.object !== "checkout.session" ||
     value.livemode !== false ||
-    value.ui_mode !== "hosted" ||
+    value.ui_mode !== "hosted_page" ||
     value.mode !== mode ||
     typeof value.id !== "string" ||
     !STRIPE_TEST_CHECKOUT_ID.test(value.id)

@@ -24,7 +24,7 @@ export function LegalDocumentLibrary({
       </header>
 
       <section className={styles.boundary} aria-labelledby="legal-boundary">
-        <h3 id="legal-boundary">Permanent Build Week facts</h3>
+        <h3 id="legal-boundary">Permanent Sites facts</h3>
         <p>
           Commerce runs in Stripe Test Mode only. No real payment will be
           accepted and no money is moved. Current Sites guidance states that

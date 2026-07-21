@@ -3,7 +3,5 @@
 dist/
 node_modules/
 
-# Generated or upstream reference material
+# Generated migration metadata
 drizzle/meta/
-examples/
-plans/sites-replacement-manifest.txt

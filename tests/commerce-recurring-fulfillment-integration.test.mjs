@@ -451,6 +451,14 @@ test("a paid initial invoice activates one subscription and exact replay is idem
     },
   );
 
+  const delayedCheckout = await processVerifiedCheckoutEvent(
+    memory.binding,
+    completedSubscriptionCheckoutInput(),
+  );
+  assert.equal(delayedCheckout.status, "ignored");
+  assert.equal(delayedCheckout.resultType, "already-fulfilled");
+  assert.equal(delayedCheckout.orderId, first.orderId);
+
   const replay = await activateInitial(memory);
   assert.equal(replay.replayed, true);
   assert.equal(replay.orderId, first.orderId);

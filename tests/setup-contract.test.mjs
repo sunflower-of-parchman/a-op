@@ -584,7 +584,7 @@ test("external actions remain blocked until their own exact Michael approval", a
     {
       actionId: "host-build-week-site",
       kind: "sites-hosting",
-      summary: "Host the exact validated Build Week Site.",
+      summary: "Host the exact validated Site.",
       target: "site",
       approval: "michael-action-specific",
     },

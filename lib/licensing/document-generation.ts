@@ -67,7 +67,7 @@ function renderedDocument(input: {
     [
       "Stripe Test Mode",
       "No real payment will be accepted.",
-      "This is a simulated Build Week commerce record.",
+      "This is a simulated Stripe Test Mode commerce record.",
       "",
       licenseText,
     ].join("\n"),

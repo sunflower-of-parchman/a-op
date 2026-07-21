@@ -14,6 +14,7 @@ const {
   archiveCommerceProduct,
   createCommerceProduct,
 } = await import("../db/commerce-admin-write.ts");
+const { bindCommerceIntent } = await import("../db/commerce-binding-write.ts");
 
 const OWNER_ID = "user_commerce_product_owner";
 let requestSequence = 0;
@@ -735,4 +736,180 @@ test("authority and module changes at the D1 batch boundary roll back product an
     ),
     0,
   );
+});
+
+test("owner binds a setup subscription to one active Stripe Test product", async (t) => {
+  const memory = await createInMemoryD1();
+  t.after(() => memory.close());
+  seedDefinitions(memory.database);
+  memory.database.exec(`
+    UPDATE membership_plans
+    SET state = 'draft'
+    WHERE id = 'membership_plan_commerce_product';
+    UPDATE subscription_plans
+    SET state = 'draft'
+    WHERE id = 'subscription_plan_commerce_product';
+    INSERT INTO commerce_binding_intents
+      (id, intent_key, intent_kind, name, description,
+       subscription_plan_id, subscription_plan_revision, amount_minor,
+       currency, billing_interval, interval_count, binding_state,
+       stripe_environment, livemode, revision, created_by_user_id)
+    VALUES
+      ('commerce_binding_intent_subscription',
+       'subscription-commerce-subscription', 'subscription',
+       'Fictional subscription', 'A frozen setup definition.',
+       'subscription_plan_commerce_product', 1, 1000, 'USD', 'month', 1,
+       'pending', 'test', 0, 1, '${OWNER_ID}');
+  `);
+
+  const operation = context("bind.subscription");
+  const first = await bindCommerceIntent(
+    memory.binding,
+    "subscription-commerce-subscription",
+    "price_AopBindingSubscription001",
+    operation,
+  );
+  assert.equal(first.replayed, false);
+  assert.equal(first.value.bindingState, "bound");
+  assert.equal(first.value.productState, "active");
+  assert.equal(first.value.stripeEnvironment, "test");
+  assert.equal(first.value.livemode, false);
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM membership_plans WHERE id = 'membership_plan_commerce_product'",
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM subscription_plans WHERE id = 'subscription_plan_commerce_product'",
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM commerce_products WHERE id = ?",
+      first.value.commerceProductId,
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT amount_minor FROM commerce_prices WHERE id = ?",
+      first.value.commercePriceId,
+    ),
+    1000,
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT binding_state FROM commerce_binding_intents WHERE id = 'commerce_binding_intent_subscription'",
+    ),
+    "bound",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT COUNT(*) FROM audit_events WHERE action = 'commerce.binding-intent.bind'",
+    ),
+    1,
+  );
+
+  const replay = await bindCommerceIntent(
+    memory.binding,
+    "subscription-commerce-subscription",
+    "price_AopBindingSubscription001",
+    operation,
+  );
+  assert.equal(replay.replayed, true);
+  assert.deepEqual(replay.value, first.value);
+  assert.equal(
+    scalar(memory.database, "SELECT COUNT(*) FROM commerce_products"),
+    1,
+  );
+  assert.equal(
+    scalar(memory.database, "SELECT COUNT(*) FROM commerce_prices"),
+    1,
+  );
+});
+
+test("owner binds a setup license to one active offer and Test product", async (t) => {
+  const memory = await createInMemoryD1();
+  t.after(() => memory.close());
+  seedDefinitions(memory.database);
+  memory.database.exec(`
+    UPDATE license_terms
+    SET state = 'draft'
+    WHERE id = 'license_terms_commerce_product';
+    INSERT INTO commerce_binding_intents
+      (id, intent_key, intent_kind, name, description,
+       track_id, track_revision_id, track_revision, license_terms_id,
+       license_terms_version_id, license_terms_version, license_option_id,
+       amount_minor, currency, billing_interval, interval_count,
+       binding_state, stripe_environment, livemode, revision,
+       created_by_user_id)
+    VALUES
+      ('commerce_binding_intent_license', 'license-fictional-track',
+       'license', 'Fictional track license', 'A frozen setup definition.',
+       'track_commerce_product', 'track_commerce_product_r1', 1,
+       'license_terms_commerce_product',
+       'license_terms_commerce_product_v1', 1,
+       'license_option_commerce_product', 30000, 'USD', 'one_time', 1,
+       'pending', 'test', 0, 1, '${OWNER_ID}');
+  `);
+
+  const operation = context("bind.license");
+  const first = await bindCommerceIntent(
+    memory.binding,
+    "license-fictional-track",
+    "price_AopBindingLicense001",
+    operation,
+  );
+  assert.equal(first.replayed, false);
+  assert.equal(first.value.intentKind, "license");
+  assert.equal(first.value.bindingState, "bound");
+  assert.ok(first.value.licenseOfferId);
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM license_terms WHERE id = 'license_terms_commerce_product'",
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM commerce_products WHERE id = ?",
+      first.value.commerceProductId,
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT state FROM license_offers WHERE id = ?",
+      first.value.licenseOfferId,
+    ),
+    "active",
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT binding_state FROM commerce_binding_intents WHERE id = 'commerce_binding_intent_license'",
+    ),
+    "bound",
+  );
+
+  const replay = await bindCommerceIntent(
+    memory.binding,
+    "license-fictional-track",
+    "price_AopBindingLicense001",
+    operation,
+  );
+  assert.equal(replay.replayed, true);
+  assert.deepEqual(replay.value, first.value);
 });

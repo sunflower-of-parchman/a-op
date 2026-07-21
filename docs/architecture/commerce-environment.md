@@ -8,9 +8,9 @@ Each deployment selects an explicit commerce capability in source-controlled dep
 
 ## Sites boundary
 
-Current official [Sites guidance](https://help.openai.com/en/articles/20001339) states that Sites must not process payment-card data or enable financial transactions. The Build Week installation exercises simulated commerce through Stripe Test Mode only. Stripe test keys create simulated Stripe objects; Stripe states that test environments accept no real payment methods and make no real charges.
+Current official [Sites guidance](https://help.openai.com/en/articles/20001339) states that Sites must not process payment-card data or enable financial transactions. The Sites installation exercises simulated commerce through Stripe Test Mode only. Stripe test keys create simulated Stripe objects; Stripe states that test environments accept no real payment methods and make no real charges.
 
-Sites describes every deployed Site URL as a production URL. That describes the hosted deployment, not the Stripe environment. Every Build Week deployment URL remains permanently `stripe-test-simulation` and cannot accept real payment or move money.
+Sites describes every deployed Site URL as a production URL. That describes the hosted deployment, not the Stripe environment. Every deployment URL remains permanently `stripe-test-simulation` and cannot accept real payment or move money.
 
 The Sites application:
 
@@ -35,7 +35,7 @@ Only a verified, test-mode fulfillment event can create or advance an order. The
 
 The return page reads application-owned order state. A successful browser redirect does not fulfill an order. A cancelled redirect, missing webhook, invalid signature, live-mode event, or failed Stripe status creates no access.
 
-## Build Week judge journey
+## Stripe Test acceptance journey
 
 1. A visitor signs in and becomes an active application customer.
 2. The customer selects a track, license, membership, subscription, or other active test product.

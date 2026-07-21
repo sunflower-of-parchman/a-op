@@ -60,9 +60,9 @@ Contact can carry public contact details, booking information, an invitation, in
 
 Submissions are stored for the artist with the exact consent version the visitor accepted. Administration provides inquiry status and private notes. The application does not send email unless the artist deliberately adds and approves an email delivery service.
 
-### Privacy, Terms, and FAQ
+### Privacy Policy, Terms and Conditions, and FAQ
 
-Privacy and Terms begin with editable starter documents. They remain identified as starters until the artist reviews, approves, and publishes a version. Published versions keep their history.
+Privacy Policy and Terms and Conditions begin with editable starter documents. They remain identified as starters until the artist reviews, approves, and publishes a version. Published versions keep their history.
 
 FAQ is a normal published page the artist can edit for their own listeners and customers.
 
@@ -120,7 +120,9 @@ The Sites build contains a test-only commerce simulation for checkout, orders, m
 
 It accepts Stripe test credentials only. Stripe-hosted Test Checkout handles test payment entry. The application verifies webhook signatures, rejects live credentials and live-mode events before product writes, and stores no card fields. No real payment is accepted and no money moves.
 
-The application contract is covered by local tests. A real Stripe-hosted Test Checkout and provider-delivered test webhook have not yet completed the final external acceptance rehearsal. Live commerce is unavailable in the Sites deployment.
+Stripe is an installation requirement only when the artist activates commerce. Setup records frozen membership, subscription, and license products as pending bindings. An owner connects each one to its matching Stripe Test `price_…` identifier in Commerce administration; the application activates the exact linked plan or license terms, application product, price, and license offer together.
+
+The external acceptance rehearsal completed in Stripe Test mode on July 20, 2026. One hosted subscription checkout produced a provider-signed invoice, fulfilled order, active subscription and membership, two Course entitlements, and 15 download credits. One hosted license checkout fulfilled an approved request, issued the license, granted its track and document entitlements, and queued document generation. The rehearsal also confirmed provider-event ordering and Stripe's current hosted-page and invoice payload shapes. Its local D1, R2, credential, and media state was removed afterward; task-created Test subscriptions were canceled, Test customers were deleted, and Test products and prices were archived. Stripe retains its normal sandbox event and completed-session history. Live commerce is unavailable in the Sites deployment.
 
 See [docs/architecture/commerce-environment.md](docs/architecture/commerce-environment.md) for the exact boundary.
 
@@ -132,9 +134,9 @@ Ordinary use of the website makes no model request. Material enters ChatGPT Work
 
 ## Current release state
 
-The Sites application compiles and produces its Worker deployment output. The repository contains the complete product domains and their local verification suites.
+The Sites application compiles and produces its Worker deployment output. The repository contains the complete product domains and their local verification suites. The working tree contains no Sound for Movement media, demo proposal, local D1 or R2 state, hosted test account file, or Stripe credential file.
 
-Before submission, the current working branch still needs its changed interface and setup tests brought back into agreement, the one-shot installer exercised from a clean state, the Stripe Test provider rehearsal resolved or explicitly left out, and the exact approved Sites version saved and deployed.
+Before submission, the one-shot installer still needs a clean-state exercise against artist-approved source material. The exact approved Sites version must then be saved and deployed with Michael's approval.
 
 The controlling implementation record is [plans/migrateAopToSites.md](plans/migrateAopToSites.md). The product contract is [PRODUCT.md](PRODUCT.md).
 

@@ -63,11 +63,11 @@ Artists define each plan, its included access, download credits, license credits
 
 Customers can see their current plan, access, benefits, credits, renewal date, and history. Artists can manage plans, members, subscribers, renewals, cancellations, credits, access, and history through `a-op`.
 
-## Commerce environments and the Build Week presentation
+## Commerce environments and the Sites presentation
 
 `a-op` has one connected commerce domain for checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery. The deployment environment determines whether that domain is simulated or live.
 
-The Build Week presentation demonstrates commerce through Stripe Test mode. It accepts no real payment and moves no money. Test checkout events exercise the same order, licensing, membership, subscription, credit, entitlement, and protected-delivery contracts used by the application. Live commerce is disabled in the ChatGPT Sites deployment.
+The Sites presentation demonstrates commerce through Stripe Test mode. It accepts no real payment and moves no money. Test checkout events exercise the same order, licensing, membership, subscription, credit, entitlement, and protected-delivery contracts used by the application. Live commerce is disabled in the ChatGPT Sites deployment.
 
 The Sites installation accepts only Stripe test credentials, uses Stripe-hosted Test Checkout and Stripe-provided test payment methods, verifies webhook signatures, rejects every live-mode event before it can write state, and marks related records as test data. Payment-card fields never enter the React application, D1, logs, telemetry, or audit records. Checkout, return, account, and administration views identify the experience as Stripe Test Mode and state that no real payment will be accepted.
 

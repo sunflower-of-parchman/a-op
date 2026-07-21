@@ -19,7 +19,7 @@ export async function readPublicMosaicImages(
     readPublicArtwork(
       binding,
       "media-about-profile-artwork",
-      "Portrait of Michael Wall",
+      "Artist portrait",
     ),
   ]);
   const releases = catalog.items

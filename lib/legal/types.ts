@@ -5,7 +5,7 @@ export type LegalTelemetryMode = "disabled" | "consent_required" | "anonymous";
 
 /**
  * The exact guided-setup record stored with every legal draft. Fixed literals
- * keep the Build Week Sites boundary factual and impossible to reinterpret as
+ * keep the Sites boundary factual and impossible to reinterpret as
  * live commerce or a geographic residency promise.
  */
 export interface LegalSetupAnswers {

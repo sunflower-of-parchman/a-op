@@ -35,9 +35,15 @@ function adapterFailure(error: CommerceAdapterError): RuntimeError {
   });
 }
 
-function requireHttpsOrigin(request: Request): URL {
+function requireCheckoutOrigin(request: Request): URL {
   const url = new URL(request.url);
-  if (url.protocol !== "https:") {
+  const localDevelopment =
+    env.AOP_RUNTIME_ENV === "development" &&
+    url.protocol === "http:" &&
+    (url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1" ||
+      url.hostname === "[::1]");
+  if (url.protocol !== "https:" && !localDevelopment) {
     throw new RuntimeError(
       "STRIPE_CHECKOUT_HTTPS_REQUIRED",
       "Stripe-hosted Test Checkout requires an HTTPS application origin.",
@@ -53,7 +59,7 @@ function requireHttpsOrigin(request: Request): URL {
 
 export async function POST(request: Request): Promise<Response> {
   return runApiRoute("commerce.checkout_create_failed", async (requestId) => {
-    const requestUrl = requireHttpsOrigin(request);
+    const requestUrl = requireCheckoutOrigin(request);
     let selection;
     try {
       selection = parseCommerceCheckoutSelection(
@@ -109,6 +115,7 @@ export async function POST(request: Request): Promise<Response> {
             stripeCustomerId: checkout.stripeCustomerId,
             successUrl: returnUrl.toString(),
             cancelUrl: cancelUrl.toString(),
+            allowHttpLoopback: env.AOP_RUNTIME_ENV === "development",
           },
           { fetch: globalThis.fetch },
         );

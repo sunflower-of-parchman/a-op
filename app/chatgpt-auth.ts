@@ -22,6 +22,7 @@ function localAccountPreviewUser(): ChatGPTUser | null {
   return resolveLocalAccountPreviewUser({
     AOP_RUNTIME_ENV: env.AOP_RUNTIME_ENV,
     AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW: env.AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW,
+    AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA: env.AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA,
   });
 }
 

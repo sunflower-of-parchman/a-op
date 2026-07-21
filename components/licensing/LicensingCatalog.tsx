@@ -21,22 +21,6 @@ export interface LicensingCatalogProps {
   readonly signInHref: string;
 }
 
-const LICENSING_ARTWORK = [
-  "/judge-content/collections/energetic.webp",
-  "/judge-content/releases/maquina-de-humo.jpg",
-  "/judge-content/releases/an-agreement.jpg",
-] as const;
-
-const SUBSCRIPTION_ARTWORK = [
-  "/judge-content/collections/ambient.webp",
-  "/judge-content/releases/amiss.jpg",
-  "/judge-content/collections/beautiful.webp",
-] as const;
-
-function artworkAt(images: readonly string[], index: number): string {
-  return images[index % images.length] ?? LICENSING_ARTWORK[0];
-}
-
 function previewCadence(product: PublicCommerceIntentPreview): string {
   if (product.billingInterval === "one_time") return "One time";
   const unit = product.billingInterval === "month" ? "month" : "year";
@@ -49,29 +33,20 @@ function PreviewPlanList({
   actionHref = "#custom-licensing",
   actionLabel = "Ask about this option",
   actionStyle = "text",
-  artwork,
   products,
 }: {
   readonly actionHref?: string;
   readonly actionLabel?: string;
   readonly actionStyle?: "button" | "text";
-  readonly artwork?: readonly string[];
   readonly products: readonly PublicCommerceIntentPreview[];
 }) {
   return (
     <ol className={styles.planGrid}>
-      {products.map((product, index) => (
+      {products.map((product) => (
         <li
-          className={`${styles.planTile} ${artwork ? "" : styles.planTilePlain}`}
+          className={`${styles.planTile} ${styles.planTilePlain}`}
           key={product.id}
         >
-          {artwork ? (
-            <img
-              alt=""
-              className={styles.cardArtwork}
-              src={artworkAt(artwork, index)}
-            />
-          ) : null}
           <div className={styles.planPanel}>
             <div className={styles.planIdentity}>
               <h3>{product.name}</h3>
@@ -117,26 +92,17 @@ function cadence(product: CommerceProductDTO): string {
 }
 
 function PublishedPlanList({
-  artwork,
   products,
 }: {
-  readonly artwork?: readonly string[];
   readonly products: readonly CommerceProductDTO[];
 }) {
   return (
     <ol className={styles.planGrid}>
-      {products.map((product, index) => (
+      {products.map((product) => (
         <li
-          className={`${styles.planTile} ${artwork ? "" : styles.planTilePlain}`}
+          className={`${styles.planTile} ${styles.planTilePlain}`}
           key={product.id}
         >
-          {artwork ? (
-            <img
-              alt=""
-              className={styles.cardArtwork}
-              src={artworkAt(artwork, index)}
-            />
-          ) : null}
           {product.productType === "membership" ? (
             <TelemetryPageView
               eventName="membership-view"
@@ -230,7 +196,7 @@ export function LicensingCatalog({
   signInHref,
 }: LicensingCatalogProps) {
   const educationPattern = /education|school|academic/i;
-  const membershipPattern = /sound-for-movement-membership|\bmembership\b/i;
+  const membershipPattern = /\bmembership\b/i;
   const recurringProducts = commerceProducts.filter(
     (product) =>
       product.productType === "subscription" ||
@@ -268,7 +234,6 @@ export function LicensingCatalog({
               actionHref="/music?view=tracks"
               actionLabel="Buy License"
               actionStyle="button"
-              artwork={LICENSING_ARTWORK}
               products={pendingLicenseTypes}
             />
           ) : (
@@ -276,7 +241,7 @@ export function LicensingCatalog({
           )
         ) : (
           <ol className={styles.offerList}>
-            {offers.map((offer, index) => {
+            {offers.map((offer) => {
               const { option, terms, testPrice, track } = offer.snapshot;
               return (
                 <li
@@ -284,11 +249,6 @@ export function LicensingCatalog({
                   id={`offer-${offer.slug}`}
                   key={offer.id}
                 >
-                  <img
-                    alt=""
-                    className={styles.cardArtwork}
-                    src={artworkAt(LICENSING_ARTWORK, index)}
-                  />
                   <TelemetryPageView
                     eventName="licensing-view"
                     resourceId={offer.id}
@@ -337,15 +297,9 @@ export function LicensingCatalog({
       <section className={styles.section} aria-labelledby="subscriptions-title">
         <h2 id="subscriptions-title">Licensing Plans</h2>
         {licensingSubscriptions.length > 0 ? (
-          <PublishedPlanList
-            artwork={SUBSCRIPTION_ARTWORK}
-            products={licensingSubscriptions}
-          />
+          <PublishedPlanList products={licensingSubscriptions} />
         ) : pendingLicensingPlans.length > 0 ? (
-          <PreviewPlanList
-            artwork={SUBSCRIPTION_ARTWORK}
-            products={pendingLicensingPlans}
-          />
+          <PreviewPlanList products={pendingLicensingPlans} />
         ) : (
           <p>No licensing plans are published.</p>
         )}

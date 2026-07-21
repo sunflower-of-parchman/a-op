@@ -1,10 +1,18 @@
 import type { ChatGPTUser } from "@/app/chatgpt-auth";
 
 const LOCAL_ACCOUNT_PREVIEW_FLAG = "AOP_ENABLE_LOCAL_ACCOUNT_PREVIEW";
-const LOCAL_ACCOUNT_PREVIEW_USER: ChatGPTUser = Object.freeze({
-  displayName: "Fictional Customer",
-  email: "customer@a-op.invalid",
-  fullName: "Fictional Customer",
+const LOCAL_ACCOUNT_PREVIEW_PERSONA = "AOP_LOCAL_ACCOUNT_PREVIEW_PERSONA";
+const LOCAL_ACCOUNT_PREVIEW_USERS = Object.freeze({
+  customer: Object.freeze({
+    displayName: "Fictional Customer",
+    email: "customer@a-op.invalid",
+    fullName: "Fictional Customer",
+  }),
+  owner: Object.freeze({
+    displayName: "Fictional Owner",
+    email: "owner@a-op.invalid",
+    fullName: "Fictional Owner",
+  }),
 });
 
 type AuthenticationEnvironment = Readonly<Record<string, string | undefined>>;
@@ -19,5 +27,7 @@ export function resolveLocalAccountPreviewUser(
     return null;
   }
 
-  return LOCAL_ACCOUNT_PREVIEW_USER;
+  return environment[LOCAL_ACCOUNT_PREVIEW_PERSONA] === "owner"
+    ? LOCAL_ACCOUNT_PREVIEW_USERS.owner
+    : LOCAL_ACCOUNT_PREVIEW_USERS.customer;
 }

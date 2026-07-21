@@ -60,7 +60,7 @@ Artist-controlled grants, active memberships and subscriptions, issued licenses,
 
 ## Current Sites runtime scope
 
-Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The Build Week Sites installation therefore runs the complete commerce domain as a Stripe Test Mode simulation. Stripe test objects represent checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery without accepting a real payment or moving money. Stripe hosts the test payment interface; card fields never enter `a-op`.
+Current official [Sites guidance](https://help.openai.com/en/articles/20001339) prohibits payment-card processing and financial transactions. The Sites installation therefore runs the complete commerce domain as a Stripe Test Mode simulation. Stripe test objects represent checkout, orders, memberships, subscriptions, licensing, credits, entitlements, and protected delivery without accepting a real payment or moving money. Stripe hosts the test payment interface; card fields never enter `a-op`.
 
 The Sites runtime accepts only `pk_test_` and `sk_test_` credentials, verifies Stripe webhook signatures, rejects `livemode` events before writes, stores the environment on related records, and identifies Test Mode at checkout actions and on resulting records. The public demonstration cannot enable live commerce through administration or ordinary configuration. A future compatible deployment begins live-commerce work only after a fresh rules and technical-support check, explicit deployment capability, validated live configuration, and artist approval.
 

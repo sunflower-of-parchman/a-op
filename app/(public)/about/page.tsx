@@ -16,11 +16,7 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const [page, portrait, mosaicImages] = await Promise.all([
     readPublishedPageBySlug(env.DB, "about"),
-    readPublicArtwork(
-      env.DB,
-      "media-about-profile-artwork",
-      "Portrait of Michael Wall",
-    ),
+    readPublicArtwork(env.DB, "media-about-profile-artwork", "Artist portrait"),
     readPublicMosaicImages(env.DB),
   ]);
   const bodyBlocks =

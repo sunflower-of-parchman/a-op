@@ -50,9 +50,21 @@ Run from the repository root. The environment-file option lets Node load the ign
 
 Preflight confirms the governing files, logical `DB` and `MEDIA` Sites bindings, local media-tool availability, ignored path aliases, the owner bootstrap identity, and the Stripe Test Mode boundary.
 
-A fresh non-runtime-lab production installation requires `AOP_OWNER_BOOTSTRAP_EMAIL` in its server-managed environment. Set it to the email address of the ChatGPT account Michael approved for the one-time artist-owner bootstrap. Missing and malformed values block production preflight without printing the configured value. The test-only runtime laboratory keeps its fixed fictional owner path and does not require this setting.
+A fresh non-runtime-lab production installation requires `AOP_OWNER_BOOTSTRAP_EMAIL` in its server-managed environment. Set it to the email address of the ChatGPT account approved for the one-time artist-owner bootstrap. Missing and malformed values block production preflight without printing the configured value. The test-only runtime laboratory keeps its fixed fictional owner path and does not require this setting.
 
-The Sites commerce adapter is permanently `stripe-test-simulation`. Present malformed credentials and every recognized live credential produce a hard, redacted failure. The read-only setup interview can report an unconfigured inactive commerce journey, while activation requires complete `pk_test_`, `sk_test_`, and `whsec_` values. The Build Week Sites packaging gate is strict: `npm run verify:sites-package` fails clearly when any test credential is absent and runs the complete integrated gate only after the test configuration passes. The proposal, command output, D1, R2, logs, telemetry, audit records, and browser receive no credential or payment-card value.
+The Sites commerce adapter is permanently `stripe-test-simulation`. Present malformed credentials and every recognized live credential produce a hard, redacted failure. The read-only setup interview can report an unconfigured inactive commerce journey, while activation requires complete `pk_test_`, `sk_test_`, and `whsec_` values. The Sites packaging gate is strict: `npm run verify:sites-package` fails clearly when any test credential is absent and runs the complete integrated gate only after the test configuration passes. The proposal, command output, D1, R2, logs, telemetry, audit records, and browser receive no credential or payment-card value.
+
+### Connect Stripe Test Mode
+
+Stripe is required only when the artist activates checkout, paid memberships, subscriptions, licenses, or credit sales. A streaming-only installation does not require a Stripe account.
+
+1. Create or use a Stripe account and switch to a sandbox or Test mode.
+2. In Stripe, create each product and price using the exact name, amount, currency, and billing interval shown under `/admin/commerce` in `Connect setup products`.
+3. Copy the resulting `price_…` identifier into that setup product and choose `Connect test price`. The owner-only operation activates the frozen application plan and creates one active application product and immutable Test price together. It does not create a Checkout Session, customer, payment method, subscription, order, or entitlement.
+4. Store `STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`, and `STRIPE_WEBHOOK_SECRET` as server-managed Test credentials. Use `pk_test_`, `sk_test_`, and the `whsec_` value produced for the exact webhook endpoint. Do not paste credentials into a task, proposal, source file, browser form, or command output.
+5. For a local provider rehearsal, run Stripe's listener against `/api/commerce/webhooks/stripe`, start the application with the matching Test credentials, complete one Stripe-hosted Test Checkout, and confirm the returned order, membership or subscription, credits, entitlements, protected access, and owner evidence. Use Stripe-provided test payment details only.
+
+The binding screen handles membership, subscription, and license setup intents. A license connection activates the exact license-terms version, creates the track-specific application product and price, and creates the active license offer together. The artist reviews the license language and source proposal before applying and connecting it.
 
 ## Keep machine paths local
 
@@ -112,7 +124,7 @@ The artist-owner approval uses schema `aop.setup-approval.v1` and contains:
 
 Supported scopes are `configuration`, `internal-publication`, `media-preparation`, `media-publication`, `source-changes`, `account-authority`, and `legal-drafts`. The compiler derives the scopes required by the proposal. Approval of configuration never authorizes an external action.
 
-Each proposed Sites hosting, custom-domain, DNS, email-delivery, public-media-upload, or repository-visibility action needs its own `aop.external-action-approval.v1` artifact. It binds the exact proposal hash, source fingerprint, action identifier, and canonical action hash to Michael's statement `I approve this exact external action hash.` No local or Site apply route executes an external action.
+Each proposed Sites hosting, custom-domain, DNS, email-delivery, public-media-upload, or repository-visibility action needs its own `aop.external-action-approval.v1` artifact. It binds the exact proposal hash, source fingerprint, action identifier, and canonical action hash to the artist's statement `I approve this exact external action hash.` No local or Site apply route executes an external action.
 
 Check a proposal and approval after the owner-authenticated Site returns the current fingerprint:
 
@@ -129,7 +141,7 @@ The owner-authenticated Site apply boundary receives the validated proposal and 
 
 Every operation carries a stable idempotency key. D1 records one aggregate setup application for the exact proposal and approval. Each domain repository uses the compiled operation identifier for its compare-and-set marker and audit receipt. An exact replay returns the aggregate application and existing domain receipts. Reusing an identifier with changed facts fails. Media preparation and publication reuse the matching approved media object and job identities.
 
-The local media publication command always names the approved logical `mediaKey`. A protected publication accepts no external-action fields. A public publication also requires `--external-approval-alias`, resolved through ignored `setup/local-paths.json`, for the exact `aop.external-action-approval.v1` artifact. The command validates the artifact and proposal hash locally, then sends only its safe action identifier and canonical action hash. Before any R2 write, and again inside the final guarded D1 statements, the Site requires the applied setup result to contain the matching `public-media-upload` receipt for that same media key and Michael's action-specific approval.
+The local media publication command always names the approved logical `mediaKey`. A protected publication accepts no external-action fields. A public publication also requires `--external-approval-alias`, resolved through ignored `setup/local-paths.json`, for the exact `aop.external-action-approval.v1` artifact. The command validates the artifact and proposal hash locally, then sends only its safe action identifier and canonical action hash. Before any R2 write, and again inside the final guarded D1 statements, the Site requires the applied setup result to contain the matching `public-media-upload` receipt for that same media key and the artist's action-specific approval.
 
 Apply can write only the internal boundaries named by its plan:
 
@@ -173,4 +185,4 @@ Run:
 
 Diagnosis reports safe contract, binding, tool, alias-count, test-environment, proposal-hash, and source-fingerprint facts. It prints no artist text, path, credential, customer value, provider payload, or private object key. Resolve the named blocker, obtain a fresh source fingerprint when durable state changed, preview again, and approve the new exact hash.
 
-Export, verification, and disposable-local restore use their separate Milestone 9 portability contract. Customer-data export and hosted backup require their own privacy review and approval. Public Sites hosting begins only after complete local integration and Michael's action-specific approval.
+Export, verification, and disposable-local restore use their separate Milestone 9 portability contract. Customer-data export and hosted backup require their own privacy review and approval. Public Sites hosting begins only after complete local integration and action-specific approval from the repository owner.

@@ -19,7 +19,7 @@ test("the canonical product keeps the full platform and the Sites test boundary 
   );
   assert.match(
     product,
-    /The Build Week presentation demonstrates commerce through Stripe Test mode\. It accepts no real payment and moves no money\./,
+    /The Sites presentation demonstrates commerce through Stripe Test mode\. It accepts no real payment and moves no money\./,
   );
   assert.match(
     product,
@@ -44,7 +44,7 @@ test("the canonical product keeps the full platform and the Sites test boundary 
     /production URL[\s\S]*not the Stripe environment[\s\S]*permanently `stripe-test-simulation`/,
   );
   const judgeJourney = contract.match(
-    /## Build Week judge journey([\s\S]*?)## Data minimization/,
+    /## Stripe Test acceptance journey([\s\S]*?)## Data minimization/,
   )?.[1];
   assert.ok(judgeJourney);
   assert.deepEqual(

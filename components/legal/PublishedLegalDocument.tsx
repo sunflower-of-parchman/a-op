@@ -23,10 +23,10 @@ export function PublishedLegalDocument({
           and explicitly approved before publication.
         </p>
         <p>
-          Build Week commerce runs only in Stripe Test Mode. No real payment
-          will be accepted and no money is moved. Stripe-hosted Test Checkout
-          handles test payment entry; a-op does not collect or store
-          payment-card fields.
+          Commerce runs only in Stripe Test Mode. No real payment will be
+          accepted and no money is moved. Stripe-hosted Test Checkout handles
+          test payment entry; a-op does not collect or store payment-card
+          fields.
         </p>
         <p>
           Current Sites guidance states that Sites does not support data

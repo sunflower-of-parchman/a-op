@@ -9,7 +9,7 @@ export interface LegalDocumentStarter {
 
 const PRIVACY_STARTER: LegalDocumentStarter = Object.freeze({
   id: "privacy",
-  title: "Privacy",
+  title: "Privacy Policy",
   introduction:
     "This editable starter explains how an artist-owned a-op installation may collect, use, store, and protect information. The artist must replace bracketed details, confirm the installed capabilities, and approve the exact document before treating it as their privacy policy.",
   bodyText: `Effective date: [date]
@@ -36,7 +36,7 @@ Current Sites guidance states that Sites does not support data residency or infe
 
 Payments and connected services
 
-This Build Week installation demonstrates commerce only through Stripe Test mode. It accepts no real payment method, makes no real charge, and moves no money. Stripe-hosted Test Checkout owns test payment entry; a-op does not collect or store payment-card fields. A future compatible deployment must document its actual payment provider and practices before accepting live transactions.
+This Sites installation demonstrates commerce only through Stripe Test mode. It accepts no real payment method, makes no real charge, and moves no money. Stripe-hosted Test Checkout owns test payment entry; a-op does not collect or store payment-card fields. A future compatible deployment must document its actual payment provider and practices before accepting live transactions.
 
 Sharing and disclosure
 
@@ -65,7 +65,7 @@ Privacy questions and requests can be sent to [contact email or contact-page lin
 
 const TERMS_STARTER: LegalDocumentStarter = Object.freeze({
   id: "terms",
-  title: "Terms",
+  title: "Terms and Conditions",
   introduction:
     "This editable starter describes a visitor's agreement with an artist-owned a-op installation. The artist must replace bracketed details, add their actual business and licensing terms, and approve the exact document before treating it as their terms of use.",
   bodyText: `Effective date: [date]
@@ -94,7 +94,7 @@ Memberships, subscriptions, and credits
 
 When active, a membership or subscription provides the access and included credits described by its published plan. The artist should state billing intervals, renewal, cancellation, expiration, rollover, refund, and credit-consumption rules. Credits have no cash value unless the artist's published terms expressly say otherwise.
 
-Build Week commerce simulation
+Stripe Test mode commerce simulation
 
 This Sites installation demonstrates commerce only through Stripe Test mode. No real payment will be accepted and no money is moved. Test prices, objects, orders, and checkout results are fictional simulations. Live commerce requires a future compatible deployment, current policy and platform review, deliberate configuration, and the artist's approval.
 

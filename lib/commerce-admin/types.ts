@@ -87,3 +87,18 @@ export interface CommerceProductMutationReceipt {
   readonly livemode: false;
   readonly created: boolean;
 }
+
+export interface CommerceBindingMutationReceipt {
+  readonly intentId: string;
+  readonly intentKey: string;
+  readonly intentKind: "membership" | "subscription" | "license";
+  readonly bindingState: "bound";
+  readonly commerceProductId: string;
+  readonly commercePriceId: string;
+  readonly licenseOfferId: string | null;
+  readonly productState: "active";
+  readonly stripePriceId: string;
+  readonly stripeEnvironment: "test";
+  readonly livemode: false;
+  readonly revision: number;
+}

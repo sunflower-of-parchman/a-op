@@ -1,5 +1,9 @@
 export { AdminCommerce, type AdminCommerceProps } from "./AdminCommerce";
 export {
+  AdminCommerceBindings,
+  type AdminCommerceBindingsProps,
+} from "./AdminCommerceBindings";
+export {
   AdminCommerceProductWorkspace,
   type AdminCommerceProductWorkspaceProps,
 } from "./AdminCommerceProductWorkspace";
