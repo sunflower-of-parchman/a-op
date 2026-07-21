@@ -26,7 +26,7 @@ Music publishing, catalog, streaming, identity, access, and administration form 
 
 Public navigation, routes, administration, setup, jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history.
 
-A repository-link request to build a new artist-owned website first clones the repository, prepares the exact release artifact, creates a new private Site with fresh Sites-provided D1 and R2 resources, applies every migration, and verifies the complete neutral installation. Ask no capability, content, asset, design, or setup question before that hosted verification succeeds.
+A repository-link request to build a new artist-owned website first clones the repository and completes one neutral production build. It then creates a new private Site with fresh Sites-provided D1 and R2 resources, records the assigned `project_id`, commits that linkage, prepares the exact release artifact once from clean synchronized `main`, applies every migration, and verifies the complete neutral installation. Ask no capability, content, asset, design, or setup question before that hosted verification succeeds.
 
 After the neutral Site works, tell the artist that their new artist-owned website is ready and that it is time to personalize it. Ask them to attach a context document or approved assets, share a Google Drive folder containing material they want to use, approve a local asset folder, or begin with the blank Site. Review only material the artist deliberately provides, then present the proposed active capabilities, asset and information checklist, and exact setup proposal before applying it. Imported content populates the existing product repositories and native interfaces; it never replaces the visual foundation, player, navigation, access controls, or module components with a content-specific renderer.
 
@@ -94,7 +94,7 @@ Public Sites deployment, custom domains, DNS, repository visibility, email deliv
 
 ## Sites release boundary
 
-Prepare every Sites version with `npm run prepare:sites-release` from a clean `main` checkout whose `HEAD` equals `origin/main`. Treat any clone, install, build, source-integrity, artifact, binding, migration, packaging, version-save, deployment, route, or Worker-log failure as terminal for that attempt. Report the exact failure and stop.
+For a new Site, complete the neutral `npm run build`, create the private Site, and commit its assigned `project_id` first. Prepare that initial version and every later Sites version with the single canonical command `npm run prepare:sites-release` from a clean `main` checkout whose `HEAD` equals `origin/main`. Treat any clone, install, build, source-integrity, artifact, binding, migration, packaging, version-save, deployment, route, or Worker-log failure as terminal for that attempt. Report the exact failure and stop.
 
 Deploy only the official archive made from that verified unchanged checkout with the installed `sites:sites-hosting` helper. Never create `app/site.tsx`, substitute routes, static route shims, replacement prose, alternate components, or database-free fallbacks during deployment. `docs/architecture/sites-release-contract.md` is the complete release contract.
 

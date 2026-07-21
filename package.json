@@ -12,7 +12,7 @@
     "setup:build-local": "node scripts/build-local-installer-proposal.mjs",
     "setup:install-local": "node scripts/install-local-site.mjs",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
-    "build": "node --env-file-if-exists=.env scripts/verify-commerce-boundary.mjs --allow-missing && WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
+    "build": "bash scripts/build-neutral.sh",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run verify:all",
     "typecheck": "tsc --noEmit",
@@ -55,7 +55,6 @@
     "verify:m10:static": "node --test tests/security-headers.test.mjs tests/security-browser-boundary.test.mjs tests/m10-interface-contract.test.mjs tests/payment-data-boundary.test.mjs tests/commerce-webhook-route-contract.test.mjs tests/sites-deployment-contract.test.mjs",
     "verify:m10:artifact": "node scripts/verify-runtime-artifact.mjs && node scripts/verify-m10-artifact.mjs",
     "verify:m10": "npm run verify:all && npm run verify:m10:static && npm run verify:m10:artifact",
-    "verify:sites-package": "npm run commerce:preflight && npm run verify:m10",
     "verify:access": "node --test tests/access-contract.test.mjs tests/access-delivery-integration.test.mjs tests/customer-access-read-integration.test.mjs",
     "verify:runtime": "npm run db:migrate:local && npm run verify:runtime:unit",
     "verify:all": "npm run typecheck && npm run lint && npm run format:check && npm run verify:foundation && npm run verify:runtime && npm run verify:music && npm run verify:accounts && npm run verify:access-admin && npm run verify:commerce && npm run verify:publishing && npm run verify:operations && npm run verify:setup"

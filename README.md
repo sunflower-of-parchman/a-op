@@ -191,7 +191,7 @@ The Sites application compiles and produces its Worker deployment output. The re
 
 Before submission, the one-shot installer still needs a clean-state exercise against artist-approved source material. The exact approved Sites version must then be saved and deployed with Michael's approval.
 
-Sites release preparation is fail closed. `npm run prepare:sites-release` requires clean synchronized `main`, installs from the lockfile, builds without source changes, verifies the Worker, bindings, complete migration chain, database-backed public routes, and artifact digest, then leaves the unchanged candidate ready for the official Sites packager. See [docs/architecture/sites-release-contract.md](docs/architecture/sites-release-contract.md).
+Initial Sites release uses one eligibility build, then private Site creation and one committed `project_id`. The single canonical `npm run prepare:sites-release` command then requires clean synchronized `main`, installs from the lockfile, builds without source changes, verifies the Worker, bindings, complete journal-matched migration chain, database-backed public routes, and artifact digest, and leaves the unchanged candidate ready for the official Sites packager. See [docs/architecture/sites-release-contract.md](docs/architecture/sites-release-contract.md).
 
 The controlling implementation record is [plans/migrateAopToSites.md](plans/migrateAopToSites.md). The product contract is [PRODUCT.md](PRODUCT.md).
 

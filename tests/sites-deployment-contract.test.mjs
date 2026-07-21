@@ -31,6 +31,8 @@ test("Sites release preparation fails closed around one clean main artifact", as
   assert.match(verifier, /dist\/\.openai\/hosting\.json/);
   assert.match(verifier, /dist\/\.openai\/drizzle\/meta\/_journal\.json/);
   assert.match(verifier, /createHash\("sha256"\)/);
+  assert.match(verifier, /commit its project_id/);
+  assert.doesNotMatch(verifier, /exactly 36 source migrations/);
 
   const ci = runner.indexOf("npm ci");
   const build = runner.indexOf("npm run build");
@@ -41,7 +43,10 @@ test("Sites release preparation fails closed around one clean main artifact", as
   assert.match(runner, /set -euo pipefail/);
 
   assert.match(packageJson, /"prepare:sites-release"/);
+  assert.doesNotMatch(packageJson, /"verify:sites-package"/);
   assert.match(contract, /Any failure is terminal/);
+  assert.match(contract, /Initial Site linkage/);
+  assert.match(contract, /assigned `project_id`/);
   assert.match(contract, /No membership is published\./);
   assert.match(agents, /npm run prepare:sites-release/);
   assert.match(

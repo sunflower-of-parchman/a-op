@@ -15,7 +15,7 @@ Sites describes every deployed Site URL as a production URL. That describes the 
 The Sites application:
 
 - accepts only `pk_test_` publishable keys and `sk_test_` secret keys;
-- rejects `pk_live_`, `sk_live_`, `rk_live_`, and any other recognized live credential during setup, preflight, build validation, and runtime use;
+- rejects `pk_live_`, `sk_live_`, `rk_live_`, and any other recognized live credential during commerce setup, activation preflight, and runtime use; neutral production builds consume no commerce credentials;
 - creates Stripe-hosted Test Checkout sessions, sends the exact no-real-payment notice through Stripe's supported [`custom_text.submit.message`](https://docs.stripe.com/api/checkout/sessions/create#checkout_session_create-custom_text-submit-message) parameter beside the confirmation button, and redirects the customer to Stripe;
 - contains no card-number, expiry, security-code, payment-method-token, or equivalent payment-entry field;
 - states throughout checkout and return that Stripe Test Mode accepts no real payment;
@@ -66,8 +66,8 @@ Changing Sites environment values, sending a live webhook, or using an administr
 
 ## Required verification
 
-- A fresh Sites installation resolves to `stripe-test-simulation` and missing test credentials produce a clear setup failure.
-- Every recognized live credential produces a hard failure in preflight, build verification, and runtime initialization.
+- A fresh Sites installation resolves to an inactive `stripe-test-simulation` without test credentials; deliberate commerce activation requires all three Test values and produces a clear setup failure when they are missing or invalid.
+- Every recognized live credential supplied to commerce produces a hard failure in activation preflight and runtime initialization; neutral build verification removes all commerce credentials.
 - Repository, client bundle, logs, telemetry, audit output, and D1 contain no secret or payment-card field.
 - A valid test key can create only a Stripe Test Checkout session.
 - Invalid webhook signatures and signed `livemode = true` events create or modify zero application state, preserve all pre-existing records, and produce no event, order, entitlement, credit, membership, subscription, license, telemetry, or audit row.

@@ -117,10 +117,18 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] Implement telemetry, consent, retention, privacy, terms, diagnostics, and operations.
 - [x] Implement ChatGPT Work setup, personalization, media preparation, export, restore rehearsal, diagnosis, and maintenance.
 - [x] Complete responsive, keyboard, accessibility, performance, security, and recovery verification across the integrated application.
+- [x] (2026-07-21 14:52Z) Corrected the neutral Sites release boundary so caller Stripe environment values cannot activate or block the pre-personalization build. Release preparation now removes all three Stripe Test variables before building; local setup and activated runtime validation remain strict. The focused commerce-preflight contract and the neutral production build passed with an unrelated 32-character `STRIPE_SECRET_KEY` present in the caller environment.
+- [x] (2026-07-21 14:58Z) Simplified the initial Sites path to one eligibility build, private Site linkage, and one final release preparation. Removed the duplicate `verify:sites-package` command, limited live-credential checks to the three Stripe inputs, required the assigned `project_id` before final preparation, and derived migration-chain length from the checked-in journal rather than the current count. Nine focused release and commerce contracts, the neutral five-stage production build under the conflicting caller environment, strict types, the runtime artifact verifier, and diff integrity passed.
 - [ ] Save a Sites version from the exact validated source.
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: The release process inherited a generic `STRIPE_SECRET_KEY` from the caller even though the neutral installation had no commerce configuration.
+  Evidence: The variable was present, 32 characters long, and did not have a Stripe Test prefix; the other two Stripe variables were absent. Ordinary builds correctly allow absent commerce configuration, but validating the unrelated caller value caused the neutral production build to stop before Sites creation.
+
+- Observation: The release surface still contained a duplicate full-suite command, an all-environment live-key scan, an exact 36-migration assertion, and a prepare-before-link order that discarded the first artifact after Sites assigned `project_id`.
+  Evidence: `verify:sites-package` recursively invoked the complete Milestone 10 gate but was absent from the governing release instructions; the commerce verifier inspected unrelated environment variables; two artifact verifiers pinned migration 0035; and `.openai/hosting.json` remained unlinked until after the first strict build.
 
 - Observation: The first Work deployment report claimed commit `420e448` while describing source behavior that does not exist in that commit.
   Evidence: That commit contains a dedicated `/membership` route, the neutral-framework presentation gate, migration `0029` seeding setup as `unconfigured`, and the `No membership is published.` empty state. A healthy `/api/health` response checks role count and binding reachability only; it does not prove route, setup-state, migration-history, artifact, or deployed-version identity.
@@ -312,6 +320,14 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Evidence: Emitting null-valued Meter, Tempo, and Key fields changed an older archive's semantic fingerprint after restore. Current exports omit absent optional fields, restore older records as null, and round-trip supplied values exactly; the complete portability export and double-restore rehearsal passes.
 
 ## Decision Log
+
+- Decision: Build and package every neutral Sites release with Stripe Test environment values removed from the child process.
+  Rationale: Hosted runtime values belong in Sites settings and personalization follows successful neutral hosting. Removing the three exact commerce variables prevents ambient tool configuration from becoming release input while local setup and deliberately activated Test commerce continue to reject missing, malformed, or live values.
+  Date/Author: 2026-07-21 / Michael and Codex
+
+- Decision: Use one canonical final release preparation after private Site linkage.
+  Rationale: One successful neutral build is sufficient before private Site creation. Committing the assigned `project_id` before `prepare:sites-release` produces the exact linked artifact once, while journal-derived migration checks and exact-input credential validation preserve meaningful release integrity without unrelated or stale-count failures.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Complete and verify the neutral private Site before beginning artist personalization.
   Rationale: The two-line repository prompt promises a working artist-owned website. Artist material and capability choices become an informed setup proposal after that complete baseline exists.
@@ -561,9 +577,9 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Rationale: Operators need actionable component, code, time, count, and safe internal subject evidence. Provider objects, payment data, secrets, private paths, customer fields, and artist-authored free text do not belong in the browser diagnostic surface.
   Date/Author: 2026-07-19 / Codex
 
-- Decision: Make `verify:sites-package` the strict Build Week packaging boundary.
-  Rationale: Ordinary source builds remain available before an artist activates commerce. The Sites package gate requires complete `pk_test_`, `sk_test_`, and `whsec_` configuration first, rejects live or malformed values, and then runs the complete integrated gate. No administration or ordinary Sites configuration exposes a live switch.
-  Date/Author: 2026-07-19 / Codex
+- Decision: Retire the former `verify:sites-package` Build Week boundary in favor of `prepare:sites-release` as the only release command.
+  Rationale: Ordinary source builds remain available before an artist activates commerce. One linked, clean-source release command now owns the exact artifact gate without repeating the complete historical milestone suite or requiring Stripe configuration.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Treat Stripe as a conditional commerce dependency and bind setup products through an owner-only application operation.
   Rationale: Streaming and free publishing need no Stripe account. An artist who activates commerce creates matching products and prices in Stripe Test Mode, then supplies only the `price_` identifier. The application owns plan activation, product facts, access, fulfillment, and entitlements; Stripe owns hosted test payment entry and signed provider events.
@@ -622,6 +638,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Date/Author: 2026-07-18 / Michael
 
 ## Outcomes & Retrospective
+
+Neutral commerce-boundary outcome as of 2026-07-21: the release candidate no longer requires or consumes Stripe Test configuration. `prepare:sites-release` removes the three Stripe variables from its child environment, then verifies the complete application with simulated commerce inactive. Stripe Test setup remains a later deliberate Sites-settings action after the hosted neutral installation is verified, and runtime activation still fails closed for incomplete, malformed, or live configuration.
+
+Initial-release simplification outcome as of 2026-07-21: one ordinary neutral build establishes eligibility, Sites creates the private project and assigns `project_id`, and one clean synchronized `prepare:sites-release` run creates the final linked artifact. The redundant package gate is gone, unrelated environment credentials are outside Stripe validation, and sequential journal parity replaces the stale exact migration-count gate.
 
 Framework-release outcome as of 2026-07-21: the empty clone is a complete, clickable product framework rather than a content demonstration. Public navigation, support pages, legal starters, Login, and every supported capability index remain visible while setup is unconfigured. Music, Courses, Videos, Membership, Licensing, Contact, and What's New tell the truth about absent records; they contain no preview catalog, course, playlist, plan, benefit, pricing, category, or artist-specific licensing content. Configured installations still derive public navigation from active modules, and detail routes, delivery, account authority, administration, and mutations retain their server-owned gates.
 
@@ -1173,7 +1193,7 @@ Acceptance:
 
 Stripe Test Mode acceptance:
 
-- A fresh Sites installation defaults to `stripe-test-simulation`; missing test credentials fail setup clearly and every recognized live credential fails preflight, build validation, and runtime initialization.
+- A fresh Sites installation defaults to inactive `stripe-test-simulation`; missing test credentials fail activated setup clearly, every recognized live credential fails commerce preflight and runtime initialization, and the neutral production build consumes no commerce credential.
 - Stripe-hosted Test Checkout and a signed `livemode = false` webhook complete the acceptance journey with exactly one order and exact fulfillment.
 - Invalid signatures and signed live-mode events create or modify zero application state and preserve pre-existing records.
 - Failed, expired, or cancelled test checkouts may retain non-fulfilling operational evidence, create no order fulfillment, grant, entitlement, credit, membership, subscription, or license, and preserve pre-existing access.
@@ -1598,3 +1618,7 @@ Revision note, 2026-07-20: Simplified the visible administration rail to Metrics
 Revision note, 2026-07-21: Added the fail-closed Sites release preparation boundary after the first Work deployment mixed or misreported source, artifact, database, and hosted-version evidence. The repository now refuses dirty, unsynchronized, substituted, incomplete, or migration-mismatched release candidates before official Sites packaging.
 
 Revision note, 2026-07-21: Moved capability and artist-material discovery after successful neutral private deployment so the exact public two-line repository prompt completes the Site before personalization begins.
+
+Revision note, 2026-07-21: Removed Stripe Test environment values from the neutral release and package child processes after a generic caller `STRIPE_SECRET_KEY` blocked the pre-personalization build. Preserved strict validation for deliberate local setup and activated simulated commerce.
+
+Revision note, 2026-07-21: Simplified initial hosting to one eligibility build and one final linked release build, removed the duplicate package gate, scoped Stripe checks to exact inputs, and made migration verification follow the checked-in journal.

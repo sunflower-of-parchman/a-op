@@ -4,28 +4,38 @@
 
 One private Sites release carries one exact `a-op` source commit, its generated Worker artifact, the repository hosting configuration, and the complete checked-in D1 migration chain. Deployment stops on any mismatch. A deployment agent never replaces repository routes, components, copy, repositories, or database access with a substitute Site.
 
-## Required preparation
+## Initial Site linkage
+
+For a new installation, run one ordinary neutral production build first:
+
+    npm run build
+
+After that build succeeds and Michael approves creation of the private Site, create it once with the installed Sites hosting helper. Record the assigned non-empty `project_id` in `.openai/hosting.json`, commit and push that single linkage with the validated source, and then run the final preparation below. This avoids preparing and discarding an unlinked release artifact.
+
+## Required final preparation
 
 Run from a clean clone of `sunflower-of-parchman/a-op` on `main`:
 
     npm run prepare:sites-release
 
-The command fails unless `HEAD` equals `origin/main`. It records the full source SHA, installs the lockfile exactly, confirms that installation did not change source, builds once, confirms that the build did not change source, and verifies:
+The command fails unless `HEAD` equals `origin/main` and `.openai/hosting.json` contains the assigned `project_id`. It records the full source SHA, installs the lockfile exactly, confirms that installation did not change source, builds once, confirms that the build did not change source, and verifies:
 
 - `dist/server/index.js`;
 - `dist/.openai/hosting.json` with logical `DB` and `MEDIA` bindings;
-- migrations `0000` through `0035` and the matching Drizzle journal;
+- one non-empty sequential migration chain and the matching Drizzle journal;
 - byte-for-byte source and packaged migration parity;
 - the dedicated database-backed `/membership` route and its neutral empty state;
 - the repository-backed Music and Licensing reads;
 - the packaged security and client-boundary contracts; and
 - the final Worker SHA-256 digest.
 
+The release build is always the neutral installation. The preparation command removes `STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`, and `STRIPE_WEBHOOK_SECRET` from its child build environment so an unrelated caller value cannot activate or block commerce. Stripe Test values remain absent until an artist deliberately activates simulated commerce after hosted neutral verification, stores the complete values in Sites settings, and redeploys the approved version.
+
 Any failure is terminal for that release attempt. Report the failing command and output. Do not edit application source, create `app/site.tsx`, add route shims, write replacement prose, create alternate components, or deploy a partial artifact.
 
 ## Official packaging and versioning
 
-After preparation succeeds, use the currently installed `sites:sites-hosting` package helper on the same unchanged checkout. The helper stages `dist/`, the current `.openai/hosting.json`, and `drizzle/` into the official archive. If Sites provisioning adds `project_id`, commit that single hosting-linkage change through the official Sites source flow, rebuild and rerun the release command from that clean commit, then package it.
+After preparation succeeds, use the currently installed `sites:sites-hosting` package helper on the same unchanged checkout. The helper stages `dist/`, the current linked `.openai/hosting.json`, and `drizzle/` into the official archive.
 
 Save one Sites version with the exact source commit and archive. Prefer private deployment. Stop on quota, permission, access, packaging, version-save, migration, or deployment failure.
 

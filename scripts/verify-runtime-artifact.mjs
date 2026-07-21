@@ -178,8 +178,10 @@ if (Object.hasOwn(parsedPackagedHosting, "project_id")) {
   assert.match(parsedPackagedHosting.project_id, /\S/);
 }
 assert.deepEqual(packagedMigrationNames, sourceMigrationNames);
-assert.equal(sourceMigrationNames.length, 36);
-assert.match(sourceMigrationNames.at(-1), /^0035_.+\.sql$/);
+assert.ok(sourceMigrationNames.length > 0);
+for (const [index, name] of sourceMigrationNames.entries()) {
+  assert.equal(name.slice(0, 4), String(index).padStart(4, "0"));
+}
 
 const [sourceMigrations, packagedMigrations] = await Promise.all([
   readMigrations(sourceMigrationDirectory, sourceMigrationNames),

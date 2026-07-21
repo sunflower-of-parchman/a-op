@@ -16,7 +16,8 @@ function fail(message) {
   process.exitCode = 1;
 }
 
-for (const [name, value] of Object.entries(process.env)) {
+for (const [name] of REQUIRED) {
+  const value = process.env[name];
   if (typeof value === "string" && LIVE_CREDENTIAL.test(value)) {
     fail(`recognized live Stripe credential detected in ${name}.`);
     break;
