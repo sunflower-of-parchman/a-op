@@ -1,5 +1,7 @@
 # a-op
 
+![a-op: artist-owned platform](docs/images/a-op-lato.png)
+
 **a-op: artist-owned platform** is an open-source web application for musicians.
 
 An artist can publish music, stream it through their own site, manage customer access, deliver downloads, issue licenses, offer memberships and subscriptions, publish Courses and video, receive inquiries, and run the work from one administration area.
