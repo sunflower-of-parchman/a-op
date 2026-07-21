@@ -9,6 +9,12 @@ interface DeliveryRow {
   byte_length: unknown;
 }
 
+interface ExternalPosterRow {
+  video_id: unknown;
+  external_provider: unknown;
+  external_embed_url: unknown;
+}
+
 export interface VideoMediaDeliveryRecord {
   readonly videoId: string;
   readonly derivativeId: string;
@@ -16,6 +22,12 @@ export interface VideoMediaDeliveryRecord {
   readonly objectKey: string;
   readonly contentType: string;
   readonly byteLength: number;
+}
+
+export interface ExternalVideoPosterSource {
+  readonly videoId: string;
+  readonly provider: "youtube" | "vimeo";
+  readonly embedUrl: string;
 }
 
 function id(value: unknown, label: string): string {
@@ -147,4 +159,37 @@ export async function readPublishedVideoPosterDelivery(
     .bind(videoId)
     .first<DeliveryRow>();
   return map(row, "image/");
+}
+
+export async function readPublishedExternalVideoPosterSource(
+  binding: D1Database,
+  videoId: string,
+): Promise<ExternalVideoPosterSource | null> {
+  if (!SAFE_ID.test(videoId)) return null;
+  const row = await binding
+    .prepare(
+      `SELECT video.id AS video_id,
+              revision.external_provider,
+              revision.external_embed_url
+       FROM videos AS video
+       JOIN video_revisions AS revision
+         ON revision.id = video.published_revision_id
+        AND revision.video_id = video.id
+       WHERE video.id = ?1
+         AND video.publication_state = 'published'
+         AND revision.delivery_kind = 'external'
+         AND revision.external_provider IN ('youtube', 'vimeo')
+       LIMIT 1`,
+    )
+    .bind(videoId)
+    .first<ExternalPosterRow>();
+  if (!row) return null;
+  const provider = row.external_provider;
+  if (provider !== "youtube" && provider !== "vimeo") return null;
+  if (typeof row.external_embed_url !== "string") return null;
+  return Object.freeze({
+    videoId: id(row.video_id, "video ID"),
+    provider,
+    embedUrl: row.external_embed_url,
+  });
 }

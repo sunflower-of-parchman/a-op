@@ -12,14 +12,14 @@ const [route, index, emptyPlayer, styles] = await Promise.all([
 test("an empty Video installation presents one viewing room and four blank Videos", () => {
   assert.match(index, /const PREVIEW_VIDEO_COUNT = 4/);
   assert.match(index, /<p>Now Playing<\/p>/);
-  assert.match(index, /activeVideo\?\.title \?\? "Title"/);
-  assert.match(index, /activeVideo\?\.summary \|\| "Subheading"/);
+  assert.match(index, /selectedVideo\?\.title \?\? "Title"/);
+  assert.match(index, /selectedVideo\?\.summary \|\| "Subheading"/);
   assert.match(index, /: "Date"/);
   assert.match(index, /Watch on YouTube/);
   assert.match(index, /id="playlist-title">Playlist/);
-  assert.doesNotMatch(
-    `${index}\n${emptyPlayer}`,
-    /\.(?:avif|gif|jpe?g|png|svg|webp)|data:image|placeholder|fallback/i,
+  assert.match(
+    index,
+    /<span aria-hidden="true" className=\{styles\.playlistArtwork\} \/>/,
   );
 });
 
@@ -39,13 +39,16 @@ test("blank playlist selection and the empty player are interactive without crea
 
 test("published Videos replace the preview and retain hosted and privacy-gated external playback", () => {
   assert.match(route, /listPublishedVideos\(env\.DB\)/);
-  assert.match(route, /readPublishedVideoBySlug\(env\.DB, activeSlug\)/);
+  assert.match(
+    route,
+    /videos\.map\(\(\{ slug \}\) => readPublishedVideoBySlug\(env\.DB, slug\)\)/,
+  );
   assert.match(index, /ExternalVideoConsent/);
   assert.match(index, /HostedVideoPlayer/);
   assert.match(index, /videos\.map\(\(video\) =>/);
   assert.match(
     index,
-    /href={`\/videos\?video=\$\{encodeURIComponent\(video\.slug\)\}`}/,
+    /`\/videos\?video=\$\{encodeURIComponent\(video\.slug\)\}`/,
   );
   assert.match(index, /https:\/\/www\.youtube\.com\/watch\?v=/);
 });

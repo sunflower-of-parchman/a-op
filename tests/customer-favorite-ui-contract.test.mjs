@@ -6,12 +6,22 @@ async function source(path) {
   return readFile(new URL(path, import.meta.url), "utf8");
 }
 
-test("public track and release favorite controls use server customer state and desired-state writes", async () => {
-  const [server, toggle, trackPage, releasePage, detail] = await Promise.all([
+test("public track, album, and collection favorite controls use server customer state and desired-state writes", async () => {
+  const [
+    server,
+    toggle,
+    trackPage,
+    releasePage,
+    collectionPage,
+    index,
+    detail,
+  ] = await Promise.all([
     source("../components/account/customer-library/PublicFavoriteControl.tsx"),
     source("../components/account/customer-library/FavoriteToggle.tsx"),
     source("../app/(public)/music/tracks/[slug]/page.tsx"),
     source("../app/(public)/music/releases/[slug]/page.tsx"),
+    source("../app/(public)/music/collections/[slug]/page.tsx"),
+    source("../components/music/MusicIndex.tsx"),
     source("../components/music/MusicDetail.tsx"),
   ]);
 
@@ -36,9 +46,11 @@ test("public track and release favorite controls use server customer state and d
 
   assert.match(trackPage, /targetType="track"/);
   assert.match(releasePage, /targetType="release"/);
+  assert.match(collectionPage, /targetType="collection"/);
+  assert.match(index, /targetType=\{item\.kind\}/);
   assert.match(detail, /customerAction/);
   assert.doesNotMatch(
-    [server, toggle, trackPage, releasePage].join("\n"),
+    [server, toggle, trackPage, releasePage, collectionPage, index].join("\n"),
     /\bFormData\b|type=["']file["']|\bR2Bucket\b|<(?:img|picture|video)\b/i,
   );
 });

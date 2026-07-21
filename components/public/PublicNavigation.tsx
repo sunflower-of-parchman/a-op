@@ -14,12 +14,14 @@ type PublicNavigationProps = {
   accountHref: string;
   items: readonly PublicNavigationItem[];
   loginHref: string;
+  unreadUpdates: number;
 };
 
 export function PublicNavigation({
   accountHref,
   items,
   loginHref,
+  unreadUpdates,
 }: PublicNavigationProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -105,7 +107,11 @@ export function PublicNavigation({
   const compactItems = [
     ...items,
     { id: "login", href: loginHref, label: "Log in" },
-    { id: "account", href: accountHref, label: "Account" },
+    {
+      id: "account",
+      href: accountHref,
+      label: unreadUpdates > 0 ? `Account (${unreadUpdates})` : "Account",
+    },
   ];
 
   return (
@@ -119,7 +125,15 @@ export function PublicNavigation({
           Log in
         </Link>
         <Link className="site-header__account" href={accountHref}>
-          Account
+          <span>Account</span>
+          {unreadUpdates > 0 ? (
+            <span
+              aria-label={`${unreadUpdates} unread ${unreadUpdates === 1 ? "update" : "updates"}`}
+              className="site-header__badge"
+            >
+              {unreadUpdates > 99 ? "99+" : unreadUpdates}
+            </span>
+          ) : null}
         </Link>
       </div>
 

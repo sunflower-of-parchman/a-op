@@ -1405,11 +1405,16 @@ export const favorites = sqliteTable(
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    targetType: text("target_type", { enum: ["track", "release"] }).notNull(),
+    targetType: text("target_type", {
+      enum: ["track", "release", "collection"],
+    }).notNull(),
     trackId: text("track_id").references(() => tracks.id, {
       onDelete: "restrict",
     }),
     releaseId: text("release_id").references(() => releases.id, {
+      onDelete: "restrict",
+    }),
+    collectionId: text("collection_id").references(() => collections.id, {
       onDelete: "restrict",
     }),
     state: text("state", { enum: ["active", "removed"] })
@@ -1429,6 +1434,9 @@ export const favorites = sqliteTable(
     uniqueIndex("favorites_user_release_unique")
       .on(table.userId, table.releaseId)
       .where(sql`${table.releaseId} is not null`),
+    uniqueIndex("favorites_user_collection_unique")
+      .on(table.userId, table.collectionId)
+      .where(sql`${table.collectionId} is not null`),
     index("favorites_user_state_updated_idx").on(
       table.userId,
       table.state,
@@ -1436,14 +1444,16 @@ export const favorites = sqliteTable(
     ),
     check(
       "favorites_target_type_valid",
-      sql`${table.targetType} in ('track', 'release')`,
+      sql`${table.targetType} in ('track', 'release', 'collection')`,
     ),
     check(
       "favorites_exact_target",
       sql`(
-        (${table.targetType} = 'track' and ${table.trackId} is not null and ${table.releaseId} is null)
+        (${table.targetType} = 'track' and ${table.trackId} is not null and ${table.releaseId} is null and ${table.collectionId} is null)
         or
-        (${table.targetType} = 'release' and ${table.releaseId} is not null and ${table.trackId} is null)
+        (${table.targetType} = 'release' and ${table.releaseId} is not null and ${table.trackId} is null and ${table.collectionId} is null)
+        or
+        (${table.targetType} = 'collection' and ${table.collectionId} is not null and ${table.trackId} is null and ${table.releaseId} is null)
       )`,
     ),
     check(

@@ -59,6 +59,7 @@ interface PublicTrackRow {
   publication_state: unknown;
   published_at: unknown;
   stream_ready: unknown;
+  release_artwork_id: unknown;
 }
 
 interface PublicReleaseRow {
@@ -386,7 +387,35 @@ const TRACK_PROJECTION_SQL = `
     AND source_media.approval_state = 'approved'
     AND source_media.content_type LIKE 'audio/%'
     AND source_media.content_sha256 IS NOT NULL
-  THEN 1 ELSE 0 END AS stream_ready`;
+  THEN 1 ELSE 0 END AS stream_ready,
+  (SELECT artwork_derivative.id
+     FROM release_tracks AS artwork_release_track
+     JOIN release_revisions AS artwork_release_revision
+       ON artwork_release_revision.id = artwork_release_track.release_revision_id
+     JOIN releases AS artwork_release
+       ON artwork_release.published_revision_id = artwork_release_revision.id
+      AND artwork_release.id = artwork_release_revision.release_id
+     JOIN media_derivatives AS artwork_derivative
+       ON artwork_derivative.id = artwork_release_revision.artwork_derivative_id
+     JOIN media_objects AS artwork_source
+       ON artwork_source.id = artwork_derivative.source_media_id
+    WHERE artwork_release_track.track_id = tracks.id
+      AND artwork_release.publication_state = 'published'
+      AND artwork_release_revision.view_mode = 'public'
+      AND artwork_derivative.kind = 'artwork'
+      AND artwork_derivative.status = 'ready'
+      AND artwork_derivative.approval_state = 'approved'
+      AND artwork_derivative.object_key IS NOT NULL
+      AND artwork_derivative.content_type LIKE 'image/%'
+      AND artwork_derivative.byte_length IS NOT NULL
+      AND artwork_derivative.content_sha256 IS NOT NULL
+      AND artwork_source.kind = 'image'
+      AND artwork_source.status = 'ready'
+      AND artwork_source.approval_state = 'approved'
+      AND artwork_source.content_type LIKE 'image/%'
+      AND artwork_source.content_sha256 IS NOT NULL
+    ORDER BY artwork_release.published_at DESC, artwork_release.id
+    LIMIT 1) AS release_artwork_id`;
 
 const TRACK_MEDIA_JOINS_SQL = `
   LEFT JOIN media_derivatives AS streaming_derivative
@@ -767,6 +796,8 @@ export async function readPublicTrack(
   if (!row) return null;
   const track = playerTrack(row);
   const revisionId = readId(row.revision_id, "track revision ID");
+  const credits = await readCredits(binding, { trackRevisionId: revisionId });
+  const releaseArtwork = artwork(row.release_artwork_id, track.title);
   return Object.freeze({
     kind: "track",
     id: track.id,
@@ -775,7 +806,7 @@ export async function readPublicTrack(
     subtitle: track.subtitle,
     description: readString(row.description, "track description"),
     date: null,
-    artwork: null,
+    artwork: releaseArtwork,
     tracks: Object.freeze([
       Object.freeze({
         position: 1,
@@ -784,7 +815,7 @@ export async function readPublicTrack(
         track,
       }),
     ]),
-    credits: await readCredits(binding, { trackRevisionId: revisionId }),
+    credits,
     tags: readTags(row.tags_json),
   });
 }
@@ -1042,7 +1073,7 @@ export async function readCatalogTrack(
     subtitle: track.subtitle,
     description: readString(row.description, "track description"),
     date: null,
-    artwork: null,
+    artwork: artwork(row.release_artwork_id, track.title),
     tracks: Object.freeze([
       Object.freeze({
         position: 1,
@@ -1184,6 +1215,23 @@ export async function readPublicMusicIndex(
     readPublicCollectionRows(binding),
   ]);
 
+  const releaseProjections = await Promise.all(
+    releaseRows.map(async (row) => {
+      const base = releaseBase(row);
+      const tracks = await readReleaseTracks(binding, base.revisionId);
+      return Object.freeze({ base, tracks });
+    }),
+  );
+  const releaseArtworkByTrackId = new Map<string, CatalogArtworkDTO>();
+  for (const { base, tracks } of releaseProjections) {
+    if (!base.artwork) continue;
+    for (const { track } of tracks) {
+      if (!releaseArtworkByTrackId.has(track.id)) {
+        releaseArtworkByTrackId.set(track.id, base.artwork);
+      }
+    }
+  }
+
   const trackItems: CatalogIndexItemDTO[] = trackRows.map((row) => {
     const track = playerTrack(row);
     return Object.freeze({
@@ -1195,7 +1243,7 @@ export async function readPublicMusicIndex(
       subtitle: track.subtitle,
       description: readString(row.description, "track description"),
       publishedAt: readPublishedAt(row.published_at),
-      artwork: null,
+      artwork: releaseArtworkByTrackId.get(track.id) ?? null,
       trackCount: null,
       playableTrack: track.streamUrl ? track : null,
       durationMs: track.durationMs,
@@ -1206,12 +1254,10 @@ export async function readPublicMusicIndex(
     });
   });
 
-  const releaseItems = await Promise.all(
-    releaseRows.map(async (row): Promise<CatalogIndexItemDTO> => {
-      const base = releaseBase(row);
-      const tracks = await readReleaseTracks(binding, base.revisionId);
-      return Object.freeze({
-        kind: "release",
+  const releaseItems: readonly CatalogIndexItemDTO[] = releaseProjections.map(
+    ({ base, tracks }) =>
+      Object.freeze({
+        kind: "release" as const,
         id: base.id,
         slug: base.slug,
         href: `/music/releases/${base.slug}`,
@@ -1228,8 +1274,7 @@ export async function readPublicMusicIndex(
         tempoBpm: null,
         musicalKey: null,
         tags: base.tags,
-      });
-    }),
+      }),
   );
 
   const collectionItems = await Promise.all(

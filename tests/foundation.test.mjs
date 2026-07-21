@@ -4,7 +4,7 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-test("packages the functional-only home and quiet public page labels", async () => {
+test("packages the functional home and quiet public page labels", async () => {
   const [home, publicPage, pageHeader, footer, layout, manifest] =
     await Promise.all([
       readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
@@ -29,8 +29,13 @@ test("packages the functional-only home and quiet public page labels", async () 
 
   assert.match(layout, /a-op: artist-owned platform/i);
   assert.match(pageHeader, /<h1 className="sr-only">\{title\}<\/h1>/);
-  assert.match(home, /return <div \/>/);
-  assert.doesNotMatch(home, /readPublishedArtistRevision|artist\.headline/);
+  assert.match(home, /readPublishedArtistRevision/);
+  assert.match(home, /readPublicMosaicImages/);
+  assert.match(home, /<MediaMosaic/);
+  assert.match(home, /<CourseCards/);
+  assert.match(home, /<ExternalVideoConsent/);
+  assert.match(home, /href="\/membership"/);
+  assert.match(home, /href="\/licensing"/);
   assert.doesNotMatch(footer, /TelemetryConsentControl|Audience privacy/);
   assert.match(footer, /label: "Explore"/);
   assert.match(footer, /label: "Membership"/);

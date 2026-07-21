@@ -17,7 +17,7 @@ const SOURCE_FINGERPRINT = `sha256:${"1".repeat(64)}`;
 
 function validProposal(overrides = {}) {
   const proposal = {
-    schemaVersion: "aop.setup-proposal.v1",
+    schemaVersion: "aop.setup-proposal.v2",
     proposalId: "artist-setup-one",
     createdAt: "2026-07-19T12:00:00Z",
     sourceStateFingerprint: SOURCE_FINGERPRINT,
@@ -85,6 +85,17 @@ function validProposal(overrides = {}) {
       coursesVideo: {
         courses: [],
         videos: [],
+      },
+      editorialPresentation: {
+        posts: [],
+        updates: [],
+        about: {
+          title: "About",
+          introduction: "About this artist.",
+          bodyText: "",
+          publication: "draft",
+        },
+        pageHeroes: [],
       },
       contactConsent: {
         enabled: false,
@@ -176,7 +187,7 @@ function assertInvalid(proposal, expectedCode) {
   );
 }
 
-test("the exact versioned proposal covers all fourteen setup topics", async () => {
+test("the exact versioned proposal covers all fifteen setup topics", async () => {
   const proposal = validateSetupProposal(validProposal());
   assert.deepEqual(Object.keys(proposal.topics), [
     "artist",
@@ -189,6 +200,7 @@ test("the exact versioned proposal covers all fourteen setup topics", async () =
     "credits",
     "licensing",
     "coursesVideo",
+    "editorialPresentation",
     "contactConsent",
     "telemetryRetention",
     "privacyTerms",
@@ -462,7 +474,7 @@ test("approved aliases compile stable media operations without carrying paths", 
   });
   assert.equal(plan.readyForApply, true);
   assert.equal(plan.writesPerformed, 0);
-  assert.equal(plan.operations.length, 15);
+  assert.equal(plan.operations.length, 17);
   assert.ok(
     plan.operations.some(
       (operation) =>

@@ -21,18 +21,27 @@ import {
 } from "./catalog-admin-read.ts";
 import { configureContactForm } from "./contact-write.ts";
 import { readContactAdminWorkspace } from "./contact-read.ts";
+import { readAdminEditorialPostBySlug } from "./editorial-read.ts";
+import { publishEditorialPost, saveEditorialDraft } from "./editorial-write.ts";
 import { publishCourse, saveCourseDraft } from "./course-write.ts";
 import { readAdminCourseDraft } from "./course-read.ts";
 import { saveLegalDocumentDraft } from "./legal-write.ts";
 import { readLegalAdminWorkspace } from "./legal-read.ts";
 import {
   assertSetupMediaBindings,
+  resolveSetupArtworkMedia,
   resolveSetupCourseMediaItems,
+  resolveSetupPageHeroMedia,
   resolveSetupTrackMedia,
   resolveSetupVideoMedia,
   type SetupCourseMediaItemBinding,
   type SetupVideoMediaBinding,
 } from "./setup-media.ts";
+import {
+  reconcilePageHeroes,
+  type PageHeroSetting,
+} from "./page-presentation.ts";
+import { publishPage, savePageDraft } from "./page-write.ts";
 import { createAccessPlan, updateAccessPlan } from "./access-admin-write.ts";
 import { readAdminAccessOverview } from "./access-admin-read.ts";
 import { updateTelemetrySettings } from "./telemetry-write.ts";
@@ -51,10 +60,13 @@ import { publishVideo, saveVideoDraft } from "./video-write.ts";
 import { readAdminVideoBySlug } from "./video-read.ts";
 import {
   readActiveModuleKeys,
+  readAdminPageDraftBySlug,
   readDraftArtistRevision,
   readNavigationSnapshot,
   readPublishedArtistRevision,
 } from "./site-read.ts";
+import { readAdminUpdateBySlug } from "./updates-read.ts";
+import { publishUpdate, saveUpdateDraft } from "./updates-write.ts";
 import { activeOwnerCondition } from "./authority-guards.ts";
 import { changedRows, prepareConditionalAuditEvent } from "./audit-events.ts";
 import {
@@ -105,6 +117,7 @@ import {
   type CourseProposal,
   type CreditRuleProposal,
   type EditorAccountProposal,
+  type EditorialPostProposal,
   type LicenseOptionProposal,
   type LicenseTermsProposal,
   type MembershipPlanProposal,
@@ -116,6 +129,7 @@ import {
   type SetupTopicKey,
   type TrackAvailabilityProposal,
   type SubscriptionPlanProposal,
+  type UpdateEntryProposal,
   type VideoProposal,
 } from "@/lib/setup/types.ts";
 import type { VideoDraftInput } from "@/lib/video/index.ts";
@@ -189,6 +203,11 @@ const OPERATION_CONTRACTS = Object.freeze({
     target: "track-availability",
     requiredApproval: "configuration",
   }),
+  "reconcile-courses-video-foundation": Object.freeze({
+    topic: "courses-video",
+    target: "courses-video-foundation",
+    requiredApproval: "configuration",
+  }),
   "reconcile-access-definitions": Object.freeze({
     topic: "customer-access",
     target: "access-definitions",
@@ -212,6 +231,11 @@ const OPERATION_CONTRACTS = Object.freeze({
   "reconcile-courses-video-drafts": Object.freeze({
     topic: "courses-video",
     target: "courses-video",
+    requiredApproval: "configuration",
+  }),
+  "reconcile-editorial-presentation": Object.freeze({
+    topic: "editorial-presentation",
+    target: "editorial-presentation",
     requiredApproval: "configuration",
   }),
   "reconcile-contact-consent": Object.freeze({
@@ -247,11 +271,13 @@ const BASE_D1_ACTIONS = Object.freeze([
   "record-media-rights-intent",
   "reconcile-catalog-drafts",
   "reconcile-track-availability",
+  "reconcile-courses-video-foundation",
   "reconcile-access-definitions",
   "reconcile-membership-definitions",
   "reconcile-credit-rules",
   "reconcile-licensing-definitions",
   "reconcile-courses-video-drafts",
+  "reconcile-editorial-presentation",
   "reconcile-contact-consent",
   "reconcile-telemetry-settings",
   "save-legal-drafts",
@@ -873,6 +899,10 @@ function updatedTrackInput(
       TrackDraftInput,
       | "title"
       | "subtitle"
+      | "meter"
+      | "tempoBpm"
+      | "musicalKey"
+      | "tags"
       | "durationMs"
       | "streamMode"
       | "downloadMode"
@@ -892,9 +922,15 @@ function updatedTrackInput(
     durationMs: Object.hasOwn(changes, "durationMs")
       ? (changes.durationMs ?? null)
       : current.durationMs,
-    meter: current.meter,
-    tempoBpm: current.tempoBpm,
-    musicalKey: current.musicalKey,
+    meter: Object.hasOwn(changes, "meter")
+      ? (changes.meter ?? null)
+      : current.meter,
+    tempoBpm: Object.hasOwn(changes, "tempoBpm")
+      ? (changes.tempoBpm ?? null)
+      : current.tempoBpm,
+    musicalKey: Object.hasOwn(changes, "musicalKey")
+      ? (changes.musicalKey ?? null)
+      : current.musicalKey,
     isrc: current.isrc,
     copyrightNotice: current.copyrightNotice,
     explicit: current.explicit,
@@ -910,7 +946,7 @@ function updatedTrackInput(
     downloadDerivativeId: Object.hasOwn(changes, "downloadDerivativeId")
       ? (changes.downloadDerivativeId ?? null)
       : current.downloadDerivativeId,
-    tags: current.tags,
+    tags: changes.tags ?? current.tags,
     credits: current.credits,
   });
 }
@@ -949,6 +985,7 @@ function releaseInput(
   proposal: CatalogReleaseProposal,
   current: AdminReleaseDraft | null,
   trackIds: readonly string[],
+  artworkDerivativeId: string | null,
 ): ReleaseDraftInput {
   return Object.freeze({
     slug: proposal.releaseKey,
@@ -961,7 +998,7 @@ function releaseInput(
     catalogNumber: current?.catalogNumber ?? null,
     copyrightNotice: current?.copyrightNotice ?? "",
     viewMode: current?.viewMode ?? "public",
-    artworkDerivativeId: current?.artworkDerivativeId ?? null,
+    artworkDerivativeId,
     tags: current?.tags ?? Object.freeze([]),
     tracks: Object.freeze(
       trackIds.map((trackId, index) =>
@@ -980,13 +1017,14 @@ function collectionInput(
   proposal: CatalogCollectionProposal,
   current: AdminCollectionDraft | null,
   trackIds: readonly string[],
+  artworkDerivativeId: string | null,
 ): CollectionDraftInput {
   return Object.freeze({
     slug: proposal.collectionKey,
     title: proposal.title,
     description: current?.description ?? "",
     viewMode: current?.viewMode ?? "public",
-    artworkDerivativeId: current?.artworkDerivativeId ?? null,
+    artworkDerivativeId,
     tags: current?.tags ?? Object.freeze([]),
     trackIds,
     credits: current?.credits ?? Object.freeze([]),
@@ -996,6 +1034,7 @@ function collectionInput(
 async function applyReleaseDraft(
   binding: D1Database,
   proposal: CatalogReleaseProposal,
+  setupProposal: SetupProposal,
   operation: SetupOperation,
   context: MutationContext,
   counts: DomainMutationCounts,
@@ -1004,6 +1043,25 @@ async function applyReleaseDraft(
   const trackIds = await releaseTrackIds(binding, proposal.trackKeys);
   if (trackIds === null) return false;
   const current = await readAdminReleaseDraft(binding, proposal.releaseKey);
+  const artworkReference =
+    proposal.artworkMediaKey === null
+      ? null
+      : (setupProposal.topics.rightsMedia.media.find(
+          (media) => media.mediaKey === proposal.artworkMediaKey,
+        ) ?? null);
+  if (proposal.artworkMediaKey !== null && artworkReference === null) {
+    unsupported(
+      "catalog-releases",
+      `Release ${proposal.releaseKey} references missing artwork.`,
+    );
+  }
+  const artwork = artworkReference
+    ? await resolveSetupArtworkMedia(
+        binding,
+        artworkReference,
+        context.actorUserId,
+      )
+    : null;
   await runDomainMutation(
     binding,
     "release.draft.save",
@@ -1012,7 +1070,12 @@ async function applyReleaseDraft(
     () =>
       saveReleaseDraft(
         binding,
-        releaseInput(proposal, current, trackIds),
+        releaseInput(
+          proposal,
+          current,
+          trackIds,
+          artwork?.derivativeId ?? current?.artworkDerivativeId ?? null,
+        ),
         current?.version ?? 0,
         childContext(
           context,
@@ -1027,6 +1090,7 @@ async function applyReleaseDraft(
 async function applyCollectionDraft(
   binding: D1Database,
   proposal: CatalogCollectionProposal,
+  setupProposal: SetupProposal,
   operation: SetupOperation,
   context: MutationContext,
   counts: DomainMutationCounts,
@@ -1038,6 +1102,25 @@ async function applyCollectionDraft(
     binding,
     proposal.collectionKey,
   );
+  const artworkReference =
+    proposal.artworkMediaKey === null
+      ? null
+      : (setupProposal.topics.rightsMedia.media.find(
+          (media) => media.mediaKey === proposal.artworkMediaKey,
+        ) ?? null);
+  if (proposal.artworkMediaKey !== null && artworkReference === null) {
+    unsupported(
+      "catalog-releases",
+      `Collection ${proposal.collectionKey} references missing artwork.`,
+    );
+  }
+  const artwork = artworkReference
+    ? await resolveSetupArtworkMedia(
+        binding,
+        artworkReference,
+        context.actorUserId,
+      )
+    : null;
   await runDomainMutation(
     binding,
     "collection.draft.save",
@@ -1050,7 +1133,12 @@ async function applyCollectionDraft(
     () =>
       saveCollectionDraft(
         binding,
-        collectionInput(proposal, current, trackIds),
+        collectionInput(
+          proposal,
+          current,
+          trackIds,
+          artwork?.derivativeId ?? current?.artworkDerivativeId ?? null,
+        ),
         current?.version ?? 0,
         childContext(
           context,
@@ -1096,12 +1184,29 @@ async function applyCatalogDrafts(
       ? updatedTrackInput(current, {
           title: track.title,
           subtitle: track.versionLabel,
+          durationMs: track.durationMs,
+          meter: track.meter,
+          tempoBpm: track.tempoBpm,
+          musicalKey: track.musicalKey,
+          tags: track.tags,
         })
-      : newTrackInput(track.title, track.versionLabel, track.trackKey);
+      : {
+          ...newTrackInput(track.title, track.versionLabel, track.trackKey),
+          durationMs: track.durationMs,
+          meter: track.meter,
+          tempoBpm: track.tempoBpm,
+          musicalKey: track.musicalKey,
+          tags: track.tags,
+        };
     if (
       current &&
       current.title === input.title &&
-      current.subtitle === input.subtitle
+      current.subtitle === input.subtitle &&
+      current.durationMs === input.durationMs &&
+      current.meter === input.meter &&
+      current.tempoBpm === input.tempoBpm &&
+      current.musicalKey === input.musicalKey &&
+      JSON.stringify(current.tags) === JSON.stringify(input.tags)
     ) {
       continue;
     }
@@ -1125,6 +1230,7 @@ async function applyCatalogDrafts(
     const applied = await applyReleaseDraft(
       binding,
       release,
+      proposal,
       operation,
       context,
       counts,
@@ -1135,6 +1241,7 @@ async function applyCatalogDrafts(
     const applied = await applyCollectionDraft(
       binding,
       collection,
+      proposal,
       operation,
       context,
       counts,
@@ -3070,13 +3177,13 @@ function videoInput(
   current: Awaited<ReturnType<typeof readAdminVideoBySlug>>,
   media: SetupVideoMediaBinding | null,
 ): VideoDraftInput {
-  if (proposal.transcript === null) {
-    unsupported(
-      "courses-video",
-      `Video ${proposal.videoKey} needs a transcript.`,
-    );
-  }
   if (media !== null) {
+    if (proposal.transcript === null) {
+      unsupported(
+        "courses-video",
+        `Artist-hosted video ${proposal.videoKey} needs a transcript.`,
+      );
+    }
     return Object.freeze({
       slug: proposal.videoKey,
       title: proposal.title,
@@ -3115,13 +3222,16 @@ function videoInput(
     hostedDerivativeId: null,
     externalProvider: externalVideoProvider(externalEmbedUrl),
     externalEmbedUrl,
-    transcripts: Object.freeze([
-      Object.freeze({
-        language: "en",
-        transcriptText: proposal.transcript,
-        captionsDerivativeId: null,
-      }),
-    ]),
+    transcripts:
+      proposal.transcript === null
+        ? Object.freeze([])
+        : Object.freeze([
+            Object.freeze({
+              language: "en",
+              transcriptText: proposal.transcript,
+              captionsDerivativeId: null,
+            }),
+          ]),
   });
 }
 
@@ -3129,6 +3239,7 @@ async function resolveCourseAccessPlan(
   binding: D1Database,
   actorUserId: string,
   key: string | null,
+  allowPending: boolean,
 ): Promise<{ readonly id: string; readonly revision: number } | null> {
   if (key === null) return null;
   const overview = await readAdminAccessOverview(binding, actorUserId);
@@ -3136,6 +3247,7 @@ async function resolveCourseAccessPlan(
     (candidate) => candidate.slug === key && candidate.state === "active",
   );
   if (!plan) {
+    if (allowPending) return null;
     unsupported("courses-video", `Course access plan ${key} is not active.`);
   }
   return { id: plan.id, revision: plan.revision };
@@ -3147,6 +3259,7 @@ async function applyCoursesVideo(
   operation: SetupOperation,
   context: MutationContext,
   counts: DomainMutationCounts,
+  allowPendingAccessPlans = false,
 ): Promise<HandlerResult> {
   const topic = proposal.topics.coursesVideo;
   const mediaByKey = new Map(
@@ -3163,6 +3276,7 @@ async function applyCoursesVideo(
       binding,
       context.actorUserId,
       course.accessPlanKey,
+      allowPendingAccessPlans,
     );
     const mediaItemsByLessonKey = new Map<
       string,
@@ -3259,6 +3373,196 @@ async function applyCoursesVideo(
   return {
     outcome: changed ? "applied" : "no-op",
     resourceCount: topic.courses.length + topic.videos.length,
+  };
+}
+
+function sameEditorialPost(
+  current: Awaited<ReturnType<typeof readAdminEditorialPostBySlug>>,
+  proposal: EditorialPostProposal,
+): boolean {
+  return (
+    current !== null &&
+    current.title === proposal.title &&
+    current.excerpt === proposal.excerpt &&
+    canonicalJson(current.body) === canonicalJson(proposal.body)
+  );
+}
+
+function sameUpdateEntry(
+  current: Awaited<ReturnType<typeof readAdminUpdateBySlug>>,
+  proposal: UpdateEntryProposal,
+): boolean {
+  return (
+    current !== null &&
+    current.title === proposal.title &&
+    current.summary === proposal.summary &&
+    current.audience === proposal.audience &&
+    current.resource === null &&
+    canonicalJson(current.body) === canonicalJson(proposal.body)
+  );
+}
+
+async function applyEditorialPresentation(
+  binding: D1Database,
+  proposal: SetupProposal,
+  operation: SetupOperation,
+  context: MutationContext,
+  counts: DomainMutationCounts,
+): Promise<HandlerResult> {
+  const topic = proposal.topics.editorialPresentation;
+  let changed = false;
+
+  for (const [index, post] of topic.posts.entries()) {
+    const current = await readAdminEditorialPostBySlug(binding, post.postKey);
+    if (current?.state === "published") {
+      if (!sameEditorialPost(current, post)) {
+        unsupported(
+          "editorial-presentation",
+          `Published editorial post ${post.postKey} is immutable and does not match the proposal.`,
+        );
+      }
+      continue;
+    }
+    if (current?.state === "archived") {
+      unsupported(
+        "editorial-presentation",
+        `Editorial post ${post.postKey} is archived and immutable.`,
+      );
+    }
+    if (sameEditorialPost(current, post)) continue;
+    const nested = childContext(context, operation, `post-${index + 1}`);
+    await runDomainMutation(
+      binding,
+      "editorial.draft.save",
+      nested,
+      counts,
+      () =>
+        saveEditorialDraft(
+          binding,
+          {
+            slug: post.postKey,
+            title: post.title,
+            excerpt: post.excerpt,
+            body: post.body,
+          },
+          current?.revision ?? 0,
+          nested,
+        ),
+    );
+    changed = true;
+  }
+
+  for (const [index, update] of topic.updates.entries()) {
+    const current = await readAdminUpdateBySlug(binding, update.updateKey);
+    if (current?.state === "published") {
+      if (!sameUpdateEntry(current, update)) {
+        unsupported(
+          "editorial-presentation",
+          `Published What's New entry ${update.updateKey} is immutable and does not match the proposal.`,
+        );
+      }
+      continue;
+    }
+    if (current?.state === "archived") {
+      unsupported(
+        "editorial-presentation",
+        `What's New entry ${update.updateKey} is archived and immutable.`,
+      );
+    }
+    if (sameUpdateEntry(current, update)) continue;
+    const nested = childContext(context, operation, `update-${index + 1}`);
+    await runDomainMutation(binding, "update.draft.save", nested, counts, () =>
+      saveUpdateDraft(
+        binding,
+        {
+          slug: update.updateKey,
+          title: update.title,
+          summary: update.summary,
+          body: update.body,
+          audience: update.audience,
+          resource: null,
+        },
+        current?.revision ?? 0,
+        nested,
+      ),
+    );
+    changed = true;
+  }
+
+  const about = topic.about;
+  const currentAbout = await readAdminPageDraftBySlug(
+    binding,
+    "about",
+    context.actorUserId,
+  );
+  const sameAbout =
+    currentAbout !== null &&
+    currentAbout.revision.title === about.title &&
+    currentAbout.revision.introduction === about.introduction &&
+    currentAbout.revision.bodyText === about.bodyText &&
+    currentAbout.revision.sections.length === 0 &&
+    currentAbout.moduleKey === null &&
+    currentAbout.kind === "standard";
+  if (!sameAbout) {
+    const nested = childContext(context, operation, "about");
+    await runDomainMutation(binding, "page.draft.save", nested, counts, () =>
+      savePageDraft(
+        binding,
+        {
+          slug: "about",
+          title: about.title,
+          introduction: about.introduction,
+          bodyText: about.bodyText,
+          sectionRevisionIds: [],
+          moduleKey: null,
+          kind: "standard",
+        },
+        currentAbout?.version ?? 0,
+        nested,
+      ),
+    );
+    changed = true;
+  }
+
+  const mediaByKey = new Map(
+    proposal.topics.rightsMedia.media.map((media) => [media.mediaKey, media]),
+  );
+  const heroes: PageHeroSetting[] = [];
+  for (const hero of topic.pageHeroes) {
+    const reference = mediaByKey.get(hero.mediaKey);
+    if (!reference) {
+      unsupported(
+        "editorial-presentation",
+        `Page hero media ${hero.mediaKey} is missing.`,
+      );
+    }
+    const resolved = await resolveSetupPageHeroMedia(
+      binding,
+      reference,
+      context.actorUserId,
+    );
+    heroes.push(
+      Object.freeze({
+        pageKey: hero.pageKey,
+        mediaDerivativeId: resolved.derivativeId,
+        altText: hero.altText,
+      }),
+    );
+  }
+  const heroContext = childContext(context, operation, "page-heroes");
+  const heroResult = await runDomainMutation(
+    binding,
+    "page-heroes.reconcile",
+    heroContext,
+    counts,
+    () => reconcilePageHeroes(binding, heroes, heroContext),
+  );
+  if (heroResult.changedModules.length > 0) changed = true;
+
+  return {
+    outcome: changed ? "applied" : "no-op",
+    resourceCount:
+      topic.posts.length + topic.updates.length + 1 + heroes.length,
   };
 }
 
@@ -3536,6 +3840,7 @@ async function applyInternalPublication(
         const applied = await applyReleaseDraft(
           binding,
           release,
+          proposal,
           operation,
           context,
           counts,
@@ -3587,16 +3892,14 @@ async function applyInternalPublication(
         const applied = await applyCollectionDraft(
           binding,
           collection,
+          proposal,
           operation,
           context,
           counts,
           "publication-collection-draft",
         );
         if (!applied) {
-          unsupported(
-            "catalog-releases",
-            `Collection ${collection.collectionKey} still lacks published tracks.`,
-          );
+          continue;
         }
         current = await readAdminCollectionDraft(
           binding,
@@ -3609,6 +3912,7 @@ async function applyInternalPublication(
           `Collection ${collection.collectionKey} is missing.`,
         );
       }
+      if (current.trackIds.length === 0) continue;
       resources += 1;
       if (current.publishedRevisionId !== current.revisionId) {
         const nested = childContext(
@@ -3670,6 +3974,78 @@ async function applyInternalPublication(
         );
         changed = true;
       }
+    }
+    for (const post of proposal.topics.editorialPresentation.posts) {
+      const current = await readAdminEditorialPostBySlug(binding, post.postKey);
+      if (!current) {
+        unsupported(
+          "editorial-presentation",
+          `Editorial post ${post.postKey} is missing.`,
+        );
+      }
+      resources += 1;
+      if (post.publication === "publish" && current.state === "draft") {
+        const nested = childContext(
+          context,
+          operation,
+          `editorial-${post.postKey}`,
+        );
+        await runDomainMutation(
+          binding,
+          "editorial.publish",
+          nested,
+          counts,
+          () =>
+            publishEditorialPost(
+              binding,
+              post.postKey,
+              current.revision,
+              nested,
+            ),
+        );
+        changed = true;
+      }
+    }
+    for (const update of proposal.topics.editorialPresentation.updates) {
+      const current = await readAdminUpdateBySlug(binding, update.updateKey);
+      if (!current) {
+        unsupported(
+          "editorial-presentation",
+          `What's New entry ${update.updateKey} is missing.`,
+        );
+      }
+      resources += 1;
+      if (update.publication === "publish" && current.state === "draft") {
+        const nested = childContext(
+          context,
+          operation,
+          `update-${update.updateKey}`,
+        );
+        await runDomainMutation(binding, "update.publish", nested, counts, () =>
+          publishUpdate(binding, update.updateKey, current.revision, nested),
+        );
+        changed = true;
+      }
+    }
+    const about = proposal.topics.editorialPresentation.about;
+    const currentAbout = await readAdminPageDraftBySlug(
+      binding,
+      "about",
+      context.actorUserId,
+    );
+    if (!currentAbout) {
+      unsupported("editorial-presentation", "The About page is missing.");
+    }
+    resources += 1;
+    if (
+      about.publication === "publish" &&
+      currentAbout.publishedRevisionId !== currentAbout.revision.id
+    ) {
+      const nested = childContext(context, operation, "about");
+      await runDomainMutation(binding, "page.publish", nested, counts, () =>
+        publishPage(binding, "about", currentAbout.version, nested),
+      );
+      changed = true;
     }
   }
 
@@ -3751,8 +4127,25 @@ async function dispatchOperation(
         context,
         counts,
       );
+    case "reconcile-courses-video-foundation":
+      return applyCoursesVideo(
+        binding,
+        proposal,
+        operation,
+        context,
+        counts,
+        true,
+      );
     case "reconcile-courses-video-drafts":
       return applyCoursesVideo(binding, proposal, operation, context, counts);
+    case "reconcile-editorial-presentation":
+      return applyEditorialPresentation(
+        binding,
+        proposal,
+        operation,
+        context,
+        counts,
+      );
     case "reconcile-contact-consent":
       return applyContactConsent(binding, proposal, operation, context, counts);
     case "reconcile-telemetry-settings":

@@ -66,8 +66,9 @@ test("public and customer journeys preserve intended use, frozen terms, Test Che
 
   for (const view of [catalog, customer]) {
     assert.doesNotMatch(view, /CommerceTestModeNotice/);
-    assert.match(view, /Test (?:offer|record)/);
   }
+  assert.match(catalog, /href=\{`\/commerce#\$\{product\.offerAnchorId\}`\}/);
+  assert.match(customer, /Test record/);
   assert.match(catalog, /id=\{`offer-\$\{offer\.slug\}`\}/);
   assert.match(request, /fetch\("\/api\/licensing\/requests"/);
   assert.match(request, /"idempotency-key": operationKey\.current/);
@@ -136,7 +137,7 @@ test("owner administration exposes safe decisions and queued operational evidenc
   assert.match(controls, /aria-live="polite"/);
 });
 
-test("licensing interfaces remain open, responsive, theme-token based, and asset-free", async () => {
+test("licensing interfaces remain open, responsive, theme-token based, and media-aware", async () => {
   const sources = await Promise.all(Object.values(files).map(source));
   const combined = sources.join("\n");
   const styles = await source(files.styles);
@@ -146,8 +147,11 @@ test("licensing interfaces remain open, responsive, theme-token based, and asset
   assert.match(styles, /@media \(max-width: 620px\)/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(styles, /\.(?:card|panel|surface)\b/i);
-  assert.doesNotMatch(styles, /(?:background-)?image\s*:|url\(|gradient\(/i);
-  assert.doesNotMatch(combined, /<(?:img|audio|video|picture|source)\b/i);
+  assert.doesNotMatch(styles, /url\(/i);
+  assert.match(styles, /linear-gradient\(/i);
+  assert.match(combined, /<img\b/i);
+  assert.match(combined, /\/judge-content\//);
+  assert.doesNotMatch(combined, /<(?:audio|video|picture|source)\b/i);
   assert.doesNotMatch(combined, /type=["']file["']/i);
   assert.doesNotMatch(combined, /\bFormData\b|\bFileReader\b|\bR2Bucket\b/i);
   assert.doesNotMatch(
@@ -158,7 +162,7 @@ test("licensing interfaces remain open, responsive, theme-token based, and asset
   assert.match(combined, /type="button"/);
 });
 
-test("empty licensing shows generic offers, subscriptions, education, custom contact, and working FAQs", async () => {
+test("empty licensing reports unpublished sections without invented plans or FAQs", async () => {
   const [publicPage, catalog, contactForm, styles] = await Promise.all([
     source(files.publicPage),
     source(files.catalog),
@@ -170,34 +174,20 @@ test("empty licensing shows generic offers, subscriptions, education, custom con
   assert.match(publicPage, /readPublicContactForm\(env\.DB\)/);
   assert.doesNotMatch(publicPage, /PublicPageHeader/);
   assert.match(catalog, />One-Time Licenses</);
-  assert.match(catalog, />Licensing Subscriptions</);
-  assert.match(catalog, />Education Plans</);
-  assert.match(catalog, /title="Custom Licensing"/);
-  assert.match(catalog, /function CustomLicensingPreview/);
-  assert.match(catalog, /aria-label="Custom Licensing form"/);
-  assert.match(catalog, /<span>Name<\/span>/);
-  assert.match(catalog, /<span>Email<\/span>/);
-  assert.match(catalog, /<span>Company<\/span>/);
-  assert.match(catalog, /<span>Project<\/span>/);
-  assert.match(catalog, /<span>Message<\/span>/);
-  assert.match(catalog, /<span>Consent<\/span>/);
-  assert.match(catalog, /disabled type="submit"/);
-  assert.match(catalog, />Licensing FAQ</);
-  assert.equal(
-    catalog.match(/id: "(?:student|one-time|extended)-license"/g)?.length,
-    3,
-  );
-  assert.equal(catalog.match(/id: "license-subscription-[12]"/g)?.length, 2);
-  assert.equal(catalog.match(/id: "education-plan-[123]"/g)?.length, 3);
-  assert.equal(catalog.match(/"licensing-faq-[1-5]"/g)?.length, 5);
-  assert.match(catalog, /<details className=\{styles\.faqItem\}/);
-  assert.match(catalog, /<summary>/);
-  assert.match(catalog, />Question</);
-  assert.match(catalog, /<p>Answer<\/p>/);
+  assert.match(catalog, />Licensing Plans</);
+  assert.match(catalog, />Education</);
+  assert.match(catalog, /function CustomLicensingCallout/);
+  assert.match(catalog, /aria-label="Custom Licensing"/);
+  assert.match(catalog, /href="\/contact"/);
+  assert.match(catalog, /Contact is not currently available\./);
+  assert.match(catalog, /No one-time licenses are published\./);
+  assert.match(catalog, /No licensing plans are published\./);
+  assert.match(catalog, /No education plans are published\./);
+  assert.doesNotMatch(catalog, />Price<|>Benefit<|>Question<|>Answer</);
   assert.doesNotMatch(catalog, /\$(?:25|60|100|250|300|500)|20\.83|41\.67/);
   assert.match(contactForm, /fetch\("\/api\/contact"/);
   assert.match(contactForm, /selectedCategory/);
   assert.match(contactForm, /embedded \? styles\.embedded/);
   assert.match(styles, /\.planGrid/);
-  assert.match(styles, /\.faqItem\[open\] \.faqMarker/);
+  assert.match(styles, /\.planTile/);
 });

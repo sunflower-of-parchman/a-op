@@ -22,7 +22,6 @@
 
 .emptyPlayer,
 .hostedPlayer,
-.externalPlayer,
 .nowPlaying > .playerBoundary {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -159,6 +158,9 @@
   border-radius: 8px;
   background: var(--card);
   color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
   text-decoration: none;
   gap: 1rem;
   transition:
@@ -183,6 +185,7 @@
   border: 1px solid var(--slate);
   border-radius: 4px;
   background: var(--field);
+  object-fit: cover;
 }
 
 .playlistCopy {
@@ -205,10 +208,11 @@
 }
 
 .nowPlaying > .playerBoundary {
+  position: relative;
   align-content: center;
   max-width: none;
-  padding: clamp(1rem, 3vw, 2rem);
-  border-block: 1px solid var(--slate);
+  padding: 0;
+  overflow: hidden;
 }
 
 .indexHeader,
@@ -356,6 +360,7 @@
 }
 
 .playerBoundary {
+  position: relative;
   display: grid;
   max-width: 64rem;
   padding-block: 1.5rem;
@@ -379,24 +384,84 @@
   background: var(--field);
 }
 
+.nowPlaying .externalPlayer {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border-radius: 0;
+}
+
+.consentPoster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .consentAction {
-  min-height: 2.75rem;
-  width: fit-content;
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--slate);
-  border-radius: 4px;
-  background: var(--action);
-  color: #fffdfc;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 5rem;
+  height: 5rem;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ground) 78%, transparent);
+  color: var(--ink);
   cursor: pointer;
-  font-weight: 400;
+  opacity: 0;
+  place-items: center;
   transition:
     background-color 200ms ease,
+    opacity 180ms ease,
     transform 200ms ease;
 }
 
+.playerBoundary:hover > .consentAction,
+.consentAction:focus-visible {
+  opacity: 1;
+}
+
 .consentAction:hover {
-  background: var(--accent-action);
-  transform: translateY(-2px);
+  background: var(--ground);
+  transform: scale(1.04);
+}
+
+@media (hover: none) {
+  .consentAction {
+    opacity: 1;
+  }
+}
+
+.consentAction span:last-child {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.consentPlayIcon {
+  width: 0;
+  height: 0;
+  margin-left: 0.3rem;
+  border-top: 0.75rem solid transparent;
+  border-bottom: 0.75rem solid transparent;
+  border-left: 1.15rem solid currentColor;
+}
+
+.nowPlaying > .playerBoundary > .consentCopy {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.8rem;
+  left: 1rem;
+  margin: 0;
+  z-index: 1;
+  font-size: 0.78rem;
+  text-align: center;
 }
 
 .operation {

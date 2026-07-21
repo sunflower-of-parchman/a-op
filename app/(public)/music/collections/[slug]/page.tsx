@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PublicFavoriteControl } from "@/components/account";
 import { MusicDetail } from "@/components/music/MusicDetail";
 import { PreviewCatalogDetail } from "@/components/music/PreviewCatalogDetail";
 import { readCurrentCatalogCollection } from "@/lib/catalog/read-current-detail";
@@ -34,5 +35,16 @@ export default async function CollectionPage({
   }
   const collection = await readCurrentCatalogCollection(env.DB, slug);
   if (!collection) notFound();
-  return <MusicDetail data={collection} />;
+  return (
+    <MusicDetail
+      customerAction={
+        <PublicFavoriteControl
+          label={collection.title}
+          targetId={collection.id}
+          targetType="collection"
+        />
+      }
+      data={collection}
+    />
+  );
 }

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { PublishedCourseSummary } from "@/lib/courses/types.ts";
+import type { PublicArtwork } from "@/db/public-media.ts";
+import { PageHero } from "@/components/public/PageHero";
 import { CoursePreviewIndex } from "./CoursePreview";
 import styles from "./Courses.module.css";
 
@@ -12,10 +14,14 @@ function accessLabel(course: PublishedCourseSummary): string {
 }
 
 export function CourseIndex({
+  artworkBySlug,
   courses,
+  mosaicImages,
   previewCategory,
 }: {
+  readonly artworkBySlug?: Readonly<Record<string, PublicArtwork | null>>;
   readonly courses: readonly PublishedCourseSummary[];
+  readonly mosaicImages?: readonly PublicArtwork[];
   readonly previewCategory?: string | null;
 }) {
   if (courses.length === 0) {
@@ -24,44 +30,54 @@ export function CourseIndex({
 
   return (
     <>
-      <header className={`page-frame ${styles.pageHeader}`}>
-        <p className="eyebrow">Courses</p>
-        <h1>Courses</h1>
-        <p>
-          Ordered lessons with artist-authored text, media, downloads, and
-          durable progress.
-        </p>
-      </header>
+      <PageHero hero={null} mosaicImages={mosaicImages} title="Courses" />
       <div className={`page-frame ${styles.indexContent}`}>
-        <ul className={styles.courseList}>
-          {courses.map((course) => (
-            <li className={styles.courseRow} key={course.id}>
-              <div className={styles.courseIdentity}>
-                <span className="eyebrow">Course</span>
-                <h2>
-                  <Link href={`/courses/${course.slug}`}>{course.title}</Link>
-                </h2>
-              </div>
-              <div className={styles.courseFacts}>
-                {course.description ? <p>{course.description}</p> : null}
-                <span>
-                  {course.lessonCount}{" "}
-                  {course.lessonCount === 1 ? "lesson" : "lessons"}
-                  {course.estimatedMinutes
-                    ? ` · ${course.estimatedMinutes} minutes`
-                    : ""}
-                </span>
-              </div>
+        <CourseCards artworkBySlug={artworkBySlug} courses={courses} />
+      </div>
+    </>
+  );
+}
+
+export function CourseCards({
+  artworkBySlug,
+  courses,
+}: {
+  readonly artworkBySlug?: Readonly<Record<string, PublicArtwork | null>>;
+  readonly courses: readonly PublishedCourseSummary[];
+}) {
+  return (
+    <ul className={styles.courseList}>
+      {courses.map((course) => (
+        <li className={styles.courseCard} key={course.id}>
+          <Link href={`/courses/${course.slug}`}>
+            {artworkBySlug?.[course.slug] ? (
+              <img
+                alt={artworkBySlug[course.slug]?.alt ?? ""}
+                className={styles.courseArtwork}
+                src={artworkBySlug[course.slug]?.url}
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className={styles.courseArtworkFallback}
+              />
+            )}
+            <span className={styles.courseOverlay}>
+              <span className={styles.courseMeta}>
+                {course.lessonCount}{" "}
+                {course.lessonCount === 1 ? "lesson" : "lessons"}
+              </span>
+              <strong>{course.title}</strong>
               <span
                 className={styles.accessLabel}
                 data-allowed={String(course.access.allowed)}
               >
                 {accessLabel(course)}
               </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

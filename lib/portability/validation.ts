@@ -101,7 +101,7 @@ const PROVIDER_ID_PATTERN =
 const OBJECT_KEY_PATTERN =
   /(?:^|\s)(?:originals|derivatives|runtime-lab|exports)\//i;
 const MACHINE_PATH_PATTERN =
-  /(?:file:\/\/|(?:^|\s)(?:~\/|\/Users\/|\/home\/|\/private\/|\/var\/|\/tmp\/)|[A-Za-z]:\\)/i;
+  /(?:file:\/\/|(?:^|\s)(?:~\/|\/Users\/|\/home\/|\/private\/|\/var\/|\/tmp\/)|(?<![A-Za-z0-9])[A-Za-z]:\\)/i;
 
 function fail(
   code: (typeof PORTABILITY_ERROR_CODES)[keyof typeof PORTABILITY_ERROR_CODES],

@@ -44,7 +44,11 @@ test("owner-only telemetry navigation stays absent for editors and inactive oper
     source("../app/admin/operations/page.tsx"),
     source("../components/operations/OperationsWorkspace.tsx"),
   ]);
-  assert.match(layout, /owner \|\| key !== "telemetry"/);
+  assert.match(
+    layout,
+    /resolveAdministrationNavigation\(activeModules, owner\)/,
+  );
+  assert.doesNotMatch(layout, /href: "\/admin\/telemetry"/);
   assert.match(page, /activeModules\.includes\("telemetry"\)/);
   assert.match(
     component,

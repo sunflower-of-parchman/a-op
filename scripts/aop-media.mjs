@@ -49,12 +49,14 @@ Commands:
   publish   --manifest-alias ALIAS --media-alias ALIAS --media-id ID
             --media-key KEY --application-id ID --site-origin URL
             --visibility public|protected [--source-media-id ID]
-            [--external-approval-alias ALIAS] --confirm-site-publication
+            [--external-approval-alias ALIAS] [--local-preview]
+            --confirm-site-publication
 
 All filesystem values resolve through the ignored setup/local-paths.json file.
 Commands and manifests emit aliases and hashes only. Publication requires the
-exact applied setup approval and an authenticated owner cookie supplied through
-${PUBLICATION_COOKIE_ENV}. Public visibility also requires the exact ignored
+exact staged or applied setup approval and an authenticated owner session.
+Local preview may omit the cookie only for a loopback HTTP origin. Public
+visibility also requires the exact ignored
 external-action approval alias; protected visibility rejects that authority.`;
 }
 
@@ -67,9 +69,12 @@ function parseArguments(values) {
       throw new Error("Use named media command flags only.");
     const name = token.slice(2);
     if (
-      ["check-tools", "rights-confirmed", "confirm-site-publication"].includes(
-        name,
-      )
+      [
+        "check-tools",
+        "rights-confirmed",
+        "confirm-site-publication",
+        "local-preview",
+      ].includes(name)
     ) {
       options.set(name, true);
       continue;
@@ -386,8 +391,15 @@ async function publish(options) {
       "--confirm-site-publication is required for this Site mutation.",
     );
   }
+  const origin = siteOrigin(one(options, "site-origin"));
   const cookie = process.env[PUBLICATION_COOKIE_ENV];
-  if (!cookie) throw new Error(`${PUBLICATION_COOKIE_ENV} is required.`);
+  const localPreview =
+    options.get("local-preview") === true &&
+    origin.startsWith("http://") &&
+    ["localhost", "127.0.0.1"].includes(new URL(origin).hostname);
+  if (!cookie && !localPreview) {
+    throw new Error(`${PUBLICATION_COOKIE_ENV} is required.`);
+  }
   const aliases = await loadAliases();
   const manifestAlias = one(options, "manifest-alias");
   const mediaAlias = one(options, "media-alias");
@@ -433,10 +445,9 @@ async function publish(options) {
       }
     : {};
   const bytes = await readAliasBytes(aliases, mediaAlias);
-  const origin = siteOrigin(one(options, "site-origin"));
   const headers = {
     origin,
-    cookie,
+    ...(cookie ? { cookie } : {}),
     "content-type": entry.contentType,
     "content-length": String(bytes.byteLength),
     "idempotency-key": `media-publish:${manifest.manifestSha256.slice(-48)}:${entry.sha256.slice(0, 16)}`,
@@ -487,10 +498,13 @@ async function publish(options) {
     redirect: "error",
   });
   const body = await response.json();
-  if (!response.ok)
+  if (!response.ok) {
+    const safeCode =
+      typeof body?.error?.code === "string" ? ` ${body.error.code}` : "";
     throw new Error(
-      `Site media publication failed with HTTP ${response.status}.`,
+      `Site media publication failed with HTTP ${response.status}${safeCode}.`,
     );
+  }
   return { status: "published", mediaAlias, response: body };
 }
 

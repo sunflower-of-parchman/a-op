@@ -32,17 +32,95 @@
 
 .unreadStatus {
   width: fit-content;
-  padding-block: 0.65rem;
-  border-block: 1px solid var(--slate);
-  color: var(--ink);
+  color: var(--ink-muted);
   font-weight: 400;
 }
 
 .list {
+  display: grid;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--slate);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
   list-style: none;
+}
+
+.card {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--slate) 45%, transparent);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--field) 72%, transparent);
+  transition:
+    border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: color-mix(in srgb, var(--slate) 82%, transparent);
+  transform: translateY(-0.15rem);
+}
+
+.cardUnread {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--slate));
+}
+
+.card article {
+  display: grid;
+  min-height: clamp(12rem, 23vw, 18rem);
+  align-content: start;
+  padding: clamp(1.4rem, 3.5vw, 2.5rem);
+  gap: 1.25rem;
+}
+
+.cardHeader,
+.cardFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+}
+
+.cardHeader h2 {
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 300;
+}
+
+.cardHeader time {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.cardHeader a,
+.textLink,
+.resourceLink {
+  text-decoration-color: transparent;
+  text-underline-offset: 0.35rem;
+}
+
+.cardHeader a:hover,
+.textLink:hover,
+.resourceLink:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+.cardSummary {
+  max-width: 62rem;
+  color: var(--ink-muted);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.cardFooter {
+  margin-top: auto;
+}
+
+.unreadMarker {
+  color: var(--accent);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .row {
@@ -65,16 +143,12 @@
   font-size: clamp(1.3rem, 2.4vw, 1.9rem);
 }
 
-.rowIdentity a,
-.textLink,
-.resourceLink {
+.rowIdentity a {
   text-decoration-color: transparent;
   text-underline-offset: 0.35rem;
 }
 
-.rowIdentity a:hover,
-.textLink:hover,
-.resourceLink:hover {
+.rowIdentity a:hover {
   color: var(--ink);
   text-decoration-color: currentColor;
 }
@@ -258,7 +332,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .textButton,
-  .textLink {
+  .textLink,
+  .card {
     transition-duration: 0.01ms;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: none;
   }
 }

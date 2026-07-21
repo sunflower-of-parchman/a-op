@@ -116,7 +116,11 @@ export function FavoriteList({ favorites }: FavoriteListProps) {
                 <span className={styles.rowTitle}>{label}</span>
               )}
               <span className={styles.meta}>
-                {item.favorite.targetType === "track" ? "Track" : "Release"}
+                {item.favorite.targetType === "track"
+                  ? "Track"
+                  : item.favorite.targetType === "release"
+                    ? "Album"
+                    : "Collection"}
                 {item.active ? " · Saved" : " · Removed"}
               </span>
               {!resource.available ? (

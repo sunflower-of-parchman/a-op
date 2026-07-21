@@ -101,7 +101,7 @@ test("the consent-gated external player stays sandboxed and receives no broad br
     source,
     /sandbox="allow-scripts allow-same-origin allow-presentation"/,
   );
-  assert.match(source, /referrerPolicy="no-referrer"/);
+  assert.match(source, /referrerPolicy="strict-origin-when-cross-origin"/);
   assert.doesNotMatch(source, /allow-top-navigation|allow-popups|allow-forms/);
 
   const iframeUsers = [...sources.entries()].filter(([, value]) =>
@@ -111,6 +111,16 @@ test("the consent-gated external player stays sandboxed and receives no broad br
     iframeUsers.map(([file]) => file),
     ["components/video/ExternalVideoConsent.tsx"],
   );
+});
+
+test("external thumbnails stay same-origin while the player remains consent-gated", () => {
+  const index = sources.get("components/video/VideoIndex.tsx");
+  const headers = sources.get("lib/security/response-headers.ts");
+  assert.ok(index);
+  assert.ok(headers);
+  assert.match(index, /src=\{posterHref\}/);
+  assert.doesNotMatch(index, /https:\/\/i\.ytimg\.com/);
+  assert.match(headers, /img-src 'self' data:/);
 });
 
 test("auth, payment, and provider secrets cannot be exposed through public build variables", () => {

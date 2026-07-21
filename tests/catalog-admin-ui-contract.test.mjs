@@ -30,7 +30,11 @@ test("Music is a core scoped administration destination", async () => {
     source(files.overview),
   ]);
 
-  assert.match(layout, /\{ href: "\/admin\/music", label: "Music" \}/);
+  assert.match(layout, /readActiveModuleKeys\(env\.DB\)/);
+  assert.match(
+    layout,
+    /resolveAdministrationNavigation\(activeModules, owner\)/,
+  );
   assert.match(
     page,
     /readActiveEditorPermissions\(env\.DB, identity\.userId\)/,

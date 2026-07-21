@@ -58,13 +58,23 @@ test("video validation accepts exact external and hosted contracts", () => {
   assert.equal(hosted.value.hostedDerivativeId, "derivative_fictional_video");
 });
 
-test("video validation rejects auto-embedded provider mismatches, missing transcripts, and extra fields", () => {
+test("video validation accepts transcript-optional external embeds and rejects unsafe delivery", () => {
+  assert.equal(
+    validateVideoDraftInput(externalVideo({ transcripts: [] })).ok,
+    true,
+  );
   for (const input of [
     externalVideo({ externalEmbedUrl: "http://www.youtube.com/embed/example" }),
     externalVideo({
       externalEmbedUrl: "https://example.invalid/embed/example",
     }),
-    externalVideo({ transcripts: [] }),
+    externalVideo({
+      deliveryKind: "artist_hosted",
+      hostedDerivativeId: "derivative_fictional_video",
+      externalProvider: null,
+      externalEmbedUrl: null,
+      transcripts: [],
+    }),
     { ...externalVideo(), unexpected: true },
   ]) {
     const result = validateVideoDraftInput(input);

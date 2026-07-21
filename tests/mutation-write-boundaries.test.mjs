@@ -49,7 +49,10 @@ function functionText(source, fileName, functionName) {
 
 function receiptTail(source, fileName, functionName) {
   const body = functionText(source, fileName, functionName);
-  const receiptStart = body.lastIndexOf("prepareConditionalAuditEvent");
+  const receiptStart = Math.max(
+    body.lastIndexOf("prepareConditionalAuditEvent"),
+    body.lastIndexOf("prepareRequiredPageAuditEvent"),
+  );
   assert.notEqual(
     receiptStart,
     -1,

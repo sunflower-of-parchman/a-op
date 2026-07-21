@@ -6,40 +6,43 @@ import type { ExternalVideoProvider } from "@/lib/video/types.ts";
 import styles from "./Video.module.css";
 
 export function ExternalVideoConsent({
-  provider,
   embedUrl,
   title,
   videoId,
+  posterHref,
+  consented: controlledConsent,
+  onConsent,
 }: {
   readonly provider: ExternalVideoProvider;
   readonly embedUrl: string;
   readonly title: string;
   readonly videoId?: string | null;
+  readonly posterHref?: string | null;
+  readonly consented?: boolean;
+  readonly onConsent?: () => void;
 }) {
-  const [consented, setConsented] = useState(false);
+  const [localConsent, setLocalConsent] = useState(false);
+  const consented = controlledConsent ?? localConsent;
   const playbackRecorded = useRef(false);
   const { configuration, record } = useTelemetry();
-  const providerLabel =
-    provider === "youtube"
-      ? "YouTube"
-      : provider === "vimeo"
-        ? "Vimeo"
-        : "the external provider";
-
   if (!consented) {
     return (
       <div className={styles.playerBoundary}>
-        <p className={styles.consentCopy}>
-          The external player is off. Loading it connects your browser to{" "}
-          {providerLabel}, which may receive network and browser information
-          under its own policy.
-        </p>
+        {posterHref ? (
+          // Posters are delivered by the Site's same-origin media boundary.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img alt="" className={styles.consentPoster} src={posterHref} />
+        ) : null}
         <button
           className={styles.consentAction}
-          onClick={() => setConsented(true)}
+          onClick={() => {
+            setLocalConsent(true);
+            onConsent?.();
+          }}
           type="button"
         >
-          Load external player
+          <span aria-hidden="true" className={styles.consentPlayIcon} />
+          <span>Play {title}</span>
         </button>
       </div>
     );
@@ -47,14 +50,11 @@ export function ExternalVideoConsent({
 
   return (
     <div className={styles.playerBoundary}>
-      <p className={styles.consentCopy}>
-        External player loaded after your choice.
-      </p>
       <iframe
         allow="encrypted-media; fullscreen; picture-in-picture"
         allowFullScreen
         className={styles.externalPlayer}
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         sandbox="allow-scripts allow-same-origin allow-presentation"
         src={embedUrl}
         title={`${title} external video player`}

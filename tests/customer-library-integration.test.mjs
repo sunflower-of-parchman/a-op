@@ -89,8 +89,57 @@ function seedCustomerDomain(database) {
        'release_one_revision_1', 'published');
     INSERT INTO release_revisions (id, release_id, revision, title)
     VALUES ('release_one_revision_1', 'release_one', 1, 'Release one');
+
+    INSERT INTO collections
+      (id, slug, draft_revision_id, published_revision_id, publication_state)
+    VALUES
+      ('collection_one', 'collection-one', 'collection_one_revision_1',
+       'collection_one_revision_1', 'published');
+    INSERT INTO collection_revisions (id, collection_id, revision, title)
+    VALUES ('collection_one_revision_1', 'collection_one', 1, 'Collection one');
   `);
 }
+
+test("collection favorites persist and resolve to the public collection", async (t) => {
+  const memory = await createInMemoryD1();
+  t.after(() => memory.close());
+  seedCustomerDomain(memory.database);
+  memory.database.exec(
+    `UPDATE artist_modules SET active = 1 WHERE module_key = 'customer-library'`,
+  );
+
+  const saved = await setCustomerFavorite(
+    memory.binding,
+    {
+      targetType: "collection",
+      targetId: "collection_one",
+      active: true,
+      expectedRevision: null,
+    },
+    context("user_customer_one", "favorite-collection-one"),
+  );
+  assert.equal(saved.value.active, true);
+  assert.deepEqual(
+    await readCustomerFavoriteState(
+      memory.binding,
+      "user_customer_one",
+      "collection",
+      "collection_one",
+    ),
+    {
+      targetType: "collection",
+      targetId: "collection_one",
+      active: true,
+      revision: 1,
+    },
+  );
+  const favorites = await readCustomerFavorites(
+    memory.binding,
+    "user_customer_one",
+  );
+  assert.equal(favorites[0].resource.kind, "collection");
+  assert.equal(favorites[0].resource.href, "/music/collections/collection-one");
+});
 
 test("customer favorites, playlists, history, replay, CAS, and isolation remain durable", async (t) => {
   const memory = await createInMemoryD1();

@@ -243,6 +243,7 @@ test("normalizes page drafts and validates optional module ownership", () => {
         title: "Listening Room",
         introduction: "Hear the current release.",
         bodyText: "Line one.\n\nLine two.",
+        sectionRevisionIds: [],
         moduleKey: "whats-new",
         kind: "standard",
       },

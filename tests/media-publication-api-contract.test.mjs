@@ -24,7 +24,7 @@ test("hosted media publication is owner-only, approval-first, bounded, and R2 ve
   assert.match(route, /resolveMediaPublicationByteCap/);
   assert.match(route, /requireSameOrigin/);
   assert.match(route, /requireIdempotencyKey/);
-  assert.match(repository, /status = 'applied'/);
+  assert.match(repository, /status IN \('applying', 'applied'\)/);
   assert.match(repository, /proposal_hash = \?/);
   assert.match(repository, /approval_hash = \?/);
   assert.match(repository, /\$\.externalActionApprovals/);

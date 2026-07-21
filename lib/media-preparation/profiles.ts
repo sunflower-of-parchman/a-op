@@ -84,6 +84,74 @@ const AUDIO_DOWNLOAD_FLAC_V1: FixedDerivativeProfile = Object.freeze({
   ]),
 });
 
+const AUDIO_DOWNLOAD_MP3_320_V1: FixedDerivativeProfile = Object.freeze({
+  id: "audio-download-mp3-320",
+  version: "1",
+  sourceKind: "audio",
+  sourceContentTypes: AUDIO_SOURCE_CONTENT_TYPES,
+  intendedUses: intendedUses("download", "course", "protected-delivery"),
+  processor: "ffmpeg",
+  derivativeKind: "download",
+  outputExtension: "mp3",
+  contentType: "audio/mpeg",
+  format: "mp3",
+  bitrateKbps: 320,
+  ffmpegArguments: Object.freeze([
+    "-map_metadata",
+    "-1",
+    "-vn",
+    "-ac",
+    "2",
+    "-ar",
+    "48000",
+    "-c:a",
+    "libmp3lame",
+    "-b:a",
+    "320k",
+    "-write_xing",
+    "0",
+    "-id3v2_version",
+    "0",
+    "-fflags",
+    "+bitexact",
+    "-flags:a",
+    "+bitexact",
+  ]),
+});
+
+const AUDIO_STREAMING_MP3_128_V1: FixedDerivativeProfile = Object.freeze({
+  ...AUDIO_STREAMING_MP3_192_V1,
+  id: "audio-streaming-mp3-128",
+  bitrateKbps: 128,
+  ffmpegArguments: Object.freeze(
+    AUDIO_STREAMING_MP3_192_V1.ffmpegArguments.map((value) =>
+      value === "192k" ? "128k" : value,
+    ),
+  ),
+});
+
+const AUDIO_DOWNLOAD_MP3_128_V1: FixedDerivativeProfile = Object.freeze({
+  ...AUDIO_DOWNLOAD_MP3_320_V1,
+  id: "audio-download-mp3-128",
+  bitrateKbps: 128,
+  ffmpegArguments: Object.freeze(
+    AUDIO_DOWNLOAD_MP3_320_V1.ffmpegArguments.map((value) =>
+      value === "320k" ? "128k" : value,
+    ),
+  ),
+});
+
+const AUDIO_DOWNLOAD_MP3_160_V1: FixedDerivativeProfile = Object.freeze({
+  ...AUDIO_DOWNLOAD_MP3_320_V1,
+  id: "audio-download-mp3-160",
+  bitrateKbps: 160,
+  ffmpegArguments: Object.freeze(
+    AUDIO_DOWNLOAD_MP3_320_V1.ffmpegArguments.map((value) =>
+      value === "320k" ? "160k" : value,
+    ),
+  ),
+});
+
 const VIDEO_STREAMING_MP4_H264_720_V1: FixedDerivativeProfile = Object.freeze({
   id: "video-streaming-mp4-h264-720",
   version: "1",
@@ -282,6 +350,69 @@ const IMAGE_COURSE_WEBP_1600_V1: FixedDerivativeProfile = Object.freeze({
   ]),
 });
 
+const IMAGE_ARTWORK_WEBP_1600_V1: FixedDerivativeProfile = Object.freeze({
+  ...IMAGE_COURSE_WEBP_1600_V1,
+  id: "image-artwork-webp-1600",
+  derivativeKind: "artwork",
+});
+
+function imageCopyProfile(
+  id: string,
+  sourceContentTypes: readonly string[],
+  outputExtension: string,
+  contentType: string,
+  format: string,
+  derivativeKind: "artwork" | "thumbnail",
+): FixedDerivativeProfile {
+  return Object.freeze({
+    id,
+    version: "1",
+    sourceKind: "image",
+    sourceContentTypes: Object.freeze([...sourceContentTypes]),
+    intendedUses: intendedUses("artwork", "public-site", "course"),
+    processor: "copy",
+    derivativeKind,
+    outputExtension,
+    contentType,
+    format,
+    bitrateKbps: null,
+    ffmpegArguments: Object.freeze([]),
+  });
+}
+
+const IMAGE_ARTWORK_WEBP_COPY_V1 = imageCopyProfile(
+  "image-artwork-webp-copy",
+  ["image/webp"],
+  "webp",
+  "image/webp",
+  "webp",
+  "artwork",
+);
+const IMAGE_ARTWORK_JPEG_COPY_V1 = imageCopyProfile(
+  "image-artwork-jpeg-copy",
+  ["image/jpeg"],
+  "jpg",
+  "image/jpeg",
+  "jpeg",
+  "artwork",
+);
+const IMAGE_THUMBNAIL_WEBP_COPY_V1 = imageCopyProfile(
+  "image-thumbnail-webp-copy",
+  ["image/webp"],
+  "webp",
+  "image/webp",
+  "webp",
+  "thumbnail",
+);
+const IMAGE_THUMBNAIL_JPEG_COPY_V1 = imageCopyProfile(
+  "image-thumbnail-jpeg-copy",
+  ["image/jpeg"],
+  "jpg",
+  "image/jpeg",
+  "jpeg",
+  "thumbnail",
+);
+
 const DOCUMENT_DOWNLOAD_PDF_COPY_V1: FixedDerivativeProfile = Object.freeze({
   id: "document-download-pdf-copy",
   version: "1",
@@ -305,11 +436,20 @@ const DOCUMENT_DOWNLOAD_PDF_COPY_V1: FixedDerivativeProfile = Object.freeze({
 export const FIXED_DERIVATIVE_PROFILES = Object.freeze([
   AUDIO_STREAMING_MP3_192_V1,
   AUDIO_DOWNLOAD_FLAC_V1,
+  AUDIO_DOWNLOAD_MP3_320_V1,
+  AUDIO_STREAMING_MP3_128_V1,
+  AUDIO_DOWNLOAD_MP3_128_V1,
+  AUDIO_DOWNLOAD_MP3_160_V1,
   VIDEO_STREAMING_MP4_H264_720_V1,
   VIDEO_DOWNLOAD_MP4_H264_1080_V1,
   VIDEO_POSTER_WEBP_1280_V1,
   VIDEO_CAPTIONS_WEBVTT_V1,
   IMAGE_COURSE_WEBP_1600_V1,
+  IMAGE_ARTWORK_WEBP_1600_V1,
+  IMAGE_ARTWORK_WEBP_COPY_V1,
+  IMAGE_ARTWORK_JPEG_COPY_V1,
+  IMAGE_THUMBNAIL_WEBP_COPY_V1,
+  IMAGE_THUMBNAIL_JPEG_COPY_V1,
   DOCUMENT_DOWNLOAD_PDF_COPY_V1,
 ]);
 

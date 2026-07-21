@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { TelemetryPageView } from "@/components/telemetry";
+import type { PublicArtwork } from "@/db/public-media.ts";
 import type { CommerceProductDTO } from "@/lib/commerce/domain.ts";
 
 import styles from "./MembershipLanding.module.css";
 
 export interface MembershipLandingProps {
+  readonly images: readonly PublicArtwork[];
   readonly product: CommerceProductDTO | null;
 }
 
@@ -16,11 +18,6 @@ const BENEFIT_LINKS = Object.freeze([
     href: "/account/credits",
     placement: "credits",
   }),
-]);
-
-const ACCOUNT_LINKS = Object.freeze([
-  Object.freeze({ label: "Playlists", href: "/account/playlists" }),
-  Object.freeze({ label: "Favorites", href: "/account/favorites" }),
 ]);
 
 function money(amountMinor: number, currency: string): string {
@@ -38,14 +35,13 @@ function cadence(product: CommerceProductDTO): string {
     : `every ${product.intervalCount} ${interval}s`;
 }
 
-export function MembershipLanding({ product }: MembershipLandingProps) {
+export function MembershipLanding({ images, product }: MembershipLandingProps) {
   const offerHref = product
     ? `/commerce#${product.offerAnchorId}`
     : "/account/memberships";
 
   return (
     <div className={`page-frame ${styles.page}`}>
-      <h1 className="sr-only">Membership</h1>
       {product?.productType === "membership" ? (
         <TelemetryPageView
           eventName="membership-view"
@@ -57,11 +53,15 @@ export function MembershipLanding({ product }: MembershipLandingProps) {
       <section className={styles.membership} aria-labelledby="membership-title">
         <div className={styles.offer}>
           <div className={styles.offerIdentity}>
-            <h2 id="membership-title">{product?.name ?? "Membership"}</h2>
-            <p className={styles.price}>
-              {product ? money(product.amountMinor, product.currency) : "Price"}
-              {product ? <span>{cadence(product)}</span> : null}
-            </p>
+            <h2 id="membership-title">
+              {product?.name ?? "Membership benefits"}
+            </h2>
+            {product ? (
+              <p className={styles.price}>
+                {money(product.amountMinor, product.currency)}
+                <span>{cadence(product)}</span>
+              </p>
+            ) : null}
             {product?.description ? <p>{product.description}</p> : null}
           </div>
 
@@ -75,30 +75,23 @@ export function MembershipLanding({ product }: MembershipLandingProps) {
               </Link>
             ) : null}
           </div>
-
-          <p className={styles.licensingNote}>
-            Licensing is managed separately.{" "}
-            <Link href="/licensing">Licensing</Link>
-          </p>
         </div>
 
         <nav className={styles.benefits} aria-label="Membership benefits">
-          {BENEFIT_LINKS.map((benefit) => (
+          {BENEFIT_LINKS.map((benefit, index) => (
             <Link
               className={`${styles.benefitLink} ${styles[benefit.placement]}`}
               href={benefit.href}
               key={benefit.href}
             >
+              {images[index] ? (
+                // Artwork is artist-approved and delivered by the Site.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img alt="" src={images[index].url} />
+              ) : null}
               <span>{benefit.label}</span>
             </Link>
           ))}
-          <div className={styles.accountLinks}>
-            {ACCOUNT_LINKS.map((link) => (
-              <Link href={link.href} key={link.href}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
         </nav>
       </section>
     </div>

@@ -57,6 +57,17 @@ export async function bootstrapFictionalRuntimeIdentities(
     statements.push(
       binding
         .prepare(
+          `UPDATE role_assignments
+           SET revoked_at = CURRENT_TIMESTAMP
+           WHERE user_id = ?1
+             AND role_key <> ?2
+             AND revoked_at IS NULL`,
+        )
+        .bind(identity.id, role),
+    );
+    statements.push(
+      binding
+        .prepare(
           `INSERT INTO role_assignments
             (id, user_id, role_key, assigned_by_user_id, revoked_at)
            VALUES (?1, ?2, ?3, ?4, NULL)

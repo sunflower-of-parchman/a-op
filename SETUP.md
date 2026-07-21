@@ -19,7 +19,11 @@ Local inspection and proposal commands are read-only. They perform no D1, R2, me
 
 Read `AGENTS.md`, `PRODUCT.md`, `PLANS.md`, `plans/migrateAopToSites.md`, the current contracts in `docs/architecture/`, and `docs/provenance.md`. Use the current installed `sites:sites-building` guidance before changing the Sites application. Keep `sites:sites-hosting` unopened until the documented hosting stage and Michael's approval for that exact action.
 
-Ask for the artist's own material and preserve their wording. Cover every topic:
+Start with capability selection. Ask which parts of a-op the artist wants active, then produce a bounded asset and information checklist for those capabilities. After the artist identifies an approved local folder, inspect it without changing the Site and report what is ready, optional, or missing.
+
+Content enters the product through the setup proposal, D1 repositories, and approved R2 media flow. It populates the existing public and administrative interfaces. A local import or rehearsal must not replace the visual foundation, navigation, persistent player, access decisions, or module components with a content-specific page renderer.
+
+Preserve the artist's wording and cover every applicable topic. Inactive capabilities remain recorded as deliberate choices and require no assets:
 
 1. Artist name, words, and public contact.
 2. Active capabilities and navigation.
@@ -67,14 +71,14 @@ Do not paste this file into a ChatGPT Work task. Proposals carry `sourceAlias: "
 
 ## Create one exact proposal
 
-Store working proposal JSON under ignored `setup/proposals/`. The exact schema is exported from `lib/setup/index.ts` as `SetupProposal` and versioned as `aop.setup-proposal.v1`.
+Store working proposal JSON under ignored `setup/proposals/`. The exact schema is exported from `lib/setup/index.ts` as `SetupProposal` and versioned as `aop.setup-proposal.v2`.
 
 The top level contains:
 
 - one stable proposal identifier and UTC creation time;
 - the current server-owned source-state fingerprint;
 - the fixed Stripe Test Mode commerce contract;
-- all fourteen required topic objects;
+- all fifteen required topic objects, including editorial posts, What's New, About, and approved public page heroes;
 - media actions expressed through aliases and stable media keys;
 - artist-requested source changes; and
 - external actions that remain approval-gated.

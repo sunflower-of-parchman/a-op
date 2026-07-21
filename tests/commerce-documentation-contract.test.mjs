@@ -30,21 +30,15 @@ test("the canonical product keeps the full platform and the Sites test boundary 
     /An artist must verify the rules and technical support of their chosen environment before activating real payments\./,
   );
 
-  assert.match(readme, /The complete platform contains one commerce domain/);
-  assert.match(readme, /runs that domain in Stripe Test Mode only/);
-  assert.match(
-    readme,
-    /has no administration control that can enable live commerce/,
-  );
-  assert.match(
-    readme,
-    /Every Build Week URL remains permanently locked to Stripe Test Mode/,
-  );
+  assert.match(readme, /test-only commerce simulation/);
+  assert.match(readme, /It accepts Stripe test credentials only/);
+  assert.match(readme, /No real payment is accepted and no money moves/);
+  assert.match(readme, /Live commerce is unavailable in the Sites deployment/);
   assert.match(
     contract,
     /The Sites adapter is permanently `stripe-test-simulation`/,
   );
-  assert.match(contract, /No real payment will be accepted\./);
+  assert.match(contract, /cannot accept real payment or move money/);
   assert.match(
     contract,
     /production URL[\s\S]*not the Stripe environment[\s\S]*permanently `stripe-test-simulation`/,

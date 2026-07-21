@@ -2,8 +2,11 @@ import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
 import { LicensingCatalog } from "@/components/licensing";
+import { PageHero } from "@/components/public/PageHero";
 import { listActiveCommerceProducts } from "@/db/commerce-read.ts";
+import { listPublicCommerceIntentPreviews } from "@/db/commerce-preview.ts";
 import { readPublicContactForm } from "@/db/contact-read.ts";
+import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
 import { listActiveLicenseOffers } from "@/db/licensing-read.ts";
 import { resolveApplicationIdentity } from "@/lib/auth/application-identity.ts";
 import { requireActiveModule } from "@/lib/modules/active-module.ts";
@@ -16,13 +19,23 @@ export const metadata: Metadata = {
 
 export default async function LicensingPage() {
   await requireActiveModule(env.DB, "licensing");
-  const [authenticatedUser, offers, commerceProducts, contactForm] =
-    await Promise.all([
-      getChatGPTUser(),
-      listActiveLicenseOffers(env.DB),
-      listActiveCommerceProducts(env.DB),
-      readPublicContactForm(env.DB),
-    ]);
+  const [
+    authenticatedUser,
+    offers,
+    commerceProducts,
+    contactForm,
+    mosaicImages,
+    pendingPlans,
+    pendingLicenseTypes,
+  ] = await Promise.all([
+    getChatGPTUser(),
+    listActiveLicenseOffers(env.DB),
+    listActiveCommerceProducts(env.DB),
+    readPublicContactForm(env.DB),
+    readPublicMosaicImages(env.DB),
+    listPublicCommerceIntentPreviews(env.DB, "subscription"),
+    listPublicCommerceIntentPreviews(env.DB, "license"),
+  ]);
   const identity = await resolveApplicationIdentity(env.DB, authenticatedUser);
   const requestAccess = identity?.roles.includes("customer")
     ? "customer"
@@ -31,12 +44,17 @@ export default async function LicensingPage() {
       : "signed-out";
 
   return (
-    <LicensingCatalog
-      commerceProducts={commerceProducts}
-      contactForm={contactForm}
-      offers={offers}
-      requestAccess={requestAccess}
-      signInHref={chatGPTSignInPath("/licensing")}
-    />
+    <>
+      <PageHero hero={null} mosaicImages={mosaicImages} title="Licensing" />
+      <LicensingCatalog
+        commerceProducts={commerceProducts}
+        contactForm={contactForm}
+        offers={offers}
+        pendingLicenseTypes={pendingLicenseTypes}
+        pendingPlans={pendingPlans}
+        requestAccess={requestAccess}
+        signInHref={chatGPTSignInPath("/licensing")}
+      />
+    </>
   );
 }

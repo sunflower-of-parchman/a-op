@@ -167,7 +167,8 @@ test("video playback telemetry waits for the player or consented embed to load",
   assert.match(hosted, /resourceId: videoId/);
   assert.doesNotMatch(hosted, /useEffect/);
 
-  assert.match(external, /onClick=\{\(\) => setConsented\(true\)\}/);
+  assert.match(external, /setLocalConsent\(true\)/);
+  assert.match(external, /onConsent\?\.\(\)/);
   assert.match(external, /<iframe[\s\S]*onLoad=\{\(\) =>/);
   assert.match(external, /eventName: "video-playback-start"/);
   assert.match(external, /resourceId: videoId/);

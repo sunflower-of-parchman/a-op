@@ -88,6 +88,7 @@ export function VideoDetail({
               provider={video.delivery.provider}
               title={video.title}
               videoId={video.id}
+              posterHref={video.delivery.posterHref}
             />
           ) : (
             <div className={styles.playerBoundary}>

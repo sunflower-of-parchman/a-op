@@ -58,6 +58,38 @@ test("the shared foundation exposes keyboard, touch, reduced-motion, and respons
   assert.match(css, /width:\s*calc\(100% - 2rem\)/);
 });
 
+test("approved page heroes open Courses, Videos, Membership, and Licensing through one server delivery contract", async () => {
+  const [component, styles, deliveryRoute, ...pages] = await Promise.all([
+    readFile("components/public/PageHero.tsx", "utf8"),
+    readFile("components/public/PageHero.module.css", "utf8"),
+    readFile("app/api/media/heroes/[pageKey]/route.ts", "utf8"),
+    readFile("app/(public)/courses/page.tsx", "utf8"),
+    readFile("app/(public)/videos/page.tsx", "utf8"),
+    readFile("app/(public)/membership/page.tsx", "utf8"),
+    readFile("app/(public)/licensing/page.tsx", "utf8"),
+  ]);
+
+  assert.match(
+    component,
+    /<img[\s\S]*alt=\{hero\.altText\}[\s\S]*src=\{hero\.url\}/,
+  );
+  assert.match(
+    component,
+    /<h1(?:\s+className=\{styles\.title\})?>\{title\}<\/h1>/,
+  );
+  assert.match(styles, /object-fit:\s*cover/);
+  assert.match(styles, /@media \(prefers-reduced-motion:\s*reduce\)/);
+  assert.match(
+    deliveryRoute,
+    /deliverPageHero\(\{[\s\S]*binding:\s*env\.DB,[\s\S]*bucket:\s*env\.MEDIA,[\s\S]*pageKey:\s*key/,
+  );
+  assert.match(deliveryRoute, /PAGE_HERO_KEYS\.includes/);
+  for (const page of pages) {
+    assert.match(page, /readPublicPageHero\(env\.DB/);
+    assert.match(page, /<PageHero/);
+  }
+});
+
 test("the compact public navigation uses the agreed hamburger-to-close contract", async () => {
   const [header, navigation] = await Promise.all([
     readFile("components/public/SiteHeader.tsx", "utf8"),

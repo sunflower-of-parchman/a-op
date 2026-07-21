@@ -137,12 +137,14 @@ test("fictional runtime roles bootstrap as one replay-safe D1 batch", async () =
   );
 
   assert.equal(batches.length, 1);
-  assert.equal(prepared.length, 10);
-  assert.equal(results.length, 10);
+  assert.equal(prepared.length, 13);
+  assert.equal(results.length, 13);
   assert.match(prepared[0].sql, /ON CONFLICT\(id\) DO UPDATE/);
   assert.match(prepared[1].sql, /INSERT INTO profiles/);
-  assert.match(prepared[6].sql, /INSERT INTO role_assignments/);
-  assert.match(prepared[9].sql, /ON CONFLICT\(id\) DO NOTHING/);
+  assert.match(prepared[6].sql, /UPDATE role_assignments/);
+  assert.deepEqual(prepared[6].bindings, ["user_runtime_owner", "owner"]);
+  assert.match(prepared[7].sql, /INSERT INTO role_assignments/);
+  assert.match(prepared[12].sql, /ON CONFLICT\(id\) DO NOTHING/);
 
   const serialized = JSON.stringify({
     fixtures: FICTIONAL_RUNTIME_IDENTITIES,

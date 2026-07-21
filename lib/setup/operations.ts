@@ -66,6 +66,13 @@ const TOPIC_OPERATION_SEEDS = Object.freeze([
     requiredApproval: "configuration",
   },
   {
+    topic: "courses-video",
+    action: "reconcile-courses-video-foundation",
+    target: "courses-video-foundation",
+    mutationBoundary: "d1",
+    requiredApproval: "configuration",
+  },
+  {
     topic: "customer-access",
     action: "reconcile-access-definitions",
     target: "access-definitions",
@@ -97,6 +104,13 @@ const TOPIC_OPERATION_SEEDS = Object.freeze([
     topic: "courses-video",
     action: "reconcile-courses-video-drafts",
     target: "courses-video",
+    mutationBoundary: "d1",
+    requiredApproval: "configuration",
+  },
+  {
+    topic: "editorial-presentation",
+    action: "reconcile-editorial-presentation",
+    target: "editorial-presentation",
     mutationBoundary: "d1",
     requiredApproval: "configuration",
   },

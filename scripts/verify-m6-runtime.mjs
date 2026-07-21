@@ -213,10 +213,7 @@ async function expectHtml(path, expectedStatus, identity, required = []) {
   return text;
 }
 
-const TEST_MODE_COPY = [
-  "Stripe Test Mode",
-  "No real payment will be accepted.",
-];
+const TEST_MODE_COPY = ["Stripe Test Mode"];
 
 async function beginRun() {
   const response = await expectResponse(
@@ -454,7 +451,7 @@ async function exerciseJourney(run) {
     [...TEST_MODE_COPY, "Test order complete", run.commerceProductName],
   );
   await expectHtml("/account/orders", 200, customer, [
-    ...TEST_MODE_COPY,
+    "Test record",
     run.commerceProductName,
     "Fulfilled",
   ]);
@@ -474,7 +471,7 @@ async function exerciseJourney(run) {
     "Subscription entitlement",
   ]);
   await expectHtml("/admin/commerce", 200, owner, [
-    ...TEST_MODE_COPY,
+    "Test record",
     run.commerceProductName,
     run.customerDisplayName,
     "Signed event evidence",

@@ -11,6 +11,7 @@ export interface ContactFormProps {
   readonly description?: string | null;
   readonly defaultCategory?: string;
   readonly embedded?: boolean;
+  readonly consentInSubmitAction?: boolean;
 }
 
 export function ContactForm({
@@ -19,6 +20,7 @@ export function ContactForm({
   description,
   defaultCategory,
   embedded = false,
+  consentInSubmitAction = false,
 }: ContactFormProps) {
   const operationKey = useRef(crypto.randomUUID());
   const [pending, setPending] = useState(false);
@@ -50,7 +52,8 @@ export function ContactForm({
         body: JSON.stringify({
           formKey: form.formKey,
           consentVersionId: form.consent.id,
-          consentAccepted: data.get("consentAccepted") === "on",
+          consentAccepted:
+            consentInSubmitAction || data.get("consentAccepted") === "on",
           name: data.get("name"),
           email: data.get("email"),
           category: data.get("category"),
@@ -161,24 +164,26 @@ export function ContactForm({
           <span>Message</span>
           <textarea name="message" rows={8} maxLength={12_000} required />
         </label>
-        <label className={styles.consent}>
-          <input name="consentAccepted" type="checkbox" required />
-          <span>
-            {form.consent.text}{" "}
-            <small>Consent version {form.consent.version}</small>
-          </span>
-        </label>
-        <p className={styles.boundary}>
-          This form stores the inquiry in the artist&apos;s a-op installation.
-          Its delivery adapter is stored only.
-        </p>
+        {consentInSubmitAction ? null : (
+          <label className={styles.consent}>
+            <input name="consentAccepted" type="checkbox" required />
+            <span>
+              {form.consent.text}{" "}
+              <small>Consent version {form.consent.version}</small>
+            </span>
+          </label>
+        )}
         <div className={styles.actions}>
           <button
             className="button button-primary"
             disabled={pending}
             type="submit"
           >
-            {pending ? "Storing…" : "Send inquiry"}
+            {pending
+              ? "Storing…"
+              : consentInSubmitAction
+                ? "Agree and send inquiry"
+                : "Send inquiry"}
           </button>
           <p className={styles.message} data-tone={tone} aria-live="polite">
             {message}

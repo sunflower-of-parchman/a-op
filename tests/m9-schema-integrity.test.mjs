@@ -52,8 +52,8 @@ test("the M9 foundation creates 99 tables and an inert setup checkpoint", async 
   const database = new DatabaseSync(":memory:");
 
   try {
-    assert.equal(migrations.names.length, 33);
-    assert.match(migrations.names[32], /^0032_.+\.sql$/);
+    assert.equal(migrations.names.length, 35);
+    assert.match(migrations.names[34], /^0034_.+\.sql$/);
     for (const migration of migrations.contents)
       applyMigration(database, migration);
     assertClean(database);

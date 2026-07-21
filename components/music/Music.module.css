@@ -371,10 +371,9 @@
 
 .trackColumnHeader {
   display: grid;
-  grid-template-columns: minmax(15rem, 1fr) minmax(14rem, 17rem) minmax(
-      2.75rem,
-      4rem
-    ) auto;
+  grid-template-columns:
+    minmax(15rem, 1fr) minmax(14rem, 17rem) minmax(2.75rem, 4rem)
+    auto;
   align-items: center;
   min-height: 2.75rem;
   color: var(--ink-muted);
@@ -390,10 +389,9 @@
 
 .catalogRow {
   display: grid;
-  grid-template-columns: minmax(15rem, 1fr) minmax(14rem, 17rem) minmax(
-      2.75rem,
-      4rem
-    ) auto;
+  grid-template-columns:
+    minmax(15rem, 1fr) minmax(14rem, 17rem) minmax(2.75rem, 4rem)
+    auto;
   align-items: center;
   min-height: 4.4rem;
   padding-block: 0.45rem;
@@ -422,6 +420,51 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 2px;
+}
+
+.artworkPlayback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  background: transparent;
+  transition: background-color 160ms ease;
+}
+
+.artworkPlayback:hover,
+.artworkPlayback:focus-within {
+  background: color-mix(in srgb, var(--canvas) 52%, transparent);
+}
+
+.artworkPlayback button {
+  border-color: transparent;
+  background: transparent;
+  color: #fffdfc;
+  opacity: 0;
+  outline: 0;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.artworkPlayback button:hover,
+.artworkPlayback button:focus-visible {
+  border-color: transparent;
+  background: transparent;
+  transform: scale(1.08);
+}
+
+.artworkPlayback:hover button,
+.artworkPlayback:focus-within button,
+.artworkPlayback button[aria-pressed="true"] {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .artworkPlayback button {
+    opacity: 1;
+  }
 }
 
 .indexArtworkEmpty {

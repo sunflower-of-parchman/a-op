@@ -259,7 +259,7 @@ test("D1 export emits every fixed document with provider-neutral definitions onl
   assert.equal(rehearsal.duplicateCount, 0);
   assert.equal(rehearsal.commerceBindingState, "pending");
   assert.equal(rehearsal.applicationSchemaRestored, true);
-  assert.equal(rehearsal.migrationCount, 34);
+  assert.equal(rehearsal.migrationCount, 35);
   assert.equal(rehearsal.foreignKeyViolationCount, 0);
   assert.equal(rehearsal.sourceObjectKeysRestored, 0);
   assert.equal(rehearsal.mediaBytesRestored, 0);

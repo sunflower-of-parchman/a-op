@@ -26,6 +26,8 @@ Music publishing, catalog, streaming, identity, access, and administration form 
 
 Public navigation, routes, administration, setup, jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history.
 
+Begin every installation by asking which supported capabilities the artist wants to use. Build the asset and information checklist from those choices, then inspect only artist-approved local folders. Present the resulting setup proposal before applying it. Imported content populates the existing product repositories and native interfaces; it never replaces the visual foundation, player, navigation, access controls, or module components with a content-specific renderer.
+
 ## Active plan
 
 `plans/migrateAopToSites.md` is the controlling implementation plan. Keep its `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` sections current as implementation proceeds.

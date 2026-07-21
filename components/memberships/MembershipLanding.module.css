@@ -2,7 +2,7 @@
   display: grid;
   min-height: min(48rem, calc(100svh - 5.25rem));
   align-items: center;
-  padding-block: clamp(3.5rem, 9vw, 8rem);
+  padding-block: clamp(4rem, 9vw, 8rem);
 }
 
 .membership {
@@ -34,8 +34,7 @@
   line-height: 1.05;
 }
 
-.offerIdentity > p:not(.price),
-.licensingNote {
+.offerIdentity > p:not(.price) {
   color: var(--ink-muted);
 }
 
@@ -58,20 +57,9 @@
   gap: 0.9rem;
 }
 
-.textLink,
-.licensingNote a,
-.accountLinks a {
+.textLink {
   color: var(--ink);
   text-underline-offset: 0.28em;
-}
-
-.licensingNote {
-  margin: 0;
-  font-size: 0.82rem;
-}
-
-.licensingNote a {
-  margin-left: 0.2em;
 }
 
 .benefits {
@@ -82,6 +70,7 @@
 }
 
 .benefitLink {
+  position: relative;
   display: flex;
   min-width: 0;
   align-items: end;
@@ -97,16 +86,32 @@
     transform 240ms ease;
 }
 
+.benefitLink img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 420ms ease;
+}
+
 .benefitLink span {
+  position: relative;
+  z-index: 1;
   width: 100%;
   padding: 0.9rem 1rem;
   border-top: 1px solid var(--slate);
+  background: color-mix(in srgb, var(--canvas) 82%, transparent);
 }
 
 .benefitLink:hover {
   border-color: var(--ink);
   background: var(--canvas-raised);
   transform: translateY(-2px);
+}
+
+.benefitLink:hover img {
+  scale: 1.025;
 }
 
 .benefitLink:focus-visible {
@@ -121,15 +126,6 @@
 .music,
 .credits {
   min-height: 13rem;
-}
-
-.accountLinks {
-  display: flex;
-  grid-column: 1 / -1;
-  flex-wrap: wrap;
-  gap: 0.8rem 2rem;
-  padding-top: 0.25rem;
-  font-size: 0.82rem;
 }
 
 @media (max-width: 900px) {
@@ -153,8 +149,7 @@
     grid-template-rows: repeat(3, minmax(9rem, auto)) auto;
   }
 
-  .courses,
-  .accountLinks {
+  .courses {
     grid-column: auto;
   }
 
@@ -171,5 +166,13 @@
 
   .benefitLink:hover {
     transform: none;
+  }
+
+  .benefitLink img {
+    transition: none;
+  }
+
+  .benefitLink:hover img {
+    scale: 1;
   }
 }

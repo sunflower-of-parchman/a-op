@@ -29,6 +29,8 @@ import {
   type CreditsTopic,
   type CustomerAccessTopic,
   type EditorAccountProposal,
+  type EditorialPostProposal,
+  type EditorialPresentationTopic,
   type ExternalActionKind,
   type ExternalActionProposal,
   type GrantTemplateProposal,
@@ -46,13 +48,16 @@ import {
   type SetupNavigationItem,
   type SetupProposal,
   type SetupResourceType,
+  type SetupStructuredTextBlock,
   type SetupTopics,
   type SourceChangeProposal,
   type StreamingDownloadsTopic,
   type SubscriptionPlanProposal,
   type TelemetryRetentionTopic,
   type TrackAvailabilityProposal,
+  type UpdateEntryProposal,
   type VideoProposal,
+  PAGE_HERO_KEYS,
 } from "./types.ts";
 
 const SAFE_KEY = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
@@ -796,7 +801,25 @@ function parseTrack(
 ): CatalogTrackProposal {
   const object = exactObject(
     value,
-    ["trackKey", "title", "versionLabel", "releaseKey", "sequence", "mediaKey"],
+    [
+      "trackKey",
+      "title",
+      "versionLabel",
+      ...(isRecord(value) && Object.hasOwn(value, "durationMs")
+        ? ["durationMs"]
+        : []),
+      ...(isRecord(value) && Object.hasOwn(value, "meter") ? ["meter"] : []),
+      ...(isRecord(value) && Object.hasOwn(value, "tempoBpm")
+        ? ["tempoBpm"]
+        : []),
+      ...(isRecord(value) && Object.hasOwn(value, "musicalKey")
+        ? ["musicalKey"]
+        : []),
+      ...(isRecord(value) && Object.hasOwn(value, "tags") ? ["tags"] : []),
+      "releaseKey",
+      "sequence",
+      "mediaKey",
+    ],
     path,
     issues,
   );
@@ -809,6 +832,32 @@ function parseTrack(
       issues,
       160,
     ),
+    durationMs:
+      object.durationMs === undefined || object.durationMs === null
+        ? null
+        : integer(
+            object.durationMs,
+            `${path}.durationMs`,
+            issues,
+            0,
+            86_400_000,
+          ),
+    meter:
+      object.meter === undefined || object.meter === null
+        ? null
+        : text(object.meter, `${path}.meter`, issues, { max: 16 }),
+    tempoBpm:
+      object.tempoBpm === undefined || object.tempoBpm === null
+        ? null
+        : integer(object.tempoBpm, `${path}.tempoBpm`, issues, 1, 1000),
+    musicalKey:
+      object.musicalKey === undefined || object.musicalKey === null
+        ? null
+        : text(object.musicalKey, `${path}.musicalKey`, issues, { max: 32 }),
+    tags:
+      object.tags === undefined
+        ? Object.freeze([])
+        : textSet(object.tags, `${path}.tags`, issues, 100, 160),
     releaseKey:
       object.releaseKey === null
         ? null
@@ -828,7 +877,15 @@ function parseRelease(
 ): CatalogReleaseProposal {
   const object = exactObject(
     value,
-    ["releaseKey", "title", "releaseDate", "trackKeys"],
+    [
+      "releaseKey",
+      "title",
+      "releaseDate",
+      "trackKeys",
+      ...(isRecord(value) && Object.hasOwn(value, "artworkMediaKey")
+        ? ["artworkMediaKey"]
+        : []),
+    ],
     path,
     issues,
   );
@@ -837,6 +894,10 @@ function parseRelease(
     title: text(object.title, `${path}.title`, issues, { max: 240 }),
     releaseDate: dateValue(object.releaseDate, `${path}.releaseDate`, issues),
     trackKeys: stringSet(object.trackKeys, `${path}.trackKeys`, issues),
+    artworkMediaKey:
+      object.artworkMediaKey === undefined || object.artworkMediaKey === null
+        ? null
+        : stableKey(object.artworkMediaKey, `${path}.artworkMediaKey`, issues),
   };
 }
 
@@ -847,7 +908,14 @@ function parseCollection(
 ): CatalogCollectionProposal {
   const object = exactObject(
     value,
-    ["collectionKey", "title", "trackKeys"],
+    [
+      "collectionKey",
+      "title",
+      "trackKeys",
+      ...(isRecord(value) && Object.hasOwn(value, "artworkMediaKey")
+        ? ["artworkMediaKey"]
+        : []),
+    ],
     path,
     issues,
   );
@@ -859,6 +927,10 @@ function parseCollection(
     ),
     title: text(object.title, `${path}.title`, issues, { max: 240 }),
     trackKeys: stringSet(object.trackKeys, `${path}.trackKeys`, issues),
+    artworkMediaKey:
+      object.artworkMediaKey === undefined || object.artworkMediaKey === null
+        ? null
+        : stableKey(object.artworkMediaKey, `${path}.artworkMediaKey`, issues),
   };
 }
 
@@ -916,6 +988,17 @@ function parseCatalog(
     }
   }
   for (const release of releases) {
+    if (
+      release.artworkMediaKey !== null &&
+      !mediaKeys.has(release.artworkMediaKey)
+    ) {
+      issue(
+        issues,
+        `${path}.releases`,
+        "missing-media",
+        "Every artwork key must exist in rights and media.",
+      );
+    }
     for (const trackKey of release.trackKeys) {
       if (!trackKeys.has(trackKey)) {
         issue(
@@ -928,6 +1011,17 @@ function parseCatalog(
     }
   }
   for (const collection of collections) {
+    if (
+      collection.artworkMediaKey !== null &&
+      !mediaKeys.has(collection.artworkMediaKey)
+    ) {
+      issue(
+        issues,
+        `${path}.collections`,
+        "missing-media",
+        "Every artwork key must exist in rights and media.",
+      );
+    }
     for (const trackKey of collection.trackKeys) {
       if (!trackKeys.has(trackKey)) {
         issue(
@@ -1817,6 +1911,207 @@ function parseCoursesVideo(
   };
 }
 
+function parseSetupBody(
+  value: unknown,
+  path: string,
+  issues: SetupValidationIssue[],
+): readonly SetupStructuredTextBlock[] {
+  return Object.freeze(
+    array(value, path, issues, 128).map((entry, index) => {
+      const itemPath = `${path}[${index}]`;
+      const item = exactObject(entry, ["type", "text"], itemPath, issues);
+      return Object.freeze({
+        type: literal(
+          item.type,
+          ["heading", "paragraph", "quote"] as const,
+          `${itemPath}.type`,
+          issues,
+        ),
+        text: text(item.text, `${itemPath}.text`, issues, { max: 8_000 }),
+      });
+    }),
+  );
+}
+
+function parseEditorialPresentation(
+  value: unknown,
+  path: string,
+  issues: SetupValidationIssue[],
+  mediaByKey: ReadonlyMap<string, ApprovedMediaReference>,
+): EditorialPresentationTopic {
+  const object = exactObject(
+    value,
+    ["posts", "updates", "about", "pageHeroes"],
+    path,
+    issues,
+  );
+  const posts: EditorialPostProposal[] = array(
+    object.posts,
+    `${path}.posts`,
+    issues,
+    200,
+  ).map((entry, index) => {
+    const itemPath = `${path}.posts[${index}]`;
+    const item = exactObject(
+      entry,
+      ["postKey", "title", "excerpt", "body", "publication"],
+      itemPath,
+      issues,
+    );
+    const body = parseSetupBody(item.body, `${itemPath}.body`, issues);
+    if (body.length === 0) {
+      issue(
+        issues,
+        `${itemPath}.body`,
+        "editorial-body-required",
+        "Every editorial post needs at least one authored text block.",
+      );
+    }
+    return {
+      postKey: stableKey(item.postKey, `${itemPath}.postKey`, issues),
+      title: text(item.title, `${itemPath}.title`, issues, { max: 160 }),
+      excerpt: text(item.excerpt, `${itemPath}.excerpt`, issues, {
+        max: 2_000,
+        empty: true,
+      }),
+      body,
+      publication: literal(
+        item.publication,
+        ["draft", "publish"] as const,
+        `${itemPath}.publication`,
+        issues,
+      ),
+    };
+  });
+  const updates: UpdateEntryProposal[] = array(
+    object.updates,
+    `${path}.updates`,
+    issues,
+    200,
+  ).map((entry, index) => {
+    const itemPath = `${path}.updates[${index}]`;
+    const item = exactObject(
+      entry,
+      ["updateKey", "title", "summary", "body", "audience", "publication"],
+      itemPath,
+      issues,
+    );
+    const body = parseSetupBody(item.body, `${itemPath}.body`, issues);
+    if (body.length === 0) {
+      issue(
+        issues,
+        `${itemPath}.body`,
+        "update-body-required",
+        "Every What's New entry needs at least one authored text block.",
+      );
+    }
+    return {
+      updateKey: stableKey(item.updateKey, `${itemPath}.updateKey`, issues),
+      title: text(item.title, `${itemPath}.title`, issues, { max: 160 }),
+      summary: text(item.summary, `${itemPath}.summary`, issues, {
+        max: 2_000,
+        empty: true,
+      }),
+      body,
+      audience: literal(
+        item.audience,
+        ["public", "account"] as const,
+        `${itemPath}.audience`,
+        issues,
+      ),
+      publication: literal(
+        item.publication,
+        ["draft", "publish"] as const,
+        `${itemPath}.publication`,
+        issues,
+      ),
+    };
+  });
+  const aboutObject = exactObject(
+    object.about,
+    ["title", "introduction", "bodyText", "publication"],
+    `${path}.about`,
+    issues,
+  );
+  const pageHeroes = array(
+    object.pageHeroes,
+    `${path}.pageHeroes`,
+    issues,
+    PAGE_HERO_KEYS.length,
+  ).map((entry, index) => {
+    const itemPath = `${path}.pageHeroes[${index}]`;
+    const item = exactObject(
+      entry,
+      ["pageKey", "mediaKey", "altText"],
+      itemPath,
+      issues,
+    );
+    const mediaKey = stableKey(item.mediaKey, `${itemPath}.mediaKey`, issues);
+    const media = mediaByKey.get(mediaKey);
+    if (
+      !media ||
+      (media.kind !== "image" && media.kind !== "artwork") ||
+      media.rights !== "confirmed"
+    ) {
+      issue(
+        issues,
+        `${itemPath}.mediaKey`,
+        "page-hero-media-invalid",
+        "Page hero media must reference one confirmed image in rights and media.",
+      );
+    }
+    return {
+      pageKey: literal(
+        item.pageKey,
+        PAGE_HERO_KEYS,
+        `${itemPath}.pageKey`,
+        issues,
+      ),
+      mediaKey,
+      altText: text(item.altText, `${itemPath}.altText`, issues, { max: 500 }),
+    };
+  });
+  unique(posts, (entry) => entry.postKey, `${path}.posts`, issues);
+  unique(updates, (entry) => entry.updateKey, `${path}.updates`, issues);
+  unique(pageHeroes, (entry) => entry.pageKey, `${path}.pageHeroes`, issues);
+  return {
+    posts: Object.freeze(
+      posts.sort((left, right) => left.postKey.localeCompare(right.postKey)),
+    ),
+    updates: Object.freeze(
+      updates.sort((left, right) =>
+        left.updateKey.localeCompare(right.updateKey),
+      ),
+    ),
+    about: Object.freeze({
+      title: text(aboutObject.title, `${path}.about.title`, issues, {
+        max: 240,
+      }),
+      introduction: text(
+        aboutObject.introduction,
+        `${path}.about.introduction`,
+        issues,
+        { max: 4_000 },
+      ),
+      bodyText: text(aboutObject.bodyText, `${path}.about.bodyText`, issues, {
+        max: 100_000,
+        empty: true,
+      }),
+      publication: literal(
+        aboutObject.publication,
+        ["draft", "publish"] as const,
+        `${path}.about.publication`,
+        issues,
+      ),
+    }),
+    pageHeroes: Object.freeze(
+      pageHeroes.sort((left, right) =>
+        left.pageKey.localeCompare(right.pageKey),
+      ),
+    ),
+  };
+}
+
 function parseContact(
   value: unknown,
   path: string,
@@ -2207,6 +2502,7 @@ function parseMediaActions(
             "stream",
             "download",
             "waveform",
+            "artwork",
             "poster",
             "thumbnail",
             "transcript",
@@ -2448,6 +2744,7 @@ export function validateSetupProposal(value: unknown): SetupProposal {
       "credits",
       "licensing",
       "coursesVideo",
+      "editorialPresentation",
       "contactConsent",
       "telemetryRetention",
       "privacyTerms",
@@ -2541,24 +2838,22 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     issues,
     membershipPlanKeys,
   );
-  const membershipCadenceByKey = new Map<string, "once" | "month" | "year">([
-    ...membershipsSubscriptions.membershipPlans.map(
-      (entry) => [entry.planKey, "once"] as const,
-    ),
-    ...membershipsSubscriptions.subscriptionPlans.map(
-      (entry) => [entry.planKey, entry.billingInterval] as const,
-    ),
-  ]);
+  const oneTimeMembershipPlanKeys = new Set(
+    membershipsSubscriptions.membershipPlans.map((entry) => entry.planKey),
+  );
   for (const rule of [
     ...credits.downloadCreditRules,
     ...credits.licenseCreditRules,
   ]) {
-    if (membershipCadenceByKey.get(rule.planKey) !== rule.cadence) {
+    if (
+      oneTimeMembershipPlanKeys.has(rule.planKey) &&
+      rule.cadence !== "once"
+    ) {
       issue(
         issues,
         "$.topics.credits",
         "credit-cadence-mismatch",
-        "Every credit rule cadence must match its membership benefit cadence.",
+        "A one-time membership credit rule must use the once cadence.",
       );
     }
   }
@@ -2600,6 +2895,12 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     new Set(mediaByKey.keys()),
     accessPlanKeys,
   );
+  const editorialPresentation = parseEditorialPresentation(
+    topicsObject.editorialPresentation,
+    "$.topics.editorialPresentation",
+    issues,
+    mediaByKey,
+  );
   for (const course of coursesVideo.courses) {
     for (const lesson of course.lessons) {
       for (const mediaKey of lesson.mediaKeys) {
@@ -2615,12 +2916,12 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     }
   }
   for (const video of coursesVideo.videos) {
-    if (video.transcript === null) {
+    if (video.mediaKey !== null && video.transcript === null) {
       issue(
         issues,
         "$.topics.coursesVideo.videos",
         "video-transcript-required",
-        "Every hosted or external video needs an artist-approved transcript.",
+        "Every artist-hosted video needs an artist-approved transcript.",
       );
     }
     if (video.mediaKey !== null) {
@@ -2678,8 +2979,42 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     "$.topics.accountsPublication",
     issues,
   );
+  if (
+    accountsPublication.publication.content !== "publish" &&
+    (editorialPresentation.posts.some(
+      ({ publication }) => publication === "publish",
+    ) ||
+      editorialPresentation.updates.some(
+        ({ publication }) => publication === "publish",
+      ) ||
+      editorialPresentation.about.publication === "publish")
+  ) {
+    issue(
+      issues,
+      "$.topics.accountsPublication.publication.content",
+      "editorial-publication-mismatch",
+      "Publishing editorial content requires the approved content publication intent.",
+    );
+  }
   const commerce = parseCommerce(object.commerce, "$.commerce", issues);
   const activeModules = new Set(capabilitiesNavigation.activeModules);
+  const heroModule = new Map([
+    ["courses", "courses"],
+    ["videos", "video"],
+    ["membership", "memberships"],
+    ["licensing", "licensing"],
+  ] as const);
+  for (const hero of editorialPresentation.pageHeroes) {
+    const moduleKey = heroModule.get(hero.pageKey);
+    if (moduleKey && !activeModules.has(moduleKey)) {
+      issue(
+        issues,
+        "$.topics.editorialPresentation.pageHeroes",
+        "inactive-page-hero",
+        `Activate ${moduleKey} before assigning its page hero.`,
+      );
+    }
+  }
 
   const moduleFacts: readonly [boolean, ModuleKey, string][] = [
     [
@@ -2705,6 +3040,12 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     [licensing.options.length > 0, "licensing", "license options"],
     [coursesVideo.courses.length > 0, "courses", "Courses"],
     [coursesVideo.videos.length > 0, "video", "video"],
+    [
+      editorialPresentation.posts.length > 0 ||
+        editorialPresentation.updates.length > 0,
+      "whats-new",
+      "editorial posts and What's New entries",
+    ],
     [contactConsent.enabled, "contact", "contact"],
     [telemetryRetention.enabled, "telemetry", "telemetry"],
   ];
@@ -2742,6 +3083,7 @@ export function validateSetupProposal(value: unknown): SetupProposal {
     credits,
     licensing,
     coursesVideo,
+    editorialPresentation,
     contactConsent,
     telemetryRetention,
     privacyTerms,

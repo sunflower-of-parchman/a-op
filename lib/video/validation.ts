@@ -196,12 +196,19 @@ function validateCredits(
 function validateTranscripts(
   value: unknown,
   issues: VideoValidationIssue[],
+  allowEmpty = false,
 ): readonly VideoTranscriptInput[] {
-  if (!Array.isArray(value) || value.length < 1 || value.length > 16) {
+  if (
+    !Array.isArray(value) ||
+    (!allowEmpty && value.length < 1) ||
+    value.length > 16
+  ) {
     issues.push({
       code: "video-transcripts-invalid",
       field: "transcripts",
-      message: "Provide between one and 16 transcripts.",
+      message: allowEmpty
+        ? "Provide at most 16 transcripts."
+        : "Provide between one and 16 transcripts.",
     });
     return [];
   }
@@ -358,7 +365,11 @@ export function validateVideoDraftInput(
     externalProvider,
     issues,
   );
-  const transcripts = validateTranscripts(value.transcripts, issues);
+  const transcripts = validateTranscripts(
+    value.transcripts,
+    issues,
+    deliveryKind === "external",
+  );
 
   if (
     deliveryKind === "artist_hosted" &&

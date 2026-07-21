@@ -40,14 +40,14 @@ test("context, credits, and transcript precede every player and external media s
   assert.ok(detail.indexOf("Credits") < detail.indexOf("Playback"));
   assert.ok(detail.indexOf("Transcript") < detail.indexOf("Playback"));
   assert.match(consent, /useState\(false\)/);
-  assert.match(consent, /onClick=\{\(\) => setConsented\(true\)\}/);
+  assert.match(consent, /setLocalConsent\(true\)/);
   assert.match(consent, /if \(!consented\)/);
   assert.match(consent, /src=\{embedUrl\}/);
   assert.match(
     consent,
     /sandbox="allow-scripts allow-same-origin allow-presentation"/,
   );
-  assert.match(consent, /referrerPolicy="no-referrer"/);
+  assert.match(consent, /referrerPolicy="strict-origin-when-cross-origin"/);
   assert.match(consent, /!videoId/);
   assert.match(workspace, /videoId=\{null\}/);
 });

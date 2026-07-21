@@ -102,6 +102,11 @@ function CatalogRow({
               unoptimized
             />
           ) : null}
+          {item.playableTrack ? (
+            <div className={styles.artworkPlayback}>
+              <PlayTrackButton compact track={item.playableTrack} />
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.catalogIdentity}>
@@ -128,9 +133,7 @@ function CatalogRow({
       </dl>
 
       <div className={styles.catalogPlayback}>
-        {item.playableTrack ? (
-          <PlayTrackButton compact track={item.playableTrack} />
-        ) : null}
+        <span aria-hidden="true" />
       </div>
 
       <div className={styles.catalogActions}>
@@ -181,12 +184,12 @@ function CatalogCard({ item }: { readonly item: CatalogIndexItemDTO }) {
           </span>
         </span>
       </Link>
-      {item.kind === "release" ? (
+      {item.kind === "release" || item.kind === "collection" ? (
         <PublicFavoriteControl
           compact
           label={item.title}
           targetId={item.id}
-          targetType="release"
+          targetType={item.kind}
         />
       ) : null}
     </article>

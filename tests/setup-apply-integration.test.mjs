@@ -137,7 +137,7 @@ function seedApprovedMediaDerivative(
 
 function proposal(overrides = {}) {
   const value = {
-    schemaVersion: "aop.setup-proposal.v1",
+    schemaVersion: "aop.setup-proposal.v2",
     proposalId: "artist-setup-apply",
     createdAt: "2026-07-19T12:00:00Z",
     sourceStateFingerprint: SOURCE_FINGERPRINT,
@@ -188,6 +188,17 @@ function proposal(overrides = {}) {
       credits: { downloadCreditRules: [], licenseCreditRules: [] },
       licensing: { terms: [], options: [] },
       coursesVideo: { courses: [], videos: [] },
+      editorialPresentation: {
+        posts: [],
+        updates: [],
+        about: {
+          title: "About",
+          introduction: "About this fictional artist.",
+          bodyText: "",
+          publication: "draft",
+        },
+        pageHeroes: [],
+      },
       contactConsent: {
         enabled: false,
         publicEmail: null,
@@ -269,7 +280,7 @@ function context(requestId) {
   };
 }
 
-test("the fourteen-topic D1 plan applies safe receipts and replays without duplicates", async (t) => {
+test("the fifteen-topic D1 plan applies safe receipts and replays without duplicates", async (t) => {
   const memory = await createInMemoryD1();
   t.after(() => memory.close());
   seedOwner(memory.database);
@@ -287,8 +298,8 @@ test("the fourteen-topic D1 plan applies safe receipts and replays without dupli
     context("setup-apply-first"),
   );
   assert.equal(first.schemaVersion, "aop.setup-apply-receipt.v1");
-  assert.equal(first.operationCount, 14);
-  assert.equal(first.operations.length, 14);
+  assert.equal(first.operationCount, 16);
+  assert.equal(first.operations.length, 16);
   assert.deepEqual(
     new Set(first.operations.map(({ topic }) => topic)),
     new Set([
@@ -302,6 +313,7 @@ test("the fourteen-topic D1 plan applies safe receipts and replays without dupli
       "credits",
       "licensing",
       "courses-video",
+      "editorial-presentation",
       "contact-consent",
       "telemetry-retention",
       "privacy-terms",
@@ -327,7 +339,7 @@ test("the fourteen-topic D1 plan applies safe receipts and replays without dupli
       memory.database,
       "SELECT COUNT(*) FROM audit_events WHERE action = 'setup.operation.apply'",
     ),
-    14,
+    16,
   );
   assert.doesNotMatch(
     JSON.stringify(first),
@@ -348,7 +360,7 @@ test("the fourteen-topic D1 plan applies safe receipts and replays without dupli
     plan,
     context("setup-apply-replay"),
   );
-  assert.equal(replay.replayedCount, 14);
+  assert.equal(replay.replayedCount, 16);
   assert.ok(replay.operations.every(({ replayed }) => replayed));
   assert.equal(
     scalar(memory.database, "SELECT COUNT(*) FROM audit_events"),
@@ -498,14 +510,14 @@ test("a complete D1-only plan slice is accepted from a larger approved plan", as
     d1Plan,
     context("setup-d1-slice"),
   );
-  assert.equal(receipt.operationCount, 14);
+  assert.equal(receipt.operationCount, 16);
   assert.ok(receipt.operations.every(({ topic }) => topic !== "source"));
   assert.equal(
     scalar(
       memory.database,
       "SELECT COUNT(*) FROM audit_events WHERE action = 'setup.operation.apply'",
     ),
-    14,
+    16,
   );
 });
 
@@ -524,7 +536,7 @@ test("approved internal publication publishes the exact artist and navigation dr
     plan,
     context("setup-internal-publication"),
   );
-  assert.equal(receipt.operationCount, 15);
+  assert.equal(receipt.operationCount, 17);
   assert.ok(
     receipt.operations.some(
       ({ action, outcome }) =>
@@ -595,7 +607,7 @@ test("configured catalog, contact, and telemetry topics reach their public and a
     plan,
     context("setup-functional-topics"),
   );
-  assert.equal(receipt.operationCount, 14);
+  assert.equal(receipt.operationCount, 16);
   assert.deepEqual(
     {
       ...memory.database
@@ -1158,7 +1170,7 @@ test("non-empty access, membership, credit, licensing, and editor definitions pe
     plan,
     context("setup-complete-topics-replay"),
   );
-  assert.equal(replay.replayedCount, 14);
+  assert.equal(replay.replayedCount, 16);
   assert.deepEqual(
     {
       templates: scalar(
@@ -1265,6 +1277,7 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
     kind: "image",
     contentType: "image/png",
     durationMs: null,
+    visibility: "public",
   });
   const courseImage = seedApprovedMediaDerivative(memory.database, image, {
     id: "media_derivative_setup_course_image",
@@ -1295,6 +1308,9 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
     "downloads",
     "courses",
     "video",
+    "memberships",
+    "licensing",
+    "whats-new",
   ];
   value.topics.rightsMedia = {
     rightsStatement: "The fictional artist confirms these exact media uses.",
@@ -1320,7 +1336,7 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
         sourceAlias: "approved-image-alias",
         kind: "image",
         rights: "confirmed",
-        intendedUse: "protected",
+        intendedUse: "public",
         attribution: null,
       },
       {
@@ -1403,6 +1419,51 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
       },
     ],
   };
+  value.topics.editorialPresentation = {
+    posts: [
+      {
+        postKey: "artist-note",
+        title: "Artist note",
+        excerpt: "A complete fictional editorial post.",
+        body: [{ type: "paragraph", text: "The artist's approved note." }],
+        publication: "publish",
+      },
+    ],
+    updates: [
+      {
+        updateKey: "new-release",
+        title: "New release",
+        summary: "A fictional release update.",
+        body: [{ type: "paragraph", text: "The release is available." }],
+        audience: "public",
+        publication: "publish",
+      },
+    ],
+    about: {
+      title: "About the artist",
+      introduction: "A fictional artist introduction.",
+      bodyText: "## Musical work\n\nThe artist's approved biography.",
+      publication: "publish",
+    },
+    pageHeroes: [
+      {
+        pageKey: "courses",
+        mediaKey: image.mediaKey,
+        altText: "Courses hero.",
+      },
+      { pageKey: "videos", mediaKey: image.mediaKey, altText: "Videos hero." },
+      {
+        pageKey: "membership",
+        mediaKey: image.mediaKey,
+        altText: "Membership hero.",
+      },
+      {
+        pageKey: "licensing",
+        mediaKey: image.mediaKey,
+        altText: "Licensing hero.",
+      },
+    ],
+  };
   value.topics.accountsPublication.publication.catalog = "publish";
   value.topics.accountsPublication.publication.content = "publish";
   const plan = await approvedPlan(value, ["internal-publication"]);
@@ -1413,7 +1474,7 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
     plan,
     context("setup-ready-media-follow-up"),
   );
-  assert.equal(receipt.operationCount, 15);
+  assert.equal(receipt.operationCount, 17);
   assert.deepEqual(
     {
       ...memory.database
@@ -1437,6 +1498,34 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
       streaming_derivative_id: audioStream.id,
       download_derivative_id: audioDownload.id,
     },
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT COUNT(*) FROM editorial_posts WHERE state = 'published'",
+    ),
+    1,
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT COUNT(*) FROM updates WHERE state = 'published'",
+    ),
+    1,
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT COUNT(*) FROM pages WHERE slug = 'about' AND publication_state = 'published'",
+    ),
+    1,
+  );
+  assert.equal(
+    scalar(
+      memory.database,
+      "SELECT COUNT(*) FROM artist_modules WHERE settings_json LIKE '%pageHero%'",
+    ),
+    4,
   );
   assert.deepEqual(
     memory.database
@@ -1566,7 +1655,7 @@ test("a follow-up proposal binds audited ready media and publishes playable trac
     plan,
     context("setup-ready-media-follow-up-replay"),
   );
-  assert.equal(replay.replayedCount, 15);
+  assert.equal(replay.replayedCount, 17);
   assert.deepEqual(
     {
       tracks: scalar(memory.database, "SELECT COUNT(*) FROM track_revisions"),

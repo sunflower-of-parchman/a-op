@@ -2,63 +2,72 @@ import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "@/components/public/PublicInfoPage.module.css";
+import { PageHero } from "@/components/public/PageHero";
+import { readPublicArtwork } from "@/db/public-media.ts";
+import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
 import { readPublishedPageBySlug } from "@/db/site-read.ts";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "About the musician, their work, and this artist-owned platform.",
 };
 
 export default async function AboutPage() {
-  const page = await readPublishedPageBySlug(env.DB, "about");
-  const introduction =
-    page?.revision.introduction ??
-    "This is an artist-owned home for music, direct access, and the work around it.";
+  const [page, portrait, mosaicImages] = await Promise.all([
+    readPublishedPageBySlug(env.DB, "about"),
+    readPublicArtwork(
+      env.DB,
+      "media-about-profile-artwork",
+      "Portrait of Michael Wall",
+    ),
+    readPublicMosaicImages(env.DB),
+  ]);
+  const bodyBlocks =
+    page?.revision.bodyText
+      ?.split(/\n\s*\n/)
+      .map((block) => block.trim())
+      .filter(Boolean) ?? [];
+  const introduction = page?.revision.introduction ?? "";
 
   return (
-    <article className={styles.page}>
-      <header className={styles.heading}>
-        <h1>{page?.revision.title ?? "About"}</h1>
-        <p className="intro-copy">{introduction}</p>
-      </header>
+    <>
+      <PageHero
+        hero={null}
+        mosaicImages={mosaicImages}
+        title={page?.revision.title ?? "About"}
+      />
+      <article className={`${styles.page} ${styles.aboutPage}`}>
+        {portrait ? (
+          <img
+            alt={portrait.alt}
+            className={styles.aboutPortrait}
+            src={portrait.url}
+          />
+        ) : null}
 
-      {page?.revision.bodyText ? (
-        <p className={styles.prose}>{page.revision.bodyText}</p>
-      ) : null}
+        <div className={styles.aboutCopy}>
+          {introduction ? <p className="intro-copy">{introduction}</p> : null}
+          {bodyBlocks.length > 0 ? (
+            <div className={styles.prose}>
+              {bodyBlocks.map((block, index) =>
+                block.startsWith("## ") ? (
+                  <h2 key={`${index}-${block}`}>{block.slice(3)}</h2>
+                ) : (
+                  <p key={`${index}-${block}`}>{block}</p>
+                ),
+              )}
+            </div>
+          ) : null}
+        </div>
 
-      <div className={styles.sectionGrid}>
-        <section className={styles.section}>
-          <h2>Music</h2>
-          <p>
-            Releases, tracks, streaming, downloads, and licensing live in one
-            catalog controlled by the artist.
-          </p>
-        </section>
-        <section className={styles.section}>
-          <h2>Direct access</h2>
-          <p>
-            Customer accounts can hold favorites, playlists, purchases,
-            licenses, memberships, subscriptions, and Courses in the same place.
-          </p>
-        </section>
-        <section className={styles.section}>
-          <h2>Artist owned</h2>
-          <p>
-            The artist controls their fork, deployment, content, data, customer
-            relationship, and artist-specific changes.
-          </p>
-        </section>
-      </div>
-
-      <nav className={styles.linkDirectory} aria-label="Explore this site">
-        <Link href="/music">Music</Link>
-        <Link href="/courses">Courses</Link>
-        <Link href="/licensing">Licensing</Link>
-        <Link href="/contact">Contact</Link>
-      </nav>
-    </article>
+        <nav className={styles.linkDirectory} aria-label="Explore this site">
+          <Link href="/music">Music</Link>
+          <Link href="/courses">Courses</Link>
+          <Link href="/licensing">Licensing</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
+      </article>
+    </>
   );
 }

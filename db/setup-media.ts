@@ -6,7 +6,11 @@ import type {
 } from "@/lib/setup/types.ts";
 import { RuntimeError } from "@/lib/runtime/index.ts";
 
-type SetupMediaTopic = "streaming-downloads" | "courses-video";
+type SetupMediaTopic =
+  | "catalog-releases"
+  | "streaming-downloads"
+  | "courses-video"
+  | "editorial-presentation";
 
 interface SetupMediaSourceRow {
   readonly id: string;
@@ -57,6 +61,47 @@ export interface SetupVideoMediaBinding {
   readonly hostedDerivativeId: string;
   readonly posterDerivativeId: string | null;
   readonly captionsDerivativeId: string | null;
+}
+
+export interface SetupPageHeroMediaBinding {
+  readonly derivativeId: string;
+}
+
+export interface SetupArtworkMediaBinding {
+  readonly derivativeId: string;
+}
+
+export async function resolveSetupArtworkMedia(
+  binding: D1Database,
+  reference: ApprovedMediaReference,
+  actorUserId: string,
+): Promise<SetupArtworkMediaBinding> {
+  const bundle = await resolveSetupMediaBundle(
+    binding,
+    reference,
+    actorUserId,
+    "catalog-releases",
+  );
+  if (
+    bundle.source.kind !== "image" ||
+    !bundle.source.content_type.startsWith("image/")
+  ) {
+    throw setupMediaError(
+      "SETUP_MEDIA_INCOMPATIBLE",
+      "catalog-releases",
+      reference.mediaKey,
+      "Catalog artwork must be an approved image source.",
+    );
+  }
+  const derivative = exactDerivative(
+    bundle,
+    reference,
+    "catalog-releases",
+    "catalog artwork",
+    (row) => row.kind === "artwork" && row.content_type.startsWith("image/"),
+    true,
+  )!;
+  return Object.freeze({ derivativeId: derivative.id });
 }
 
 function setupMediaError(
@@ -268,7 +313,8 @@ function durationMatches(
   return (
     source.duration_ms !== null &&
     source.duration_ms > 0 &&
-    derivative.duration_ms === source.duration_ms
+    derivative.duration_ms !== null &&
+    Math.abs(derivative.duration_ms - source.duration_ms) <= 50
   );
 }
 
@@ -501,6 +547,42 @@ export async function resolveSetupVideoMedia(
   });
 }
 
+export async function resolveSetupPageHeroMedia(
+  binding: D1Database,
+  reference: ApprovedMediaReference,
+  actorUserId: string,
+): Promise<SetupPageHeroMediaBinding> {
+  const topic = "editorial-presentation" as const;
+  const bundle = await resolveSetupMediaBundle(
+    binding,
+    reference,
+    actorUserId,
+    topic,
+  );
+  if (
+    bundle.source.kind !== "image" ||
+    !bundle.source.content_type.startsWith("image/")
+  ) {
+    throw setupMediaError(
+      "SETUP_MEDIA_INCOMPATIBLE",
+      topic,
+      reference.mediaKey,
+      "Page hero media must be an approved image source.",
+    );
+  }
+  const derivative = exactDerivative(
+    bundle,
+    reference,
+    topic,
+    "page hero",
+    (row) =>
+      ["artwork", "poster", "thumbnail", "other"].includes(row.kind) &&
+      row.content_type.startsWith("image/"),
+    true,
+  )!;
+  return Object.freeze({ derivativeId: derivative.id });
+}
+
 /**
  * Resolves every media pointer in an exact proposal before setup begins any
  * product-topic mutation. Individual writers resolve again immediately before
@@ -520,6 +602,22 @@ export async function assertSetupMediaBindings(
       track,
     ]),
   );
+  for (const parent of [
+    ...proposal.topics.catalogReleases.releases,
+    ...proposal.topics.catalogReleases.collections,
+  ]) {
+    if (parent.artworkMediaKey === null) continue;
+    const reference = mediaByKey.get(parent.artworkMediaKey);
+    if (!reference) {
+      throw setupMediaError(
+        "SETUP_MEDIA_MISSING",
+        "catalog-releases",
+        parent.artworkMediaKey,
+        "The exact artwork declaration is missing.",
+      );
+    }
+    await resolveSetupArtworkMedia(binding, reference, actorUserId);
+  }
   for (const availability of proposal.topics.streamingDownloads.tracks) {
     const mediaKey = catalogByKey.get(availability.trackKey)?.mediaKey ?? null;
     if (mediaKey === null) continue;
@@ -563,5 +661,17 @@ export async function assertSetupMediaBindings(
       );
     }
     await resolveSetupVideoMedia(binding, reference, actorUserId);
+  }
+  for (const hero of proposal.topics.editorialPresentation.pageHeroes) {
+    const reference = mediaByKey.get(hero.mediaKey);
+    if (!reference) {
+      throw setupMediaError(
+        "SETUP_MEDIA_MISSING",
+        "editorial-presentation",
+        hero.mediaKey,
+        "The exact rights and media declaration is missing.",
+      );
+    }
+    await resolveSetupPageHeroMedia(binding, reference, actorUserId);
   }
 }

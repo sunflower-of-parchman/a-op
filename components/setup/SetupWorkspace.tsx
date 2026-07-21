@@ -238,7 +238,7 @@ export function SetupWorkspace({
         <p className="eyebrow">ChatGPT Work setup</p>
         <h2>Proposal, approval, and recovery</h2>
         <p>
-          ChatGPT Work prepares a complete fourteen-topic proposal. Preview
+          ChatGPT Work prepares a complete fifteen-topic proposal. Preview
           validates the exact artifact with zero writes. Apply accepts only the
           artist owner’s approval for that proposal hash and records durable,
           replay-safe results.

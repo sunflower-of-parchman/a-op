@@ -32,6 +32,15 @@ test("customer-library validators accept exact normalized request shapes", () =>
       },
     },
   );
+  assert.equal(
+    validateFavoriteDesiredStateInput({
+      targetType: "collection",
+      targetId: "collection_one",
+      active: true,
+      expectedRevision: null,
+    }).ok,
+    true,
+  );
 
   assert.deepEqual(
     validatePlaylistCreateInput({

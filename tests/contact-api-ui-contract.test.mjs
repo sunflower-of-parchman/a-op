@@ -78,7 +78,8 @@ test("public and administration surfaces show consent and stored-only delivery w
   assert.match(form, /form\.publicContactDetails/);
   assert.match(form, />Booking</);
   assert.match(form, />Contact details</);
-  assert.match(form, /delivery adapter is stored only/i);
+  assert.match(form, /Your inquiry is stored for the artist\./);
+  assert.match(form, /fetch\("\/api\/contact"/);
   assert.match(
     admin,
     /Existing\s+inquiries[\s\S]*retain the text they accepted/i,

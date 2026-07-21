@@ -1,10 +1,12 @@
 import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import { VideoIndex } from "@/components/video/VideoIndex";
+import { PageHero } from "@/components/public/PageHero";
 import {
   listPublishedVideos,
   readPublishedVideoBySlug,
 } from "@/db/video-read.ts";
+import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
 import { requireActiveModule } from "@/lib/modules/active-module.ts";
 
 export const dynamic = "force-dynamic";
@@ -17,22 +19,34 @@ export default async function VideosPage({
   readonly searchParams: Promise<{ video?: string | string[] }>;
 }) {
   await requireActiveModule(env.DB, "video");
-  const videos = await listPublishedVideos(env.DB);
+  const [videos, mosaicImages] = await Promise.all([
+    listPublishedVideos(env.DB),
+    readPublicMosaicImages(env.DB),
+  ]);
   const rawSelection = (await searchParams).video;
   const requestedSlug = Array.isArray(rawSelection)
     ? rawSelection[0]
     : rawSelection;
   const activeSlug =
     videos.find(({ slug }) => slug === requestedSlug)?.slug ?? videos[0]?.slug;
-  const activeVideo = activeSlug
-    ? await readPublishedVideoBySlug(env.DB, activeSlug)
-    : null;
+  const publishedVideos = (
+    await Promise.all(
+      videos.map(({ slug }) => readPublishedVideoBySlug(env.DB, slug)),
+    )
+  ).filter((video) => video !== null);
+  const activeVideo =
+    publishedVideos.find(({ slug }) => slug === activeSlug) ??
+    publishedVideos[0] ??
+    null;
 
   return (
-    <VideoIndex
-      activeVideo={activeVideo}
-      previewSelection={requestedSlug ?? null}
-      videos={videos}
-    />
+    <>
+      <PageHero hero={null} mosaicImages={mosaicImages} title="Videos" />
+      <VideoIndex
+        activeVideo={activeVideo}
+        previewSelection={requestedSlug ?? null}
+        videos={publishedVideos}
+      />
+    </>
   );
 }

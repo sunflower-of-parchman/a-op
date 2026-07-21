@@ -48,6 +48,84 @@
   border-top: 1px solid var(--slate);
 }
 
+.courseList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 0;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.courseCard {
+  min-width: 0;
+}
+
+.courseCard > a {
+  position: relative;
+  display: grid;
+  min-height: clamp(22rem, 42vw, 34rem);
+  overflow: hidden;
+  border: 1px solid var(--slate);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.courseArtwork,
+.courseArtworkFallback {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+}
+
+.courseArtwork {
+  object-fit: cover;
+  transition: transform 320ms ease;
+  z-index: -2;
+}
+
+.courseArtworkFallback {
+  background: var(--field);
+  z-index: -2;
+}
+
+.courseCard > a::after {
+  position: absolute;
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 6%) 30%,
+    rgb(0 0 0 / 78%) 100%
+  );
+  content: "";
+  inset: 0;
+  z-index: -1;
+}
+
+.courseCard > a:hover .courseArtwork,
+.courseCard > a:focus-visible .courseArtwork {
+  transform: scale(1.015);
+}
+
+.courseOverlay {
+  display: grid;
+  align-self: end;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  gap: 0.7rem;
+}
+
+.courseOverlay strong {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.04;
+}
+
+.courseMeta,
+.courseOverlay .accessLabel {
+  color: rgb(255 255 255 / 82%);
+  font-size: 0.82rem;
+}
+
 .courseRow,
 .adminRow,
 .accountRow {
@@ -108,6 +186,22 @@
 .accessLabel[data-allowed="true"],
 .status[data-state="published"] {
   color: var(--status-green);
+}
+
+@media (max-width: 46rem) {
+  .courseList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .courseCard > a {
+    min-height: 26rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .courseArtwork {
+    transition: none;
+  }
 }
 
 .detailHeader {

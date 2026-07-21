@@ -345,10 +345,13 @@ export async function saveVideoDraft(
 }
 
 function revisionReadinessCondition(revisionAlias: string): string {
-  return `EXISTS (
-           SELECT 1 FROM video_transcripts AS transcript
-           WHERE transcript.video_revision_id = ${revisionAlias}.id
-             AND length(trim(transcript.transcript_text)) > 0
+  return `(
+           ${revisionAlias}.delivery_kind = 'external'
+           OR EXISTS (
+             SELECT 1 FROM video_transcripts AS transcript
+             WHERE transcript.video_revision_id = ${revisionAlias}.id
+               AND length(trim(transcript.transcript_text)) > 0
+           )
          )
          AND NOT EXISTS (
            SELECT 1
@@ -495,7 +498,11 @@ async function readPublicationSnapshot(
     )
     .bind(revisionId)
     .all<PublicationTranscriptRow>();
-  if (!transcriptResult.success || transcriptResult.results.length < 1) {
+  if (
+    !transcriptResult.success ||
+    (revision.delivery_kind !== "external" &&
+      transcriptResult.results.length < 1)
+  ) {
     return null;
   }
   return Object.freeze({

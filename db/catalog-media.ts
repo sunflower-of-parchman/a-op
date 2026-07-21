@@ -343,6 +343,19 @@ export async function readArtworkDelivery(
                AND collection_revisions.view_mode = 'public'
                AND collection_revisions.artwork_derivative_id = derivative.id
            )
+           OR EXISTS (
+             SELECT 1 FROM courses
+             WHERE courses.publication_state = 'published'
+               AND courses.published_revision_id IS NOT NULL
+               AND derivative.id = 'media-course-' || courses.slug || '-artwork'
+           )
+           OR EXISTS (
+             SELECT 1 FROM pages
+             WHERE pages.slug = 'about'
+               AND pages.publication_state = 'published'
+               AND pages.published_revision_id IS NOT NULL
+               AND derivative.id = 'media-about-profile-artwork'
+           )
          )
        LIMIT 1`,
     )

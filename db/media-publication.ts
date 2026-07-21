@@ -86,7 +86,7 @@ function approvalCondition(publication: MediaPublication) {
         AND media_setup_application.proposal_hash = ?
         AND media_setup_application.proposal_schema_version = 1
         AND media_setup_application.approval_hash = ?
-        AND media_setup_application.status = 'applied'
+        AND media_setup_application.status IN ('applying', 'applied')
         AND media_setup_application.approved_by_user_id IS NOT NULL
         AND media_setup_application.approved_at IS NOT NULL
         ${externalReceipt}

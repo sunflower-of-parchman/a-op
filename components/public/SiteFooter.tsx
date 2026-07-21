@@ -9,23 +9,13 @@ import {
 
 type FooterItem = Pick<NavigationItem, "id" | "label" | "href" | "external">;
 
-const ROUTE_GROUPS = {
-  explore: new Set(["/music", "/videos", "/whats-new"]),
-  membership: new Set(["/membership", "/licensing"]),
-  learn: new Set(["/courses"]),
-  support: new Set(["/about", "/contact"]),
-} as const;
-
-const KNOWN_PRIMARY_ROUTES = new Set(
-  Object.values(ROUTE_GROUPS).flatMap((routes) => [...routes]),
-);
-
-function linkItems(
-  items: readonly NavigationItem[],
-  routes: ReadonlySet<string>,
-): FooterItem[] {
-  return items.filter((item) => routes.has(item.href));
-}
+const FOOTER_GROUPS = Object.freeze([
+  Object.freeze({ label: "Explore", keys: ["music", "videos"] }),
+  Object.freeze({ label: "Membership", keys: ["membership", "licensing"] }),
+  Object.freeze({ label: "Courses", keys: ["courses"] }),
+  Object.freeze({ label: "Support", keys: ["about", "contact"] }),
+  Object.freeze({ label: "Connect", keys: ["whats-new"] }),
+]);
 
 function FooterLink({ item }: { readonly item: FooterItem }) {
   if (item.external) {
@@ -49,12 +39,11 @@ function FooterLink({ item }: { readonly item: FooterItem }) {
 }
 
 export async function SiteFooter() {
-  const [artist, primaryNavigation, footerNavigation] = await Promise.all([
+  const [artist, footerNavigation, primaryNavigation] = await Promise.all([
     readPublishedArtistRevision(env.DB),
-    readPublicNavigationSnapshot(env.DB, "primary"),
     readPublicNavigationSnapshot(env.DB, "footer"),
+    readPublicNavigationSnapshot(env.DB, "primary"),
   ]);
-  const primaryItems = primaryNavigation?.items ?? [];
   const footerItems = (footerNavigation?.items ?? []).filter(
     (item) =>
       item.label !== "GitHub repository" &&
@@ -63,48 +52,25 @@ export async function SiteFooter() {
   const legalItems = footerItems.filter((item) =>
     new Set(["/privacy", "/terms"]).has(item.href),
   );
-  const faqItems = footerItems.filter((item) => item.href === "/faq");
-  const connectItems = footerItems.filter(
-    (item) => !new Set(["/privacy", "/terms", "/faq"]).has(item.href),
+  const configuredDirectoryItems = footerItems.filter(
+    (item) => !legalItems.some(({ id }) => id === item.id),
   );
-  const groups = [
-    {
-      label: "Explore",
-      items: [
-        ...linkItems(primaryItems, ROUTE_GROUPS.explore),
-        ...primaryItems.filter((item) => !KNOWN_PRIMARY_ROUTES.has(item.href)),
-      ],
-    },
-    {
-      label: "Membership",
-      items: [
-        ...linkItems(primaryItems, ROUTE_GROUPS.membership),
-        {
-          id: "footer-account",
-          label: "Account",
-          href: "/account",
-          external: false,
-        },
-      ],
-    },
-    {
-      label: "Courses",
-      items: linkItems(primaryItems, ROUTE_GROUPS.learn),
-    },
-    {
-      label: "Support",
-      items: [...linkItems(primaryItems, ROUTE_GROUPS.support), ...faqItems],
-    },
-    ...(connectItems.length > 0
-      ? [{ label: "Connect", items: connectItems }]
-      : []),
-  ].filter(({ items }) => items.length > 0);
+  const directoryItems =
+    configuredDirectoryItems.length > 0
+      ? configuredDirectoryItems
+      : (primaryNavigation?.items ?? []);
+  const groups = FOOTER_GROUPS.map((group) => ({
+    label: group.label,
+    items: group.keys
+      .map((key) => directoryItems.find(({ itemKey }) => itemKey === key))
+      .filter((item): item is NavigationItem => item !== undefined),
+  })).filter(({ items }) => items.length > 0);
   const copyrightName = artist?.displayName ?? "a-op";
 
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
-        <nav className="site-footer__directory" aria-label="Footer navigation">
+        <div className="site-footer__directory">
           {groups.map((group) => (
             <section className="site-footer__group" key={group.label}>
               <h2>{group.label}</h2>
@@ -117,8 +83,7 @@ export async function SiteFooter() {
               </ul>
             </section>
           ))}
-        </nav>
-
+        </div>
         <div className="site-footer__bottom">
           <nav aria-label="Legal">
             <ul className="site-footer__utility-links">

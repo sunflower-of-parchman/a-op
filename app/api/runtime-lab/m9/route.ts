@@ -663,6 +663,19 @@ async function beginRun(
        VALUES (?1, ?2, 1)`,
     ).bind(`${SNAPSHOT_PREFIX}${run.runId}`, JSON.stringify(snapshot)),
     env.DB.prepare(
+      `UPDATE setup_state
+       SET status = 'unconfigured',
+           proposal_schema_version = NULL,
+           last_proposal_hash = NULL,
+           last_application_id = NULL,
+           state_fingerprint = NULL,
+           revision = revision + 1,
+           last_operation_key = NULL,
+           updated_by_user_id = NULL,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = 'setup'`,
+    ),
+    env.DB.prepare(
       `INSERT INTO users (id, email, normalized_email, status)
        VALUES (?1, ?2, ?2, 'active')`,
     ).bind(run.ownerId, run.ownerEmail),
@@ -1298,6 +1311,18 @@ async function cleanupRun(
     env.DB.prepare("DELETE FROM collections WHERE slug = ?1").bind(
       run.collectionKey,
     ),
+    env.DB.prepare(
+      `DELETE FROM favorites
+       WHERE track_id IN (SELECT id FROM tracks WHERE slug = ?1)`,
+    ).bind(run.trackKey),
+    env.DB.prepare(
+      `DELETE FROM playlist_tracks
+       WHERE track_id IN (SELECT id FROM tracks WHERE slug = ?1)`,
+    ).bind(run.trackKey),
+    env.DB.prepare(
+      `DELETE FROM listening_history
+       WHERE track_id IN (SELECT id FROM tracks WHERE slug = ?1)`,
+    ).bind(run.trackKey),
     env.DB.prepare("DELETE FROM tracks WHERE slug = ?1").bind(run.trackKey),
     env.DB.prepare(
       "DELETE FROM contact_consent_versions WHERE approved_by_user_id = ?1",

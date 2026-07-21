@@ -796,7 +796,7 @@ test("rehearses the verified export twice in disposable in-memory SQLite without
   assert.equal(report.commerceBindingState, "pending");
   assert.equal(report.externalVideoBindingState, "pending");
   assert.equal(report.applicationSchemaRestored, true);
-  assert.equal(report.migrationCount, 34);
+  assert.equal(report.migrationCount, 35);
   assert.equal(report.foreignKeyViolationCount, 0);
   assert.equal(report.sourceObjectKeysRestored, 0);
   assert.equal(report.mediaBytesRestored, 0);
@@ -992,6 +992,25 @@ test("rejects customer records, provider identifiers, card data, object keys, an
   await assert.rejects(() => buildArchive(machinePath), {
     code: "PORTABILITY_PROHIBITED_DATA",
   });
+
+  const windowsMachinePath = fictionalSnapshot();
+  windowsMachinePath.artist[0].fields.find(
+    ({ name }) => name === "introduction",
+  ).value = "C:\\Users\\example\\private\\music.aif";
+  await assert.rejects(() => buildArchive(windowsMachinePath), {
+    code: "PORTABILITY_PROHIBITED_DATA",
+  });
+
+  const structuredText = fictionalSnapshot();
+  structuredText.updates[0].fields.find(
+    ({ name }) => name === "bodyText",
+  ).value = JSON.stringify([
+    {
+      text: "A meter of 3 is used in dance:\n- Slow movement",
+      type: "paragraph",
+    },
+  ]);
+  await assert.doesNotReject(() => buildArchive(structuredText));
 
   const credential = fictionalSnapshot();
   credential.artist[0].fields.find(({ name }) => name === "headline").value =

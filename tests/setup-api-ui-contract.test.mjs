@@ -20,6 +20,7 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
     page,
     readRoute,
     previewRoute,
+    stageRoute,
     applyRoute,
     setupRoute,
     exportRoute,
@@ -29,6 +30,7 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
     source("../app/admin/setup/page.tsx"),
     source("../app/api/admin/setup/route.ts"),
     source("../app/api/admin/setup/preview/route.ts"),
+    source("../app/api/admin/setup/stage/route.ts"),
     source("../app/api/admin/setup/apply/route.ts"),
     source("../app/api/admin/setup/setup-route.ts"),
     source("../app/api/admin/setup/export/route.ts"),
@@ -40,6 +42,7 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
   for (const route of [
     readRoute,
     previewRoute,
+    stageRoute,
     applyRoute,
     exportRoute,
     verifyRoute,
@@ -49,7 +52,7 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
   }
 
   assert.match(setupRoute, /requireSameOrigin\(request\)/);
-  for (const route of [previewRoute, applyRoute]) {
+  for (const route of [previewRoute, stageRoute, applyRoute]) {
     assert.match(route, /readSetupJsonMutation\(request\)/);
     assert.match(route, /requireMutationObject\(/);
   }
@@ -58,6 +61,7 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
     assert.match(route, /requireIdempotencyKey\(request\)/);
   }
   assert.match(applyRoute, /requireIdempotencyKey\(request\)/);
+  assert.match(stageRoute, /requireIdempotencyKey\(request\)/);
   assert.doesNotMatch(previewRoute, /requireIdempotencyKey/);
 
   assert.match(setupRoute, /MAXIMUM_SETUP_BYTES\s*=\s*1_048_576/);
@@ -75,6 +79,8 @@ test("setup administration is owner-only with same-origin, idempotent, bounded m
   );
   assert.match(previewRoute, /value\.length > 32/);
   assert.match(applyRoute, /value\.length > 32/);
+  assert.match(stageRoute, /beginSetupApplication\(/);
+  assert.doesNotMatch(responseSource(stageRoute), RESPONSE_SECRET_FIELDS);
 });
 
 test("setup preview fingerprints customer-independent source state and performs zero writes", async () => {
@@ -238,7 +244,7 @@ test("portability stays customer-independent, in memory, and free of private med
   assert.doesNotMatch(responseSource(verifyRoute), RESPONSE_SECRET_FIELDS);
 });
 
-test("media publication requires the exact applied approval before R2 and returns no private locator", async () => {
+test("media publication requires the exact staged or applied approval before R2 and returns no private locator", async () => {
   const [route, repository, requestReader] = await Promise.all([
     source("../app/api/admin/media-publication/route.ts"),
     source("../db/media-publication.ts"),
@@ -254,7 +260,10 @@ test("media publication requires the exact applied approval before R2 and return
   );
   assert.match(repository, /media_setup_application\.proposal_hash = \?/);
   assert.match(repository, /media_setup_application\.approval_hash = \?/);
-  assert.match(repository, /media_setup_application\.status = 'applied'/);
+  assert.match(
+    repository,
+    /media_setup_application\.status IN \('applying', 'applied'\)/,
+  );
   assert.match(repository, /\$\.externalActionApprovals/);
   assert.match(repository, /public-media-upload/);
   assert.match(repository, /publication\.mediaKey/);

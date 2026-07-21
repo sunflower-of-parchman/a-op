@@ -1,0 +1,92 @@
+.page {
+  display: grid;
+  min-height: calc(100svh - 5rem);
+  grid-template-columns: minmax(24rem, 1fr) minmax(32rem, 1.18fr);
+}
+
+.formSide {
+  display: flex;
+  width: min(100%, 43rem);
+  padding: clamp(4rem, 9vw, 9rem) clamp(2rem, 8vw, 8rem);
+  justify-self: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formSide h1 {
+  margin: 0;
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.introduction {
+  max-width: 31rem;
+  margin: 1.5rem 0 0;
+  color: var(--ink-muted);
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.primaryAction {
+  display: inline-flex;
+  width: 100%;
+  min-height: 4.75rem;
+  margin-top: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.primaryAction:hover {
+  filter: brightness(1.08);
+}
+
+.primaryAction:active {
+  transform: translateY(1px);
+}
+
+.primaryAction:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.accountNote {
+  margin: 1.5rem 0 0;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.mosaicSide {
+  min-width: 0;
+  padding: 0 clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem) 0;
+}
+
+@media (max-width: 62rem) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .formSide {
+    width: min(100%, 44rem);
+    min-height: 34rem;
+    padding: 4rem 1.5rem;
+  }
+
+  .mosaicSide {
+    padding: 0 1rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryAction {
+    transition: none;
+  }
+}

@@ -150,6 +150,7 @@ function credits(value: unknown): readonly VideoCredit[] {
 async function readTranscripts(
   binding: D1Database,
   revisionId: string,
+  allowEmpty = false,
 ): Promise<readonly VideoTranscriptDTO[]> {
   const result = await binding
     .prepare(
@@ -160,7 +161,7 @@ async function readTranscripts(
     )
     .bind(revisionId)
     .all<TranscriptRow>();
-  if (!result.success || result.results.length < 1) {
+  if (!result.success || (!allowEmpty && result.results.length < 1)) {
     integrity("D1 returned a video revision without a transcript.");
   }
   return Object.freeze(
@@ -228,6 +229,7 @@ export async function listPublishedVideos(
         const transcripts = await readTranscripts(
           binding,
           id(row.revision_id, "video revision ID"),
+          row.delivery_kind === "external",
         );
         return basePublicSummary(row, transcripts);
       }),
@@ -253,12 +255,16 @@ export async function readPublishedVideoBySlug(
   const transcripts = await readTranscripts(
     binding,
     id(row.revision_id, "video revision ID"),
+    row.delivery_kind === "external",
   );
   const kind = deliveryKind(row.delivery_kind);
+  const externalProvider = provider(row.external_provider);
   const posterHref =
-    row.poster_derivative_id === null
-      ? null
-      : `/api/videos/${encodeURIComponent(videoId)}/poster`;
+    row.poster_derivative_id !== null ||
+    (kind === "external" &&
+      (externalProvider === "youtube" || externalProvider === "vimeo"))
+      ? `/api/videos/${encodeURIComponent(videoId)}/poster`
+      : null;
   const delivery =
     kind === "artist_hosted"
       ? Object.freeze({
@@ -269,7 +275,7 @@ export async function readPublishedVideoBySlug(
       : Object.freeze({
           kind: "external" as const,
           provider:
-            provider(row.external_provider) ??
+            externalProvider ??
             integrity("D1 returned external video without a provider."),
           embedUrl:
             row.external_embed_url === null
@@ -340,7 +346,11 @@ export async function readAdminVideoBySlug(
     .first<VideoRow>();
   if (!row) return null;
   const revisionId = id(row.revision_id, "video revision ID");
-  const transcripts = await readTranscripts(binding, revisionId);
+  const transcripts = await readTranscripts(
+    binding,
+    revisionId,
+    row.delivery_kind === "external",
+  );
   return Object.freeze({
     id: id(row.id, "video ID"),
     slug: slug(row.slug),

@@ -65,7 +65,7 @@ test("fresh customer migrations create an empty constrained access spine", async
           "SELECT schema_version FROM installation_state WHERE id = 'installation'",
         )
         .get().schema_version,
-      6,
+      19,
     );
     for (const table of CUSTOMER_TABLES) {
       assert.equal(
@@ -81,6 +81,7 @@ test("fresh customer migrations create an empty constrained access spine", async
       download_events: ["download_events_request_unique"],
       entitlements: ["entitlements_source_resource_unique"],
       favorites: [
+        "favorites_user_collection_unique",
         "favorites_user_release_unique",
         "favorites_user_track_unique",
       ],

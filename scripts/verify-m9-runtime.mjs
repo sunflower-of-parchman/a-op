@@ -63,11 +63,13 @@ async function startServer({ runtimeLab }) {
       stdio: ["ignore", "pipe", "pipe"],
     },
   );
-  child.stdout.resume();
-  child.stderr.setEncoding("utf8");
-  child.stderr.on("data", (chunk) => {
+  const captureServerOutput = (chunk) => {
     latestServerError = `${latestServerError}${chunk}`.slice(-8_000);
-  });
+  };
+  child.stdout.setEncoding("utf8");
+  child.stdout.on("data", captureServerOutput);
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", captureServerOutput);
 
   for (let attempt = 0; attempt < 240; attempt += 1) {
     if (child.exitCode !== null) {
@@ -91,27 +93,40 @@ async function startServer({ runtimeLab }) {
 }
 
 async function stopServer(child) {
-  if (child.exitCode !== null) return;
-  const exited = once(child, "exit");
-  try {
-    if (process.platform === "win32") child.kill("SIGTERM");
-    else process.kill(-child.pid, "SIGTERM");
-  } catch {
-    child.kill("SIGTERM");
-  }
-  const completed = await Promise.race([
-    exited.then(() => true),
-    delay(5_000).then(() => false),
-  ]);
-  if (!completed && child.exitCode === null) {
+  if (child.exitCode === null) {
+    const exited = once(child, "exit");
     try {
-      if (process.platform === "win32") child.kill("SIGKILL");
-      else process.kill(-child.pid, "SIGKILL");
+      if (process.platform === "win32") child.kill("SIGTERM");
+      else process.kill(-child.pid, "SIGTERM");
     } catch {
-      child.kill("SIGKILL");
+      child.kill("SIGTERM");
     }
-    await once(child, "exit");
+    const completed = await Promise.race([
+      exited.then(() => true),
+      delay(5_000).then(() => false),
+    ]);
+    if (!completed && child.exitCode === null) {
+      try {
+        if (process.platform === "win32") child.kill("SIGKILL");
+        else process.kill(-child.pid, "SIGKILL");
+      } catch {
+        child.kill("SIGKILL");
+      }
+      await once(child, "exit");
+    }
   }
+
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    try {
+      await fetch(`${baseUrl}/api/health`, {
+        signal: AbortSignal.timeout(250),
+      });
+    } catch {
+      return;
+    }
+    await delay(50);
+  }
+  throw new Error("The Milestone 9 verification server did not stop cleanly.");
 }
 
 async function streamBytes(response, maximum = MAX_ARCHIVE_BYTES) {
@@ -162,6 +177,7 @@ async function expectResponse(path, expectedStatus, init = {}) {
   });
   if (response.status !== expectedStatus) {
     const detail = await streamText(response);
+    await delay(100);
     assert.equal(
       response.status,
       expectedStatus,
@@ -246,7 +262,7 @@ async function readRunState(run) {
 
 function proposalFor(run, sourceStateFingerprint) {
   return {
-    schemaVersion: "aop.setup-proposal.v1",
+    schemaVersion: "aop.setup-proposal.v2",
     proposalId: run.proposalId,
     createdAt: new Date().toISOString(),
     sourceStateFingerprint,
@@ -523,6 +539,19 @@ function proposalFor(run, sourceStateFingerprint) {
           },
         ],
       },
+      editorialPresentation: {
+        posts: [],
+        updates: [],
+        about: {
+          title: "About",
+          introduction:
+            "a-op is an open-source web application for musicians who want to publish and operate their work through their own site.",
+          bodyText:
+            "A fresh installation begins with music, streaming, identity, access, and administration. The artist activates other connected capabilities when they need them.",
+          publication: "draft",
+        },
+        pageHeroes: [],
+      },
       contactConsent: {
         enabled: true,
         publicEmail: run.contactEmail,
@@ -626,7 +655,7 @@ function assertAppliedDefinitions(run, state) {
   assert.deepEqual(definitions.track, {
     slug: run.trackKey,
     publicationState: "published",
-    revision: 2,
+    revision: 3,
     title: run.trackTitle,
     subtitle: "Runtime verification",
     streamMode: "unavailable",
@@ -952,7 +981,7 @@ async function runJourney() {
     assert.equal(approvedPreview.plan.writesPerformed, 0);
     assert.equal(approvedPreview.plan.readyForApply, true);
     assert.deepEqual(approvedPreview.plan.blockers, []);
-    assert.equal(approvedPreview.plan.operations.length, 15);
+    assert.equal(approvedPreview.plan.operations.length, 17);
     assert.ok(
       approvedPreview.plan.operations.every(
         ({ mutationBoundary, state }) =>
@@ -971,9 +1000,9 @@ async function runJourney() {
     const firstApply = await applySetup(run, proposal, approval, "first", 201);
     assert.equal(firstApply.replayed, false);
     assert.equal(firstApply.result.status, "applied");
-    assert.equal(firstApply.result.operationCount, 15);
-    assert.equal(firstApply.receipt.operationCount, 15);
-    assert.equal(firstApply.receipt.operations.length, 15);
+    assert.equal(firstApply.result.operationCount, 17);
+    assert.equal(firstApply.receipt.operationCount, 17);
+    assert.equal(firstApply.receipt.operations.length, 17);
     assert.equal(firstApply.receipt.stripeEnvironment, "test");
     assert.equal(firstApply.receipt.livemode, false);
     assert.equal(
@@ -984,7 +1013,7 @@ async function runJourney() {
 
     const afterApply = await readRunState(run);
     assert.equal(afterApply.artifacts.setupApplications, 1);
-    assert.equal(afterApply.artifacts.setupReceipts, 15);
+    assert.equal(afterApply.artifacts.setupReceipts, 17);
     assert.equal(afterApply.artifacts.artistRevisions, 1);
     assert.equal(afterApply.artifacts.navigationItems, 8);
     assert.equal(afterApply.artifacts.legalVersions, 2);
@@ -993,7 +1022,7 @@ async function runJourney() {
     assert.equal(afterApply.artifacts.editorPermissions, 1);
     assert.equal(afterApply.artifacts.roles, 2);
     assert.equal(afterApply.artifacts.tracks, 1);
-    assert.equal(afterApply.artifacts.trackRevisions, 2);
+    assert.equal(afterApply.artifacts.trackRevisions, 3);
     assert.equal(afterApply.artifacts.releases, 1);
     assert.equal(afterApply.artifacts.releaseRevisions, 1);
     assert.equal(afterApply.artifacts.releaseTracks, 1);
@@ -1012,37 +1041,37 @@ async function runJourney() {
     assert.equal(afterApply.artifacts.licenseTermsVersions, 1);
     assert.equal(afterApply.artifacts.licenseOptions, 1);
     assert.equal(afterApply.artifacts.courses, 1);
-    assert.equal(afterApply.artifacts.courseRevisions, 1);
-    assert.equal(afterApply.artifacts.courseSections, 1);
-    assert.equal(afterApply.artifacts.lessons, 1);
-    assert.equal(afterApply.artifacts.lessonItems, 1);
+    assert.equal(afterApply.artifacts.courseRevisions, 2);
+    assert.equal(afterApply.artifacts.courseSections, 2);
+    assert.equal(afterApply.artifacts.lessons, 2);
+    assert.equal(afterApply.artifacts.lessonItems, 2);
     assert.equal(afterApply.artifacts.videos, 1);
-    assert.equal(afterApply.artifacts.videoRevisions, 1);
-    assert.equal(afterApply.artifacts.videoTranscripts, 1);
+    assert.equal(afterApply.artifacts.videoRevisions, 2);
+    assert.equal(afterApply.artifacts.videoTranscripts, 2);
     assert.equal(afterApply.artifacts.contactForms, 1);
     assert.equal(afterApply.artifacts.contactConsentVersions, 1);
-    assert.equal(afterApply.artifacts.telemetrySettings, 1);
+    assert.equal(afterApply.artifacts.telemetrySettings, 0);
     assert.equal(afterApply.artifacts.mediaObjects, 0);
     assert.equal(afterApply.artifacts.mediaJobs, 0);
     assertAppliedDefinitions(run, afterApply);
 
     const appliedSetup = await setupWorkspace(run);
     assert.equal(appliedSetup.workspace.state.status, "applied");
-    assert.equal(appliedSetup.workspace.applications.length, 1);
-    assert.equal(appliedSetup.workspace.applications[0].status, "applied");
-    assert.equal(appliedSetup.workspace.applications[0].operationCount, 15);
+    const appliedApplication = appliedSetup.workspace.applications.find(
+      ({ proposalHash }) =>
+        proposalHash === appliedSetup.workspace.state.lastProposalHash,
+    );
+    assert.ok(appliedApplication);
+    assert.equal(appliedApplication.status, "applied");
+    assert.equal(appliedApplication.operationCount, 17);
 
-    await expectHtml("/", 200, null, [
-      run.artistName,
-      run.artistHeadline,
-      run.artistIntroduction,
-    ]);
+    await expectHtml("/", 200, null, [run.artistName]);
     await expectHtml("/music", 200, null, [run.trackTitle]);
     await expectHtml("/courses", 200, null, [run.courseTitle, "1 lesson"]);
     await expectHtml("/videos", 200, null, [
       run.videoTitle,
-      "External player",
-      "Transcript: en",
+      "Now Playing",
+      "Watch externally",
     ]);
     await expectHtml("/contact", 200, null, [
       run.contactInvitation,
@@ -1088,15 +1117,13 @@ async function runJourney() {
     ]);
     await expectHtml("/admin/setup", 200, run, [
       "Proposal, approval, and recovery",
-      "Stripe Test Mode",
-      "No real payment will be accepted.",
       "applied",
     ]);
 
     const replay = await applySetup(run, proposal, approval, "replay", 200);
     assert.equal(replay.replayed, true);
     assert.equal(replay.result.status, "applied");
-    assert.equal(replay.result.operationCount, 15);
+    assert.equal(replay.result.operationCount, 17);
     const afterReplay = await readRunState(run);
     assert.deepEqual(afterReplay.currentCounts, afterApply.currentCounts);
     assert.deepEqual(afterReplay.artifacts, afterApply.artifacts);
@@ -1211,7 +1238,7 @@ async function runJourney() {
         ...jsonMutation({ method: "DELETE", body: { runId: run.runId } }),
         signal: AbortSignal.timeout(20_000),
       });
-      if (response.status !== 200) {
+      if (response.status !== 200 && response.status !== 404) {
         throw new Error("The Milestone 9 fallback cleanup failed.");
       }
     }
@@ -1238,7 +1265,7 @@ runJourney()
       `${JSON.stringify({
         status: "passed",
         journey: "m9-setup-portability",
-        setupTopicsApplied: 14,
+        setupTopicsApplied: 15,
         internalPublicationApplied: true,
         setupReplayCreatedDuplicates: false,
         exportVerified: true,

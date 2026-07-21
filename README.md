@@ -2,97 +2,144 @@
 
 **a-op: artist-owned platform** is an open-source web application for musicians.
 
-It gives artists their own music publishing, streaming, distribution, customer access, memberships and subscriptions, licensing, Courses, video, contact, telemetry, and administration in one application.
+An artist can publish music, stream it through their own site, manage customer access, deliver downloads, issue licenses, offer memberships and subscriptions, publish Courses and video, receive inquiries, and run the work from one administration area.
 
-Music comes first. An artist publishes releases and tracks, listeners stream through the artist's Site, customers sign in and build a library, and memberships, subscriptions, licenses, credits, and artist-issued grants create durable access.
+Music is the center of the application. The catalog, player, customer accounts, access records, licensing, memberships, Courses, and administration all use the same artist, account, media, and authorization system.
 
-The complete product description is in [PRODUCT.md](PRODUCT.md). The end-to-end implementation path is in [plans/migrateAopToSites.md](plans/migrateAopToSites.md).
+## Website sections
 
-## Complete from the first launch
+### Home
 
-Every installation starts from the visual framework Michael Wall developed for Sound for Movement, rebuilt in React for Sites with plain `a-op` labels and placeholders. It includes Lato, exact dark and light themes, open layouts, established interface primitives, and responsive behavior. The neutral installation contains no temporary imagery; each artist adds only material approved for their Site.
+The home page introduces the artist's current work. It can show approved imagery, the latest release, current Courses, a featured video, an About introduction, and direct paths to Membership and Licensing. Empty sections stay out of the page until the artist publishes material for them.
 
-Artists add their own music, writing, images, video, collaborators, Courses, access plans, and terms. ChatGPT Work and Codex can then reshape the visual system, page structure, navigation, names, active capabilities, and source code through natural-language collaboration.
+### Music
 
-The exact starting system is recorded in [docs/architecture/visual-direction.md](docs/architecture/visual-direction.md).
+Music contains the artist's releases, albums, tracks, and collections.
 
-## Choose the capabilities
+Listeners can browse, filter, sort, and open individual catalog entries. Public tracks stream through the persistent player, which keeps its queue while the listener moves through the site. Tracks can also carry artwork, credits, duration, meter, tempo, key, availability, download access, and licensing options.
 
-Music publishing, catalog, streaming, identity, access, and administration form the core. An artist can begin with streaming alone and add capabilities as their work grows:
+Signed-in customers can save favorites, create playlists, keep listening history, resume playback, and open music available through a purchase, membership, subscription, license, credit, or artist-issued grant.
 
-- Downloads, customer libraries, protected delivery, and access history.
-- Licensing options, license credits, issued licenses, documents, and history.
-- Memberships and subscriptions with recurring access, renewal dates, cancellations, and included benefits.
-- Courses, mixed-media lessons, access rules, progress, and resume.
-- Video pages, transcripts, artist context, and privacy-aware playback.
-- What's New updates with unread state.
-- Contact forms and inquiry management.
-- First-party telemetry, consent, retention, privacy, and terms.
+### Membership
 
-Navigation, administration, setup, jobs, and telemetry follow the capabilities active in that installation.
+Membership presents the artist's current membership or subscription offer and its included music, Courses, benefits, download credits, or license credits.
 
-## Own the fork and the work
+Customers can see their active relationship, renewal or cancellation state, benefits, credits, and history in their account. The artist can define plans and manage memberships and subscriptions from administration.
 
-An artist operates a fork of `a-op` as their own site. They control their deployment, content, catalog, data, customer relationship, and artist-specific changes. The shared source is licensed under `AGPL-3.0-or-later`.
+### Licensing
 
-Artists retain ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) state that users retain ownership rights in their input and own their output as between themselves and OpenAI.
+Licensing presents the ways the artist makes music available for licensed use. An offer can identify the track, intended use, current terms, price, approval requirement, or license-credit path.
 
-## Build Week commerce demonstration
+Customers can submit a licensing request, use an available license credit, receive an issued license, download its document, and keep the license in their account history. The artist can review requests, approve or reject them, issue licenses, generate documents, and revoke or expire access.
 
-The complete platform contains one commerce domain connecting checkout, orders, memberships, subscriptions, licensing, credits, entitlements, customer accounts, and protected delivery.
+### Courses
 
-The Build Week Sites installation runs that domain in Stripe Test Mode only. It accepts no real payment and moves no money. Stripe-hosted Test Checkout receives Stripe-provided test payment methods; `a-op` never collects or stores card fields. Signed test webhooks complete simulated orders and create the same durable access records used throughout the application. Live credentials and live-mode events fail before any state change, and the Sites installation has no administration control that can enable live commerce.
+Courses contain ordered lessons made from text, audio, video, images, and downloads. A Course can be public, account-based, granted directly, licensed, or included with a membership or subscription.
 
-Sites calls every deployed Site URL a production URL. That describes the hosted Site, not its Stripe environment. Every Build Week URL remains permanently locked to Stripe Test Mode. The complete boundary and judge journey are defined in [the commerce environment contract](docs/architecture/commerce-environment.md).
+Signed-in customers can record progress and resume where they stopped. Protected lesson media passes through the same server-side access decision as protected music and license files.
 
-A future deployment environment may support production commerce only after the artist verifies that environment's current rules and technical support, deliberately enables the capability, passes live-mode validation, and approves activation.
+### Videos
 
-## ChatGPT Work and Sites
+Videos has an index and individual viewing pages. Each video can include a title, summary, poster, artist context, credits, and transcript.
 
-Artists use ChatGPT Work and Codex to create, configure, personalize, maintain, diagnose, and verify their installation.
+Hosted video is delivered through the Site. External video remains unloaded until the visitor chooses to load it.
 
-Sites hosts the React application. Sites-provided D1 stores structured product state. Sites-provided R2 stores music, images, video, documents, and exports. Sign in with ChatGPT establishes identity. Server-owned roles and the central access contract protect administration, streams, downloads, course material, licenses, and customer records.
+### Journal and What's New
 
-Artists add music to their Site from an approved local path or through administration. Local tools prepare the approved files, R2 stores the bytes, and D1 stores metadata and access rules. Ordinary Site operation makes no model request. Material enters ChatGPT Work only when the artist deliberately shares it there. [The data and AI boundary](docs/architecture/data-and-ai-boundary.md) records the complete contract.
+Journal carries longer published posts. What's New carries shorter updates linked to current music, Courses, videos, memberships, licensing, and other activity.
 
-## Setup, approved media, and portability
+Signed-in customers can see unread What's New items and mark them as read. Customer-specific order links remain visible only to the customer who owns the order.
 
-[SETUP.md](SETUP.md) gives ChatGPT Work and Codex one fourteen-topic setup contract. The artist's decisions become a strict, canonical proposal tied to the current source-state fingerprint. Preview compiles the complete operation plan with `writesPerformed: 0`. Approval is a separate artifact bound to the exact proposal hash, source fingerprint, artist-owner, and approved scopes. The owner-only apply boundary recomputes current state, runs fixed internal operations, and records aggregate and domain receipts so an exact replay returns the existing result. Hosting, domains, DNS, email delivery, repository visibility, and public media uploads keep their own action-specific approvals and remain outside Site apply.
+### About and artist pages
 
-Media proposals contain stable local aliases, rights confirmation, intended use, hashes, and fixed derivative profiles. Full machine paths stay in ignored local configuration. Publication requires the exact applied setup proposal and owner approval before R2 receives bytes. The server enforces its configured request-byte cap, writes the approved object to a content-addressed private R2 key, reads it back, and verifies its byte length, content type, SHA-256 value, and approval metadata before D1 can publish the ready pointer. Exact retries reuse the verified immutable object. The neutral installation, documentation, and verification flow create no temporary media assets. [The media processing contract](docs/architecture/media-processing-contract.md) records the full lifecycle.
+About introduces the artist through published writing and approved media. The artist can also publish structured pages made from reusable content sections. Drafts, revisions, and publication remain separate so unfinished writing does not become public.
 
-The owner-only portability flow exports customer-independent artist definitions across identity, modules, navigation, pages, catalog, access plans, membership and subscription definitions, commerce definitions, licensing, Courses, video, updates, contact, telemetry, legal versions, and media manifests. The versioned archive carries fixed document paths, per-document checksums, and one semantic fingerprint. It contains no customer activity, provider payload, credentials, local paths, private R2 key, or media bytes. Commerce prices and external-video bindings return as `pending` for deliberate reconnection. Verification checks every manifest entry before a disposable local restore; a second restore pass must reuse every definition, create zero duplicates, and reproduce the same semantic fingerprint.
+### Contact
 
-## Build order
+Contact can carry public contact details, booking information, an invitation, inquiry categories, and the artist's consent language.
 
-1. Official Sites foundation, exact visual foundation, and runtime proof.
-2. Module registry, artist state, roles, authorization, and shared application shells.
-3. Music catalog, publishing, streaming, and player.
-4. Customer accounts, saved music, libraries, and delivery.
-5. Memberships, subscriptions, credits, licensing, access grants, and entitlements.
-6. Courses, video, pages, What's New, and contact.
-7. Telemetry, consent, privacy, terms, and operations.
-8. ChatGPT Work setup, local media preparation, personalization, export, diagnosis, and recovery.
-9. Complete integration and approved Sites hosting.
+Submissions are stored for the artist with the exact consent version the visitor accepted. Administration provides inquiry status and private notes. The application does not send email unless the artist deliberately adds and approves an email delivery service.
 
-Every milestone ends in integrated behavior that can be exercised in the running application. Focused automated checks protect authorization, media access, migrations, and durable data.
+### Privacy, Terms, and FAQ
 
-## Current implementation
+Privacy and Terms begin with editable starter documents. They remain identified as starters until the artist reviews, approves, and publishes a version. Published versions keep their history.
 
-The private GitHub repository is [sunflower-of-parchman/a-op](https://github.com/sunflower-of-parchman/a-op).
+FAQ is a normal published page the artist can edit for their own listeners and customers.
 
-The active application uses the official Sites React, TypeScript, vinext, Vite, and Cloudflare Worker structure with Sites-provided D1 and R2 bindings. The controlling plan records the behavior and verification completed at each milestone. Git history carries the earlier Nuxt implementation.
+## Customer account
 
-## Sound for Movement reference
+Sign in with ChatGPT establishes the visitor's identity. The application creates its own customer record and keeps authorization in server-side D1 data.
 
-Michael explicitly authorized the Sound for Movement visual framework as the starting framework for `a-op`. The live company repository remains private and read-only. Its visual system and generalized functional lessons inform fresh React code. Each `a-op` installation supplies its own name, music, media, writing, Courses, customer records, access plans, terms, accounts, and production state.
+The account area can show:
 
-## Authority
+- profile information;
+- current access and the reason each resource is available;
+- music library, favorites, playlists, listening history, and resume state;
+- memberships, subscriptions, renewal dates, and cancellation history;
+- download and license credit balances and ledger history;
+- orders created by the Stripe Test Mode simulation;
+- issued licenses and license documents;
+- Course progress; and
+- unread What's New items.
 
-Michael directs writing, media rights, access plans, licensing terms, legal language, connected accounts, and publication.
+## Administration
 
-Public deployment, domains, DNS, repository visibility, email delivery, and public media uploads each use action-specific approval. Local development, fictional data, and deterministic simulation support the complete build before those activation points.
+The visible dashboard is a compact working surface for Metrics, Inquiries, Courses, What's New, Videos, and Entitlements. Owners and authorized editors reach it through **Admin Dashboard**.
 
-## License
+The application also contains protected administration routes for:
+
+- artist identity, active capabilities, navigation, pages, and reusable sections;
+- tracks, releases, collections, media records, previews, and publication;
+- customers, access plans, grants, entitlements, and delivery history;
+- memberships, subscriptions, credits, licensing, and test orders;
+- contact forms, inquiries, telemetry, legal documents, and operations;
+- trusted editors and their assigned permissions; and
+- setup, export, verification, and recovery.
+
+These underlying tools remain available for setup and maintenance while the everyday dashboard stays small.
+
+## Starting an installation
+
+Every installation starts with the Sound for Movement-derived visual foundation rebuilt in React for Sites: Lato, open layouts, dark and light themes, responsive behavior, and shared controls. The neutral installation uses plain labels and contains no artist media.
+
+Setup begins by choosing the capabilities the artist wants to use. ChatGPT Work and Codex then build a bounded checklist for those choices, inspect only artist-approved local folders, and prepare one exact proposal. Preview performs zero product writes. Apply requires approval tied to the exact proposal hash and current source state.
+
+Approved content enters the existing application:
+
+- structured records go to Sites-provided D1;
+- approved music, images, video, documents, and derivatives go to Sites-provided R2; and
+- the public pages, player, account, access controls, and administration read those records through their normal interfaces.
+
+Local paths remain in ignored local configuration. Imported content does not replace the visual foundation or create a separate content-specific website.
+
+The setup contract and commands are documented in [SETUP.md](SETUP.md).
+
+## Stripe Test Mode
+
+The Sites build contains a test-only commerce simulation for checkout, orders, memberships, subscriptions, credits, licensing, entitlements, and protected delivery.
+
+It accepts Stripe test credentials only. Stripe-hosted Test Checkout handles test payment entry. The application verifies webhook signatures, rejects live credentials and live-mode events before product writes, and stores no card fields. No real payment is accepted and no money moves.
+
+The application contract is covered by local tests. A real Stripe-hosted Test Checkout and provider-delivered test webhook have not yet completed the final external acceptance rehearsal. Live commerce is unavailable in the Sites deployment.
+
+See [docs/architecture/commerce-environment.md](docs/architecture/commerce-environment.md) for the exact boundary.
+
+## Storage, identity, and model use
+
+Sites hosts the React, TypeScript, vinext, Vite, and Cloudflare Worker application. Sites-provided D1 stores structured state. Sites-provided R2 stores approved files. Sign in with ChatGPT supplies identity, while server-owned roles and the central access contract decide what each person can read, change, stream, or download.
+
+Ordinary use of the website makes no model request. Material enters ChatGPT Work only when the artist deliberately shares it in a task. [docs/architecture/data-and-ai-boundary.md](docs/architecture/data-and-ai-boundary.md) records the full boundary.
+
+## Current release state
+
+The Sites application compiles and produces its Worker deployment output. The repository contains the complete product domains and their local verification suites.
+
+Before submission, the current working branch still needs its changed interface and setup tests brought back into agreement, the one-shot installer exercised from a clean state, the Stripe Test provider rehearsal resolved or explicitly left out, and the exact approved Sites version saved and deployed.
+
+The controlling implementation record is [plans/migrateAopToSites.md](plans/migrateAopToSites.md). The product contract is [PRODUCT.md](PRODUCT.md).
+
+## Ownership and license
+
+An artist operates a fork of `a-op` as their own site. They control their deployment, content, catalog, data, customer relationship, and artist-specific source changes. Artists retain ownership of their music, images, writing, video, course material, artist-authored code and source changes, and business data.
 
 `a-op` is licensed under the GNU Affero General Public License v3.0 or later. See [LICENSE](LICENSE).

@@ -3,8 +3,8 @@ const HTML_CONTENT_TYPE = /(?:^|;)\s*text\/html(?:;|$)/i;
 /**
  * The Sites application loads only its own code and artist-hosted media. An
  * owner-approved external video enters a sandboxed frame only after the
- * visitor's explicit consent, so frame navigation is the sole broad HTTPS
- * allowance.
+ * visitor's explicit consent. Provider thumbnails pass through the Site's
+ * narrowly validated same-origin poster route.
  *
  * vinext currently emits inline framework bootstrap code. `unsafe-inline` is
  * therefore limited to script and style while every application-authored

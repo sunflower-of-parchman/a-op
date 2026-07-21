@@ -7,6 +7,7 @@ import type {
   CustomerPlaylistDTO,
   CustomerPlaylistTrackDTO,
   CustomerTrackDTO,
+  FavoriteTargetType,
   FrozenListenedRevisionDTO,
   ListeningHistoryDTO,
   ResumePositionDTO,
@@ -34,6 +35,9 @@ interface FavoriteRow {
   release_title: unknown;
   release_subtitle: unknown;
   release_available: unknown;
+  collection_slug: unknown;
+  collection_title: unknown;
+  collection_available: unknown;
 }
 
 interface FavoriteStateRow {
@@ -213,7 +217,11 @@ function trackFromRow(row: PlaylistTrackRow): CustomerTrackDTO {
 }
 
 function favorite(row: FavoriteRow): CustomerFavoriteDTO {
-  if (row.target_type !== "track" && row.target_type !== "release") {
+  if (
+    row.target_type !== "track" &&
+    row.target_type !== "release" &&
+    row.target_type !== "collection"
+  ) {
     return integrity("D1 returned an invalid favorite target type.");
   }
   const targetId = id(row.target_id, "favorite target ID");
@@ -231,7 +239,7 @@ function favorite(row: FavoriteRow): CustomerFavoriteDTO {
       revision_id: row.track_revision_id,
       stream_ready: row.track_stream_ready,
     });
-  } else {
+  } else if (row.target_type === "release") {
     const available = bool(row.release_available, "release availability");
     const slug = available ? nonBlank(row.release_slug, "release slug") : null;
     resource = Object.freeze({
@@ -245,6 +253,24 @@ function favorite(row: FavoriteRow): CustomerFavoriteDTO {
         : null,
       durationMs: null,
       href: slug ? `/music/releases/${slug}` : null,
+      streamUrl: null,
+    });
+  } else {
+    const available = bool(row.collection_available, "collection availability");
+    const slug = available
+      ? nonBlank(row.collection_slug, "collection slug")
+      : null;
+    resource = Object.freeze({
+      kind: "collection",
+      id: targetId,
+      available,
+      slug,
+      title: available
+        ? nonBlank(row.collection_title, "collection title")
+        : null,
+      subtitle: null,
+      durationMs: null,
+      href: slug ? `/music/collections/${slug}` : null,
       streamUrl: null,
     });
   }
@@ -273,7 +299,8 @@ export async function readCustomerFavorites(
   const result = await binding
     .prepare(
       `SELECT favorites.id, favorites.target_type,
-              COALESCE(favorites.track_id, favorites.release_id) AS target_id,
+              COALESCE(favorites.track_id, favorites.release_id,
+                       favorites.collection_id) AS target_id,
               favorites.revision, favorites.created_at, favorites.updated_at,
               tracks.slug AS track_slug, current_revision.title AS track_title,
               current_revision.subtitle AS track_subtitle,
@@ -288,7 +315,12 @@ export async function readCustomerFavorites(
               release_revision.subtitle AS release_subtitle,
               CASE WHEN releases.publication_state = 'published'
                      AND release_revision.id IS NOT NULL THEN 1 ELSE 0 END
-                AS release_available
+                AS release_available,
+              collections.slug AS collection_slug,
+              collection_revision.title AS collection_title,
+              CASE WHEN collections.publication_state = 'published'
+                     AND collection_revision.id IS NOT NULL THEN 1 ELSE 0 END
+                AS collection_available
        FROM favorites
        LEFT JOIN tracks ON tracks.id = favorites.track_id
        LEFT JOIN track_revisions AS current_revision
@@ -302,6 +334,10 @@ export async function readCustomerFavorites(
        LEFT JOIN release_revisions AS release_revision
          ON release_revision.id = releases.published_revision_id
         AND release_revision.release_id = releases.id
+       LEFT JOIN collections ON collections.id = favorites.collection_id
+       LEFT JOIN collection_revisions AS collection_revision
+         ON collection_revision.id = collections.published_revision_id
+        AND collection_revision.collection_id = collections.id
        WHERE favorites.user_id = ?1 AND favorites.state = 'active'
          AND ${ACTIVE_CUSTOMER_SQL}
        ORDER BY favorites.updated_at DESC, favorites.id`,
@@ -314,19 +350,25 @@ export async function readCustomerFavorites(
 export async function readCustomerFavoriteState(
   binding: D1Database,
   userId: string,
-  targetType: "track" | "release",
+  targetType: FavoriteTargetType,
   targetId: string,
 ): Promise<CustomerFavoriteStateDTO | null> {
   await ensureCustomerLibrary(binding);
   const customerId = requireUserId(userId);
   const requestedTargetId = id(targetId, "favorite target ID");
-  if (targetType !== "track" && targetType !== "release") {
+  if (
+    targetType !== "track" &&
+    targetType !== "release" &&
+    targetType !== "collection"
+  ) {
     throw new TypeError("A supported favorite target type is required.");
   }
   const targetCondition =
     targetType === "track"
-      ? "track_id = ?3 AND release_id IS NULL"
-      : "release_id = ?3 AND track_id IS NULL";
+      ? "track_id = ?3 AND release_id IS NULL AND collection_id IS NULL"
+      : targetType === "release"
+        ? "release_id = ?3 AND track_id IS NULL AND collection_id IS NULL"
+        : "collection_id = ?3 AND track_id IS NULL AND release_id IS NULL";
   const row = await binding
     .prepare(
       `SELECT state, revision

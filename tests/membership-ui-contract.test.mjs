@@ -67,7 +67,7 @@ test("Memberships stays identity-aware and role-gated without a dedicated admin 
   assert.match(adminPage, /activeModules\.includes\("subscriptions"\)/);
 });
 
-test("public Membership uses a real published offer or a record-free neutral preview", async () => {
+test("public Membership uses published records without invented price copy", async () => {
   const [page, landing, styles, registry] = await Promise.all([
     source(files.publicPage),
     source(files.landing),
@@ -79,16 +79,13 @@ test("public Membership uses a real published offer or a record-free neutral pre
   assert.match(page, /listActiveCommerceProducts\(env\.DB\)/);
   assert.match(page, /productType === "subscription"/);
   assert.match(page, /productType === "membership"/);
-  assert.match(landing, /product\?\.name \?\? "Membership"/);
-  assert.match(landing, /: "Price"/);
+  assert.match(landing, /product\?\.name \?\? "Membership benefits"/);
+  assert.doesNotMatch(landing, /: "Price"/);
   assert.match(landing, /`\/commerce#\$\{product\.offerAnchorId\}`/);
-  assert.match(landing, /href="\/licensing"/);
   for (const destination of [
     "/courses",
     "/music",
     "/account/credits",
-    "/account/playlists",
-    "/account/favorites",
     "/account/memberships",
   ]) {
     assert.match(landing, new RegExp(destination.replaceAll("/", "\\/")));
@@ -98,8 +95,8 @@ test("public Membership uses a real published offer or a record-free neutral pre
   assert.match(styles, /@media \(max-width: 900px\)/);
   assert.match(styles, /@media \(max-width: 620px\)/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
-  assert.doesNotMatch(landing, /<(?:img|audio|video|picture|source)\b/i);
-  assert.doesNotMatch(styles, /(?:background-)?image\s*:|url\(|gradient\(/i);
+  assert.match(landing, /images\[index\]\.url/);
+  assert.match(styles, /\.benefitLink img/);
 });
 
 test("customer and owner interfaces show durable periods, benefits, credits, history, and record-level Test Mode provenance", async () => {
@@ -170,9 +167,14 @@ test("membership mutation retries retain the exact request idempotency key", asy
   );
 });
 
-test("membership interfaces stay open, responsive, native-control based, and asset-free", async () => {
+test("membership interfaces stay open, responsive, and native-control based", async () => {
   const sources = await Promise.all(Object.values(files).map(source));
   const combined = sources.join("\n");
+  const operationalSources = await Promise.all(
+    Object.entries(files)
+      .filter(([key]) => key !== "landing" && key !== "landingStyles")
+      .map(([, path]) => source(path)),
+  );
   const styles = await source(files.styles);
 
   assert.match(styles, /border-top: 1px solid var\(--slate\)/);
@@ -181,7 +183,10 @@ test("membership interfaces stay open, responsive, native-control based, and ass
   assert.match(styles, /@media \(max-width: 620px\)/);
   assert.doesNotMatch(styles, /\.(?:card|panel|surface)\b/i);
   assert.doesNotMatch(styles, /(?:background-)?image\s*:|url\(|gradient\(/i);
-  assert.doesNotMatch(combined, /<(?:img|audio|video|picture|source)\b/i);
+  assert.doesNotMatch(
+    operationalSources.join("\n"),
+    /<(?:img|audio|video|picture|source)\b/i,
+  );
   assert.doesNotMatch(combined, /type=["']file["']/i);
   assert.doesNotMatch(combined, /FormData|FileReader|R2Bucket/i);
   assert.doesNotMatch(combined, /placeholder=/i);

@@ -78,7 +78,7 @@ test("real HTTP preview, exact apply, public and admin rendering, and replay are
   }
   assert.match(verifier, /expectHtml\("\/", 200/);
   assert.match(verifier, /proposalOnlyPreview\.plan\.writesPerformed, 0/);
-  assert.match(verifier, /approvedPreview\.plan\.operations\.length, 15/);
+  assert.match(verifier, /approvedPreview\.plan\.operations\.length, 16/);
   assert.match(
     verifier,
     /afterPreview\.currentCounts, beforePreview\.currentCounts/,
@@ -88,14 +88,14 @@ test("real HTTP preview, exact apply, public and admin rendering, and replay are
     /afterReplay\.currentCounts, afterApply\.currentCounts/,
   );
   assert.match(verifier, /afterReplay\.artifacts, afterApply\.artifacts/);
-  assert.match(verifier, /setupReceipts, 15/);
+  assert.match(verifier, /setupReceipts, 16/);
   assert.match(verifier, /assertAppliedDefinitions\(run, afterApply\)/);
   assert.match(verifier, /afterReplay\.definitions, afterApply\.definitions/);
   assert.match(verifier, /mediaObjects, 0/);
   assert.match(verifier, /mediaJobs, 0/);
 });
 
-test("all fourteen topics carry non-empty local definitions without media bytes", () => {
+test("all fifteen topics carry non-empty local definitions without media bytes", () => {
   for (const definition of [
     /activeModules:\s*\[/,
     /rightsStatement: run\.rightsStatement/,

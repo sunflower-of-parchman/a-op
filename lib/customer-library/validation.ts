@@ -187,7 +187,11 @@ export function validateFavoriteDesiredStateInput(
   if (
     !FAVORITE_TARGET_TYPES.includes(candidate.targetType as FavoriteTargetType)
   ) {
-    issue(issues, "targetType", "targetType must be track or release.");
+    issue(
+      issues,
+      "targetType",
+      "targetType must be track, release, or collection.",
+    );
   }
   if (typeof candidate.active !== "boolean") {
     issue(issues, "active", "active must be a boolean.");

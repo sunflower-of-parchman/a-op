@@ -65,10 +65,12 @@ function resourceCondition(
   targetType: FavoriteTargetType,
   requirePublished: boolean,
 ): string {
-  const root = targetType === "track" ? "tracks" : "releases";
-  const revisions =
-    targetType === "track" ? "track_revisions" : "release_revisions";
-  const owner = targetType === "track" ? "track_id" : "release_id";
+  const [root, revisions, owner] =
+    targetType === "track"
+      ? ["tracks", "track_revisions", "track_id"]
+      : targetType === "release"
+        ? ["releases", "release_revisions", "release_id"]
+        : ["collections", "collection_revisions", "collection_id"];
   return `EXISTS (
     SELECT 1 FROM ${root} AS favorite_resource
     ${
@@ -106,9 +108,13 @@ async function requireFavoriteResource(
 }
 
 function favoriteLookupSql(targetType: FavoriteTargetType): string {
-  return targetType === "track"
-    ? "track_id = ? AND release_id IS NULL"
-    : "release_id = ? AND track_id IS NULL";
+  if (targetType === "track") {
+    return "track_id = ? AND release_id IS NULL AND collection_id IS NULL";
+  }
+  if (targetType === "release") {
+    return "release_id = ? AND track_id IS NULL AND collection_id IS NULL";
+  }
+  return "collection_id = ? AND track_id IS NULL AND release_id IS NULL";
 }
 
 export async function setCustomerFavorite(
@@ -138,8 +144,10 @@ export async function setCustomerFavorite(
   const state = input.active ? "active" : "removed";
   const targetColumns =
     input.targetType === "track"
-      ? [input.targetId, null]
-      : [null, input.targetId];
+      ? [input.targetId, null, null]
+      : input.targetType === "release"
+        ? [null, input.targetId, null]
+        : [null, null, input.targetId];
   const lookup = favoriteLookupSql(input.targetType);
   const authority = authorityBindings(context.actorUserId);
   const stateStatement =
@@ -147,9 +155,9 @@ export async function setCustomerFavorite(
       ? binding
           .prepare(
             `INSERT INTO favorites
-              (id, user_id, target_type, track_id, release_id, state, revision,
-               last_operation_key)
-             SELECT ?, ?, ?, ?, ?, ?, 1, ?
+              (id, user_id, target_type, track_id, release_id, collection_id,
+               state, revision, last_operation_key)
+             SELECT ?, ?, ?, ?, ?, ?, ?, 1, ?
              WHERE ${CUSTOMER_LIBRARY_AUTHORITY_SQL}
                AND ${resourceCondition(input.targetType, input.active)}
                AND NOT EXISTS (

@@ -281,6 +281,24 @@ video {
   transform: translateY(-1px);
 }
 
+.site-header__account {
+  gap: 0.5rem;
+}
+
+.site-header__badge {
+  display: inline-flex;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.3rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fffdfc;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
 .mobile-navigation__toggle,
 .mobile-navigation__backdrop,
 .mobile-navigation__panel {

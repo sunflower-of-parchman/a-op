@@ -195,7 +195,7 @@ test("active commerce capability routes expose the simulated catalog", () => {
   ]);
 });
 
-test("public home leaves capability discovery to the active navigation", async () => {
+test("public home and active navigation expose the supported capability paths", async () => {
   const [home, header] = await Promise.all([
     readFile(new URL("../app/(public)/page.tsx", import.meta.url), "utf8"),
     readFile(
@@ -203,7 +203,11 @@ test("public home leaves capability discovery to the active navigation", async (
       "utf8",
     ),
   ]);
-  assert.match(home, /return <div \/>/);
+  assert.match(home, /href="\/music"/);
+  assert.match(home, /href="\/courses"/);
+  assert.match(home, /href="\/videos"/);
+  assert.match(home, /href="\/membership"/);
+  assert.match(home, /href="\/licensing"/);
   assert.match(header, /readPublicNavigationSnapshot\(env\.DB, "primary"\)/);
   assert.match(header, /navigation\?\.items/);
 });

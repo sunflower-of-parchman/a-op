@@ -27,7 +27,7 @@ export const TELEMETRY_EVENT_POLICY = Object.freeze({
   }),
   "favorite-saved": Object.freeze({
     moduleKey: "customer-library",
-    resourceTypes: Object.freeze(["track", "release"] as const),
+    resourceTypes: Object.freeze(["track", "release", "collection"] as const),
   }),
   "lesson-completed": Object.freeze({
     moduleKey: "courses",

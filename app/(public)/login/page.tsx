@@ -1,56 +1,54 @@
+import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { chatGPTSignInPath, getChatGPTUser } from "@/app/chatgpt-auth";
-import styles from "@/components/public/PublicInfoPage.module.css";
+import { MediaMosaic } from "@/components/public/MediaMosaic";
+import { readPublicMosaicImages } from "@/db/public-mosaic.ts";
+import styles from "./LoginPage.module.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Log in",
-  description: "Log in to your account with ChatGPT.",
+  description: "Log in to your account.",
 };
 
 export default async function LoginPage() {
-  const user = await getChatGPTUser();
+  const [user, mosaicImages] = await Promise.all([
+    getChatGPTUser(),
+    readPublicMosaicImages(env.DB),
+  ]);
 
   return (
     <section className={styles.page}>
-      <header className={styles.heading}>
-        <h1>Log in</h1>
-        <p className="intro-copy">
-          Sign in with ChatGPT to reach your personal account, saved access, and
-          customer library.
-        </p>
-      </header>
-
-      <div className={styles.loginStatus}>
+      <div className={styles.formSide}>
+        <h1>Welcome back</h1>
         {user ? (
           <>
-            <h2>You are signed in</h2>
-            <p>{user.fullName ?? user.email}</p>
-            <div className={styles.actions}>
-              <Link className="button button-primary" href="/account">
-                Continue to account
-              </Link>
-            </div>
+            <Link className={styles.primaryAction} href="/account">
+              Continue to account
+            </Link>
           </>
         ) : (
           <>
-            <h2>Continue with ChatGPT</h2>
-            <p>
-              ChatGPT supplies your identity. This site keeps its own
-              server-owned account, role, and access records.
+            <p className={styles.introduction}>
+              Sign in to reach your account, saved music, and access.
             </p>
-            <div className={styles.actions}>
-              <Link
-                className="button button-primary"
-                href={chatGPTSignInPath("/account")}
-              >
-                Sign in with ChatGPT
-              </Link>
-            </div>
+            <Link
+              className={styles.primaryAction}
+              href={chatGPTSignInPath("/account")}
+            >
+              Continue with ChatGPT
+            </Link>
+            <p className={styles.accountNote}>
+              New here? Continuing creates your free account.
+            </p>
           </>
         )}
+      </div>
+
+      <div className={styles.mosaicSide}>
+        <MediaMosaic images={mosaicImages} title="" variant="auth" />
       </div>
     </section>
   );

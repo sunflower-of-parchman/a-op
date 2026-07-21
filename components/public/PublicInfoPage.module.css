@@ -16,6 +16,27 @@
   gap: clamp(2.5rem, 6vw, 5rem);
 }
 
+.aboutPage {
+  grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+}
+
+.aboutPortrait {
+  width: 100%;
+  max-height: 44rem;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.aboutCopy {
+  display: grid;
+  gap: 2rem;
+}
+
+.aboutPage .linkDirectory {
+  grid-column: 1 / -1;
+}
+
 .heading {
   max-width: 62rem;
   gap: 1rem;
@@ -35,7 +56,17 @@
 .prose {
   max-width: 58rem;
   line-height: 1.75;
-  white-space: pre-wrap;
+  gap: 1rem;
+}
+
+.prose h2 {
+  margin-top: 1.75rem;
+  color: var(--ink);
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+}
+
+.prose h2:first-child {
+  margin-top: 0;
 }
 
 .sectionGrid {
@@ -103,6 +134,14 @@
   .sectionGrid,
   .linkDirectory {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aboutPage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aboutPage .linkDirectory {
+    grid-column: auto;
   }
 
   .section {

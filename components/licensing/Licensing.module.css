@@ -1,5 +1,5 @@
 .page {
-  padding-block: clamp(3rem, 8vw, 7rem);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
 }
 
 .section,
@@ -24,8 +24,6 @@
 
 .section + .section {
   margin-top: clamp(3rem, 7vw, 6rem);
-  padding-top: clamp(3rem, 7vw, 6rem);
-  border-top: 1px solid var(--slate);
 }
 
 .headingGroup {
@@ -53,29 +51,118 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
   margin: 0;
   padding: 0;
+  gap: clamp(1rem, 2.5vw, 2rem);
   list-style: none;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .planTile {
-  display: flex;
-  min-height: clamp(20rem, 34vw, 28rem);
-  flex-direction: column;
-  align-items: flex-start;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 1px solid var(--slate);
-  border-radius: 8px;
-  background: var(--field);
-  gap: 1.25rem;
-  transition:
-    transform 140ms ease,
-    border-color 140ms ease;
+  position: relative;
+  display: grid;
+  min-height: clamp(31rem, 49vw, 43rem);
+  align-items: end;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  overflow: hidden;
+  border-radius: 1.1rem;
+  isolation: isolate;
 }
 
-.planTile:hover,
-.planTile:focus-within {
-  transform: translateY(-1px);
-  border-color: var(--ink-muted);
+.planTilePlain {
+  background: var(--field);
+}
+
+.cardArtwork {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.planTile::after,
+.offerRow::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(3 5 7 / 5%), rgb(3 5 7 / 34%));
+  content: "";
+  pointer-events: none;
+}
+
+.planPanel,
+.offerPanel,
+.customPanel {
+  display: grid;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 0.9rem;
+  background: rgb(10 12 14 / 82%);
+  box-shadow: 0 1.2rem 3rem rgb(0 0 0 / 18%);
+  color: #f7f7f4;
+  backdrop-filter: blur(12px);
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease;
+}
+
+.planPanel {
+  min-height: clamp(22rem, 32vw, 29rem);
+  align-content: start;
+  padding: clamp(1.5rem, 3.2vw, 2.5rem);
+  gap: 1.25rem;
+}
+
+.planTile:hover .cardArtwork,
+.planTile:focus-within .cardArtwork,
+.offerRow:hover .cardArtwork,
+.offerRow:focus-within .cardArtwork,
+.customCard:hover .cardArtwork,
+.customCard:focus-within .cardArtwork {
+  transform: scale(1.035);
+}
+
+.planTile:hover .planPanel,
+.planTile:focus-within .planPanel,
+.offerRow:hover .offerPanel,
+.offerRow:focus-within .offerPanel {
+  background: rgb(10 12 14 / 88%);
+  transform: translateY(-0.2rem);
+}
+
+.customCard {
+  position: relative;
+  display: grid;
+  min-height: clamp(24rem, 46vw, 38rem);
+  place-items: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  overflow: hidden;
+  border-radius: 1.1rem;
+  background: var(--field);
+  isolation: isolate;
+}
+
+.customCard::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(135deg, rgb(255 255 255 / 4%), transparent 58%);
+  content: "";
+}
+
+.customPanel {
+  width: min(100%, 46rem);
+  padding: clamp(1.75rem, 4vw, 3rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.customPanel h2 {
+  color: #f7f7f4;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 300;
+}
+
+.customPanel :is(a, span) {
+  width: fit-content;
 }
 
 .planIdentity {
@@ -89,13 +176,20 @@
 }
 
 .planIdentity p {
-  color: var(--ink);
+  color: #f7f7f4;
   font-size: clamp(1.25rem, 2.7vw, 1.8rem);
 }
 
 .planIdentity span,
-.planTile > p {
-  color: var(--ink-muted);
+.planPanel > p {
+  color: rgb(247 247 244 / 76%);
+}
+
+.textAction {
+  margin-top: auto;
+  color: #f7f7f4;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.35rem;
 }
 
 .benefitList {
@@ -220,8 +314,13 @@
 .summaryList {
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--slate);
   list-style: none;
+}
+
+.offerList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
 }
 
 .offerRow,
@@ -234,7 +333,20 @@
 }
 
 .offerRow {
-  grid-template-columns: minmax(0, 1.1fr) minmax(13rem, 0.55fr);
+  position: relative;
+  min-height: clamp(32rem, 47vw, 42rem);
+  align-items: end;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  overflow: hidden;
+  border: 0;
+  border-radius: 1.1rem;
+  isolation: isolate;
+}
+
+.offerPanel {
+  align-content: start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  gap: 1.3rem;
 }
 
 .offerIdentity {
@@ -246,6 +358,18 @@
 .recordIdentity h3 {
   font-size: clamp(1.15rem, 2.2vw, 1.6rem);
   font-weight: 400;
+}
+
+.offerIdentity h3,
+.offerIdentity strong,
+.offerTerms strong {
+  color: #f7f7f4;
+}
+
+.offerIdentity .supportingText,
+.offerIdentity .recordMeta,
+.offerTerms {
+  color: rgb(247 247 244 / 76%);
 }
 
 .recordIdentity,
@@ -301,14 +425,12 @@
 }
 
 .offerTerms strong {
-  color: var(--ink);
   font-size: 1.05rem;
   font-weight: 400;
 }
 
 .offerAction {
-  grid-column: 1 / -1;
-  padding-top: 0.75rem;
+  align-self: center;
 }
 
 .form {
@@ -474,7 +596,7 @@
   }
 
   .planTile {
-    min-height: 18rem;
+    min-height: 32rem;
   }
 }
 
@@ -487,6 +609,26 @@
 
   .planTile:hover,
   .planTile:focus-within {
+    transform: none;
+  }
+
+  .cardArtwork,
+  .planPanel,
+  .offerPanel,
+  .customPanel {
+    transition: none;
+  }
+
+  .planTile:hover .cardArtwork,
+  .planTile:focus-within .cardArtwork,
+  .offerRow:hover .cardArtwork,
+  .offerRow:focus-within .cardArtwork,
+  .customCard:hover .cardArtwork,
+  .customCard:focus-within .cardArtwork,
+  .planTile:hover .planPanel,
+  .planTile:focus-within .planPanel,
+  .offerRow:hover .offerPanel,
+  .offerRow:focus-within .offerPanel {
     transform: none;
   }
 }

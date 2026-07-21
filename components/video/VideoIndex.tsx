@@ -1,8 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import type {
-  PublicVideoDetailDTO,
-  PublicVideoSummaryDTO,
-} from "@/lib/video/types.ts";
+import { useState } from "react";
+import type { PublicVideoDetailDTO } from "@/lib/video/types.ts";
 import { EmptyVideoPlayer } from "./EmptyVideoPlayer";
 import { ExternalVideoConsent } from "./ExternalVideoConsent";
 import { HostedVideoPlayer } from "./HostedVideoPlayer";
@@ -11,12 +11,24 @@ import styles from "./Video.module.css";
 const PREVIEW_VIDEO_COUNT = 4;
 
 function formattedDate(value: string): string {
-  return new Intl.DateTimeFormat("en", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(value));
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (!match) return value;
+  const [, year, month, day] = match;
+  const monthLabel = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ][Number(month) - 1];
+  return `${monthLabel} ${Number(day)}, ${year}`;
 }
 
 function externalWatchLink(video: PublicVideoDetailDTO): {
@@ -48,7 +60,15 @@ function externalWatchLink(video: PublicVideoDetailDTO): {
   }
 }
 
-function Player({ video }: { readonly video: PublicVideoDetailDTO | null }) {
+function Player({
+  consented,
+  onConsent,
+  video,
+}: {
+  readonly consented: boolean;
+  readonly onConsent: () => void;
+  readonly video: PublicVideoDetailDTO | null;
+}) {
   if (!video) return <EmptyVideoPlayer />;
 
   if (video.delivery.kind === "external") {
@@ -58,6 +78,9 @@ function Player({ video }: { readonly video: PublicVideoDetailDTO | null }) {
         provider={video.delivery.provider}
         title={video.title}
         videoId={video.id}
+        posterHref={video.delivery.posterHref}
+        consented={consented}
+        onConsent={onConsent}
       />
     );
   }
@@ -100,30 +123,45 @@ function PreviewPlaylist({ selected }: { readonly selected: number }) {
 
 function PublishedPlaylist({
   activeVideo,
+  onSelect,
   videos,
 }: {
   readonly activeVideo: PublicVideoDetailDTO;
-  readonly videos: readonly PublicVideoSummaryDTO[];
+  readonly onSelect: (video: PublicVideoDetailDTO) => void;
+  readonly videos: readonly PublicVideoDetailDTO[];
 }) {
   return (
     <ol className={styles.playlist}>
       {videos.map((video) => (
         <li key={video.id}>
-          <Link
+          <button
             aria-current={video.id === activeVideo.id ? "true" : undefined}
             className={styles.playlistRow}
-            href={`/videos?video=${encodeURIComponent(video.slug)}`}
+            onClick={() => onSelect(video)}
+            type="button"
           >
-            <span aria-hidden="true" className={styles.playlistArtwork} />
+            <VideoThumbnail video={video} />
             <span className={styles.playlistCopy}>
               <strong>{video.title}</strong>
               <span>{formattedDate(video.publishedAt)}</span>
               {video.summary ? <span>{video.summary}</span> : null}
             </span>
-          </Link>
+          </button>
         </li>
       ))}
     </ol>
+  );
+}
+
+function VideoThumbnail({ video }: { readonly video: PublicVideoDetailDTO }) {
+  const posterHref = video.delivery.posterHref;
+
+  return posterHref ? (
+    // The self-hosted poster route keeps provider requests out of the browser.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img alt="" className={styles.playlistArtwork} src={posterHref} />
+  ) : (
+    <span aria-hidden="true" className={styles.playlistArtwork} />
   );
 }
 
@@ -134,23 +172,41 @@ export function VideoIndex({
 }: {
   readonly activeVideo: PublicVideoDetailDTO | null;
   readonly previewSelection: string | null;
-  readonly videos: readonly PublicVideoSummaryDTO[];
+  readonly videos: readonly PublicVideoDetailDTO[];
 }) {
   const empty = videos.length === 0;
+  const [selectedId, setSelectedId] = useState(activeVideo?.id ?? null);
+  const [externalConsent, setExternalConsent] = useState(false);
+  const selectedVideo =
+    videos.find((video) => video.id === selectedId) ?? activeVideo;
   const previewMatch = /^preview-([1-4])$/.exec(previewSelection ?? "");
   const selectedPreview = previewMatch ? Number(previewMatch[1]) : 1;
-  const watchLink = activeVideo ? externalWatchLink(activeVideo) : null;
+  const watchLink = selectedVideo ? externalWatchLink(selectedVideo) : null;
+
+  function selectVideo(video: PublicVideoDetailDTO) {
+    setSelectedId(video.id);
+    window.history.replaceState(
+      null,
+      "",
+      `/videos?video=${encodeURIComponent(video.slug)}`,
+    );
+  }
 
   return (
     <main className={`${styles.viewingRoom} page-frame`}>
-      <h1 className="sr-only">Videos</h1>
       <section className={styles.nowPlaying} aria-label="Now playing">
-        <Player video={activeVideo} />
+        <Player
+          consented={externalConsent}
+          onConsent={() => setExternalConsent(true)}
+          video={selectedVideo}
+        />
         <div className={styles.nowPlayingCopy}>
           <p>Now Playing</p>
-          <h2>{activeVideo?.title ?? "Title"}</h2>
-          <p>{activeVideo?.summary || "Subheading"}</p>
-          <p>{activeVideo ? formattedDate(activeVideo.publishedAt) : "Date"}</p>
+          <h2>{selectedVideo?.title ?? "Title"}</h2>
+          <p>{selectedVideo?.summary || "Subheading"}</p>
+          <p>
+            {selectedVideo ? formattedDate(selectedVideo.publishedAt) : "Date"}
+          </p>
           {watchLink ? (
             <a href={watchLink.href} rel="noreferrer" target="_blank">
               {watchLink.label}
@@ -173,8 +229,12 @@ export function VideoIndex({
         </header>
         {empty ? (
           <PreviewPlaylist selected={selectedPreview} />
-        ) : activeVideo ? (
-          <PublishedPlaylist activeVideo={activeVideo} videos={videos} />
+        ) : selectedVideo ? (
+          <PublishedPlaylist
+            activeVideo={selectedVideo}
+            onSelect={selectVideo}
+            videos={videos}
+          />
         ) : null}
       </section>
     </main>

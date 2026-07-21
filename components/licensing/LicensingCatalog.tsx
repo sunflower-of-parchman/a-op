@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ContactForm } from "@/components/contact";
 import { TelemetryPageView } from "@/components/telemetry";
 import type { PublicContactFormDTO } from "@/lib/contact/index.ts";
 import type { CommerceProductDTO } from "@/lib/commerce/domain.ts";
+import type { PublicCommerceIntentPreview } from "@/db/commerce-preview.ts";
 import type { LicenseOfferDTO } from "@/lib/licensing/types.ts";
 
 import { LicenseRequestForm } from "./LicenseRequestForm";
@@ -15,81 +15,86 @@ export interface LicensingCatalogProps {
   readonly commerceProducts: readonly CommerceProductDTO[];
   readonly contactForm: PublicContactFormDTO | null;
   readonly offers: readonly LicenseOfferDTO[];
+  readonly pendingLicenseTypes: readonly PublicCommerceIntentPreview[];
+  readonly pendingPlans: readonly PublicCommerceIntentPreview[];
   readonly requestAccess: LicensingRequestAccess;
   readonly signInHref: string;
 }
 
-interface PreviewPlan {
-  readonly id: string;
-  readonly name: string;
-  readonly price: "Price";
-  readonly benefits: readonly string[];
+const LICENSING_ARTWORK = [
+  "/judge-content/collections/energetic.webp",
+  "/judge-content/releases/maquina-de-humo.jpg",
+  "/judge-content/releases/an-agreement.jpg",
+] as const;
+
+const SUBSCRIPTION_ARTWORK = [
+  "/judge-content/collections/ambient.webp",
+  "/judge-content/releases/amiss.jpg",
+  "/judge-content/collections/beautiful.webp",
+] as const;
+
+function artworkAt(images: readonly string[], index: number): string {
+  return images[index % images.length] ?? LICENSING_ARTWORK[0];
 }
 
-const PREVIEW_ONE_TIME_LICENSES = Object.freeze([
-  Object.freeze({
-    id: "student-license",
-    name: "Student License",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-  Object.freeze({
-    id: "one-time-license",
-    name: "One-Time License",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-  Object.freeze({
-    id: "extended-license",
-    name: "Extended License",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-] satisfies readonly PreviewPlan[]);
+function previewCadence(product: PublicCommerceIntentPreview): string {
+  if (product.billingInterval === "one_time") return "One time";
+  const unit = product.billingInterval === "month" ? "month" : "year";
+  return product.intervalCount === 1
+    ? `Per ${unit}`
+    : `Every ${product.intervalCount} ${unit}s`;
+}
 
-const PREVIEW_LICENSE_SUBSCRIPTIONS = Object.freeze([
-  Object.freeze({
-    id: "license-subscription-1",
-    name: "License Subscription",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-  Object.freeze({
-    id: "license-subscription-2",
-    name: "License Subscription",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-] satisfies readonly PreviewPlan[]);
-
-const PREVIEW_EDUCATION_PLANS = Object.freeze([
-  Object.freeze({
-    id: "education-plan-1",
-    name: "Education Plan",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-  Object.freeze({
-    id: "education-plan-2",
-    name: "Education Plan",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-  Object.freeze({
-    id: "education-plan-3",
-    name: "Education Plan",
-    price: "Price",
-    benefits: Object.freeze(["Benefit", "Benefit", "Benefit"]),
-  }),
-] satisfies readonly PreviewPlan[]);
-
-const PREVIEW_FAQS = Object.freeze([
-  "licensing-faq-1",
-  "licensing-faq-2",
-  "licensing-faq-3",
-  "licensing-faq-4",
-  "licensing-faq-5",
-]);
+function PreviewPlanList({
+  actionHref = "#custom-licensing",
+  actionLabel = "Ask about this option",
+  actionStyle = "text",
+  artwork,
+  products,
+}: {
+  readonly actionHref?: string;
+  readonly actionLabel?: string;
+  readonly actionStyle?: "button" | "text";
+  readonly artwork?: readonly string[];
+  readonly products: readonly PublicCommerceIntentPreview[];
+}) {
+  return (
+    <ol className={styles.planGrid}>
+      {products.map((product, index) => (
+        <li
+          className={`${styles.planTile} ${artwork ? "" : styles.planTilePlain}`}
+          key={product.id}
+        >
+          {artwork ? (
+            <img
+              alt=""
+              className={styles.cardArtwork}
+              src={artworkAt(artwork, index)}
+            />
+          ) : null}
+          <div className={styles.planPanel}>
+            <div className={styles.planIdentity}>
+              <h3>{product.name}</h3>
+              <p>{money(product.amountMinor, product.currency)}</p>
+              <span>{previewCadence(product)}</span>
+            </div>
+            {product.description ? <p>{product.description}</p> : null}
+            <Link
+              className={
+                actionStyle === "button"
+                  ? "button button-primary"
+                  : styles.textAction
+              }
+              href={actionHref}
+            >
+              {actionLabel}
+            </Link>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 function money(amountMinor: number, currency: string): string {
   return new Intl.NumberFormat("en-US", {
@@ -111,39 +116,27 @@ function cadence(product: CommerceProductDTO): string {
     : `Every ${product.intervalCount} ${unit}s`;
 }
 
-function PreviewPlanList({
-  plans,
-}: {
-  readonly plans: readonly PreviewPlan[];
-}) {
-  return (
-    <ol className={styles.planGrid} data-preview="true">
-      {plans.map((plan) => (
-        <li className={styles.planTile} key={plan.id}>
-          <div className={styles.planIdentity}>
-            <h3>{plan.name}</h3>
-            <p>{plan.price}</p>
-          </div>
-          <ul className={styles.benefitList}>
-            {plan.benefits.map((benefit, index) => (
-              <li key={`${plan.id}-${index}`}>{benefit}</li>
-            ))}
-          </ul>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
 function PublishedPlanList({
+  artwork,
   products,
 }: {
+  readonly artwork?: readonly string[];
   readonly products: readonly CommerceProductDTO[];
 }) {
   return (
     <ol className={styles.planGrid}>
-      {products.map((product) => (
-        <li className={styles.planTile} key={product.id}>
+      {products.map((product, index) => (
+        <li
+          className={`${styles.planTile} ${artwork ? "" : styles.planTilePlain}`}
+          key={product.id}
+        >
+          {artwork ? (
+            <img
+              alt=""
+              className={styles.cardArtwork}
+              src={artworkAt(artwork, index)}
+            />
+          ) : null}
           {product.productType === "membership" ? (
             <TelemetryPageView
               eventName="membership-view"
@@ -151,61 +144,43 @@ function PublishedPlanList({
               resourceType="membership"
             />
           ) : null}
-          <div className={styles.planIdentity}>
-            <h3>{product.name}</h3>
-            <p>{money(product.amountMinor, product.currency)}</p>
-            <span>{cadence(product)}</span>
+          <div className={styles.planPanel}>
+            <div className={styles.planIdentity}>
+              <h3>{product.name}</h3>
+              <p>{money(product.amountMinor, product.currency)}</p>
+              <span>{cadence(product)}</span>
+            </div>
+            {product.description ? <p>{product.description}</p> : null}
+            <Link
+              className="button button-primary"
+              href={`/commerce#${product.offerAnchorId}`}
+            >
+              View plan
+            </Link>
           </div>
-          {product.description ? <p>{product.description}</p> : null}
-          <Link
-            className="button button-primary"
-            href={`/commerce#${product.offerAnchorId}`}
-          >
-            View plan
-          </Link>
         </li>
       ))}
     </ol>
   );
 }
 
-function CustomLicensingPreview() {
+function CustomLicensingCallout({
+  available,
+}: {
+  readonly available: boolean;
+}) {
   return (
-    <section className={styles.customPreview} aria-labelledby="custom-title">
-      <h2 id="custom-title">Custom Licensing</h2>
-      <form className={styles.customForm} aria-label="Custom Licensing form">
-        <div className={styles.customFieldGrid}>
-          <label className={styles.customField}>
-            <span>Name</span>
-            <input disabled name="name" />
-          </label>
-          <label className={styles.customField}>
-            <span>Email</span>
-            <input disabled name="email" type="email" />
-          </label>
-        </div>
-        <div className={styles.customFieldGrid}>
-          <label className={styles.customField}>
-            <span>Company</span>
-            <input disabled name="company" />
-          </label>
-          <label className={styles.customField}>
-            <span>Project</span>
-            <input disabled name="project" />
-          </label>
-        </div>
-        <label className={styles.customField}>
-          <span>Message</span>
-          <textarea disabled name="message" rows={7} />
-        </label>
-        <label className={styles.customConsent}>
-          <input disabled name="consent" type="checkbox" />
-          <span>Consent</span>
-        </label>
-        <button className="button button-primary" disabled type="submit">
-          Send inquiry
-        </button>
-      </form>
+    <section className={styles.customCard} aria-labelledby="custom-title">
+      <div className={styles.customPanel}>
+        <h2 id="custom-title">Custom Licensing</h2>
+        {available ? (
+          <Link className="button button-primary" href="/contact">
+            Contact for Custom Licensing
+          </Link>
+        ) : (
+          <span>Contact is not currently available.</span>
+        )}
+      </div>
     </section>
   );
 }
@@ -249,10 +224,13 @@ export function LicensingCatalog({
   commerceProducts,
   contactForm,
   offers,
+  pendingLicenseTypes,
+  pendingPlans,
   requestAccess,
   signInHref,
 }: LicensingCatalogProps) {
-  const educationPattern = /education|student|school|academic/i;
+  const educationPattern = /education|school|academic/i;
+  const membershipPattern = /sound-for-movement-membership|\bmembership\b/i;
   const recurringProducts = commerceProducts.filter(
     (product) =>
       product.productType === "subscription" ||
@@ -264,12 +242,20 @@ export function LicensingCatalog({
   const licensingSubscriptions = recurringProducts.filter(
     (product) =>
       !educationPattern.test(`${product.slug} ${product.name}`) &&
+      !membershipPattern.test(`${product.slug} ${product.name}`) &&
       product.productType === "subscription",
+  );
+  const pendingEducationPlans = pendingPlans.filter((product) =>
+    educationPattern.test(product.name),
+  );
+  const pendingLicensingPlans = pendingPlans.filter(
+    (product) =>
+      !educationPattern.test(product.name) &&
+      !membershipPattern.test(product.name),
   );
 
   return (
     <main className={`page-frame ${styles.page}`}>
-      <h1 className="sr-only">Licensing</h1>
       <section
         className={styles.section}
         aria-labelledby="license-offers-title"
@@ -277,10 +263,20 @@ export function LicensingCatalog({
         <h2 id="license-offers-title">One-Time Licenses</h2>
 
         {offers.length === 0 ? (
-          <PreviewPlanList plans={PREVIEW_ONE_TIME_LICENSES} />
+          pendingLicenseTypes.length > 0 ? (
+            <PreviewPlanList
+              actionHref="/music?view=tracks"
+              actionLabel="Buy License"
+              actionStyle="button"
+              artwork={LICENSING_ARTWORK}
+              products={pendingLicenseTypes}
+            />
+          ) : (
+            <p>No one-time licenses are published.</p>
+          )
         ) : (
           <ol className={styles.offerList}>
-            {offers.map((offer) => {
+            {offers.map((offer, index) => {
               const { option, terms, testPrice, track } = offer.snapshot;
               return (
                 <li
@@ -288,44 +284,48 @@ export function LicensingCatalog({
                   id={`offer-${offer.slug}`}
                   key={offer.id}
                 >
+                  <img
+                    alt=""
+                    className={styles.cardArtwork}
+                    src={artworkAt(LICENSING_ARTWORK, index)}
+                  />
                   <TelemetryPageView
                     eventName="licensing-view"
                     resourceId={offer.id}
                     resourceType="license"
                   />
-                  <div className={styles.offerIdentity}>
-                    <span className={styles.testLabel}>Test offer</span>
-                    <h3>{track.title}</h3>
-                    <strong>{option.label}</strong>
-                    <p className={styles.supportingText}>
-                      {option.description}
-                    </p>
-                    <span className={styles.recordMeta}>
-                      {option.usageCategory} · {option.allowedMedia.join(", ")}
-                    </span>
-                  </div>
-                  <div className={styles.offerTerms}>
-                    <strong>
-                      {money(testPrice.amountMinor, testPrice.currency)}
-                    </strong>
-                    <span>Simulated one-time checkout</span>
-                    <span>{termLabel(option.termMonths)}</span>
-                    <span>{option.territory}</span>
-                    <span>
-                      {option.requiresApproval
-                        ? "Artist approval required"
-                        : "Published terms apply"}
-                    </span>
-                    <span>
-                      {terms.title} · version {terms.version}
-                    </span>
-                  </div>
-                  <div className={styles.offerAction}>
-                    <RequestAction
-                      access={requestAccess}
-                      offer={offer}
-                      signInHref={signInHref}
-                    />
+                  <div className={styles.offerPanel}>
+                    <div className={styles.offerIdentity}>
+                      <h3>{track.title}</h3>
+                      <strong>{option.label}</strong>
+                      <p className={styles.supportingText}>
+                        {option.description}
+                      </p>
+                      <span className={styles.recordMeta}>
+                        {option.usageCategory} ·{" "}
+                        {option.allowedMedia.join(", ")}
+                      </span>
+                    </div>
+                    <div className={styles.offerTerms}>
+                      <strong>
+                        {money(testPrice.amountMinor, testPrice.currency)}
+                      </strong>
+                      <span>{termLabel(option.termMonths)}</span>
+                      <span>{option.territory}</span>
+                      <span>
+                        {option.requiresApproval
+                          ? "Artist approval required"
+                          : "Published terms apply"}
+                      </span>
+                      <span>{terms.title}</span>
+                    </div>
+                    <div className={styles.offerAction}>
+                      <RequestAction
+                        access={requestAccess}
+                        offer={offer}
+                        signInHref={signInHref}
+                      />
+                    </div>
                   </div>
                 </li>
               );
@@ -335,54 +335,39 @@ export function LicensingCatalog({
       </section>
 
       <section className={styles.section} aria-labelledby="subscriptions-title">
-        <h2 id="subscriptions-title">Licensing Subscriptions</h2>
+        <h2 id="subscriptions-title">Licensing Plans</h2>
         {licensingSubscriptions.length > 0 ? (
-          <PublishedPlanList products={licensingSubscriptions} />
+          <PublishedPlanList
+            artwork={SUBSCRIPTION_ARTWORK}
+            products={licensingSubscriptions}
+          />
+        ) : pendingLicensingPlans.length > 0 ? (
+          <PreviewPlanList
+            artwork={SUBSCRIPTION_ARTWORK}
+            products={pendingLicensingPlans}
+          />
         ) : (
-          <PreviewPlanList plans={PREVIEW_LICENSE_SUBSCRIPTIONS} />
+          <p>No licensing plans are published.</p>
         )}
       </section>
 
       <section className={styles.section} aria-labelledby="education-title">
-        <h2 id="education-title">Education Plans</h2>
+        <h2 id="education-title">Education</h2>
         {educationProducts.length > 0 ? (
           <PublishedPlanList products={educationProducts} />
+        ) : pendingEducationPlans.length > 0 ? (
+          <PreviewPlanList products={pendingEducationPlans} />
         ) : (
-          <PreviewPlanList plans={PREVIEW_EDUCATION_PLANS} />
+          <p>No education plans are published.</p>
         )}
       </section>
 
-      {contactForm ? (
-        <section className={styles.section} aria-label="Custom Licensing">
-          <ContactForm
-            defaultCategory="licens"
-            description={null}
-            embedded
-            form={contactForm}
-            title="Custom Licensing"
-          />
-        </section>
-      ) : (
-        <section className={styles.section} aria-label="Custom Licensing">
-          <CustomLicensingPreview />
-        </section>
-      )}
-
-      <section className={styles.section} aria-labelledby="faq-title">
-        <h2 id="faq-title">Licensing FAQ</h2>
-        <div className={styles.faqList}>
-          {PREVIEW_FAQS.map((id) => (
-            <details className={styles.faqItem} key={id}>
-              <summary>
-                <span>Question</span>
-                <span aria-hidden="true" className={styles.faqMarker}>
-                  +
-                </span>
-              </summary>
-              <p>Answer</p>
-            </details>
-          ))}
-        </div>
+      <section
+        className={styles.section}
+        id="custom-licensing"
+        aria-label="Custom Licensing"
+      >
+        <CustomLicensingCallout available={contactForm !== null} />
       </section>
     </main>
   );

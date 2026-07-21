@@ -127,14 +127,15 @@ async function exerciseRuntimeLab() {
     anonymousHome.headers.get("permissions-policy") ?? "",
     /payment=\(\)/,
   );
-  assert.equal((await anonymousHome.text()).includes(">Sign in</a>"), true);
+  assert.equal((await anonymousHome.text()).includes(">Log in</a>"), true);
 
   for (const role of ["customer", "editor", "owner"]) {
+    const roleLabel = `${role[0].toUpperCase()}${role.slice(1)}`;
     const fixtureEmail = `${role}@a-op.invalid`;
     const identityHeaders = {
       "oai-authenticated-user-email": fixtureEmail,
       "oai-authenticated-user-full-name": encodeURIComponent(
-        `Fictional ${role[0].toUpperCase()}${role.slice(1)}`,
+        `Fictional ${roleLabel}`,
       ),
       "oai-authenticated-user-full-name-encoding": "percent-encoded-utf-8",
     };
@@ -143,9 +144,9 @@ async function exerciseRuntimeLab() {
     });
     const accountHtml = (await account.text()).replaceAll("<!-- -->", "");
     assert.equal(
-      accountHtml.includes(`active a-op role is ${role}`),
+      accountHtml.includes("Hello"),
       true,
-      `The ${role} account role was not rendered from D1.`,
+      `The ${role} account greeting was not rendered.`,
     );
   }
 

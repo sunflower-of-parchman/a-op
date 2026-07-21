@@ -1,6 +1,7 @@
 export const FAVORITE_TARGET_TYPES = Object.freeze([
   "track",
   "release",
+  "collection",
 ] as const);
 
 export type FavoriteTargetType = (typeof FAVORITE_TARGET_TYPES)[number];
@@ -57,7 +58,20 @@ export interface CustomerReleaseDTO {
   readonly streamUrl: null;
 }
 
-export type CustomerLibraryResourceDTO = CustomerTrackDTO | CustomerReleaseDTO;
+export interface CustomerCollectionDTO {
+  readonly kind: "collection";
+  readonly id: string;
+  readonly available: boolean;
+  readonly slug: string | null;
+  readonly title: string | null;
+  readonly subtitle: null;
+  readonly durationMs: null;
+  readonly href: string | null;
+  readonly streamUrl: null;
+}
+
+export type CustomerLibraryResourceDTO =
+  CustomerTrackDTO | CustomerReleaseDTO | CustomerCollectionDTO;
 
 export interface CustomerFavoriteDTO {
   readonly id: string;

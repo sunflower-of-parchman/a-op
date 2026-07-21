@@ -1,6 +1,6 @@
 export { AdminCourses } from "./AdminCourses";
 export { CourseDetail } from "./CourseDetail";
-export { CourseIndex } from "./CourseIndex";
+export { CourseCards, CourseIndex } from "./CourseIndex";
 export {
   CoursePreviewDetail,
   CoursePreviewIndex,

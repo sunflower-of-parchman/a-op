@@ -1,4 +1,5 @@
 import {
+  readPublishedExternalVideoPosterSource,
   readPublishedHostedVideoDelivery,
   readPublishedVideoPosterDelivery,
 } from "@/db/video-media.ts";
@@ -22,6 +23,97 @@ function unavailable(): RuntimeError {
       publicMessage: "That video media is not available.",
     },
   );
+}
+
+const MAX_EXTERNAL_POSTER_BYTES = 5 * 1024 * 1024;
+
+function providerId(
+  provider: "youtube" | "vimeo",
+  embedUrl: string,
+): string | null {
+  let url: URL;
+  try {
+    url = new URL(embedUrl);
+  } catch {
+    return null;
+  }
+  const segments = url.pathname.split("/").filter(Boolean);
+  const value = segments.at(-1) ?? "";
+  if (
+    provider === "youtube" &&
+    (url.hostname === "www.youtube-nocookie.com" ||
+      url.hostname === "www.youtube.com") &&
+    segments.at(-2) === "embed" &&
+    /^[A-Za-z0-9_-]{6,32}$/.test(value)
+  ) {
+    return value;
+  }
+  if (
+    provider === "vimeo" &&
+    url.hostname === "player.vimeo.com" &&
+    segments.at(-2) === "video" &&
+    /^\d{6,12}$/.test(value)
+  ) {
+    return value;
+  }
+  return null;
+}
+
+async function externalPosterUrl(
+  provider: "youtube" | "vimeo",
+  embedUrl: string,
+): Promise<string | null> {
+  const id = providerId(provider, embedUrl);
+  if (!id) return null;
+  if (provider === "youtube") {
+    return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
+  }
+
+  const metadata = await fetch(
+    `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(`https://vimeo.com/${id}`)}`,
+    { redirect: "manual" },
+  );
+  if (!metadata.ok) return null;
+  const body: unknown = await metadata.json();
+  if (body === null || typeof body !== "object") return null;
+  const thumbnailUrl = (body as { thumbnail_url?: unknown }).thumbnail_url;
+  if (typeof thumbnailUrl !== "string") return null;
+  const url = new URL(thumbnailUrl);
+  if (
+    url.protocol !== "https:" ||
+    !(
+      url.hostname === "i.vimeocdn.com" ||
+      url.hostname.endsWith(".vimeocdn.com")
+    )
+  ) {
+    return null;
+  }
+  return url.toString();
+}
+
+async function fetchExternalPoster(
+  provider: "youtube" | "vimeo",
+  embedUrl: string,
+): Promise<{
+  readonly body: ArrayBuffer;
+  readonly contentType: string;
+} | null> {
+  const url = await externalPosterUrl(provider, embedUrl);
+  if (!url) return null;
+  const response = await fetch(url, { redirect: "manual" });
+  if (!response.ok) return null;
+  const contentType = response.headers.get("content-type")?.split(";", 1)[0];
+  if (!contentType?.startsWith("image/")) return null;
+  const declaredLength = Number(response.headers.get("content-length"));
+  if (
+    Number.isFinite(declaredLength) &&
+    declaredLength > MAX_EXTERNAL_POSTER_BYTES
+  ) {
+    return null;
+  }
+  const body = await response.arrayBuffer();
+  if (body.byteLength > MAX_EXTERNAL_POSTER_BYTES) return null;
+  return { body, contentType };
 }
 
 async function publicVideoDecision(
@@ -103,32 +195,56 @@ export async function deliverVideoPoster(input: {
     input.binding,
     input.videoId,
   );
-  if (!record) throw unavailable();
+  const externalSource = record
+    ? null
+    : await readPublishedExternalVideoPosterSource(
+        input.binding,
+        input.videoId,
+      );
+  if (!record && !externalSource) throw unavailable();
 
   const decision = await publicVideoDecision(
     input.identity,
-    record.videoId,
+    record?.videoId ?? externalSource!.videoId,
     "view",
   );
   if (!decision.allowed) throw unavailable();
 
+  if (externalSource) {
+    const poster = await fetchExternalPoster(
+      externalSource.provider,
+      externalSource.embedUrl,
+    );
+    if (!poster) throw unavailable();
+    return new Response(poster.body, {
+      status: 200,
+      headers: {
+        "cache-control": "public, max-age=86400, stale-while-revalidate=604800",
+        "content-length": String(poster.body.byteLength),
+        "content-type": poster.contentType,
+        [REQUEST_ID_HEADER]: input.requestId,
+        "x-aop-access-source": decision.source,
+      },
+    });
+  }
+
   const store = createR2MediaStore(input.bucket);
-  const metadata = await store.head(record.objectKey);
+  const metadata = await store.head(record!.objectKey);
   if (
     !metadata ||
-    metadata.byteLength !== record.byteLength ||
-    metadata.contentType !== record.contentType
+    metadata.byteLength !== record!.byteLength ||
+    metadata.contentType !== record!.contentType
   ) {
     throw unavailable();
   }
-  const object = await store.get(record.objectKey);
+  const object = await store.get(record!.objectKey);
   if (!object) throw unavailable();
   return new Response(object.body, {
     status: 200,
     headers: {
       "cache-control": "no-store",
-      "content-length": String(record.byteLength),
-      "content-type": record.contentType,
+      "content-length": String(record!.byteLength),
+      "content-type": record!.contentType,
       [REQUEST_ID_HEADER]: input.requestId,
       "x-aop-access-source": decision.source,
     },

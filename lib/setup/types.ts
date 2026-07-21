@@ -1,6 +1,6 @@
 import type { ModuleKey } from "@/lib/modules/registry";
 
-export const SETUP_PROPOSAL_SCHEMA_VERSION = "aop.setup-proposal.v1" as const;
+export const SETUP_PROPOSAL_SCHEMA_VERSION = "aop.setup-proposal.v2" as const;
 export const SETUP_APPROVAL_SCHEMA_VERSION = "aop.setup-approval.v1" as const;
 export const EXTERNAL_ACTION_APPROVAL_SCHEMA_VERSION =
   "aop.external-action-approval.v1" as const;
@@ -24,6 +24,7 @@ export const SETUP_TOPIC_KEYS = Object.freeze([
   "credits",
   "licensing",
   "courses-video",
+  "editorial-presentation",
   "contact-consent",
   "telemetry-retention",
   "privacy-terms",
@@ -109,6 +110,11 @@ export interface CatalogTrackProposal {
   readonly trackKey: string;
   readonly title: string;
   readonly versionLabel: string | null;
+  readonly durationMs: number | null;
+  readonly meter: string | null;
+  readonly tempoBpm: number | null;
+  readonly musicalKey: string | null;
+  readonly tags: readonly string[];
   readonly releaseKey: string | null;
   readonly sequence: number;
   readonly mediaKey: string | null;
@@ -119,12 +125,14 @@ export interface CatalogReleaseProposal {
   readonly title: string;
   readonly releaseDate: string | null;
   readonly trackKeys: readonly string[];
+  readonly artworkMediaKey: string | null;
 }
 
 export interface CatalogCollectionProposal {
   readonly collectionKey: string;
   readonly title: string;
   readonly trackKeys: readonly string[];
+  readonly artworkMediaKey: string | null;
 }
 
 export interface CatalogReleasesTopic {
@@ -276,6 +284,59 @@ export interface CoursesVideoTopic {
   readonly videos: readonly VideoProposal[];
 }
 
+export type SetupStructuredTextBlockType = "heading" | "paragraph" | "quote";
+
+export interface SetupStructuredTextBlock {
+  readonly type: SetupStructuredTextBlockType;
+  readonly text: string;
+}
+
+export interface EditorialPostProposal {
+  readonly postKey: string;
+  readonly title: string;
+  readonly excerpt: string;
+  readonly body: readonly SetupStructuredTextBlock[];
+  readonly publication: "draft" | "publish";
+}
+
+export interface UpdateEntryProposal {
+  readonly updateKey: string;
+  readonly title: string;
+  readonly summary: string;
+  readonly body: readonly SetupStructuredTextBlock[];
+  readonly audience: "public" | "account";
+  readonly publication: "draft" | "publish";
+}
+
+export interface AboutPageProposal {
+  readonly title: string;
+  readonly introduction: string;
+  readonly bodyText: string;
+  readonly publication: "draft" | "publish";
+}
+
+export const PAGE_HERO_KEYS = Object.freeze([
+  "courses",
+  "videos",
+  "membership",
+  "licensing",
+] as const);
+
+export type PageHeroKey = (typeof PAGE_HERO_KEYS)[number];
+
+export interface PageHeroProposal {
+  readonly pageKey: PageHeroKey;
+  readonly mediaKey: string;
+  readonly altText: string;
+}
+
+export interface EditorialPresentationTopic {
+  readonly posts: readonly EditorialPostProposal[];
+  readonly updates: readonly UpdateEntryProposal[];
+  readonly about: AboutPageProposal;
+  readonly pageHeroes: readonly PageHeroProposal[];
+}
+
 export interface ContactConsentTopic {
   readonly enabled: boolean;
   readonly publicEmail: string | null;
@@ -338,6 +399,7 @@ export interface SetupTopics {
   readonly credits: CreditsTopic;
   readonly licensing: LicensingTopic;
   readonly coursesVideo: CoursesVideoTopic;
+  readonly editorialPresentation: EditorialPresentationTopic;
   readonly contactConsent: ContactConsentTopic;
   readonly telemetryRetention: TelemetryRetentionTopic;
   readonly privacyTerms: PrivacyTermsTopic;
@@ -350,7 +412,13 @@ export interface MediaActionProposal {
   readonly sourceAlias: string;
   readonly operation: "inspect-and-prepare" | "publish-approved";
   readonly derivatives: readonly (
-    "stream" | "download" | "waveform" | "poster" | "thumbnail" | "transcript"
+    | "stream"
+    | "download"
+    | "waveform"
+    | "artwork"
+    | "poster"
+    | "thumbnail"
+    | "transcript"
   )[];
   readonly requiresArtistApproval: true;
 }

@@ -155,6 +155,29 @@ test("exact applied approval gates R2 publication before finalization", async (t
   );
 });
 
+test("an exact applying setup can stage protected media before final apply", async (t) => {
+  const memory = await setup();
+  t.after(() => memory.close());
+  memory.database.exec(
+    `UPDATE setup_applications
+     SET status = 'applying', result_state_fingerprint = NULL,
+         completed_at = NULL
+     WHERE id = '${APPLICATION}'`,
+  );
+  await requireAppliedMediaPublicationApproval(memory.binding, source(), OWNER);
+  const result = await finalizeMediaPublication(
+    memory.binding,
+    source(),
+    object(source()),
+    context("applying-source-publication-0001"),
+  );
+  assert.equal(result.value.status, "ready");
+  assert.equal(
+    scalar(memory.database, "SELECT COUNT(*) FROM media_objects"),
+    1,
+  );
+});
+
 test("public publication requires the exact persisted Michael approval receipt before R2", async (t) => {
   const memory = await setup();
   t.after(() => memory.close());
