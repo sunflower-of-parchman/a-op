@@ -36,17 +36,16 @@
   margin-top: 3.5rem;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
-  color: #fff;
+  border-radius: 4px;
+  background: var(--accent-action);
+  color: #fffdfc;
   font-size: 1.1rem;
   text-decoration: none;
-  transition:
-    filter 160ms ease,
-    transform 160ms ease;
+  transition: transform 160ms ease;
 }
 
 .primaryAction:hover {
-  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 
 .primaryAction:active {

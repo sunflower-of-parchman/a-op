@@ -24,6 +24,7 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 
 ## Progress
 
+- [x] (2026-07-21 README) Added the factual OpenAI Build Week record with three Codex session IDs, GPT-5.6 Sol reasoning settings, the 14-hour 28-minute React/Sites build, and the commits that mark each recorded result. Added a five-minute judge path and the first ChatGPT Work handoff prompt. The prompt tests repository access, optional artist context, bounded folder approval, setup preview, exact approval, private review, and the external-action boundary.
 - [x] (2026-07-21 05:50Z) Removed the completed milestone runtime-laboratory and submission-gate layer: seven test-only application routes, seven runtime verifier scripts, eight obsolete tests, the fictional D1 role bootstrap, the runtime-proof repository and table, simulation-mode configuration, and their package commands. Generated and inspected migration 0035 to remove exact laboratory state and narrow media keys to the real `originals/*` namespace. Connected all five previously unreferenced product tests to focused verification commands. A read-only reference scan, package-command target check, and package JSON parse passed; no test suite ran during this cleanup review.
 - [x] (2026-07-18 19:09Z) Confirmed the product direction: artists create and operate `a-op` through ChatGPT Work and publish the web application with Sites.
 - [x] (2026-07-18 19:09Z) Inspected the current application, product description, architecture records, and the official Sites starter structure.

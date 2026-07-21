@@ -6,11 +6,25 @@ An artist can publish music, stream it through their own site, manage customer a
 
 Music is the center of the application. The catalog, player, customer accounts, access records, licensing, memberships, Courses, and administration all use the same artist, account, media, and authorization system.
 
+## OpenAI Build Week
+
+This repository was built during OpenAI Build Week. All repository work was completed with GPT-5.6 Sol in Codex.
+
+| Date             | Codex session                          | Setting              | Recorded result                                                                                                                                                                 |
+| ---------------- | -------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| July 18, 2026    | `019f7557-f594-7de1-9176-c4a261de2ea6` | GPT-5.6 Sol · Max    | Completed the product audit and Sites migration plan. The plan was saved in `4c96148`.                                                                                          |
+| July 18–19, 2026 | `019f7758-53d0-7d11-a874-f5a302d0e92d` | GPT-5.6 Sol · Ultra  | Rebuilt the application in React for Sites. The session started from `4c96148`. The complete implementation landed in `9b2f8bd` after 14 hours and 28 minutes.                  |
+| July 20–21, 2026 | `019f82a8-85d5-7550-a437-bb6a8945a18a` | GPT-5.6 Sol · Medium | Completed Stripe Test acceptance, removed local test state, audited the release, and restored the complete neutral framework. The neutral framework was committed in `2079971`. |
+
+Session metadata records these reasoning settings: `low`, `medium`, `high`, `xhigh`, `max`, and `ultra`. Codex also ran in Standard and Fast speed modes.
+
+The Git history includes the first Nuxt implementation and the React/Sites rebuild. Important decisions are recorded in [plans/migrateAopToSites.md](plans/migrateAopToSites.md). Implementation sources and commit evidence are recorded in [docs/provenance.md](docs/provenance.md).
+
 ## Website sections
 
 ### Home
 
-The home page introduces the artist's current work. It can show approved imagery, the latest release, current Courses, a featured video, an About introduction, and direct paths to Membership and Licensing. Empty sections stay out of the page until the artist publishes material for them.
+The home page introduces the artist's current work. It can show approved imagery, the latest release, current Courses, a featured video, an About introduction, and direct paths to Membership and Licensing. The complete page structure remains visible in a neutral installation. Empty states identify the material the artist has not published yet.
 
 ### Music
 
@@ -98,6 +112,34 @@ The application also contains protected administration routes for:
 
 These underlying tools remain available for setup and maintenance while the everyday dashboard stays small.
 
+## Five-minute judge path
+
+Requirements: Node.js 22.13 or later and npm.
+
+```sh
+npm ci
+npm run db:migrate:local
+npm run dev
+```
+
+Open the local address printed by the development server.
+
+The neutral installation contains the public navigation, responsive layouts, dark and light themes, music workspace, Membership, Licensing, Courses, Videos, What's New, Contact, Privacy Policy, Terms and Conditions, FAQ, and login page. Empty states show where the artist's approved material will appear.
+
+Sign in with ChatGPT requires Sites-provided identity. Protected account and administration routes use that identity. Stripe checkout requires Test credentials.
+
+Run the complete source verification:
+
+```sh
+npm run verify:all
+```
+
+Build the production Worker artifact:
+
+```sh
+npm run build
+```
+
 ## Starting an installation
 
 Every installation starts with the Sound for Movement-derived visual foundation rebuilt in React for Sites: Lato, open layouts, dark and light themes, responsive behavior, and shared controls. The neutral installation uses plain labels and contains no artist media.
@@ -113,6 +155,34 @@ Approved content enters the existing application:
 Local paths remain in ignored local configuration. Imported content does not replace the visual foundation or create a separate content-specific website.
 
 The setup contract and commands are documented in [SETUP.md](SETUP.md).
+
+## Try it with ChatGPT Work
+
+Open Work in the ChatGPT desktop app. Add any context document and asset folders you want it to use. Then paste this prompt:
+
+```text
+Use @Sites and this repository as the source for my musician website:
+https://github.com/sunflower-of-parchman/a-op
+
+Open the repository through my connected GitHub account. Create a fork in my account if you have permission. If Work cannot open or fork it, stop and tell me the exact access I need to provide. Do not recreate the application from scratch.
+
+Read AGENTS.md, PRODUCT.md, README.md, SETUP.md, plans/migrateAopToSites.md, and the relevant contracts in docs/architecture/ before changing the application.
+
+First ask which supported capabilities I want to use. Then ask me to choose one starting path:
+
+1. Use my attached context document and inspect only the asset folders I approve.
+2. Start blank and help me add material album by album, track by track, and page by page.
+
+Keep the complete neutral visual framework, routes, navigation, player, access controls, and administration. Empty content is okay. Do not invent artist material, prices, license terms, legal decisions, or publication choices.
+
+Before changing product content or code, show me the exact information checklist and setup proposal. Wait for my approval.
+
+After approval, use the existing setup flow and product repositories. Structured state belongs in D1. Approved files belong in R2. Keep identity and protected access on the server. Use Stripe Test mode only if I activate commerce.
+
+Run the result as a private preview. Report what works, what still needs my input, and what failed. Do not publish the Site, connect a domain, use live Stripe credentials, or change repository visibility without my specific approval.
+```
+
+This first run tests the full handoff from the repository and optional artist context into the existing application. The neutral installation remains usable when no content is supplied.
 
 ## Stripe Test Mode
 
