@@ -887,7 +887,15 @@ test("Sites, Worker, and local runtime bindings remain logically aligned", async
     readFile(new URL("../vite.config.ts", import.meta.url), "utf8"),
   ]);
 
-  assert.deepEqual(JSON.parse(hosting), { d1: "DB", r2: "MEDIA" });
+  const parsedHosting = JSON.parse(hosting);
+  assert.equal(parsedHosting.d1, "DB");
+  assert.equal(parsedHosting.r2, "MEDIA");
+  assert.deepEqual(
+    Object.keys(parsedHosting).sort(),
+    Object.hasOwn(parsedHosting, "project_id")
+      ? ["d1", "project_id", "r2"]
+      : ["d1", "r2"],
+  );
   assert.match(workerTypes, /DB:\s*D1Database/);
   assert.match(workerTypes, /MEDIA:\s*R2Bucket/);
   assert.match(workerTypes, /AOP_OWNER_BOOTSTRAP_EMAIL\?:\s*string/);

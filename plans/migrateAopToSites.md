@@ -24,6 +24,7 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 
 ## Progress
 
+- [x] (2026-07-21 Sites release boundary) Added one fail-closed repository release command that requires clean synchronized `main`, records the full source SHA, runs exact installation and the production build without source changes, verifies the Worker, logical bindings, migrations `0000` through `0035`, Drizzle journal, database-backed public route contracts, packaged security boundary, and Worker digest, and stops before any Sites action on mismatch. Documented official packaging, private versioning, hosted route and log acceptance, and the prohibition on substitute Site implementations. Verification passed: 33 focused contract checks, TypeScript, focused ESLint, a production build whose route manifest includes `/membership`, the runtime artifact verifier with 36 packaged migrations and no client-secret findings, and the deployment-contract verifier in a clean synchronized Git fixture with Worker SHA-256 `99f9273869ab1da9254b62633e929a8b8c39ebdea566ac2bfb7d5fdbfd987f3f`. The same verifier rejected the intentionally dirty development tree before building. No deployment or hosted mutation ran.
 - [x] (2026-07-21 README) Added the factual OpenAI Build Week record with three Codex session IDs, GPT-5.6 Sol reasoning settings, the 14-hour 28-minute React/Sites build, and the commits that mark each recorded result. Added a five-minute judge path and the first ChatGPT Work handoff prompt. The prompt tests repository access, optional artist context, bounded folder approval, setup preview, exact approval, private review, and the external-action boundary.
 - [x] (2026-07-21 05:50Z) Removed the completed milestone runtime-laboratory and submission-gate layer: seven test-only application routes, seven runtime verifier scripts, eight obsolete tests, the fictional D1 role bootstrap, the runtime-proof repository and table, simulation-mode configuration, and their package commands. Generated and inspected migration 0035 to remove exact laboratory state and narrow media keys to the real `originals/*` namespace. Connected all five previously unreferenced product tests to focused verification commands. A read-only reference scan, package-command target check, and package JSON parse passed; no test suite ran during this cleanup review.
 - [x] (2026-07-18 19:09Z) Confirmed the product direction: artists create and operate `a-op` through ChatGPT Work and publish the web application with Sites.
@@ -119,6 +120,9 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: The first Work deployment report claimed commit `420e448` while describing source behavior that does not exist in that commit.
+  Evidence: That commit contains a dedicated `/membership` route, the neutral-framework presentation gate, migration `0029` seeding setup as `unconfigured`, and the `No membership is published.` empty state. A healthy `/api/health` response checks role count and binding reachability only; it does not prove route, setup-state, migration-history, artifact, or deployed-version identity.
 
 - Observation: One configured FAQ footer item suppressed the fallback public directory.
   Evidence: The footer treated any configured nonlegal item as a complete directory. Merging configured footer items with the primary public navigation restored About, Contact, What's New, Membership, Courses, Videos, Licensing, and FAQ while retaining deduplication.
@@ -307,6 +311,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Evidence: Emitting null-valued Meter, Tempo, and Key fields changed an older archive's semantic fingerprint after restore. Current exports omit absent optional fields, restore older records as null, and round-trip supplied values exactly; the complete portability export and double-restore rehearsal passes.
 
 ## Decision Log
+
+- Decision: Make one clean-source-to-artifact command the only supported Sites release preparation path.
+  Rationale: A deployment agent must be able to stop with exact evidence before it can substitute routes or mix source, artifact, database, and deployed-version state. The official Sites helper continues to own archive packaging and the Sites connector continues to own version saving and private deployment.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Present the complete supported public framework while setup is unconfigured, with honest empty states and no fabricated content.
   Rationale: A fresh clone must let an artist inspect the product structure and choose capabilities. Presentation permission applies only to public index surfaces; configured module state remains authoritative after setup and all protected operations retain their existing server gates.
@@ -1581,3 +1589,5 @@ Revision note, 2026-07-19: Added the range-aware owner Dashboard, real D1 admini
 Revision note, 2026-07-20: Renamed the owner/editor Account action to `Admin Dashboard`, preserved its role-scoped `/admin` route and top-right placement, and granted the current local Michael preview record owner authority for direct review.
 
 Revision note, 2026-07-20: Simplified the visible administration rail to Metrics, Inquiries, Courses, What's New, Videos, and Entitlements; made Metrics the direct administration home; and removed implementation, setup, configuration, commerce, legal, catalog-editor, customer-editor, and shell utility controls from the everyday dashboard surface while preserving their underlying contracts.
+
+Revision note, 2026-07-21: Added the fail-closed Sites release preparation boundary after the first Work deployment mixed or misreported source, artifact, database, and hosted-version evidence. The repository now refuses dirty, unsynchronized, substituted, incomplete, or migration-mismatched release candidates before official Sites packaging.

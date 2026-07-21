@@ -165,7 +165,18 @@ const [packagedHosting, sourceMigrationNames, packagedMigrationNames] =
     migrationNames(packagedMigrationDirectory),
   ]);
 
-assert.deepEqual(JSON.parse(packagedHosting), { d1: "DB", r2: "MEDIA" });
+const parsedPackagedHosting = JSON.parse(packagedHosting);
+assert.equal(parsedPackagedHosting.d1, "DB");
+assert.equal(parsedPackagedHosting.r2, "MEDIA");
+assert.deepEqual(
+  Object.keys(parsedPackagedHosting).sort(),
+  Object.hasOwn(parsedPackagedHosting, "project_id")
+    ? ["d1", "project_id", "r2"]
+    : ["d1", "r2"],
+);
+if (Object.hasOwn(parsedPackagedHosting, "project_id")) {
+  assert.match(parsedPackagedHosting.project_id, /\S/);
+}
 assert.deepEqual(packagedMigrationNames, sourceMigrationNames);
 assert.equal(sourceMigrationNames.length, 36);
 assert.match(sourceMigrationNames.at(-1), /^0035_.+\.sql$/);

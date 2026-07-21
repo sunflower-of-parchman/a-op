@@ -84,8 +84,17 @@ test("packages exact theme, storage, type, and open-layout foundations", async (
   assert.doesNotMatch(themeToggle, /border-color|background-color/);
   assert.match(layout, /@fontsource\/lato\/300\.css/);
   assert.match(layout, /@fontsource\/lato\/400\.css/);
-  assert.deepEqual(JSON.parse(hosting), { d1: "DB", r2: "MEDIA" });
-  assert.deepEqual(JSON.parse(packagedHosting), { d1: "DB", r2: "MEDIA" });
+  const sourceHosting = JSON.parse(hosting);
+  const builtHosting = JSON.parse(packagedHosting);
+  assert.equal(sourceHosting.d1, "DB");
+  assert.equal(sourceHosting.r2, "MEDIA");
+  assert.deepEqual(builtHosting, sourceHosting);
+  assert.deepEqual(
+    Object.keys(sourceHosting).sort(),
+    Object.hasOwn(sourceHosting, "project_id")
+      ? ["d1", "project_id", "r2"]
+      : ["d1", "r2"],
+  );
   await access(new URL("licenses/Lato-OFL-1.1.txt", projectRoot));
   await assert.rejects(access(new URL("public/images/mosaic", projectRoot)));
   await assert.rejects(access(new URL("public/og.png", projectRoot)));

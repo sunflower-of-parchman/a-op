@@ -90,6 +90,12 @@ Michael remains the authority for writing, music and media rights, access plans,
 
 Public Sites deployment, custom domains, DNS, repository visibility, email delivery, public media uploads, and other external publication actions require Michael's specific approval for that exact action. Local development, fictional data, and deterministic simulations may proceed inside the approved project scope.
 
+## Sites release boundary
+
+Prepare every Sites version with `npm run prepare:sites-release` from a clean `main` checkout whose `HEAD` equals `origin/main`. Treat any clone, install, build, source-integrity, artifact, binding, migration, packaging, version-save, deployment, route, or Worker-log failure as terminal for that attempt. Report the exact failure and stop.
+
+Deploy only the official archive made from that verified unchanged checkout with the installed `sites:sites-hosting` helper. Never create `app/site.tsx`, substitute routes, static route shims, replacement prose, alternate components, or database-free fallbacks during deployment. `docs/architecture/sites-release-contract.md` is the complete release contract.
+
 ## ChatGPT Work
 
 ChatGPT Work is the artist's natural-language development and operating environment. Codex helps initialize the project, activate the selected capabilities, preserve the artist's wording, run local media preparation against artist-approved paths, apply validated configuration, change source code, diagnose problems, perform maintenance, and verify the result.
