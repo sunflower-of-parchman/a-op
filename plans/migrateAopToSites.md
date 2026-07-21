@@ -120,10 +120,14 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] (2026-07-21 14:52Z) Corrected the neutral Sites release boundary so caller Stripe environment values cannot activate or block the pre-personalization build. Release preparation now removes all three Stripe Test variables before building; local setup and activated runtime validation remain strict. The focused commerce-preflight contract and the neutral production build passed with an unrelated 32-character `STRIPE_SECRET_KEY` present in the caller environment.
 - [x] (2026-07-21 14:58Z) Simplified the initial Sites path to one eligibility build, private Site linkage, and one final release preparation. Removed the duplicate `verify:sites-package` command, limited live-credential checks to the three Stripe inputs, required the assigned `project_id` before final preparation, and derived migration-chain length from the checked-in journal rather than the current count. Nine focused release and commerce contracts, the neutral five-stage production build under the conflicting caller environment, strict types, the runtime artifact verifier, and diff integrity passed.
 - [x] (2026-07-21 Sites connector gate) Added a pre-repository capability gate after a real Work test exposed only the Sites design picker and no hosting connector. New-installation tasks now stop before clone, install, build, localhost, or personalization unless they can create a Site, obtain source-write credentials, save a version, deploy it privately, and check deployment status. The README test prompt carries the same gate and exact failure statement.
+- [x] (2026-07-21 product definition pass) Reduced `PRODUCT.md` from 122 lines to 49 by keeping the durable product identity, connected capabilities, artist ownership, data and access model, Sites commerce boundary, and completion standard. Removed repeated setup, policy, interface, and platform-operating detail already owned by the architecture and setup contracts.
 - [ ] Save a Sites version from the exact validated source.
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: `PRODUCT.md` repeated most of `docs/architecture/product-contract.md` and several narrower operating contracts.
+  Evidence: Capability descriptions appeared both as a full list and separate sections, while setup, storage, current platform guidance, privacy handling, and commerce mechanics repeated their dedicated documents.
 
 - Observation: Loading the Sites plugin does not guarantee that the active task receives the Sites hosting connector.
   Evidence: The failed Work test exposed `sites-design-picker` but no action to create a Site, save a version, deploy privately, inspect deployment status, or obtain source-write credentials. The repository completed its neutral build correctly, but no ChatGPT Site could exist in that task.
@@ -324,6 +328,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Evidence: Emitting null-valued Meter, Tempo, and Key fields changed an older archive's semantic fingerprint after restore. Current exports omit absent optional fields, restore older records as null, and round-trip supplied values exactly; the complete portability export and double-restore rehearsal passes.
 
 ## Decision Log
+
+- Decision: Keep `PRODUCT.md` as the short durable product definition.
+  Rationale: Product identity, purpose, connected capabilities, ownership, and completion belong together. Release, setup, policy, storage, and implementation detail remain in their focused contracts.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Gate every repository-link installation on callable Sites hosting actions before repository work.
   Rationale: The repository cannot supply a missing task connector. Failing before clone prevents a localhost preview from consuming time or being mistaken for the promised private Site, while a successfully provisioned task continues through the exact linked release flow.
@@ -646,6 +654,8 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Date/Author: 2026-07-18 / Michael
 
 ## Outcomes & Retrospective
+
+Product-definition outcome as of 2026-07-21: `PRODUCT.md` now gives a complete 49-line account of what a-op is without duplicating its release, setup, privacy, storage, and implementation documentation.
 
 Sites connector-gate outcome as of 2026-07-21: the repository handoff now distinguishes the Sites workflow instructions and design picker from the callable hosting connector. A task missing creation, source-write, version-save, private-deploy, or deployment-status actions stops immediately with an exact statement that no Site was created. Localhost cannot satisfy or bypass this gate, and personalization remains after successful hosted verification.
 
@@ -1634,3 +1644,5 @@ Revision note, 2026-07-21: Removed Stripe Test environment values from the neutr
 Revision note, 2026-07-21: Simplified initial hosting to one eligibility build and one final linked release build, removed the duplicate package gate, scoped Stripe checks to exact inputs, and made migration verification follow the checked-in journal.
 
 Revision note, 2026-07-21: Added a fail-fast callable-tool gate after a Work task loaded the Sites design picker without the hosting connector and incorrectly continued to localhost.
+
+Revision note, 2026-07-21: Reduced `PRODUCT.md` to the durable product definition and left operational detail in the focused repository contracts.
