@@ -84,6 +84,8 @@ test("public Membership uses published records and stays neutral when empty", as
   assert.match(page, /productType === "membership"/);
   assert.match(landing, /if \(!product\)/);
   assert.match(landing, /No membership is published\./);
+  assert.match(landing, /styles\.emptyPage/);
+  assert.match(styles, /\.emptyPage\s*\{[\s\S]*min-height:\s*auto/);
   assert.ok(
     landing.indexOf("if (!product)") <
       landing.indexOf('aria-label="Membership benefits"'),

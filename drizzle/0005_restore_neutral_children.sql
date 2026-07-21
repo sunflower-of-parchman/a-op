@@ -73,7 +73,7 @@ WITH `neutral_page_revisions` (
 ) AS (
 	VALUES
 		('page_music_revision_1', 'page_music', 'music', NULL, 'system', 'Music', 'Releases, tracks, collections, artwork, credits, and streaming live at the center of the site.', 'This neutral installation is ready for the artist''s approved catalog and media.'),
-		('page_about_revision_1', 'page_about', 'about', NULL, 'standard', 'About', 'a-op is an open-source web application for musicians who want to publish and operate their work through their own site.', 'A fresh installation begins with music, streaming, identity, access, and administration. The artist activates other connected capabilities when they need them.'),
+		('page_about_revision_1', 'page_about', 'about', NULL, 'standard', 'About', '', ''),
 		('page_privacy_revision_1', 'page_privacy', 'privacy', NULL, 'legal', 'Privacy', 'This installation includes an editable Privacy Policy starter for the artist to review, revise, approve, and publish.', 'The final policy describes the artist''s actual data collection, contact forms, accounts, access, telemetry, services, and retention choices.'),
 		('page_terms_revision_1', 'page_terms', 'terms', NULL, 'legal', 'Terms and Conditions', 'This installation includes an editable Terms and Conditions starter for the artist to review, revise, approve, and publish.', 'The artist remains the authority for access plans, memberships, subscriptions, licensing terms, downloads, Courses, and customer policies.'),
 		('page_faq_revision_1', 'page_faq', 'faq', NULL, 'standard', 'FAQ', 'Answers about listening, accounts, access, downloads, memberships, subscriptions, Courses, and licensing live here.', 'Each artist replaces these neutral placeholders with the information their visitors and customers need.'),

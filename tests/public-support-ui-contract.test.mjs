@@ -6,7 +6,7 @@ async function source(path) {
   return readFile(new URL(`../${path}`, import.meta.url), "utf8");
 }
 
-test("About and Login are dedicated public routes with direct destinations", async () => {
+test("About and Login are dedicated public routes", async () => {
   const [about, login, navigation] = await Promise.all([
     source("app/(public)/about/page.tsx"),
     source("app/(public)/login/page.tsx"),
@@ -14,10 +14,8 @@ test("About and Login are dedicated public routes with direct destinations", asy
   ]);
 
   assert.match(about, /readPublishedPageBySlug\(env\.DB, "about"\)/);
-  assert.match(about, /href="\/music"/);
-  assert.match(about, /href="\/courses"/);
-  assert.match(about, /href="\/licensing"/);
-  assert.match(about, /href="\/contact"/);
+  assert.match(about, /page_about_revision_1/);
+  assert.doesNotMatch(about, /linkDirectory|href="\//);
   assert.match(login, /getChatGPTUser\(\)/);
   assert.match(login, /chatGPTSignInPath\("\/account"\)/);
   assert.match(login, /Continue with ChatGPT/);

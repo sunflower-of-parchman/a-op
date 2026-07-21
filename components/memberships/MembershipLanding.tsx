@@ -38,7 +38,7 @@ function cadence(product: CommerceProductDTO): string {
 export function MembershipLanding({ images, product }: MembershipLandingProps) {
   if (!product) {
     return (
-      <div className={`page-frame ${styles.page}`}>
+      <div className={`page-frame ${styles.page} ${styles.emptyPage}`}>
         <p className={styles.empty}>No membership is published.</p>
       </div>
     );

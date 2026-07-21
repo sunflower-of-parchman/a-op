@@ -9,6 +9,12 @@
   color: var(--ink-muted);
 }
 
+.emptyPage {
+  min-height: auto;
+  align-items: start;
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
 .membership {
   display: grid;
   grid-template-columns: minmax(15rem, 0.72fr) minmax(28rem, 1.28fr);
