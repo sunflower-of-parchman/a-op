@@ -161,11 +161,13 @@ The setup contract and commands are documented in [SETUP.md](SETUP.md).
 Open a new Work chat and paste this prompt:
 
 ```text
+Before cloning, installing, or building, confirm this task exposes the Sites hosting actions required to create a Site, obtain source-write credentials, save a version, deploy it privately, and check deployment status. If any action is missing, stop immediately and state: "The full Sites hosting connector is unavailable. No Site has been created."
+
 @Sites, let’s build my new artist-owned website from this repository:
 https://github.com/sunflower-of-parchman/a-op
 ```
 
-That request builds and verifies the complete neutral private Site before asking for artist material or configuration. After the Site works, Work begins personalization by asking the artist to attach a context document or approved assets, share a Google Drive folder, approve a local asset folder, or begin with the blank Site. Work reviews the supplied material and presents the proposed capabilities and setup before changing the Site.
+That request first proves the active Work task can host the Site. The Sites skill or design picker by itself is insufficient. If the hosting connector is incomplete, the task ends before repository work and cannot present localhost as the website. When the gate passes, the request builds and verifies the complete neutral private Site before asking for artist material or configuration. After the Site works, Work begins personalization by asking the artist to attach a context document or approved assets, share a Google Drive folder, approve a local asset folder, or begin with the blank Site. Work reviews the supplied material and presents the proposed capabilities and setup before changing the Site.
 
 ## Stripe Test Mode
 

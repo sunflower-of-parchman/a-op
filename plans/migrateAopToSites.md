@@ -119,10 +119,14 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
 - [x] Complete responsive, keyboard, accessibility, performance, security, and recovery verification across the integrated application.
 - [x] (2026-07-21 14:52Z) Corrected the neutral Sites release boundary so caller Stripe environment values cannot activate or block the pre-personalization build. Release preparation now removes all three Stripe Test variables before building; local setup and activated runtime validation remain strict. The focused commerce-preflight contract and the neutral production build passed with an unrelated 32-character `STRIPE_SECRET_KEY` present in the caller environment.
 - [x] (2026-07-21 14:58Z) Simplified the initial Sites path to one eligibility build, private Site linkage, and one final release preparation. Removed the duplicate `verify:sites-package` command, limited live-credential checks to the three Stripe inputs, required the assigned `project_id` before final preparation, and derived migration-chain length from the checked-in journal rather than the current count. Nine focused release and commerce contracts, the neutral five-stage production build under the conflicting caller environment, strict types, the runtime artifact verifier, and diff integrity passed.
+- [x] (2026-07-21 Sites connector gate) Added a pre-repository capability gate after a real Work test exposed only the Sites design picker and no hosting connector. New-installation tasks now stop before clone, install, build, localhost, or personalization unless they can create a Site, obtain source-write credentials, save a version, deploy it privately, and check deployment status. The README test prompt carries the same gate and exact failure statement.
 - [ ] Save a Sites version from the exact validated source.
 - [ ] After Michael approves the specific hosting action, deploy the complete Site at the approved access level and verify the working hosted product.
 
 ## Surprises & Discoveries
+
+- Observation: Loading the Sites plugin does not guarantee that the active task receives the Sites hosting connector.
+  Evidence: The failed Work test exposed `sites-design-picker` but no action to create a Site, save a version, deploy privately, inspect deployment status, or obtain source-write credentials. The repository completed its neutral build correctly, but no ChatGPT Site could exist in that task.
 
 - Observation: The release process inherited a generic `STRIPE_SECRET_KEY` from the caller even though the neutral installation had no commerce configuration.
   Evidence: The variable was present, 32 characters long, and did not have a Stripe Test prefix; the other two Stripe variables were absent. Ordinary builds correctly allow absent commerce configuration, but validating the unrelated caller value caused the neutral production build to stop before Sites creation.
@@ -320,6 +324,10 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Evidence: Emitting null-valued Meter, Tempo, and Key fields changed an older archive's semantic fingerprint after restore. Current exports omit absent optional fields, restore older records as null, and round-trip supplied values exactly; the complete portability export and double-restore rehearsal passes.
 
 ## Decision Log
+
+- Decision: Gate every repository-link installation on callable Sites hosting actions before repository work.
+  Rationale: The repository cannot supply a missing task connector. Failing before clone prevents a localhost preview from consuming time or being mistaken for the promised private Site, while a successfully provisioned task continues through the exact linked release flow.
+  Date/Author: 2026-07-21 / Michael and Codex
 
 - Decision: Build and package every neutral Sites release with Stripe Test environment values removed from the child process.
   Rationale: Hosted runtime values belong in Sites settings and personalization follows successful neutral hosting. Removing the three exact commerce variables prevents ambient tool configuration from becoming release input while local setup and deliberately activated Test commerce continue to reject missing, malformed, or live values.
@@ -638,6 +646,8 @@ Michael explicitly authorized the complete Sound for Movement visual framework a
   Date/Author: 2026-07-18 / Michael
 
 ## Outcomes & Retrospective
+
+Sites connector-gate outcome as of 2026-07-21: the repository handoff now distinguishes the Sites workflow instructions and design picker from the callable hosting connector. A task missing creation, source-write, version-save, private-deploy, or deployment-status actions stops immediately with an exact statement that no Site was created. Localhost cannot satisfy or bypass this gate, and personalization remains after successful hosted verification.
 
 Neutral commerce-boundary outcome as of 2026-07-21: the release candidate no longer requires or consumes Stripe Test configuration. `prepare:sites-release` removes the three Stripe variables from its child environment, then verifies the complete application with simulated commerce inactive. Stripe Test setup remains a later deliberate Sites-settings action after the hosted neutral installation is verified, and runtime activation still fails closed for incomplete, malformed, or live configuration.
 
@@ -1622,3 +1632,5 @@ Revision note, 2026-07-21: Moved capability and artist-material discovery after 
 Revision note, 2026-07-21: Removed Stripe Test environment values from the neutral release and package child processes after a generic caller `STRIPE_SECRET_KEY` blocked the pre-personalization build. Preserved strict validation for deliberate local setup and activated simulated commerce.
 
 Revision note, 2026-07-21: Simplified initial hosting to one eligibility build and one final linked release build, removed the duplicate package gate, scoped Stripe checks to exact inputs, and made migration verification follow the checked-in journal.
+
+Revision note, 2026-07-21: Added a fail-fast callable-tool gate after a Work task loaded the Sites design picker without the hosting connector and incorrectly continued to localhost.

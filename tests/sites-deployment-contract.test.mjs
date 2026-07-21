@@ -44,7 +44,13 @@ test("Sites release preparation fails closed around one clean main artifact", as
 
   assert.match(packageJson, /"prepare:sites-release"/);
   assert.doesNotMatch(packageJson, /"verify:sites-package"/);
+  assert.match(agents, /Sites hosting capability gate/);
+  assert.match(agents, /inspect the active task's callable tools/);
+  assert.match(agents, /The full Sites hosting connector is unavailable/);
+  assert.match(agents, /Do not clone, install, build, open localhost/);
   assert.match(contract, /Any failure is terminal/);
+  assert.match(contract, /Hosting capability preflight/);
+  assert.match(contract, /A local preview is not a fallback deployment/);
   assert.match(contract, /Initial Site linkage/);
   assert.match(contract, /assigned `project_id`/);
   assert.match(contract, /No membership is published\./);
@@ -58,6 +64,8 @@ test("Sites release preparation fails closed around one clean main artifact", as
     readme,
     /@Sites, let’s build my new artist-owned website from this repository:/,
   );
+  assert.match(readme, /Before cloning, installing, or building/);
+  assert.match(readme, /deploy it privately/);
   assert.doesNotMatch(readme, /First ask which supported capabilities/);
   assert.match(
     setup,

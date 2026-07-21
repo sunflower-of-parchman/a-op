@@ -4,6 +4,12 @@
 
 One private Sites release carries one exact `a-op` source commit, its generated Worker artifact, the repository hosting configuration, and the complete checked-in D1 migration chain. Deployment stops on any mismatch. A deployment agent never replaces repository routes, components, copy, repositories, or database access with a substitute Site.
 
+## Hosting capability preflight
+
+Before cloning, installing, building, or opening localhost for a repository-link request, inspect the active task's callable tools. Continue only when the task can create a Site, obtain source-write credentials, save a Site version, deploy it privately, and check deployment status. A Sites skill plus the design picker is an incomplete hosting surface.
+
+If any hosting action is absent, stop with `The full Sites hosting connector is unavailable. No Site has been created.` A local preview is not a fallback deployment and must never be reported as the new website. Repository code cannot add a connector that the task was not provisioned to use.
+
 ## Initial Site linkage
 
 For a new installation, run one ordinary neutral production build first:

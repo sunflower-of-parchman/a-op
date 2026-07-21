@@ -2,6 +2,14 @@
 
 This repository builds `a-op: artist-owned platform`, the complete product described in `PRODUCT.md` and controlled by `plans/migrateAopToSites.md`. Read `PRODUCT.md`, `PLANS.md`, the complete ExecPlan, the relevant contracts in `docs/architecture/`, and the current official OpenAI Sites guidance before changing product code.
 
+## Sites hosting capability gate
+
+For every repository-link request to build a new Site, inspect the active task's callable tools before installing dependencies, building, or opening a localhost preview. The task must expose actions that can create a Site, obtain source-write credentials, save a Site version, deploy that version privately, and check deployment status. Loading the Sites skill or design picker alone does not satisfy this gate.
+
+If any required hosting action is absent, stop immediately and say: `The full Sites hosting connector is unavailable. No Site has been created.` Do not clone, install, build, open localhost, describe a local preview as the website, accept personalization material, or suggest that repository changes can restore a missing connector.
+
+A local build is only release preparation. Declare the new website ready only after the saved private version reports a successful deployment and the task returns its real Sites URL.
+
 ## Product outcome
 
 `a-op` is an open-source web application for musicians. It gives artists their own music publishing, streaming, distribution, customer access, memberships and subscriptions, licensing, Courses, video, contact, telemetry, legal-document starters, and administration.
@@ -26,7 +34,7 @@ Music publishing, catalog, streaming, identity, access, and administration form 
 
 Public navigation, routes, administration, setup, jobs, and telemetry follow the active module registry. Deactivation preserves durable records and access history.
 
-A repository-link request to build a new artist-owned website first clones the repository and completes one neutral production build. It then creates a new private Site with fresh Sites-provided D1 and R2 resources, records the assigned `project_id`, commits that linkage, prepares the exact release artifact once from clean synchronized `main`, applies every migration, and verifies the complete neutral installation. Ask no capability, content, asset, design, or setup question before that hosted verification succeeds.
+After the Sites hosting capability gate passes, a repository-link request to build a new artist-owned website first clones the repository and completes one neutral production build. It then creates a new private Site with fresh Sites-provided D1 and R2 resources, records the assigned `project_id`, commits that linkage, prepares the exact release artifact once from clean synchronized `main`, applies every migration, and verifies the complete neutral installation. Ask no capability, content, asset, design, or setup question before that hosted verification succeeds.
 
 After the neutral Site works, tell the artist that their new artist-owned website is ready and that it is time to personalize it. Ask them to attach a context document or approved assets, share a Google Drive folder containing material they want to use, approve a local asset folder, or begin with the blank Site. Review only material the artist deliberately provides, then present the proposed active capabilities, asset and information checklist, and exact setup proposal before applying it. Imported content populates the existing product repositories and native interfaces; it never replaces the visual foundation, player, navigation, access controls, or module components with a content-specific renderer.
 
