@@ -63,16 +63,6 @@ Videos has an index and individual viewing pages. Each video can include a title
 
 Hosted video is delivered through the Site. External video remains unloaded until the visitor chooses to load it.
 
-### Journal and What's New
-
-Journal carries longer published posts. What's New carries shorter updates linked to current music, Courses, videos, memberships, licensing, and other activity.
-
-Signed-in customers can see unread What's New items and mark them as read. Customer-specific order links remain visible only to the customer who owns the order.
-
-### About and artist pages
-
-About introduces the artist through published writing and approved media. The artist can also publish structured pages made from reusable content sections. Drafts, revisions, and publication remain separate so unfinished writing does not become public.
-
 ### Contact
 
 Contact can carry public contact details, booking information, an invitation, inquiry categories, and the artist's consent language.
