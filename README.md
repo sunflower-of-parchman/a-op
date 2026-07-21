@@ -12,9 +12,14 @@ This repository was built during OpenAI Build Week. All repository work was comp
 
 | Date             | Codex session                          | Setting              | Recorded result                                                                                                                                                                 |
 | ---------------- | -------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| July 14–18, 2026 | `019f6291-c1c9-7cf3-9da7-be2a19b7154c` | GPT-5.6 Sol · High   | Established the Build Week requirements and built the original Nuxt, Supabase, Stripe, and Vercel implementation through `a951e31`.                                             |
 | July 18, 2026    | `019f7557-f594-7de1-9176-c4a261de2ea6` | GPT-5.6 Sol · Max    | Completed the product audit and Sites migration plan. The plan was saved in `4c96148`.                                                                                          |
 | July 18–19, 2026 | `019f7758-53d0-7d11-a874-f5a302d0e92d` | GPT-5.6 Sol · Ultra  | Rebuilt the application in React for Sites. The session started from `4c96148`. The complete implementation landed in `9b2f8bd` after 14 hours and 28 minutes.                  |
+| July 19–20, 2026 | `019f7bc7-e8af-7553-85ee-2aa2e49468d5` | GPT-5.6 Sol · Medium | Built the interactive public, account, music, and administration experience and established the judge-content packet in `10e180d`.                                              |
+| July 19–21, 2026 | `019f7d94-dce5-7eb2-b837-2606092550df` | GPT-5.6 Sol · Medium | Completed the local judge-content rehearsal with approved music, artwork, Courses, writing, video records, About content, streaming, downloads, and setup verification.         |
+| July 20, 2026    | `019f8095-ddc1-73e3-b04a-5b1bf068c379` | GPT-5.6 Sol · Low    | Prepared the approved demo workbook, album and track metadata, Course materials, collection images, and About material used in the judge rehearsal.                             |
 | July 20–21, 2026 | `019f82a8-85d5-7550-a437-bb6a8945a18a` | GPT-5.6 Sol · Medium | Completed Stripe Test acceptance, removed local test state, audited the release, and restored the complete neutral framework. The neutral framework was committed in `2079971`. |
+| July 21, 2026    | `019f861d-abea-7550-9d15-3d6cbcafc7ef` | GPT-5.6 Sol · Medium | Prepared the final demo video, Devpost story, acknowledgements, and submission thumbnail.                                                                                       |
 
 Session metadata records these reasoning settings: `low`, `medium`, `high`, `xhigh`, `max`, and `ultra`. Codex also ran in Standard and Fast speed modes.
 
